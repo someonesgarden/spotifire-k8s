@@ -7,3 +7,12 @@ before_install:
 
 script:
   - docker run  someonesgarden/spotifire-client npm run test -- --coverage
+
+after_success:
+  - docker build -t someonesgarden/spotifire-client ./client
+  - docker build -t someonesgarden/spotifire-api ./api
+  # Log in to the docker CLI
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  # Take those images and push them to docker hub
+  - docker push someonesgarden/spotifire-client
+  - docker push someonesgarden/spotifire-api

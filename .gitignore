@@ -4,3 +4,4 @@ deploy.sh
 docker-compose.yml
 /client/node_modules/
 /api/node_modules/
+/k8s/
