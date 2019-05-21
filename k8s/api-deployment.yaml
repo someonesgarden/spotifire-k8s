@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: api
+  template:
+    metadata:
+      labels:
+        component: api
+    spec:
+      containers:
+        - name: api
+          image: someonesgarden/spotifire-api
+          ports:
+            - containerPort: 5000
+          env:
+            - name: SPOTIFY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: spotify-id
+                  key: SPOTIFY-ID
+            - name: SPOTIFY_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: spotify-secret
+                  key: SPOTIFY-SECRET
+            - name: SPOTIFY_CALLBACK
+              value: "https://spotifire.tokyo/api/spotify/callback"
+
+            - name: TWITTER_CONSUMER_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: twitter-consumer-key
+                  key: TWITTER-CONSUMER-KEY
+            - name: TWITTER_CONSUMER_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: twitter-consumer-secret
+                  key: TWITTER-CONSUMER-SECRET
+            - name: TWITTER_ACCESS_TOKEN_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: twitter-access-token-key
+                  key: TWITTER-ACCESS-TOKEN-KEY
+            - name: TWITTER_ACCESS_TOKEN_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: twitter-access-token-secret
+                  key: TWITTER-ACCESS-TOKEN-SECRET

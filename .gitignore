@@ -4,4 +4,5 @@ deploy.sh
 docker-compose.yml
 /client/node_modules/
 /api/node_modules/
-/k8s/
+/worker/
+/spotifiretokyo-9a2e02f6d305.json
