@@ -1,0 +1,20 @@
+import Vue  from 'vue';
+import Vuex from 'vuex';
+import * as getters from './getters'
+import * as actions from './actions'
+import { state, mutations } from './mutations';
+import spotify from './modules/spotify/index';
+import feed from './modules/feed/index';
+
+Vue.use(Vuex);
+
+export default new Vuex.Store({
+    actions,
+    getters,
+    state,
+    mutations,
+    modules:{
+        spotify,
+        feed
+    }
+});

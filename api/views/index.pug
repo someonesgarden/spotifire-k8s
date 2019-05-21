@@ -1,0 +1,10 @@
+html
+  head
+    title= title
+    link(rel='stylesheet', href='/api/css/style.css')
+    script(src='/api/js/index.js')
+    script.
+        let res = !{!!result ? JSON.stringify(result) : JSON.stringify({})};
+        setFormInput(res);
+  body
+

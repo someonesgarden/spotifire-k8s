@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: api
+  template:
+    metadata:
+      labels:
+        component: api
+    spec:
+      containers:
+        - name: api
+          image: someonesgarden/spotifire-api
+          ports:
+            - containerPort: 5000
+          env:
+            - name: SPOTIFY_ID
+              value: "78e1e70ac8fa4d7991e1f7ca90608ed9"
+            - name: SPOTIFY_SECRET
+              value: "0084f03d983f42969bae8cc8623de0f0"
+            - name: SPOTIFY_CALLBACK
+              value: "http://127.0.0.1:8080/api/spotify/callback"
+            - name: TWITTER_CONSUMER_KEY
+              value: "lmRpMW9bVgktQ4dmt8v6jw"
+            - name: TWITTER_CONSUMER_SECRET
+              value: "yYZ8r26zH9oYGmfwGIeWu6EMk6ceLYifHcMEFwDMo"
+            - name: TWITTER_ACCESS_TOKEN_KEY
+              value: "39571307-PoetotMkQKVF2KinqDzIAU4rhRMqLzwUNozmBWVdJ"
+            - name: TWITTER_ACCESS_TOKEN_SECRET
+              value: "rTnfbmlVQhhDuBLDOmZhqdXHIHcnhbQkVXGJd3UoLNEvI"
+
