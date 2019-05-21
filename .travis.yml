@@ -3,7 +3,7 @@ services:
   - docker
 
 before_install:
-  - docker build -t someonesgarden/spotifire-client -f ./client/Dockerfile.dev .
+  - docker build -t someonesgarden/spotifire-client -f ./client/Dockerfile.dev ./client
 
 script:
   - docker run  someonesgarden/spotifire-client npm run test -- --coverage
