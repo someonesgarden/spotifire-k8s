@@ -7,21 +7,21 @@ spec:
     # The ACME server URL
     server: https://acme-v01.api.letsencrypt.org/directory
     # Email address used for ACME registration
-    email: d@someonesgarden.org
+    email: 'd@someonesgarden.org'
     # Name of a secret used to store the ACME account private key
     privateKeySecretRef:
       name: letsencrypt-prod
     # Enable the HTTP-01 challenge provider
     http01: {}
     # ACME dns-01 provider configurations
-    dns01:
-      # Here we define a list of DNS-01 providers that can solve DNS challenges
-      providers:
-      - name: prod-dns
-        clouddns:
-          # A secretKeyRef to a the google cloud json service account
-          serviceAccountSecretRef:
-            name: clouddns-service-account
-            key: cert-manager-key.json
-          # The project in which to update the DNS zone
-          project: apstndb-sandbox
+#    dns01:
+#      # Here we define a list of DNS-01 providers that can solve DNS challenges
+#      providers:
+#      - name: prod-dns
+#        clouddns:
+#          # A secretKeyRef to a the google cloud json service account
+#          serviceAccountSecretRef:
+#            name: clouddns-service-account
+#            key: cert-manager-key.json
+#          # The project in which to update the DNS zone
+#          project: apstndb-sandbox

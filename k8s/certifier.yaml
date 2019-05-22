@@ -9,11 +9,12 @@ spec:
     name: letsencrypt-prod
   commonName: spotifire.tokyo
   dnsNames:
-  - www.spotifire.tokyo
+    - spotifire.tokyo
+    - www.spotifire.tokyo
   acme:
     config:
-    - dns01:
-        provider: prod-dns
-      domains:
-      - spotifire.tokyo
-      - www.spotifire.tokyo
+      - dns01:
+          provider: prod-dns
+        domains:
+          - spotifire.tokyo
+          - www.spotifire.tokyo
