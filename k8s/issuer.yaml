@@ -21,7 +21,7 @@ spec:
         clouddns:
           # A secretKeyRef to a the google cloud json service account
           serviceAccountSecretRef:
-            name: clouddns-service-account
+            name: cert-manager
             key: cert-manager-key.json
           # The project in which to update the DNS zone
           project: spotifire-tokyo
