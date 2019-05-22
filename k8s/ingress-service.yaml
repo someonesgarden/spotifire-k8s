@@ -34,7 +34,7 @@ metadata:
   name: ingress-service
   annotations:
     kubernetes.io/ingress.class: nginx
-    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
 spec:
   rules:
       - http:
@@ -46,5 +46,5 @@ spec:
             - backend:
                 serviceName: api-cluster-ip-service
                 servicePort: 5000
-              path: /api/
+              path: /something(/|$)(.*)
 #        host: spotifire.tokyo
