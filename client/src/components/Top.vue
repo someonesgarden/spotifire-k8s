@@ -3,7 +3,7 @@
 
         <div class="base">
             <mu-form :model="form" class="mu-demo-form"label-width="100">
-                <mu-form-item prop="select" label="Select">
+                <mu-form-item prop="select" label="Select!!!!">
                     <mu-select v-model="form.feedsrc" @change="loadFeed">
                         <mu-option v-for="(src,index) in feed.src" :key="'feedsrc'+index" :label="src.name" :value="src.url"></mu-option>
                     </mu-select>

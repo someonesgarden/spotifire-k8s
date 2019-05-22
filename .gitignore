@@ -5,3 +5,8 @@ docker-compose.yml
 /api/node_modules/
 /worker/
 /spotifiretokyo-9a2e02f6d305.json
+/k8s_local/
+/k8s_notuse/
+/get.sh
+/post.sh
+/deploy_local.sh

@@ -1,8 +1,10 @@
 # Gcloud shell でコマンド
 
-gcloud config set project spotifiretokyo
+gcloud config set project spotifire-cluster	
 gcloud config set compute/zone us-west1-c
 gcloud container clusters get-credentials spotifire-cluster
+
+# シークレットの作成方法
 kubectl create secret generic passwordname --from-literal PASSWORDNAME=......
 
 
