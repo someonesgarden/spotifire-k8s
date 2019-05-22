@@ -38,14 +38,14 @@ metadata:
   namespace: default
 spec:
   rules:
-    - host: spotifire.tokyo
-      http:
-        paths:
-          - backend:
-              serviceName: client-cluster-ip-service
-              servicePort: 3000
-            path: /
-          - backend:
-              serviceName: api-cluster-ip-service
-              servicePort: 5000
-            path: /api/
+      - http:
+          paths:
+            - backend:
+                serviceName: client-cluster-ip-service
+                servicePort: 3000
+              path: /
+            - backend:
+                serviceName: api-cluster-ip-service
+                servicePort: 5000
+              path: /api/
+        host: spotifire.tokyo
