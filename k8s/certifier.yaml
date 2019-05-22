@@ -1,0 +1,19 @@
+apiVersion: certmanager.k8s.io/v1alpha1
+kind: Certificate
+metadata:
+  name: sandbox-apstndb-net
+  namespace: default
+spec:
+  secretName: cert-manager-tls
+  issuerRef:
+    name: letsencrypt-prod
+  commonName: spotifire.tokyo
+  dnsNames:
+  - www.spotifire.tokyo
+  acme:
+    config:
+    - dns01:
+        provider: prod-dns
+      domains:
+      - spotifire.tokyo
+      - spotifire.tokyo

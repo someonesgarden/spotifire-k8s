@@ -16,7 +16,7 @@ chmod 700 get_helm.sh
 ./get_helm.sh
 
 wget https://storage.googleapis.com/kubernetes-helm/helm-v2.13.0-rc.1-linux-amd64.tar.gz
-tar -zxvf helm-v2.9.1-linux-amd64.tar.gz
+tar -zxvf helm-v2.13.0-rc.1-linux-amd64.tar.gz
 ls -al linux-amd64/helm
 mv linux-amd64/helm /usr/local/bin/helm
 (ここを参考に。https://qiita.com/nykym/items/1573ca568a80d0d01c45)
@@ -51,8 +51,20 @@ https://github.com/jetstack/cert-manager
     helm repo update
     
     # Install the cert-manager Helm chart
-    helm install \
-      --name cert-manager \
-      --namespace cert-manager \
-      --version v0.7.2 \
-      jetstack/cert-manager
+    helm install --name cert-manager --namespace cert-manager --version v0.7.2 jetstack/cert-manager
+
+
+httpsが使えるように
+# 参考  (https://qiita.com/apstndb/items/3a39a1e6acacbbc30765)
+# 今回は DNS には Cloud DNS を使うため、 cert-manager が Cloud DNS を使えるように GCP のサービスアカウント設定
+gcloud projects add-iam-policy-binding spotifire-tokyo --member serviceAccount:cert-manager@spotifire-tokyo.iam.gserviceaccount.com --role roles/dns.admin
+
+#
+gcloud iam service-accounts keys create cert-manager-key.json --iam-account cert-manager@spotifire-tokyo.iam.gserviceaccount.com
+
+#
+kubectl create secret generic clouddns-service-account --from-file=cert-manager-key.json -n cert-manager 
+
+#
+kubectl create secret generic clouddns-service-account --from-file=cert-manager-key.json=cert-manager-key.json
+
