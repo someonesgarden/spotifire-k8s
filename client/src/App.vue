@@ -1,7 +1,6 @@
 <template>
   <div id="app" v-cloak class="app-wrap">
     <head-top></head-top>
-
     <mu-container>
       <router-view></router-view>
     </mu-container>
