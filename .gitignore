@@ -10,3 +10,4 @@ docker-compose.yml
 /get.sh
 /post.sh
 /deploy_local.sh
+/k8s_notyet/
