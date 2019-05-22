@@ -1,5 +1,4 @@
-kubectl delete -f k8s
-
+# kubectl delete -f k8s
 docker build -t someonesgarden/spotifire-client:latest -t someonesgarden/spotifire-client:$SHA -f ./client/Dockerfile ./client
 docker build -t someonesgarden/spotifire-api:latest -t someonesgarden/spotifire-api:$SHA -f ./api/Dockerfile ./api
 docker push someonesgarden/spotifire-client:latest

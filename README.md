@@ -65,6 +65,3 @@ gcloud iam service-accounts keys create cert-manager-key.json --iam-account cert
 #
 kubectl create secret generic clouddns-service-account --from-file=cert-manager-key.json -n cert-manager 
 
-#
-kubectl create secret generic clouddns-service-account --from-file=cert-manager-key.json=cert-manager-key.json
-
