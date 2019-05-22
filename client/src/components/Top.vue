@@ -1,6 +1,5 @@
 <template>
     <mu-container class="flex_v">
-
         <div class="base">
             <mu-form :model="form" class="mu-demo-form"label-width="100">
                 <mu-form-item prop="select" label="Select..">
@@ -9,7 +8,6 @@
                     </mu-select>
                 </mu-form-item>
             </mu-form>
-
             <div class="hello" v-if="!!feed.feed.items">
                 <feed-block :item="feed.feed.items[0]" class="large" :col="3"/>
                 <masonry ref="itemarea" :cols="cols" :gutter="gutter">
