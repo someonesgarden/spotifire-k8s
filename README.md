@@ -53,7 +53,6 @@ https://github.com/jetstack/cert-manager
     # Install the cert-manager Helm chart
     helm install --name cert-manager --namespace cert-manager --version v0.7.2 jetstack/cert-manager
 
-
 httpsが使えるように
 # 参考  (https://qiita.com/apstndb/items/3a39a1e6acacbbc30765)
 # 今回は DNS には Cloud DNS を使うため、 cert-manager が Cloud DNS を使えるように GCP のサービスアカウント設定
