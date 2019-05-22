@@ -42,7 +42,7 @@ spec:
             - backend:
                 serviceName: client-cluster-ip-service
                 servicePort: 3000
-              path: /
+              path: /(/|$)(.*)
             - backend:
                 serviceName: api-cluster-ip-service
                 servicePort: 5000
