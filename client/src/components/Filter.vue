@@ -2,7 +2,7 @@
     <mu-container class="flex_v">
         <div class="base" style="text-align:center;">
             <h1>
-                <mu-icon value="filter_list"></mu-icon>&nbsp;FILTER
+                <mu-icon value="filter_list"></mu-icon>&nbsp;FILTER!
             </h1>
             <mu-form ref="filterform" :model="spotify.searchQuery" class="mu-demo-form" label-position="left" label-width="100">
 
