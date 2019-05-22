@@ -16,4 +16,4 @@ spec:
         provider: prod-dns
       domains:
       - spotifire.tokyo
-      - spotifire.tokyo
+      - www.spotifire.tokyo
