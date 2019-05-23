@@ -24,11 +24,14 @@ spec:
             backend:
               serviceName: client-cluster-ip-service
               servicePort: 3000
+          - path: /login/(.*)
+            backend:
+              serviceName: client-cluster-ip-service
+              servicePort: 3000
           - path: /api/(.*)
             backend:
               serviceName: api-cluster-ip-service
               servicePort: 5000
-
     - host: www.spotifire.tokyo
       http:
         paths:
@@ -36,8 +39,11 @@ spec:
             backend:
               serviceName: client-cluster-ip-service
               servicePort: 3000
+          - path: /login/(.*)
+            backend:
+              serviceName: client-cluster-ip-service
+              servicePort: 3000
           - path: /api/(.*)
-
             backend:
               serviceName: api-cluster-ip-service
               servicePort: 5000
