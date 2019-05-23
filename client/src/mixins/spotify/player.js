@@ -52,10 +52,22 @@ export default{
                 });
 
                 // Error handling
-                player.addListener('initialization_error', ({ message }) => { console.error(message); });
-                player.addListener('authentication_error', ({ message }) => { console.error(message); });
-                player.addListener('account_error', ({ message }) => { console.error(message); });
-                player.addListener('playback_error', ({ message }) => { console.error(message); });
+                player.addListener('initialization_error', ({ message }) => {
+                    alert(message);
+                    console.error(message);
+                });
+                player.addListener('authentication_error', ({ message }) => {
+                    alert(message);
+                    console.error(message);
+                });
+                player.addListener('account_error', ({ message }) => {
+                    alert(message);
+                    console.error(message);
+                });
+                player.addListener('playback_error', ({ message }) => {
+                    alert(message);
+                    console.error(message);
+                });
 
                 // Playback status updates
                 player.addListener('player_state_changed', state => {
