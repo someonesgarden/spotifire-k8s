@@ -13,13 +13,13 @@
 
                         <mu-col span="6" sm="6" md="6" lg="6" xl="6">
                             <mu-form-item :rules="emptyRules" prop="id" label="admin ID" class="range">
-                                <mu-text-field prop="id" multi-line :rows="1" :rows-max="2" v-model="admin.id"></mu-text-field>
+                                <mu-text-field prop="id" v-model="admin.id"></mu-text-field>
                             </mu-form-item>
                         </mu-col>
 
                         <mu-col span="6" sm="6" md="6" lg="6" xl="6">
                             <mu-form-item :rules="emptyRules" prop="pass" label="password" class="range">
-                                <mu-text-field prop="pass" multi-line :rows="1" :rows-max="2" v-model="admin.pass"  label="Password" :action-icon="visibility ? 'visibility_off' : 'visibility'" :action-click="() => (visibility = !visibility)" :type="visibility ? 'text' : 'password'"></mu-text-field>
+                                <mu-text-field  type="password" prop="pass"  v-model="admin.pass"  label="Password" :action-icon="visibility ? 'visibility_off' : 'visibility'" :action-click="() => (visibility = !visibility)" :type="visibility ? 'text' : 'password'"></mu-text-field>
                             </mu-form-item>
                         </mu-col>
                     </mu-row>
