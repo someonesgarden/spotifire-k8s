@@ -7,8 +7,8 @@
 
     <mu-container style="position:fixed;bottom:0;width:100%;max-width:inherit;">
       <mu-bottom-nav style="background-color:inherit;color:inherit;margin-top:40px;">
-        <mu-bottom-nav-item title="Filter" icon="filter_list" to="/filter"></mu-bottom-nav-item>
-        <mu-bottom-nav-item title="Nearby" icon="location_on" to="/"></mu-bottom-nav-item>
+        <mu-bottom-nav-item title="News" icon="filter_list" to="/news"></mu-bottom-nav-item>
+        <mu-bottom-nav-item title="Map" icon="location_on" to="/map"></mu-bottom-nav-item>
       </mu-bottom-nav>
     </mu-container>
 

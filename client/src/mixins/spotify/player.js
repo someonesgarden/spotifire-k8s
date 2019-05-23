@@ -74,7 +74,7 @@ export default{
                 // Playback status updates
                 player.addListener('player_state_changed', state => {
 
-                    window.alert(state);
+                    window.alert("paused?:"+state.paused);
                     console.log(state);
 
                     //Paused
@@ -85,7 +85,7 @@ export default{
 
                 // Ready
                 player.addListener('ready', ({ device_id }) => {
-                    window.alert(state);
+                    window.alert("ready with: "+device_id);
                     console.log('Ready with Device ID', device_id);
                 });
 
