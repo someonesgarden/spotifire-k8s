@@ -1,5 +1,5 @@
 <template>
-  <div id="app" v-cloak class="app-wrap">
+  <div id="app" v-cloak class="app-wrap" :class="{login:($route.name==='Login' || $route.name==='')}">
     <head-top></head-top>
     <mu-container>
       <router-view></router-view>
@@ -73,6 +73,14 @@ export default {
       ],
       tokenizer:null
     }
+  },
+
+  watch:{
+   '$route':{
+     handler(route){
+       console.log(JSON.stringify(this.$route));
+     }
+   }
   }
 }
 </script>

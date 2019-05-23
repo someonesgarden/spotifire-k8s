@@ -1,3 +1,7 @@
+// ----- GENERAL
+
+export const a_login = ({commit},params) => commit('login', params)
+
 // --------------- SPOTIFY ----------------
 export const a_spotify =  ({commit}, [type, action, data]) => {
     const actions = {

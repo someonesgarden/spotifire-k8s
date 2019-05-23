@@ -1,78 +1,75 @@
 <template>
     <mu-container class="flex_v">
-        <div class="base" style="text-align:center;">
-            <h1>
-                <mu-icon value="filter_list"></mu-icon>&nbsp;FILTER!
-            </h1>
-            <mu-form ref="filterform" :model="spotify.searchQuery" class="mu-demo-form" label-position="left" label-width="100">
+        <div>
 
-                <div v-if="spotify.credential.expires_in">
+            <mu-flex class="flex-wrapper" justify-content="center" align-items="center" direction="column">
+
+                <img class="menu-icon" src="/static/img/spotifire_logo.png">
+                <h1><mu-icon value="vpn_key"></mu-icon>LOGIN</h1>
+
+                <mu-form ref="adminform" :model="admin" class="mu-demo-form" label-position="left" label-width="100">
 
                     <mu-row gutter>
-                        <mu-col span="12">
-                            <mu-form-item prop="filtertype" label="種類" class="sixteen wide mobile">
-                                <mu-select prop="filtertype" v-model="filter.url" color="primary">
-                                    <mu-option v-for="(filter, index) in spotify.filters" :key="'filter'+index" :label="filter.name" :value="filter.url"></mu-option>
-                                </mu-select>
+
+                        <mu-col span="6" sm="6" md="6" lg="6" xl="6">
+                            <mu-form-item :rules="emptyRules" prop="id" label="admin ID" class="range">
+                                <mu-text-field prop="id" multi-line :rows="1" :rows-max="2" v-model="admin.id"></mu-text-field>
+                            </mu-form-item>
+                        </mu-col>
+
+                        <mu-col span="6" sm="6" md="6" lg="6" xl="6">
+                            <mu-form-item :rules="emptyRules" prop="pass" label="password" class="range">
+                                <mu-text-field prop="pass" multi-line :rows="1" :rows-max="2" v-model="admin.pass"  label="Password" :action-icon="visibility ? 'visibility_off' : 'visibility'" :action-click="() => (visibility = !visibility)" :type="visibility ? 'text' : 'password'"></mu-text-field>
                             </mu-form-item>
                         </mu-col>
                     </mu-row>
 
                     <mu-row gutter>
-                        <mu-col span="12">
-
-                            <mu-form-item prop="textarea" label="PlaylistID" class="sixteen wide mobile">
-                                {{spotify.playlist.id ? spotify.playlist.id : 'まだPlaylist IDが選ばれていません。左のサイドバーから選んでください。'}}
-                            </mu-form-item>
+                        <mu-col span="12" sm="12" md="12" lg="12" xl="12">
+                            <div class="grid-cell">
+                                <mu-button color="primary" class="smallbtn" full-width @click="loginAction">LOGIN</mu-button>
+                            </div>
                         </mu-col>
                     </mu-row>
-                </div>
-                <div style="height:80px;" v-else></div>
-                <mu-row gutter>
-                    <mu-col span="12" sm="12" md="12" lg="12" xl="12">
-                        <div class="grid-cell">
-                            <mu-button color="primary" class="smallbtn" full-width @click="c_getCredential" v-if="!spotify.credential.expires_in">LOGIN</mu-button>
-                            <mu-button color="secondary" class="smallbtn" full-width v-else :disabled="!spotify.playlist.id" @click="c_filter">FILTER</mu-button>
-                        </div>
-                    </mu-col>
-                </mu-row>
+                </mu-form>
 
-            </mu-form>
+            </mu-flex>
+
         </div>
     </mu-container>
 </template>
 <script>
     import {mapGetters,mapActions} from 'vuex';
-    import spotifyMixin from '../mixins/spotify/index';
+
+    import {ruleEmpty} from '../store/rules';
+
     export default {
-        name: 'myfilters',
-        mixins:[spotifyMixin],
+        name: 'mylogin',
         data(){
           return{
-
-              filter:{
-                  url:null
+              emptyRules: [ruleEmpty],
+              visibility:false,
+              admin:{
+                  id:null,
+                  pass:null
               }
           }
         },
-        methods:mapActions(['a_spotify']),
-        computed:mapGetters(['spotify']),
-        mounted(){
-            this.filter = this.spotify.filter;
+        computed:mapGetters(['loggedIn']),
+        methods:{
+            ...mapActions(['a_login']),
+
+            loginAction(){
+                this.$refs.adminform.validate().then(valid => {
+
+                    if(valid){
+                        this.a_login(this.admin);
+                        if(this.loggedIn) this.$router.push('/');
+                    }
+
+                });
+            }
         },
-        watch:{
-            'spotify.credential':{
-                handler(){
-                    if(!!this.spotify.credential.expires_in) this.c_getMe();
-                },
-                deep:true
-            },
-            'spotify.filter':{
-                handler(newFilter){
-                    this.filter = newFilter;
-                    this.$nextTick(()=> this.$refs.filterform.validate())
-                },deep:true
-            },
-        }
+
     }
 </script>
