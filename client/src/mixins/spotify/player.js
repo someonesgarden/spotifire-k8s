@@ -43,7 +43,7 @@ export default{
             console.log("c_initplayer");
             window.onSpotifyWebPlaybackSDKReady = () => {
 
-                window.alert("onSpotifyWebPlaybackSDKReady!");
+                /window.alert("onSpotifyWebPlaybackSDKReady!");
 
                 const token = this.spotify.credential.access_token;
                 console.log(token);
@@ -55,26 +55,26 @@ export default{
 
                 // Error handling
                 player.addListener('initialization_error', ({ message }) => {
-                    window.alert(message);
+                    /window.alert(message);
                     console.error(message);
                 });
                 player.addListener('authentication_error', ({ message }) => {
-                    window.alert(message);
+                    /window.alert(message);
                     console.error(message);
                 });
                 player.addListener('account_error', ({ message }) => {
-                    window.alert(message);
+                    /window.alert(message);
                     console.error(message);
                 });
                 player.addListener('playback_error', ({ message }) => {
-                    window.alert(message);
+                    /window.alert(message);
                     console.error(message);
                 });
 
                 // Playback status updates
                 player.addListener('player_state_changed', state => {
 
-                    window.alert("paused?:"+state.paused);
+                    /window.alert("paused?:"+state.paused);
                     console.log(state);
 
                     //Paused
@@ -85,7 +85,7 @@ export default{
 
                 // Ready
                 player.addListener('ready', ({ device_id }) => {
-                    window.alert("ready with: "+device_id);
+                    /window.alert("ready with: "+device_id);
                     console.log('Ready with Device ID', device_id);
                 });
 
