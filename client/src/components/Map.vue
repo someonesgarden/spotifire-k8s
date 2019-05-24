@@ -3,7 +3,6 @@
         <mu-row gutter>
             <mu-col span="4" sm="3" md="3" lg="2" class="controlarea">
 
-
                     <div class="ui">
                         <div class="sixteen wide">
                             <h4 class="title">emory.</h4>
@@ -12,16 +11,12 @@
 
                     <mu-form :model="mapform" ref="mapform" label-position="left" label-width="50">
 
-
                         <div class="ui">
                             <div class="sixteen wide">
-                                <mu-button full-width color="pink500" @click="trackStart">
+                                <mu-button full-width color="pink500" @click="trackToggle" v-if="!mapstore.tracking" >
                                     <mu-icon value="settings_input_antenna" style="width:20px;"></mu-icon>&nbsp;Start
                                 </mu-button>
-                            </div>
-
-                            <div class="sixteen wide">
-                                <mu-button full-width color="cyan400" @click="trackStop">
+                                <mu-button full-width color="cyan400" @click="trackToggle" v-else>
                                     <mu-icon value="portable_wifi_off" style="width:20px;"></mu-icon>&nbsp;Stop
                                 </mu-button>
                             </div>
@@ -33,7 +28,6 @@
                                     <mu-icon value="nature_people" style="width:20px;"></mu-icon>&nbsp;Me
                                 </mu-button>
                             </div>
-
 
                         </div>
 
@@ -74,12 +68,19 @@
                 console.log("moveToMe");
             },
 
-            trackStart(){
+            trackToggle(){
                 console.log("trackStart");
+                this.a_mapstore(['set','tracking',null]);
             },
 
             trackStop(){
                 console.log("trackStop");
+                this.a_mapstore(['set','tracking',false]);
+            },
+
+            trackStart(){
+                console.log("trackStop");
+                this.a_mapstore(['set','tracking',true]);
             }
         },
         computed:mapGetters(['spotify','mapstore']),

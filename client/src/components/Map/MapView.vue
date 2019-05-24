@@ -26,7 +26,8 @@
                 markers: [],
                 userMarker: null,
                 mapWidth: window.innerWidth,
-                mapHeight: window.innerHeight
+                mapHeight: window.innerHeight,
+                trackTimeout:null
             };
         },
         computed: mapGetters(['mapstore']),
@@ -45,7 +46,8 @@
 
             'mapstore.tracking': {
                 handler: function (lat) {
-                    this.geolocation();
+                    if(!this.trackTimeout) this.keepTracking();
+                   // this.geolocation();
                 }
             }
         },
@@ -53,15 +55,29 @@
             GoogleMapsLoader.load(this.loadMap);
             this.initMap();
             this.a_mapstore(['set', 'tracking', null]);
-
             this.resetDivSize();
             window.addEventListener('resize', this.resetDivSize);
+            this.keepTracking();
         },
         beforeDestroy() {
             window.removeEventListener("resize", this.resetDivSize)
         },
         methods: {
             ...mapActions(['a_mapstore']),
+
+            keepTracking(){
+                this.geolocation();
+                // 3秒後に実行
+                if(this.mapstore.tracking){
+                    console.log("keep tracking..");
+                    this.trackTimeout = true;
+                    setTimeout(this.keepTracking, 3000);
+                }else{
+                    console.log("stop tracking..");
+                    this.trackTimeout = false;
+                }
+            },
+
             resetDivSize() {
                 this.mapWidth = window.innerWidth;
                 if (window.innerHeight > 768) {
