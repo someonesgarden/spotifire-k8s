@@ -2,45 +2,43 @@
     <mu-container class="reset">
         <mu-row gutter>
             <mu-col span="4" sm="3" md="3" lg="2" class="controlarea">
-                <div class="grid-cell">
-
-                    <mu-container>
-                        <mu-row gutter>
-                            <mu-col span="12">
-                               <h2 class="title">emory.</h2>
-                            </mu-col>
-                        </mu-row>
 
 
-                        <mu-form :model="mapform" ref="mapform" label-position="left" label-width="50">
+                    <div class="ui">
+                        <div class="sixteen wide">
+                            <h3 class="title">emory.</h3>
+                        </div>
+                    </div>
 
-                            <div class="ui grid range">
-                                <div class="sixteen wide">
-                                    <mu-button full-width color="indigo400" @click="moveToMe">
-                                        <mu-icon value="low_priority"></mu-icon>my place
-                                    </mu-button>
-                                </div>
+                    <mu-form :model="mapform" ref="mapform" label-position="left" label-width="50">
+
+
+
+                        <div class="ui">
+                            <div class="sixteen wide">
+                                <mu-button full-width color="indigo400" @click="moveToMe">
+                                    <mu-icon value="low_priority"></mu-icon>I'm
+                                </mu-button>
+                            </div>
+                        </div>
+
+                        <div class="ui">
+                            <div class="sixteen wide">
+                                <mu-button full-width color="red500" @click="trackStart">
+                                    <mu-icon value="low_priority"></mu-icon>start.tr
+                                </mu-button>
                             </div>
 
-                            <div class="ui grid range">
-                                <div class="sixteen wide">
-                                    <mu-button full-width color="indigo400" @click="trackStart">
-                                        <mu-icon value="low_priority"></mu-icon>start track
-                                    </mu-button>
-                                </div>
-
-                                <div class="sixteen wide">
-                                    <mu-button full-width color="indigo400" @click="trackStop">
-                                        <mu-icon value="low_priority"></mu-icon>stop track
-                                    </mu-button>
-                                </div>
+                            <div class="sixteen wide">
+                                <mu-button full-width color="cyan400" @click="trackStop">
+                                    <mu-icon value="low_priority"></mu-icon>stop.tr
+                                </mu-button>
                             </div>
+                        </div>
 
+                        <mu-divider></mu-divider>
+                    </mu-form>
 
-                            <mu-divider></mu-divider>
-                        </mu-form>
-                    </mu-container>
-                </div>
             </mu-col>
             <mu-col span="8" sm="9" md="9" lg="10" class="maparea">
 
@@ -121,8 +119,10 @@
         padding:0;
         margin: 54px 0 0 0;
 
-        h2.title{
-            padding-top:20px;
+        h3.title{
+            font-weight:bold;
+            padding-top:35px;
+            padding-bottom:35px;
             color:white;
 
         }
