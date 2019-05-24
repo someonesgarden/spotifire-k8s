@@ -1,18 +1,20 @@
 <template>
     <mu-container class="flex_v">
         <div class="base" style="text-align:center;">
-
-<h1>MAP</h1>
-
+            <map-view id="map"></map-view>
         </div>
     </mu-container>
 </template>
 <script>
     import {mapGetters,mapActions} from 'vuex';
+    import MapView from './Map/MapView';
     import spotifyMixin from '../mixins/spotify/index';
     export default {
         name: 'myfilters',
         mixins:[spotifyMixin],
+        components:{
+            MapView
+        },
         data(){
           return{
 
