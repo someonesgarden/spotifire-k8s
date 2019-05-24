@@ -6,7 +6,7 @@
 
                     <div class="ui">
                         <div class="sixteen wide">
-                            <h3 class="title">emory.</h3>
+                            <h4 class="title">emory.</h4>
                         </div>
                     </div>
 
@@ -17,7 +17,7 @@
                         <div class="ui">
                             <div class="sixteen wide">
                                 <mu-button full-width color="indigo400" @click="moveToMe">
-                                    <mu-icon value="low_priority"></mu-icon>I'm
+                                    <mu-icon value="accessibility_new"></mu-icon>IM
                                 </mu-button>
                             </div>
                         </div>
@@ -25,13 +25,13 @@
                         <div class="ui">
                             <div class="sixteen wide">
                                 <mu-button full-width color="red500" @click="trackStart">
-                                    <mu-icon value="low_priority"></mu-icon>start.tr
+                                    <mu-icon value="settings_input_antenna"></mu-icon>Start
                                 </mu-button>
                             </div>
 
                             <div class="sixteen wide">
                                 <mu-button full-width color="cyan400" @click="trackStop">
-                                    <mu-icon value="low_priority"></mu-icon>stop.tr
+                                    <mu-icon value="portable_wifi_off"></mu-icon>Stop
                                 </mu-button>
                             </div>
                         </div>
@@ -119,12 +119,12 @@
         padding:0;
         margin: 54px 0 0 0;
 
-        h3.title{
+        h4.title{
+            font-family: 'Allerta Stencil' !important;
             font-weight:bold;
             padding-top:35px;
             padding-bottom:35px;
             color:white;
-
         }
 
         .col{
