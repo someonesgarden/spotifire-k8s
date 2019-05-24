@@ -7,7 +7,7 @@
                     <mu-container>
                         <mu-row gutter>
                             <mu-col span="12">
-                               <h2 class="title">emory.location.test.</h2>
+                               <h2 class="title">emory.</h2>
                             </mu-col>
                         </mu-row>
 
