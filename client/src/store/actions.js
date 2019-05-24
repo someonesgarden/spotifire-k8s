@@ -59,7 +59,8 @@ export const a_spotify =  ({commit}, [type, action, data]) => {
 export const a_mapstore = ({commit},[type, action, data]) => {
     const actions = {
         set: {
-            tracking:  (data) => commit('mapstore/setTracking', data)
+            tracking:  (data) => commit('mapstore/setTracking', data),
+            locations: (data) => commit('mapstore/setLocations', data)
         }
     }
     actions[type][action](data)

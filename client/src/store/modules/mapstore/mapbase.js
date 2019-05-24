@@ -2,13 +2,52 @@ const state = {
 
     baseimg:'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png',
 
+    friend_types:[
+        {
+            img:'/static/img/markers/m_friend_boy_1.png',
+        },
+        {
+            img:'/static/img/markers/m_friend_boy_2.png',
+        },
+        {
+            img:'/static/img/markers/m_friend_girl_1.png',
+        },
+        {
+            img:'/static/img/markers/m_friend_girl_2.png',
+        },
+        {
+            img:'/static/img/markers/m_friend_guy_1.png',
+        }
+        ,
+        {
+            img:'/static/img/markers/m_friend_woman_1.png',
+        },
+        {
+            img:'/static/img/markers/m_friend_boy_2.png',
+        },
+        {
+            img:'/static/img/markers/m_friend_girl_1.png',
+        },
+        {
+            img:'/static/img/markers/m_friend_girl_2.png',
+        },
+        {
+            img:'/static/img/markers/m_friend_guy_1.png',
+        }
+        ,
+        {
+            img:'/static/img/markers/m_friend_woman_1.png',
+        }
+
+    ],
+
     locations:[
         {
             htmltxt: '千代田区',
             lat: 35.670812,
             lng: 139.754182,
-            w:20,
-            h:20,
+            w:25,
+            h:25,
             img: '/static/img/markers/m_friend_boy_1.png'
         },
         {
@@ -31,8 +70,8 @@ const state = {
             htmltxt: '新宿区',
             lat: 35.69995,
             lng: 139.735037,
-            w:30,
-            h:30,
+            w:25,
+            h:25,
             img: '/static/img/markers/m_friend_girl_2.png'
         },
         {
@@ -47,48 +86,48 @@ const state = {
             htmltxt: '品川区	',
             lat: 35.598187,
             lng: 139.758968,
-            w:30,
-            h:30,
+            w:25,
+            h:25,
             img: '/static/img/markers/m_friend_girl_1.png'
         },
         {
             htmltxt: '太田市',
             lat: 35.549786,
             lng: 139.786522,
-            w:30,
-            h:30,
+            w:25,
+            h:25,
             img: '/static/img/markers/m_friend_boy_1.png'
         },
         {
             htmltxt: '世田谷区',
             lat: 35.669726,
             lng: 139.620901,
-            w:30,
-            h:30,
+            w:25,
+            h:25,
             img: '/static/img/markers/m_friend_woman_1.png'
         },
         {
             htmltxt: '渋谷',
             lat: 35.668183,
             lng: 139.709361,
-            w:30,
-            h:30,
+            w:25,
+            h:25,
             img: '/static/img/markers/m_friend_guy_1.png'
         },
         {
             htmltxt: '中野	',
             lat: 35.724688,
             lng: 139.65612,
-            w:30,
-            h:30,
+            w:25,
+            h:25,
             img: '/static/img/markers/m_friend_woman_1.png'
         },
         {
             htmltxt: '杉並	',
             lat: 35.671529,
             lng: 139.646176,
-            w:35,
-            h:35,
+            w:25,
+            h:25,
             img: '/static/img/markers/m_friend_guy_1.png'
         }
     ],
@@ -122,6 +161,9 @@ const mutations = {
         }else{
             state.tracking = !state.tracking;
         }
+    },
+    setLocations(state,val){
+        state.locations = val;
     }
 }
 

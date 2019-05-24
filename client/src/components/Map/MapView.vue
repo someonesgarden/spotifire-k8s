@@ -18,7 +18,7 @@
         props: {},
         data() {
             return {
-                zoom:           15,
+                zoom:           20,
                 lat0:           34.722677,
                 lng0:           135.492364,
                 lat:            34.722677,
@@ -36,6 +36,7 @@
         computed: mapGetters(['mapstore']),
         watch: {
             markers() {
+                console.log("watch:markers");
                 this.removeAllMarkers();
                 this.addMarker();
             },
@@ -54,6 +55,7 @@
             window.addEventListener('resize', this.resetDivSize);
             this.keepTracking();
         },
+
         beforeDestroy() {
             window.removeEventListener("resize", this.resetDivSize)
         },
@@ -61,8 +63,12 @@
             ...mapActions(['a_mapstore']),
 
             removeAllMarkers(){
+                console.log("removeAllMarkers");
                 this.markerlist.forEach(marker => marker.setMap(null));
-                this.markerlist.splice(0, this.markerlist.length);
+               this.markerlist.splice(0, this.markerlist.length);
+
+                // this.mapstore.locations.forEach(marker => marker.setMap(null));
+                // this.a_mapstore(['set','locations',[]]);
             },
 
             keepTracking(){
@@ -96,6 +102,13 @@
                 navigator.geolocation.getCurrentPosition((position) => {
                     this.lat = position.coords.latitude;
                     this.lng = position.coords.longitude;
+
+                    //自分のいる近傍にランダムにポイントを生成する
+                    let rand_points = this.randomPointsRange(this.lat,this.lng,70,50)
+                    console.log(rand_points);
+                    this.a_mapstore(['set','locations',rand_points]);
+
+
                 }, function () {
                     alert('位置情報取得に失敗しました');
                 });
@@ -162,8 +175,8 @@
                     htmltxt: '太田市',
                     lat: this.lat,
                     lng: this.lng,
-                    w:60,
-                    h:60,
+                    w:48,
+                    h:48,
                     img: '/static/img/markers/m_user_boy_1.png'
                 },)
 
