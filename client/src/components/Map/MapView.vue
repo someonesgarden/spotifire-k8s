@@ -1,13 +1,12 @@
 <template>
     <div ref="map">
         <div id="map" :style="{width: mapWidth + 'px',height: mapHeight + 'px'}"></div>
-        <button class="button" @click="release">無効化</button>
     </div>
 </template>
-
 <script>
 
     import {mapGetters, mapActions} from 'vuex';
+    import mapMixin from '../../mixins/map/index';
 
     let GoogleMapsLoader = require("google-maps");
     GoogleMapsLoader.KEY = 'AIzaSyCKLKkjFM9Q8YyCpALce51eEC0hcSnHURA';
@@ -15,39 +14,35 @@
 
     export default {
         name: "MapView",
+        mixins:[mapMixin],
         props: {},
         data() {
             return {
-                zoom: 15,
-                lat: 34.722677,
-                lng: 135.492364,
-                map: null,
-                formattedMarkers: [],
-                markers: [],
-                userMarker: null,
-                mapWidth: window.innerWidth,
-                mapHeight: window.innerHeight,
-                trackTimeout:null
+                zoom:           15,
+                lat0:           34.722677,
+                lng0:           135.492364,
+                lat:            34.722677,
+                lng:            135.492364,
+                map:            null,
+                markerlist:     [],
+                markers:        [],
+                userMarker:     null,
+                mapWidth:       window.innerWidth,
+                mapHeight:      window.innerHeight,
+                trackTimeout:   null,
+                trackDuration:  2000
             };
         },
         computed: mapGetters(['mapstore']),
         watch: {
             markers() {
-                // マーカーを全削除
-                this.formattedMarkers.forEach(marker => {
-                    marker.setMap(null);
-                });
-                // propsからも削除
-                this.formattedMarkers.splice(0, this.formattedMarkers.length);
-
-                // 再描画
+                this.removeAllMarkers();
                 this.addMarker();
             },
 
             'mapstore.tracking': {
-                handler: function (lat) {
+                handler: function () {
                     if(!this.trackTimeout) this.keepTracking();
-                   // this.geolocation();
                 }
             }
         },
@@ -65,15 +60,19 @@
         methods: {
             ...mapActions(['a_mapstore']),
 
+            removeAllMarkers(){
+                this.markerlist.forEach(marker => marker.setMap(null));
+                this.markerlist.splice(0, this.markerlist.length);
+            },
+
             keepTracking(){
                 this.geolocation();
                 // 3秒後に実行
                 if(this.mapstore.tracking){
-                    console.log("keep tracking..");
                     this.trackTimeout = true;
-                    setTimeout(this.keepTracking, 3000);
+                    console.log(this.lat,this.lng);
+                    setTimeout(this.keepTracking, this.trackDuration);
                 }else{
-                    console.log("stop tracking..");
                     this.trackTimeout = false;
                 }
             },
@@ -111,98 +110,63 @@
                 this.lat = position.coords.latitude;
                 this.lng = position.coords.longitude;
 
-                console.log("watch!");
-                console.log(this.lat, this.lng);
                 if (!!this.map) {
                     let latLng = new google.maps.LatLng(this.lat, this.lng);
                     this.map.panTo(latLng);
                     this.usermarker.setPosition(latLng);
                 }
+
+                //マップ読み込み成功時の処理！
                 //this.getWeather(API + '&lat=' + lat + '&lon=' + lon + KEY);
             },
             geoError(error) {
                 console.log(error);
-                //this.getWeather(API + '&lat=0&lon=0' + KEY);
             },
 
             addMarker() {
-                this.markers.forEach(markerInfo => {
-                    let contentString =
-                        '<div id="content">' +
-                        '<div id="siteNotice">' +
-                        "</div>" +
-                        '<h1 id="firstHeading" class="firstHeading">Uluru</h1>' +
-                        '<div id="bodyContent">' +
-                        "<p><b>Uluru</b>, also referred to as <b>Ayers Rock</b>, is a large " +
-                        "sandstone rock formation in the southern part of the " +
-                        "Northern Territory, central Australia. It lies 335&#160;km (208&#160;mi) " +
-                        "south west of the nearest large town, Alice Springs; 450&#160;km " +
-                        "(280&#160;mi) by road. Kata Tjuta and Uluru are the two major " +
-                        "features of the Uluru - Kata Tjuta National Park. Uluru is " +
-                        "sacred to the Pitjantjatjara and Yankunytjatjara, the " +
-                        "Aboriginal people of the area. It has many springs, waterholes, " +
-                        "rock caves and ancient paintings. Uluru is listed as a World " +
-                        "Heritage Site.</p>" +
-                        '<p>Attribution: Uluru, <a href="https://en.wikipedia.org/w/index.php?title=Uluru&oldid=297882194">' +
-                        "https://en.wikipedia.org/w/index.php?title=Uluru</a> " +
-                        "(last visited June 22, 2009).</p>" +
-                        "</div>" +
-                        "</div>";
+                console.log("mapstore.locations");
+                console.log(this.mapstore.locations);
+                console.log("markerlist");
+                console.log(this.markerlist);
 
-                    // マーカー
+
+                this.mapstore.locations.forEach(m => {
+
                     let marker = new google.maps.Marker({
-                        position: markerInfo.position,
-                        icon:
-                            "https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png",
-                        map: this.map,
-                        // ポップなアニメーションを付与
-                        animation: google.maps.Animation.DROP
+                        map:        this.map,
+                        position:   {lat:parseFloat(m.lat), lng:parseFloat(m.lng)},
+                        icon:       m.img,
+                        animation:  google.maps.Animation.DROP  // ポップなアニメーションを付与
                     });
 
-                    let infowindow = new google.maps.InfoWindow({
-                        content: contentString
-                    });
+                    let infowindow = new google.maps.InfoWindow({ content: m.htmltxt});
 
-                    // マーカークリック時にwindow表示
-                    marker.addListener("click", function () {
-                        infowindow.open(this.map, marker);
-                    });
-                    this.formattedMarkers.push(marker);
+                    marker.addListener("click", ()=> infowindow.open(this.map, marker));
+
+                    this.markerlist.push(marker);
                 });
             },
 
             loadMap(google) {
-                // googleMapを初期化
-                let centerPosition = {lat: this.lat, lng: this.lng};
 
                 let mapOptions = {
-                    mapTypeControlOptions: { //マップタイプ コントロール
-                        position: google.maps.ControlPosition.TOP_CENTER,
-                    },
-                    fullscreenControlOptions: { //全画面表示コントロール
-                        position: google.maps.ControlPosition.TOP_LEFT,
-                    },
-                    streetViewControlOptions: { //ストリートビュー コントロール
-                        position: google.maps.ControlPosition.LEFT_CENTER,
-                    },
-                    zoomControlOptions:{ //ズーム コントロール
-                        position: google.maps.ControlPosition.RIGHT_CENTER,
-                    },
-
-                    rotateControlOptions:{ //地図を傾ける
-                        position: google.maps.ControlPosition.RIGHT_TOP,
-                    },
-                    center: centerPosition,
+                    mapTypeControlOptions:      { position: google.maps.ControlPosition.TOP_CENTER },
+                    fullscreenControlOptions:   { position: google.maps.ControlPosition.TOP_LEFT },
+                    streetViewControlOptions:   { position: google.maps.ControlPosition.LEFT_CENTER },
+                    zoomControlOptions:         { position: google.maps.ControlPosition.RIGHT_CENTER },
+                    rotateControlOptions:       { position: google.maps.ControlPosition.RIGHT_TOP },
+                    center: {lat: this.lat0, lng: this.lng0}, //初期座標
                     zoom: this.zoom,
-                    // スワイプ判定を強めに設定(地図を移動させるには..問題)
-                    gestureHandling: "greedy"
+                    // gestureHandling: "greedy"    // スワイプ判定を強めに設定(地図を移動させるには..問題)
+                    gestureHandling: "auto"
                 };
 
-
                 this.map = new google.maps.Map(document.getElementById("map"), mapOptions);
+
+                this.usermarker = new google.maps.Marker({map: this.map, position:  {lat: this.lat, lng: this.lng}});
+                this.markerlist.push(this.usermarker);
+
                 this.addMarker();
-                this.usermarker = new google.maps.Marker({map: this.map, position: centerPosition});
-                this.formattedMarkers.push(this.usermarker);
             },
 
             release() {

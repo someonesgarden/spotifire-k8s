@@ -24,13 +24,11 @@
 
                         <div class="ui">
                             <div class="sixteen wide">
-                                <mu-button full-width color="indigo500" @click="findMe">
-                                    <mu-icon value="nature_people" style="width:20px;"></mu-icon>&nbsp;Me
+                                <mu-button full-width color="indigo500" @click="addMarkers">
+                                    <mu-icon value="room" style="width:20px;"></mu-icon>&nbsp;Add
                                 </mu-button>
                             </div>
-
                         </div>
-
                         <mu-divider></mu-divider>
                     </mu-form>
 
@@ -48,45 +46,31 @@
     import {mapGetters,mapActions} from 'vuex';
     import MapView from './Map/MapView';
     import spotifyMixin from '../mixins/spotify/index';
+    import mapMixin from '../mixins/map/index';
     export default {
         name: 'myfilters',
-        mixins:[spotifyMixin],
+        mixins:[spotifyMixin,mapMixin],
         components:{
             MapView
         },
         data(){
           return{
-                    mapform:{
-                        text1:""
-                    }
+                mapform:{
+                    text1:""
+                }
           }
+        },
+        computed:mapGetters(['spotify','mapstore']),
+        mounted(){
+            this.filter = this.spotify.filter;
         },
         methods:{
             ...mapActions(['a_spotify','a_mapstore']),
 
-            findMe(){
-                console.log("moveToMe");
-            },
+            addMarkers(){
 
-            trackToggle(){
-                console.log("trackStart");
-                this.a_mapstore(['set','tracking',null]);
-            },
 
-            trackStop(){
-                console.log("trackStop");
-                this.a_mapstore(['set','tracking',false]);
-            },
-
-            trackStart(){
-                console.log("trackStop");
-                this.a_mapstore(['set','tracking',true]);
             }
-        },
-        computed:mapGetters(['spotify','mapstore']),
-
-        mounted(){
-            this.filter = this.spotify.filter;
         },
         watch:{
             'spotify.credential':{
