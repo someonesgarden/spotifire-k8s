@@ -2,26 +2,25 @@
     <div class="aside">
         <h3><strong><mu-icon value="search" size="10"></mu-icon>&nbsp;SEARCH</strong></h3>
         <mu-container v-if="gen">
-            <mu-form :model="gen" label-position="left" label-width="40">
+            <mu-form :model="gen" label-position="left" label-width="32">
                 <mu-row gutter>
                     <mu-col span="1" sm="1" md="1" lg="1" xl="1">
                         <mu-radio v-model="id_or_term" value="id"></mu-radio>
                     </mu-col>
 
-                    <mu-col span="7" sm="7" md="7" lg="7" xl="7">
+                    <mu-col span="8" sm="8" md="7" lg="7" xl="7">
                         <mu-form-item prop="textarea" label="ID" class="range">
-                            <mu-text-field multi-line :rows="1" :rows-max="2" :value="spotify.searchQuery.id" :disabled="id_or_term==='term'"
-                                           @change="(val)=> a_spotify(['set','searchQuery',{key:'id',val:val}])"></mu-text-field>
+                            <mu-text-field multi-line :rows="1" :rows-max="2" :value="spotify.searchQuery.id" :disabled="id_or_term==='term'" @change="(val)=> a_spotify(['set','searchQuery',{key:'id',val:val}])"></mu-text-field>
                         </mu-form-item>
                     </mu-col>
-                    <mu-col span="4" sm="4" md="4" lg="4" xl="4">
+                    <mu-col span="3" sm="3" md="4" lg="4" xl="4" style="text-align:right;">
 
-                        <mu-button fab small color="grey500" @click="a_index(['bottom','open'])" range>
-                            <mu-icon value="border_bottom"></mu-icon>
+                        <mu-button fab small color="grey500" @click="a_index(['bottom','open'])" range style="width:26px;height:26px;">
+                            <mu-icon value="border_bottom" :size="18"></mu-icon>
                         </mu-button>
 
-                        <mu-button fab small color="black" @click="$emit('rightopen')" range>
-                            <mu-icon value="border_right"></mu-icon>
+                        <mu-button fab small color="black" @click="$emit('rightopen')" range style="width:26px;height:26px;">
+                            <mu-icon value="border_right" :size="18"></mu-icon>
                         </mu-button>
 
                     </mu-col>
@@ -278,8 +277,6 @@
                         </mu-form-item>
                     </mu-col>
                 </mu-row>
-
-
                 <mu-divider></mu-divider>
 
                 <mu-row gutter v-for="(seed,index) in gen.seeds" :key="'seed'+index">
@@ -303,17 +300,18 @@
                 </mu-row>
 
                 <mu-row gutter class="range">
-                    <mu-col span="12" sm="2" md="2" lg="2">
+
+                    <mu-col span="2" sm="2" md="2" lg="2">
                         <mu-button full-width color="indigo400" @click="orderChange">
                             <mu-icon value="low_priority"></mu-icon>
                         </mu-button>
                     </mu-col>
 
-                    <mu-col span="12" sm="6" md="6" lg="6">
+                    <mu-col span="6" sm="6" md="6" lg="6">
                         <mu-button color="primary" class="smallbtn" full-width @click="c_getCredential" v-if="!spotify.credential.expires_in">LOGIN</mu-button>
                         <mu-button full-width color="pink500" @click="generate" v-else>Generate</mu-button>
                     </mu-col>
-                    <mu-col span="12" sm="4" md="4" lg="4">
+                    <mu-col span="4" sm="4" md="4" lg="4">
                         <mu-button full-width color="secondary" @click="c_gen_condition_csv(gen)">CSV</mu-button>
                     </mu-col>
                 </mu-row>
