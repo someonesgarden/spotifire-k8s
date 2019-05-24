@@ -8,12 +8,12 @@
                         <mu-radio v-model="id_or_term" value="id"></mu-radio>
                     </mu-col>
 
-                    <mu-col span="8" sm="8" md="7" lg="7" xl="7">
+                    <mu-col span="8" sm="8" md="8" lg="8" xl="8">
                         <mu-form-item prop="textarea" label="ID" class="range">
                             <mu-text-field multi-line :rows="1" :rows-max="2" :value="spotify.searchQuery.id" :disabled="id_or_term==='term'" @change="(val)=> a_spotify(['set','searchQuery',{key:'id',val:val}])"></mu-text-field>
                         </mu-form-item>
                     </mu-col>
-                    <mu-col span="3" sm="3" md="4" lg="4" xl="4" style="text-align:right;">
+                    <mu-col span="3" sm="3" md="3" lg="3" xl="3" style="text-align:right;">
 
                         <mu-button fab small color="grey500" @click="a_index(['bottom','open'])" range style="width:26px;height:26px;">
                             <mu-icon value="border_bottom" :size="18"></mu-icon>
@@ -49,12 +49,12 @@
                 </mu-form-item>
 
                 <mu-row gutter>
-                    <mu-col span="12" sm="12" md="4" lg="4" xl="4">
+                    <mu-col span="4" sm="4" md="4" lg="4" xl="4">
                         <mu-form-item prop="textarea" label="offset" class="range">
                             <mu-text-field  :value="spotify.searchQuery.offset" @change="(val)=> a_spotify(['set','searchQuery',{key:'offset',val:val}])"></mu-text-field>
                         </mu-form-item>
                     </mu-col>
-                    <mu-col span="12" sm="12" md="8" lg="8" xl="8">
+                    <mu-col span="8" sm="8" md="8" lg="8" xl="8">
                         <mu-form-item prop="limit" label="limit" class="range">
                             <mu-slider :min="1" :max="50" :step="1" :value="spotify.searchQuery.limit"
                                        @change="(val)=> a_spotify(['set','searchQuery',{key:'limit',val:val}])"></mu-slider>

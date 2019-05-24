@@ -65,9 +65,7 @@
   min-height: 100vh;
   width: 100%;
 
-
-
-  &.News{
+  &.News, &.Top{
     margin-top:90px;
     padding-bottom:120px;
   }
