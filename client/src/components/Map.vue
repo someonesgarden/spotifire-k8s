@@ -1,7 +1,7 @@
 <template>
     <mu-container class="reset">
         <mu-row gutter>
-            <mu-col span="3" class="controlarea">
+            <mu-col span="4" sm="3" md="3" lg="2" class="controlarea">
                 <div class="grid-cell">
 
                     <mu-container>
@@ -13,6 +13,8 @@
 
 
                         <mu-form :model="mapform" ref="mapform" label-position="left" label-width="50">
+
+
                             <mu-row gutter>
                                 <mu-col span="1" sm="1" md="1" lg="1" xl="1">
 <!--                                    <mu-radio v-model="id_or_term" value="id"></mu-radio>-->
@@ -42,7 +44,7 @@
 
                 </div>
             </mu-col>
-            <mu-col span="9" class="maparea">
+            <mu-col span="8" sm="9" md="9" lg="10" class="maparea">
 
                 <div class="grid-cell">
                     <map-view id="map"></map-view>
@@ -133,7 +135,6 @@
                 height:calc(100vh - 64px);
             }
         }
-
     }
 
 </style>

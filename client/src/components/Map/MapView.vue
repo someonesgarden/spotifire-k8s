@@ -158,12 +158,32 @@
             loadMap(google) {
                 // googleMapを初期化
                 let centerPosition = {lat: this.lat, lng: this.lng};
-                this.map = new google.maps.Map(document.getElementById("map"), {
+
+                let mapOptions = {
+                    mapTypeControlOptions: { //マップタイプ コントロール
+                        position: google.maps.ControlPosition.TOP_CENTER,
+                    },
+                    fullscreenControlOptions: { //全画面表示コントロール
+                        position: google.maps.ControlPosition.TOP_LEFT,
+                    },
+                    streetViewControlOptions: { //ストリートビュー コントロール
+                        position: google.maps.ControlPosition.LEFT_CENTER,
+                    },
+                    zoomControlOptions:{ //ズーム コントロール
+                        position: google.maps.ControlPosition.RIGHT_CENTER,
+                    },
+
+                    rotateControlOptions:{ //地図を傾ける
+                        position: google.maps.ControlPosition.RIGHT_TOP,
+                    },
                     center: centerPosition,
                     zoom: this.zoom,
                     // スワイプ判定を強めに設定(地図を移動させるには..問題)
                     gestureHandling: "greedy"
-                });
+                };
+
+
+                this.map = new google.maps.Map(document.getElementById("map"), mapOptions);
                 this.addMarker();
                 this.usermarker = new google.maps.Marker({map: this.map, position: centerPosition});
                 this.formattedMarkers.push(this.usermarker);
