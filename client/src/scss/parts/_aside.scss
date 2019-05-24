@@ -1,8 +1,32 @@
 .aside{
   width:100%;
-  padding:0 8px;
+  padding:0 2px;
   height:calc(100vh - 16px);
   font-size:11px;
+
+  .col{
+    padding-left:4px;
+    padding-right:4px;
+  }
+
+  .mu-form-item-label{
+    font-size:10px;
+  }
+
+  .mu-checkbox-icon,.mu-checkbox-svg-icon{
+    width:16px;
+    height:16px;
+    margin-right: 3px;
+  }
+
+  .mu-radio-svg-icon{
+    width:16px;
+    height:16px;
+  }
+
+  .mu-text-field-input{
+    font-size:9px;
+  }
 
   .mu-form-item{
     margin-bottom:0;

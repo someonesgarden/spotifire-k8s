@@ -2,14 +2,14 @@
     <div class="aside">
         <h3><strong><mu-icon value="search" size="10"></mu-icon>&nbsp;SEARCH</strong></h3>
         <mu-container v-if="gen">
-            <mu-form :model="gen" label-position="left" label-width="60">
+            <mu-form :model="gen" label-position="left" label-width="40">
                 <mu-row gutter>
                     <mu-col span="1" sm="1" md="1" lg="1" xl="1">
                         <mu-radio v-model="id_or_term" value="id"></mu-radio>
                     </mu-col>
 
                     <mu-col span="7" sm="7" md="7" lg="7" xl="7">
-                        <mu-form-item prop="textarea" label="any ID" class="range">
+                        <mu-form-item prop="textarea" label="ID" class="range">
                             <mu-text-field multi-line :rows="1" :rows-max="2" :value="spotify.searchQuery.id" :disabled="id_or_term==='term'"
                                            @change="(val)=> a_spotify(['set','searchQuery',{key:'id',val:val}])"></mu-text-field>
                         </mu-form-item>
@@ -73,6 +73,7 @@
                     <search-res-list type="episode"></search-res-list>
                 </div>
 
+                <br>
                 <mu-row gutter>
                     <mu-col span="12" sm="12" md="12" lg="12" xl="12">
                         <div class="grid-cell">
