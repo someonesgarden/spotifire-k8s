@@ -60,7 +60,7 @@ const state = {
             img: '/static/img/markers/m_friend_boy_1.png'
         },
         {
-            htmltxt: '世田谷区	',
+            htmltxt: '世田谷区',
             lat: 35.669726,
             lng: 139.620901,
             w:30,
@@ -68,7 +68,7 @@ const state = {
             img: '/static/img/markers/m_friend_woman_1.png'
         },
         {
-            htmltxt: '渋谷	',
+            htmltxt: '渋谷',
             lat: 35.668183,
             lng: 139.709361,
             w:30,

@@ -162,8 +162,8 @@
                     htmltxt: '太田市',
                     lat: this.lat,
                     lng: this.lng,
-                    w:80,
-                    h:80,
+                    w:60,
+                    h:60,
                     img: '/static/img/markers/m_user_boy_1.png'
                 },)
 
