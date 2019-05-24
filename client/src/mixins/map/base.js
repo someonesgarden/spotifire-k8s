@@ -49,13 +49,18 @@ export default{
                 let dlng = bit*(Math.random()*dist)*Math.pow(-1,Math.floor(Math.random()*2 + 1));
 
                 rand_points.push({
-                    htmltxt: '文章',
                     lat: lat0+dlat,
                     lng: lng0+dlng,
-                     w:20+type,
-                     h:20+type,
-                    type:type,
-                    img: this.mapstore.friend_types[type].img
+                     w:  20+type,
+                     h:  20+type,
+                     type:this.mapstore.marker_types[type].type,
+                     title:this.mapstore.marker_types[type].title,
+                     subtitle:this.mapstore.marker_types[type].subtitle,
+                     body:this.mapstore.marker_types[type].body,
+                     pid:this.mapstore.marker_types[type].pid,
+                     icon: this.mapstore.marker_types[type].icon,
+                     thumb: this.mapstore.marker_types[type].thumb,
+                     id: this.mapstore.marker_types[type].id,
                 })
 
             }

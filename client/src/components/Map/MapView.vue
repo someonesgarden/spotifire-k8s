@@ -141,11 +141,24 @@
                 let marker = new google.maps.Marker({
                     map:        this.map,
                     position:   {lat:parseFloat(m.lat), lng:parseFloat(m.lng)},
-                    icon:       { url: m.img, scaledSize: new google.maps.Size(parseInt(m.w), parseInt(m.h))},
+                    icon:       { url: m.icon, scaledSize: new google.maps.Size(parseInt(m.w), parseInt(m.h))},
                     animation:  google.maps.Animation.DROP  // ポップなアニメーションを付与
                 });
 
-                let infowindow = new google.maps.InfoWindow({ content: m.htmltxt});
+                let infowindow = new google.maps.InfoWindow({
+
+                    content: '<div class="mu-card marker" style="width: 100%;margin: 0 auto;">'+
+                        '<div class=" mu-card-media">'+
+                        '<img src="'+m.thumb+'">'+
+                        '<div class="mu-card-media-title">'+
+                        '<div class="mu-card-title">'+m.title+'</div>'+
+                        '<div class="mu-card-sub-title">'+m.subtitle+'</div>'+
+                        '</div>'+
+                        '</div>'+
+                        '<div class="mu-card-text">'+m.body+
+                        ' </div>'+
+                        '</div>'
+                });
                 marker.addListener("click", ()=> infowindow.open(this.map, marker));
 
                 return marker;
@@ -172,12 +185,18 @@
                 this.map = new google.maps.Map(document.getElementById("map"), mapOptions);
 
                 this.usermarker = this.markerMaker( {
-                    htmltxt: '太田市',
+                    icon:'/static/img/markers/m_friend_boy_1.png',
+                    title:'For Your Holidays.',
+                    subtitle:'top smooth tracks',
+                    body:'あなたは現在視聴中です。',
+                    thumb:'/static/img/covers/p1.jpg',
+                    pid:'',
+                    id:0,
+                    type:'friend',
                     lat: this.lat,
                     lng: this.lng,
                     w:48,
-                    h:48,
-                    img: '/static/img/markers/m_user_boy_1.png'
+                    h:48
                 },)
 
                    // new google.maps.Marker({map: this.map, position:  {lat: this.lat, lng: this.lng}});
@@ -197,4 +216,7 @@
 </script>
 
 <style lang="scss" scoped>
+
+
+
 </style>

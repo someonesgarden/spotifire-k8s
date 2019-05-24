@@ -2,43 +2,119 @@ const state = {
 
     baseimg:'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png',
 
-    friend_types:[
+    marker_types:[
         {
-            img:'/static/img/markers/m_friend_boy_1.png',
+            icon:'/static/img/markers/m_friend_boy_1.png',
+            title:'For Your Holidays.',
+            subtitle:'top smooth tracks',
+            body:'もう半世紀以上のあいだ名詞や動詞や助詞や形容詞や疑問符など言葉どもに揉まれながら暮らしてきましたからどちらかと言うと無言を好みます',
+            thumb:'/static/img/covers/p1.jpg',
+            pid:'',
+            id:0,
+            type:'friend'
         },
         {
-            img:'/static/img/markers/m_friend_boy_2.png',
+            icon:'/static/img/markers/m_friend_boy_2.png',
+            title:'Poets for Your Life',
+            subtitle:'',
+            body:'私は工具類が嫌いではありませんまた樹木が灌木も含めて大好きですがそれらの名称を覚えるのは苦手です',
+            thumb:'/static/img/covers/p2.jpg',
+            pid:'',
+            id:1,
+            type:'friend'
         },
         {
-            img:'/static/img/markers/m_friend_girl_1.png',
+            icon:'/static/img/markers/m_friend_girl_1.png',
+            title:'Electro Tokyo',
+            subtitle:'',
+            body:'夏はほとんどＴシャツで過ごします私の書く言葉には値段がつくことがあります',
+            thumb:'/static/img/covers/p3.jpg',
+            pid:'',
+            id:2,
+            type:'friend'
         },
         {
-            img:'/static/img/markers/m_friend_girl_2.png',
+            icon:'/static/img/markers/m_friend_girl_2.png',
+            title:'Michael Jackson',
+            subtitle:'this is life.',
+            body:'私は過去の日付にあまり関心がなく権威というものに反感をもっています斜視で乱視で老眼です',
+            thumb:'/static/img/covers/p4.jpg',
+            pid:'',
+            id:3,
+            type:'friend'
         },
         {
-            img:'/static/img/markers/m_friend_guy_1.png',
+            icon:'/static/img/markers/m_friend_guy_1.png',
+            title:'My Summer REwind',
+            subtitle:'How good!',
+            body:'家には仏壇も神棚もありませんが室内に直結の巨大な郵便受けがあります私にとって睡眠は快楽の一種です',
+            thumb:'/static/img/covers/p5.jpg',
+            pid:'',
+            id:4,
+            type:'friend'
         }
         ,
         {
-            img:'/static/img/markers/m_friend_woman_1.png',
+            icon:'/static/img/markers/m_friend_woman_1.png',
+            title:'Podcart',
+            subtitle:'How good!',
+            body:'夢は見ても目覚めたときには忘れていますここに述べていることはすべて事実です',
+            thumb:'/static/img/covers/p6.jpg',
+            pid:'',
+            id:5,
+            type:'friend'
         },
         {
-            img:'/static/img/markers/m_friend_boy_2.png',
+            icon:'/static/img/markers/m_friend_boy_2.png',
+            title:'To Crates',
+            subtitle:'How good!',
+            body:'こうして言葉にしてしまうとどこか噓くさい別居の子ども二人孫四人犬猫は飼っていません',
+            thumb:'/static/img/covers/p7.jpg',
+            pid:'',
+            id:6,
+            type:'friend'
         },
         {
-            img:'/static/img/markers/m_friend_girl_1.png',
+            icon:'/static/img/markers/m_friend_girl_1.png',
+            title:'旅と音楽',
+            subtitle:'How good!',
+            body:'夏はほとんどＴシャツで過ごします私の書く言葉には値段がつくことがあります',
+            thumb:'/static/img/covers/p8.jpg',
+            pid:'',
+            id:7,
+            type:'friend'
         },
         {
-            img:'/static/img/markers/m_friend_girl_2.png',
+            icon:'/static/img/markers/m_friend_girl_2.png',
+            title:'Collin hay',
+            subtitle:'v',
+            body:'',
+            thumb:'/static/img/covers/p9.jpg',
+            pid:'',
+            id:8,
+            type:'friend'
         },
         {
-            img:'/static/img/markers/m_friend_guy_1.png',
+            icon:'/static/img/markers/m_friend_guy_1.png',
+            title:'NEW NEW NEW',
+            subtitle:'How good!',
+            body:'夏はほとんどＴシャツで過ごします私の書く言葉には値段がつくことがあります',
+            thumb:'/static/img/covers/p10.jpg',
+            pid:'',
+            id:9,
+            type:'friend'
         }
         ,
         {
-            img:'/static/img/markers/m_friend_woman_1.png',
+            icon:'/static/img/markers/m_friend_woman_1.png',
+            title:'NEW NEW NEW',
+            subtitle:'Life is new!',
+            body:'夏はほとんどＴシャツで過ごします私の書く言葉には値段がつくことがあります',
+            thumb:'/static/img/covers/p10.jpg',
+            pid:'',
+            id:10,
+            type:'friend'
         }
-
     ],
 
     locations:[
@@ -49,109 +125,8 @@ const state = {
             w:25,
             h:25,
             img: '/static/img/markers/m_friend_boy_1.png'
-        },
-        {
-            htmltxt: '中央地区',
-            lat: 35.668796,
-            lng: 139.786583,
-            w:20,
-            h:20,
-            img: '/static/img/markers/m_friend_boy_2.png'
-        },
-        {
-            htmltxt: '港エリア	',
-            lat: 35.66849,
-            lng: 139.746192,
-            w:20,
-            h:20,
-            img: '/static/img/markers/m_friend_girl_1.png'
-        },
-        {
-            htmltxt: '新宿区',
-            lat: 35.69995,
-            lng: 139.735037,
-            w:25,
-            h:25,
-            img: '/static/img/markers/m_friend_girl_2.png'
-        },
-        {
-            htmltxt: '文京区	',
-            lat: 35.72349,
-            lng: 139.749553,
-            w:20,
-            h:20,
-            img: '/static/img/markers/m_friend_guy_1.png'
-        },
-        {
-            htmltxt: '品川区	',
-            lat: 35.598187,
-            lng: 139.758968,
-            w:25,
-            h:25,
-            img: '/static/img/markers/m_friend_girl_1.png'
-        },
-        {
-            htmltxt: '太田市',
-            lat: 35.549786,
-            lng: 139.786522,
-            w:25,
-            h:25,
-            img: '/static/img/markers/m_friend_boy_1.png'
-        },
-        {
-            htmltxt: '世田谷区',
-            lat: 35.669726,
-            lng: 139.620901,
-            w:25,
-            h:25,
-            img: '/static/img/markers/m_friend_woman_1.png'
-        },
-        {
-            htmltxt: '渋谷',
-            lat: 35.668183,
-            lng: 139.709361,
-            w:25,
-            h:25,
-            img: '/static/img/markers/m_friend_guy_1.png'
-        },
-        {
-            htmltxt: '中野	',
-            lat: 35.724688,
-            lng: 139.65612,
-            w:25,
-            h:25,
-            img: '/static/img/markers/m_friend_woman_1.png'
-        },
-        {
-            htmltxt: '杉並	',
-            lat: 35.671529,
-            lng: 139.646176,
-            w:25,
-            h:25,
-            img: '/static/img/markers/m_friend_guy_1.png'
         }
     ],
-
-    marker_txt_test: '<div id="content">' +
-        '<div id="siteNotice">' +
-        "</div>" +
-        '<h1 id="firstHeading" class="firstHeading">Uluru</h1>' +
-        '<div id="bodyContent">' +
-        "<p><b>Uluru</b>, also referred to as <b>Ayers Rock</b>, is a large " +
-        "sandstone rock formation in the southern part of the " +
-        "Northern Territory, central Australia. It lies 335&#160;km (208&#160;mi) " +
-        "south west of the nearest large town, Alice Springs; 450&#160;km " +
-        "(280&#160;mi) by road. Kata Tjuta and Uluru are the two major " +
-        "features of the Uluru - Kata Tjuta National Park. Uluru is " +
-        "sacred to the Pitjantjatjara and Yankunytjatjara, the " +
-        "Aboriginal people of the area. It has many springs, waterholes, " +
-        "rock caves and ancient paintings. Uluru is listed as a World " +
-        "Heritage Site.</p>" +
-        '<p>Attribution: Uluru, <a href="https://en.wikipedia.org/w/index.php?title=Uluru&oldid=297882194">' +
-        "https://en.wikipedia.org/w/index.php?title=Uluru</a> " +
-        "(last visited June 22, 2009).</p>" +
-        "</div>" +
-        "</div>"
 }
 
 const mutations = {
