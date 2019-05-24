@@ -21,6 +21,13 @@
     padding:20px 12px;
   }
 }
+.flex_h{
+  @include flex('h');
+  .base{
+    width:100%;
+    padding:20px 12px;
+  }
+}
 
 .flex-wrapper {
   width: 100%;
@@ -58,13 +65,13 @@
   min-height: 100vh;
   width: 100%;
 
-  margin-top:90px;
-  padding-bottom:120px;
 
-  &.login{
-    margin-top:inherit;
-    padding-bottom:inherit;
+
+  &.News{
+    margin-top:90px;
+    padding-bottom:120px;
   }
+
 
   // headings
   h1, h2, h3, h4, h5, h6 {

@@ -1,7 +1,7 @@
 <template>
-  <div id="app" v-cloak class="app-wrap" :class="{login:($route.name==='Login' || $route.name==='')}">
+  <div id="app" v-cloak class="app-wrap" :class="[$route.name,{login:($route.name==='Login' || $route.name==='')}]">
     <head-top></head-top>
-    <mu-container>
+    <mu-container fluid>
       <router-view></router-view>
     </mu-container>
 
@@ -91,4 +91,9 @@ export default {
   @import "scss/app";
   @import "scss/parts/layout/driveway";
   @import "scss/driveway";
+
+  .container-fluid{
+    padding-right:0;
+    padding-left:0;
+  }
 </style>

@@ -29,7 +29,7 @@
                 mapHeight: window.innerHeight
             };
         },
-        computed: mapGetters(['mapparam']),
+        computed: mapGetters(['mapstore']),
         watch: {
             markers() {
                 // マーカーを全削除
@@ -43,9 +43,8 @@
                 this.addMarker();
             },
 
-            'mapparam.tracking': {
+            'mapstore.tracking': {
                 handler: function (lat) {
-
                     this.geolocation();
                 }
             }
@@ -53,7 +52,7 @@
         mounted() {
             GoogleMapsLoader.load(this.loadMap);
             this.initMap();
-            this.a_map(['set', 'tracking', null]);
+            this.a_mapstore(['set', 'tracking', null]);
 
             this.resetDivSize();
             window.addEventListener('resize', this.resetDivSize);
@@ -62,7 +61,7 @@
             window.removeEventListener("resize", this.resetDivSize)
         },
         methods: {
-            ...mapActions(['a_map']),
+            ...mapActions(['a_mapstore']),
             resetDivSize() {
                 this.mapWidth = window.innerWidth;
                 if (window.innerHeight > 768) {
