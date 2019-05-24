@@ -25,6 +25,13 @@
           color: #00e100;
           margin: 1px 10px 1px 10px;
 
+
+
+          @media (max-width: 767px) {
+            visibility: hidden;
+            display:none;
+          }
+
         }
 
         &.artist {
@@ -34,6 +41,10 @@
           i.mu-icon {
             font-size: 8px;
             padding-right: 3px;
+          }
+
+          @media (max-width: 767px) {
+            font-size: 7px;
           }
         }
 
@@ -45,6 +56,10 @@
             font-size: 8px;
             padding-right: 3px;
           }
+
+          @media (max-width: 767px) {
+            font-size: 7px;
+          }
         }
 
         &.album {
@@ -54,6 +69,11 @@
           i.mu-icon {
             font-size: 8px;
             padding-right: 3px;
+          }
+
+          @media (max-width: 767px) {
+            visibility: hidden;
+            display:none;
           }
         }
       }
