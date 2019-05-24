@@ -123,28 +123,23 @@
                 console.log(error);
             },
 
-            addMarker() {
-                console.log("mapstore.locations");
-                console.log(this.mapstore.locations);
-                console.log("markerlist");
-                console.log(this.markerlist);
 
-
-                this.mapstore.locations.forEach(m => {
-
-                    let marker = new google.maps.Marker({
-                        map:        this.map,
-                        position:   {lat:parseFloat(m.lat), lng:parseFloat(m.lng)},
-                        icon:       m.img,
-                        animation:  google.maps.Animation.DROP  // ポップなアニメーションを付与
-                    });
-
-                    let infowindow = new google.maps.InfoWindow({ content: m.htmltxt});
-
-                    marker.addListener("click", ()=> infowindow.open(this.map, marker));
-
-                    this.markerlist.push(marker);
+            markerMaker(m){
+                let marker = new google.maps.Marker({
+                    map:        this.map,
+                    position:   {lat:parseFloat(m.lat), lng:parseFloat(m.lng)},
+                    icon:       { url: m.img, scaledSize: new google.maps.Size(parseInt(m.w), parseInt(m.h))},
+                    animation:  google.maps.Animation.DROP  // ポップなアニメーションを付与
                 });
+
+                let infowindow = new google.maps.InfoWindow({ content: m.htmltxt});
+                marker.addListener("click", ()=> infowindow.open(this.map, marker));
+
+                return marker;
+            },
+
+            addMarker() {
+                this.mapstore.locations.forEach(m => this.markerlist.push(this.markerMaker(m)))
             },
 
             loadMap(google) {
@@ -157,16 +152,26 @@
                     rotateControlOptions:       { position: google.maps.ControlPosition.RIGHT_TOP },
                     center: {lat: this.lat0, lng: this.lng0}, //初期座標
                     zoom: this.zoom,
-                    // gestureHandling: "greedy"    // スワイプ判定を強めに設定(地図を移動させるには..問題)
-                    gestureHandling: "auto"
+                    gestureHandling: "greedy",    // スワイプ判定を強めに設定(地図を移動させるには..問題)
+                    //gestureHandling: "auto"
                 };
 
                 this.map = new google.maps.Map(document.getElementById("map"), mapOptions);
 
-                this.usermarker = new google.maps.Marker({map: this.map, position:  {lat: this.lat, lng: this.lng}});
-                this.markerlist.push(this.usermarker);
+                this.usermarker = this.markerMaker( {
+                    htmltxt: '太田市',
+                    lat: this.lat,
+                    lng: this.lng,
+                    w:80,
+                    h:80,
+                    img: '/static/img/markers/m_user_boy_1.png'
+                },)
+
+                   // new google.maps.Marker({map: this.map, position:  {lat: this.lat, lng: this.lng}});
 
                 this.addMarker();
+
+                this.markerlist.push(this.usermarker);
             },
 
             release() {

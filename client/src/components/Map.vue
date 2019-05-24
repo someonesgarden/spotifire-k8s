@@ -114,7 +114,6 @@
         }
 
         .col{
-
             &.controlarea{
                 padding-right:0;
                 text-align:center;
@@ -125,7 +124,6 @@
                 padding-left:0;
                 width:100%;
                 height:100%;
-                background-color:orange;
             }
 
             .grid-cell{
