@@ -2,7 +2,7 @@
     <div class="aside">
         <h3><strong><mu-icon value="search" size="10"></mu-icon>&nbsp;SEARCH</strong></h3>
         <mu-container v-if="gen">
-            <mu-form :model="gen" label-position="left" label-width="70">
+            <mu-form :model="gen" label-position="left" label-width="60">
                 <mu-row gutter>
                     <mu-col span="1" sm="1" md="1" lg="1" xl="1">
                         <mu-radio v-model="id_or_term" value="id"></mu-radio>

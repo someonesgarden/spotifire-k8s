@@ -13,27 +13,28 @@
                     <mu-form :model="mapform" ref="mapform" label-position="left" label-width="50">
 
 
-
                         <div class="ui">
                             <div class="sixteen wide">
-                                <mu-button full-width color="indigo400" @click="moveToMe">
-                                    <mu-icon value="accessibility_new"></mu-icon>IM
+                                <mu-button full-width color="pink500" @click="trackStart">
+                                    <mu-icon value="settings_input_antenna" style="width:20px;"></mu-icon>&nbsp;Start
+                                </mu-button>
+                            </div>
+
+                            <div class="sixteen wide">
+                                <mu-button full-width color="cyan400" @click="trackStop">
+                                    <mu-icon value="portable_wifi_off" style="width:20px;"></mu-icon>&nbsp;Stop
                                 </mu-button>
                             </div>
                         </div>
 
                         <div class="ui">
                             <div class="sixteen wide">
-                                <mu-button full-width color="red500" @click="trackStart">
-                                    <mu-icon value="settings_input_antenna"></mu-icon>Start
+                                <mu-button full-width color="indigo500" @click="findMe">
+                                    <mu-icon value="nature_people" style="width:20px;"></mu-icon>&nbsp;Me
                                 </mu-button>
                             </div>
 
-                            <div class="sixteen wide">
-                                <mu-button full-width color="cyan400" @click="trackStop">
-                                    <mu-icon value="portable_wifi_off"></mu-icon>Stop
-                                </mu-button>
-                            </div>
+
                         </div>
 
                         <mu-divider></mu-divider>
@@ -69,7 +70,7 @@
         methods:{
             ...mapActions(['a_spotify','a_mapstore']),
 
-            moveToMe(){
+            findMe(){
                 console.log("moveToMe");
             },
 

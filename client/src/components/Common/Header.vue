@@ -13,7 +13,7 @@
 
         </mu-appbar>
 
-        <mu-drawer :open.sync="side.left.open" :docked="side.left.docked" :width="420">
+        <mu-drawer :open.sync="side.left.open" :docked="side.left.docked" :width="280">
             <mu-list>
                 <aside-view @rightopen="side.right.open=true"></aside-view>
             </mu-list>
