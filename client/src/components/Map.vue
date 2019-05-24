@@ -14,34 +14,32 @@
 
                         <mu-form :model="mapform" ref="mapform" label-position="left" label-width="50">
 
-
-                            <mu-row gutter>
-                                <mu-col span="1" sm="1" md="1" lg="1" xl="1">
-<!--                                    <mu-radio v-model="id_or_term" value="id"></mu-radio>-->
-                                </mu-col>
-
-                                <mu-col span="7" sm="8" md="8" lg="8" xl="8">
-                                    <mu-form-item prop="textarea" label="any ID" class="range">
-                                        <mu-text-field v-model="mapform.text1"></mu-text-field>
-                                    </mu-form-item>
-                                </mu-col>
-
-                            </mu-row>
-
-
-                            <mu-row gutter class="range">
-                                <mu-col span="12" sm="12" md="12" lg="12">
-                                    <mu-button full-width color="indigo400">
-                                        <mu-icon value="low_priority"></mu-icon>
+                            <div class="ui grid range">
+                                <div class="sixteen wide">
+                                    <mu-button full-width color="indigo400" @click="moveToMe">
+                                        <mu-icon value="low_priority"></mu-icon>my place
                                     </mu-button>
-                                </mu-col>
+                                </div>
+                            </div>
 
-                            </mu-row>
+                            <div class="ui grid range">
+                                <div class="sixteen wide">
+                                    <mu-button full-width color="indigo400" @click="trackStart">
+                                        <mu-icon value="low_priority"></mu-icon>start track
+                                    </mu-button>
+                                </div>
+
+                                <div class="sixteen wide">
+                                    <mu-button full-width color="indigo400" @click="trackStop">
+                                        <mu-icon value="low_priority"></mu-icon>stop track
+                                    </mu-button>
+                                </div>
+                            </div>
+
+
                             <mu-divider></mu-divider>
                         </mu-form>
                     </mu-container>
-
-
                 </div>
             </mu-col>
             <mu-col span="8" sm="9" md="9" lg="10" class="maparea">
@@ -70,7 +68,21 @@
                     }
           }
         },
-        methods:mapActions(['a_spotify','a_mapstore']),
+        methods:{
+            ...mapActions(['a_spotify','a_mapstore']),
+
+            moveToMe(){
+                console.log("moveToMe");
+            },
+
+            trackStart(){
+                console.log("trackStart");
+            },
+
+            trackStop(){
+                console.log("trackStop");
+            }
+        },
         computed:mapGetters(['spotify','mapstore']),
 
         mounted(){
@@ -107,7 +119,7 @@
         background-color:rgba(12,23,22,0.4);
         max-width:inherit;
         padding:0;
-        margin: 64px 0 0 0;
+        margin: 54px 0 0 0;
 
         h2.title{
             padding-top:20px;
@@ -120,7 +132,7 @@
             &.controlarea{
                 padding-right:0;
                 text-align:center;
-                background-color:red;
+                background-color: #18212e;
             }
 
             &.maparea{
@@ -132,7 +144,7 @@
 
             .grid-cell{
                 background-color:rgba(34,12,111,0.3);
-                height:calc(100vh - 64px);
+                height:calc(100vh - 54px);
             }
         }
     }

@@ -32,10 +32,18 @@ body {
           linear-gradient( 336deg, rgba( $gradSecondary, .8 ), rgba( $gradSecondary, 0 ) 70.71% );
   #app {
     // font-family: 'Avenir', Helvetica, Arial, sans-serif;
-    font-family:  $mincho;
+    font-family:  $mincho !important;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
+}
+
+bodh,html{
+  height:inherit;
+}
+
+h1,h2,h3,h4,h5{
+  font-family:  $mincho !important;
 }
 
 a{

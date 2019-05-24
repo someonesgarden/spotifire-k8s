@@ -8,13 +8,13 @@
                         <mu-radio v-model="id_or_term" value="id"></mu-radio>
                     </mu-col>
 
-                    <mu-col span="7" sm="8" md="8" lg="8" xl="8">
+                    <mu-col span="7" sm="7" md="7" lg="7" xl="7">
                         <mu-form-item prop="textarea" label="any ID" class="range">
                             <mu-text-field multi-line :rows="1" :rows-max="2" :value="spotify.searchQuery.id" :disabled="id_or_term==='term'"
                                            @change="(val)=> a_spotify(['set','searchQuery',{key:'id',val:val}])"></mu-text-field>
                         </mu-form-item>
                     </mu-col>
-                    <mu-col span="4" sm="3" md="3" lg="3" xl="3">
+                    <mu-col span="4" sm="4" md="4" lg="4" xl="4">
 
                         <mu-button fab small color="grey500" @click="a_index(['bottom','open'])" range>
                             <mu-icon value="border_bottom"></mu-icon>

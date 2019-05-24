@@ -9,29 +9,29 @@
 
                 <mu-form ref="adminform" :model="admin" class="mu-demo-form" label-position="left" label-width="100">
 
-                    <mu-row gutter>
-
-                        <mu-col span="12" sm="6" md="6" lg="6" xl="6">
+                    <div class="ui grid">
+                        <div class="sixteen wide mobile eight wide tablet eight wide computer column">
                             <mu-form-item :rules="emptyRules" prop="id" label="admin ID" class="range">
                                 <mu-text-field prop="id" v-model="admin.id"></mu-text-field>
                             </mu-form-item>
-                        </mu-col>
+                        </div>
 
-                        <mu-col span="12" sm="6" md="6" lg="6" xl="6">
+                        <div class="sixteen wide mobile eight wide tablet eight wide computer column">
                             <mu-form-item :rules="emptyRules" prop="pass" label="password" class="range">
                                 <mu-text-field  type="password" prop="pass"  v-model="admin.pass"  label="Password" :action-icon="visibility ? 'visibility_off' : 'visibility'" :action-click="() => (visibility = !visibility)" :type="visibility ? 'text' : 'password'"></mu-text-field>
                             </mu-form-item>
-                        </mu-col>
-                    </mu-row>
+                        </div>
+                    </div>
 
-                    <mu-row gutter>
+                    <div class="ui grid">
                         <mu-col span="12" sm="12" md="12" lg="12" xl="12">
                             <div class="grid-cell">
                                 <mu-button color="primary" class="smallbtn" full-width @click="loginAction">LOGIN</mu-button>
                             </div>
                         </mu-col>
-                    </mu-row>
+                    </div>
                 </mu-form>
+
 
             </mu-flex>
 
