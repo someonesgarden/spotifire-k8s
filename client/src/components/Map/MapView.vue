@@ -224,7 +224,7 @@
                 this.infowindow = new google.maps.InfoWindow();
 
                 this.usermarker = this.markerMaker( {
-                    icon:'/static/img/markers/m_friend_boy_1.png',
+                    icon:'/static/img/markers/m_user_girl_1.png',
                     title:'For Your Holidays.',
                     subtitle:'top smooth tracks',
                     body:'あなたは現在視聴中です。',
