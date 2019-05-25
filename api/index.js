@@ -37,7 +37,7 @@ io.on('connection',function(socket){
     // 新規ユーザーのアクセス
     socket.on('open-socket', function(msg) {
         let resmsg = {...msg,socketid:socket.id};
-        socket.emit('open-socket-success',resmsg);
+        io.emit('open-socket-success',resmsg);
         console.log("open-socket:success");
     });
 

@@ -2,7 +2,10 @@ const state = {
     you:{
         name:null,
         socketid:null,
-        connected:false
+        connected:false,
+        lat:null,
+        lng:null,
+        pid:null
     },
     users:{},
     rooms:{}
@@ -26,7 +29,10 @@ const mutations = {
        state.you={
                 name:null,
                 socketid:null,
-                connected:false
+                connected:false,
+               lat:null,
+               lng:null,
+               pid:null
         }
     },
 
