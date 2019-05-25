@@ -4,16 +4,13 @@
             <mu-col span="4" sm="3" md="3" lg="2" class="controlarea">
 
                     <div class="ui">
-                        <div class="sixteen wide">
                             <h4 class="title">emory.</h4>
-                        </div>
                     </div>
 
-                    <mu-form :model="mapform" ref="mapform" label-position="left" label-width="50">
-
+                    <mu-form :model="mapform" ref="mapform" label-position="left" label-width="0" style="background-color:white;" class="userform">
                         <div class="ui">
                             <div class="sixteen wide">
-                                <mu-button full-width color="pink500" @click="trackToggle" v-if="!mapstore.tracking" >
+                                <mu-button full-width color="pink500" @click="trackToggle" v-if="!mapstore.tracking">
                                     <mu-icon value="settings_input_antenna" style="width:20px;"></mu-icon>&nbsp;Start
                                 </mu-button>
                                 <mu-button full-width color="cyan400" @click="trackToggle" v-else>
@@ -22,15 +19,33 @@
                             </div>
                         </div>
 
+                        <mu-form-item prop="username" :rules="blankRules">
+                            <mu-text-field color="primary" prop="username" placeholder="enter name." v-model="mapform.username"></mu-text-field>
+                        </mu-form-item>
                         <div class="ui">
                             <div class="sixteen wide">
-                                <mu-button full-width color="indigo500">
-                                    <mu-icon value="room" style="width:20px;"></mu-icon>&nbsp;Add
+                                <mu-button full-width color="indigo500" @click="connectToSocket" v-if="!ws.you.connected">
+                                    <mu-icon value="device_hub" style="width:20px;"></mu-icon>&nbsp;connect
+                                </mu-button>
+                                <mu-button full-width color="red500" @click="socketDisconnect" v-else>
+                                    <mu-icon value="settings_input_composite" style="width:20px;"></mu-icon>&nbsp;disconnect
                                 </mu-button>
                             </div>
                         </div>
-                        <mu-divider></mu-divider>
+
                     </mu-form>
+
+                <mu-list class="users_list">
+
+                    <map-user-item></map-user-item>
+                    <map-user-item></map-user-item>
+                    <map-user-item></map-user-item>
+                    <map-user-item></map-user-item>
+                    <map-user-item></map-user-item>
+
+
+                </mu-list>
+                <mu-divider></mu-divider>
 
             </mu-col>
             <mu-col span="8" sm="9" md="9" lg="10" class="maparea">
@@ -44,57 +59,55 @@
 </template>
 <script>
 
-
-    import io from 'socket.io-client'
     import {mapGetters,mapActions} from 'vuex';
-    import MapView from './Map/MapView';
     import spotifyMixin from '../mixins/spotify/index';
     import mapMixin from '../mixins/map/index';
+    import wsMixin from '../mixins/ws/index';
+    import {ruleEmpty} from '../store/rules';
+
+    import MapView from './Map/MapView';
+    import MapUserItem from './Map/MapUserItem';
     export default {
         name: 'myfilters',
-        mixins:[spotifyMixin,mapMixin],
+        mixins:[
+            spotifyMixin,
+            mapMixin,
+            wsMixin
+        ],
         components:{
-            MapView
+            MapView,
+            MapUserItem
         },
+
         data(){
           return{
+              socket:null,
+              blankRules: [ruleEmpty],
                 mapform:{
-                    text1:""
+                    username:''
                 }
           }
         },
-        computed:mapGetters(['spotify','mapstore']),
+        computed:mapGetters(['spotify','mapstore','ws']),
         mounted(){
             this.filter = this.spotify.filter;
-
-            this.socket = io({path: '/ws/socket.io'});
-
-            let message = {
-                user: "sdfsdf",
-                date: new Date(),
-                text: "sdfsdfsfsd",
-            }
-            this.socket.emit('to-server', message);
-
-            this.socket.on('from-server',(msg)=>{
-                console.log(msg);
-            });
+            this.socketInit();
         },
 
         beforeDestroy(){
-
+            this.socketDisconnect();
         },
 
+        methods: {
+            ...mapActions([
+                'a_spotify',
+                'a_mapstore',
+                'a_ws']),
 
-        methods:{
-            ...mapActions(['a_spotify','a_mapstore']),
-        },
-        watch:{
-            'spotify.credential':{
-                handler(){
-                    if(!!this.spotify.credential.expires_in) this.c_getMe();
-                },
-                deep:true
+            connectToSocket() {
+                this.$refs.mapform.validate().then(valid => {
+                    if (valid) this.socketConnect(this.mapform.username);
+                })
             }
         }
     }
@@ -148,5 +161,18 @@
                 height:calc(100vh - 54px);
             }
         }
+    }
+
+    .userform{
+        .mu-form-item{
+            margin-bottom:0;
+            padding-bottom:2px;
+        }
+    }
+
+    .users_list{
+
+        background-color:white;
+
     }
 </style>

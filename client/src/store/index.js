@@ -6,6 +6,7 @@ import { state, mutations } from './mutations';
 import spotify from './modules/spotify/index';
 import feed from './modules/feed/index';
 import mapstore from './modules/mapstore/index';
+import ws from './modules/ws/index';
 
 Vue.use(Vuex);
 
@@ -17,7 +18,8 @@ export default new Vuex.Store({
     modules:{
         spotify,
         feed,
-        mapstore
+        mapstore,
+        ws
     }
 });
 

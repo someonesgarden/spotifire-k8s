@@ -114,7 +114,7 @@
                     this.lng = position.coords.longitude;
 
                     //自分のいる近傍にランダムにポイントを生成する
-                    let rand_points = this.randomPointsRange(this.lat,this.lng,70,50)
+                    let rand_points = this.randomPointsRange(this.lat,this.lng,80,5,50)
 
                     this.a_mapstore(['set','locations',rand_points]);
 
@@ -161,15 +161,19 @@
             },
 
             markerMaker(m){
-                let marker = new google.maps.Marker({
-                    map:        this.map,
-                    position:   {lat:parseFloat(m.lat), lng:parseFloat(m.lng)},
-                    icon:       {
+
+                let options = {
+                    map: this.map,
+                    position: {lat: parseFloat(m.lat), lng: parseFloat(m.lng)},
+                    icon: {
                         url: m.icon ? m.icon : '/static/img/markers/m_friend_girl_1.png',
                         scaledSize: new google.maps.Size(parseInt(m.w), parseInt(m.h))
                     },
-                    animation:  google.maps.Animation.DROP  // ポップなアニメーションを付与
-                });
+                };
+
+                if(m.type==='mainuser') options = {...options, animation: google.maps.Animation.DROP}
+
+                let marker = new google.maps.Marker(options);
 
                 let dom = document.createElement("div");
                 dom.innerHTML ='<div class="mu-card marker" style="width:150px; margin: 0 auto;">'+

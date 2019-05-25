@@ -88,3 +88,23 @@ export const a_feed =  ({commit}, [type, action, data]) => {
     }
     actions[type][action](data)
 }
+
+
+export const a_ws =  ({commit}, [type, action, data]) => {
+    const actions = {
+        set:{
+            socketid:(data) => commit('ws/setSocketID', data),
+            youname: (data) => commit('ws/setYouName', data),
+            users:   (data) => commit('ws/setUsers',data),
+            room:    (data) => commit('ws/setRoom', data),
+            connect: (data) => commit('ws/setConnect',data)
+        },
+        reset:{
+            you:() => commit('ws/resetYou')
+        },
+        add: {
+            user: (data) => commit('ws/addUser', data),
+        }
+    }
+    actions[type][action](data)
+}

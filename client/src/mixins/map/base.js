@@ -33,10 +33,13 @@ export default{
             return 6371 * Math.acos(Math.cos(lat1) * Math.cos(lat2) * Math.cos(lng2 - lng1) + Math.sin(lat1) * Math.sin(lat2));
         },
 
-        randomPointsRange(lat0,lng0,num,dist){
+        randomPointsRange(lat0,lng0,num,near,far){
             // 緯度1秒の平均距離 約30.9m
             // 緯度35度上の緯度1秒の距離 約30.8m
             // 緯度1 = 111km
+            //near: 下限(m)
+            //far : 上限(m)
+            //num : 生成するマーカーの数
             const bit = 0.000008999280057595;  // 1 bit = 1 m/rad
 
             let rand_points = [];
@@ -45,8 +48,8 @@ export default{
 
                 let type = Math.floor( Math.random() * 10 ); //0 - 10
 
-                let dlat = bit*(Math.random()*dist)*Math.pow(-1,Math.floor(Math.random()*2 + 1));
-                let dlng = bit*(Math.random()*dist)*Math.pow(-1,Math.floor(Math.random()*2 + 1));
+                let dlat = (bit*(Math.random()*far)+bit*near)*Math.pow(-1,Math.floor(Math.random()*2 + 1));
+                let dlng = (bit*(Math.random()*far)+bit*near)*Math.pow(-1,Math.floor(Math.random()*2 + 1));
 
                 rand_points.push({
                     lat: lat0+dlat,
