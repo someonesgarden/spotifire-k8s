@@ -18,6 +18,9 @@
         props: {},
         data() {
             return {
+                mainuser:          {
+                  ready:false
+                },
                 zoom:           20,
                 lat0:           34.722677,
                 lng0:           135.492364,
@@ -30,11 +33,18 @@
                 mapWidth:       window.innerWidth,
                 mapHeight:      window.innerHeight,
                 trackTimeout:   null,
-                trackDuration:  2000
+                trackDuration:  2000,
+                infowindow:     null
             };
         },
         computed: mapGetters(['mapstore']),
         watch: {
+
+            'mainuser':{
+              handler(newUser){
+              },deep:true
+            },
+
             markers() {
                 console.log("watch:markers");
                 this.removeAllMarkers();
@@ -105,8 +115,13 @@
 
                     //自分のいる近傍にランダムにポイントを生成する
                     let rand_points = this.randomPointsRange(this.lat,this.lng,70,50)
-                    console.log(rand_points);
+
                     this.a_mapstore(['set','locations',rand_points]);
+
+                    //自分のいるポイントを起点に生成したランダムポイントをマークする
+                    setTimeout(()=>{
+                        this.addMarker();
+                    },3000);
 
 
                 }, function () {
@@ -136,31 +151,51 @@
                 console.log(error);
             },
 
+            mainuserWindowClicked(){
+                window.alert("あなたはメインユーザーです");
+            },
+
+            friendsWindowClicked(pid){
+              window.alert(pid);
+
+            },
 
             markerMaker(m){
                 let marker = new google.maps.Marker({
                     map:        this.map,
                     position:   {lat:parseFloat(m.lat), lng:parseFloat(m.lng)},
-                    icon:       { url: m.icon, scaledSize: new google.maps.Size(parseInt(m.w), parseInt(m.h))},
+                    icon:       {
+                        url: m.icon ? m.icon : '/static/img/markers/m_friend_girl_1.png',
+                        scaledSize: new google.maps.Size(parseInt(m.w), parseInt(m.h))
+                    },
                     animation:  google.maps.Animation.DROP  // ポップなアニメーションを付与
                 });
 
-                let infowindow = new google.maps.InfoWindow({
+                let dom = document.createElement("div");
+                dom.innerHTML ='<div class="mu-card marker" style="width:150px; margin: 0 auto;">'+
+                    '<div class=" mu-card-media">'+
+                    '<img src="'+m.thumb+'">'+
+                    '<div class="mu-card-media-title">'+
+                    '<div class="mu-card-title">'+m.title+'</div>'+
+                    '<div class="mu-card-sub-title">'+m.subtitle+'</div>'+
+                    '</div>'+
+                    '</div>'+
+                    '<div class="mu-card-text">'+m.body+
+                    ' </div>';
 
-                    content: '<div class="mu-card marker" style="width: 100%;margin: 0 auto;">'+
-                        '<div class=" mu-card-media">'+
-                        '<img src="'+m.thumb+'">'+
-                        '<div class="mu-card-media-title">'+
-                        '<div class="mu-card-title">'+m.title+'</div>'+
-                        '<div class="mu-card-sub-title">'+m.subtitle+'</div>'+
-                        '</div>'+
-                        '</div>'+
-                        '<div class="mu-card-text">'+m.body+
-                        ' </div>'+
-                        '</div>'
+                dom.addEventListener("click", ()=> {
+                    if(m.type==='mainuser'){
+                        this.mainuserWindowClicked.call(this);
+                    }else{
+                        this.friendsWindowClicked.call(this,m.pid);
+                    }
+                 x
                 });
-                marker.addListener("click", ()=> infowindow.open(this.map, marker));
 
+                marker.addListener("click", ()=> {
+                    this.infowindow.setContent(dom);
+                    this.infowindow.open(this.map, marker);
+                });
                 return marker;
             },
 
@@ -169,7 +204,6 @@
             },
 
             loadMap(google) {
-
                 let mapOptions = {
                     mapTypeControlOptions:      { position: google.maps.ControlPosition.TOP_CENTER },
                     fullscreenControlOptions:   { position: google.maps.ControlPosition.TOP_LEFT },
@@ -184,6 +218,8 @@
 
                 this.map = new google.maps.Map(document.getElementById("map"), mapOptions);
 
+                this.infowindow = new google.maps.InfoWindow();
+
                 this.usermarker = this.markerMaker( {
                     icon:'/static/img/markers/m_friend_boy_1.png',
                     title:'For Your Holidays.',
@@ -192,16 +228,12 @@
                     thumb:'/static/img/covers/p1.jpg',
                     pid:'',
                     id:0,
-                    type:'friend',
+                    type:'mainuser',
                     lat: this.lat,
                     lng: this.lng,
                     w:48,
                     h:48
                 },)
-
-                   // new google.maps.Marker({map: this.map, position:  {lat: this.lat, lng: this.lng}});
-
-                this.addMarker();
 
                 this.markerlist.push(this.usermarker);
             },
