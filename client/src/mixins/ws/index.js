@@ -20,6 +20,7 @@ export default{
             socket.on('open-socket-success',(msg)=>{
                 console.log("open-socket-success");
                 console.log(msg);
+                window.alert(JSON.stringify(msg));
                 this.a_ws(['set','connect',socket.connected]);
             });
 
