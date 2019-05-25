@@ -38,7 +38,7 @@
                 <mu-list class="users_list">
 
                     <mu-list-item avatar button :ripple="false" class="you range" v-if="ws.you.connected">
-                        <mu-list-item-title>MY NAME IS.</mu-list-item-title>
+                        <mu-list-item-title>{{ws.you.name}}</mu-list-item-title>
                     </mu-list-item>
 
                     <map-user-item></map-user-item>
