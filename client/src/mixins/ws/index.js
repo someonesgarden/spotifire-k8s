@@ -2,7 +2,9 @@ import io from 'socket.io-client'
 import {mapGetters, mapActions} from 'vuex';
 
 let socket = io({path: '/ws/socket.io'});
-socket.close(); //一度接続して置いておく
+
+window.alert(JSON.stringify({conncted:socket.connected,id:socket.id}));
+//socket.close(); //一度接続して置いておく
 
 export default{
 
@@ -14,6 +16,7 @@ export default{
             socket.on('new-socket-id', (msg)=>{
                 console.log("new-socket-id");
                 console.log(msg);
+                window.alert(JSON.stringify(msg));
                 this.a_ws(['set','socketid',msg.socketid]);
             });
 
@@ -27,6 +30,7 @@ export default{
             socket.on('close-socket-success',(msg)=>{
                 console.log("close-socket-success");
                 console.log(msg);
+                window.alert(JSON.stringify(msg));
                 this.a_ws(['reset','you']);
             });
         },
