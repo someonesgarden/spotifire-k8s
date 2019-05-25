@@ -22,48 +22,47 @@ const redisPublisher = redisClient.duplicate();
 
 
 
-
 //*-------------------------------  SOCKET.IO
 const io = require('socket.io')(http);
+
+// io :     全員に送られる
+// socket : そのユーザーだけに送られる
+
 io.on('connection',function(socket){
 
+    //接続したユーザーにIDを識別情報として保存させる
     console.log('socket_id: ' + socket.id + ' is connected');
+    socket.emit('new-socket-id',{socketid:socket.id});
 
-    socket.on('send-message', msg=>{
-        console.log('message: ' + msg);
+    // 新規ユーザーのアクセス
+    socket.on('open-socket', function(msg) {
+        let resmsg = {...msg,socketid:socket.id};
+        socket.emit('open-socket-success',resmsg);
+        console.log("open-socket:success");
     });
 
-
-    // 受信メッセージをつながっているクライアント全員に送信
-    socket.on('to-server', function(msg) {
-        console.log('broadcast',JSON.stringify(msg));
-
-        let msg_fromserver = {
-            ...msg,
-            user:'api!',
-            now:new Date(),
-            status:'socket.io is working fine!',
-        };
-
-        io.emit('from-server', msg_fromserver);
+    socket.on('close-socket', function(msg) {
+        console.log("close-socket:success");
+        let resmsg = {...msg,socketid:socket.id};
+        socket.emit('close-socket-success',resmsg);
+        socket.disconnect();
     });
 
     // クライアントが切断したときの処理
-    socket.on('disconnect', function(){
-        if(socket.sessionId){
-            console.log(socket.sessionId + 'が切断しました。');
-            socket.disconnect();
-        }
-
+    socket.on('disconnect', function(msg){
+        console.log(msg);
+        console.log("disconnect called");
     });
 
 });
 //*-------------------------------  SOCKET.IO
 
+
 app.use(cors());
 app.use(bodyParser.json());
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
+
 
 // CORSを許可する
 app.use(function(req, res, next) {
@@ -93,3 +92,4 @@ const PORT = 5000;
 http.listen(PORT, ()=>{
     console.log('server listening. Port:' + PORT);
 });
+
