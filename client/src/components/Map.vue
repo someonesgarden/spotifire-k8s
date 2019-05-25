@@ -78,6 +78,7 @@
 
             this.socket.on('from-server',(msg)=>{
                 console.log(msg);
+                alert(JSON.stringify(msg));
             });
         },
 
