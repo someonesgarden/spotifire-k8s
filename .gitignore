@@ -12,3 +12,4 @@ docker-compose.yml
 /deploy_local.sh
 /k8s_notyet/
 /deploy_notgood.sh
+/.gitignore
