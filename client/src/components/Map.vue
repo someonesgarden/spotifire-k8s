@@ -24,7 +24,7 @@
 
                         <div class="ui">
                             <div class="sixteen wide">
-                                <mu-button full-width color="indigo500" @click="addMarkers">
+                                <mu-button full-width color="indigo500">
                                     <mu-icon value="room" style="width:20px;"></mu-icon>&nbsp;Add
                                 </mu-button>
                             </div>
@@ -43,6 +43,9 @@
     </mu-container>
 </template>
 <script>
+
+
+    import io from 'socket.io-client'
     import {mapGetters,mapActions} from 'vuex';
     import MapView from './Map/MapView';
     import spotifyMixin from '../mixins/spotify/index';
@@ -63,14 +66,28 @@
         computed:mapGetters(['spotify','mapstore']),
         mounted(){
             this.filter = this.spotify.filter;
+
+            this.socket = io();
+
+            let message = {
+                user: "sdfsdf",
+                date: new Date(),
+                text: "sdfsdfsfsd",
+            }
+            this.socket.emit('to-server', message);
+
+            this.socket.on('from-server',(msg)=>{
+                console.log(msg);
+            });
         },
+
+        beforeDestroy(){
+
+        },
+
+
         methods:{
             ...mapActions(['a_spotify','a_mapstore']),
-
-            addMarkers(){
-
-
-            }
         },
         watch:{
             'spotify.credential':{
@@ -132,5 +149,4 @@
             }
         }
     }
-
 </style>

@@ -7,6 +7,9 @@ const spotifyRouter = require('./routes/spotify/index');
 const twitterRouter = require('./routes/twitter/index');
 const analyzeRouter = require('./routes/analyzer/index');
 const mysqlRouter   = require('./routes/mysql/index');
+const app = express();
+let http = require('http').Server(app);
+
 
 //*-------------------------------  REDIS
 const redis = require('redis');
@@ -18,7 +21,38 @@ const redisPublisher = redisClient.duplicate();
 //*-------------------------------  REDIS
 
 
-const app = express();
+
+
+//*-------------------------------  SOCKET.IO
+const io = require('socket.io')(http);
+io.on('connection',function(socket){
+
+    console.log('socket_id: ' + socket.id + ' is connected');
+
+    socket.on('send-message', msg=>{
+        console.log('message: ' + msg);
+    });
+
+
+    // 受信メッセージをつながっているクライアント全員に送信
+    socket.on('to-server', function(msg) {
+        console.log('broadcast',JSON.stringify(msg));
+        io.emit('from-server', msg);
+    });
+
+    // クライアントが切断したときの処理
+    socket.on('disconnect', function(){
+        if(socket.sessionId){
+            console.log(socket.sessionId + 'が切断しました。');
+            socket.disconnect();
+        }
+
+    });
+
+});
+//*-------------------------------  SOCKET.IO
+
+
 app.use(cors());
 app.use(bodyParser.json());
 app.set('views', path.join(__dirname, 'views'));
@@ -35,11 +69,21 @@ app.use(function(req, res, next) {
 
 app.use(express.static(path.join(__dirname, 'public')));
 
+
+app.get('/' , function(req, res){
+    res.send('API IS REASDY');
+});
+
 app.use('/spotify', spotifyRouter);
 app.use('/twitter', twitterRouter);
 app.use('/analyze', analyzeRouter);
 app.use('/mysql',   mysqlRouter);
 
-app.listen(5000, err => {
-  console.log('Listening on Port 5000');
+// app.listen(5000, err => {
+//   console.log('Listening on Port 5000');
+// });
+
+const PORT = 5000;
+http.listen(PORT, ()=>{
+    console.log('server listening. Port:' + PORT);
 });

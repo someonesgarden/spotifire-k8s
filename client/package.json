@@ -21,6 +21,7 @@
     "reset-css": "^4.0.1",
     "rss-parser": "^3.7.0",
     "sass-loader": "^7.1.0",
+    "socket.io-client": "^2.2.0",
     "vue": "^2.5.2",
     "vue-carousel": "^0.18.0-alpha",
     "vue-chartjs": "^3.4.2",
