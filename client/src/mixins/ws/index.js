@@ -12,6 +12,7 @@ export default{
         ...mapActions(['a_ws']),
 
         socketInit(){
+            // YOUR SOCKET
             socket.on('new-socket-id', (msg)=>{
                 console.log("new-socket-id");
                 console.log(msg);
@@ -29,6 +30,19 @@ export default{
                 console.log("close-socket-success");
                 console.log(msg);
                 this.a_ws(['reset','you']);
+            });
+
+            // BROADCAST
+            socket.on('new-user-added', (msg)=>{
+                console.log("new-user-added!");
+                console.log(msg);
+                this.a_ws(['set','users',msg.clients]);
+            });
+
+            socket.on('user-disconnected', (msg)=>{
+                console.log("user-disconnected!");
+                console.log(msg);
+                this.a_ws(['set','users',msg.clients]);
             });
         },
 

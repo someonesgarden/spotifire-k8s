@@ -7,7 +7,7 @@ const state = {
         lng:null,
         pid:null
     },
-    users:{},
+    users:[],
     rooms:{}
 }
 
@@ -41,7 +41,11 @@ const mutations = {
     },
 
     addUser(state,data){
-        state.users[data.key] = data.val;
+        state.users.push(data);
+    },
+
+    popUser(state,data){
+      state.users = state.users.map(user=> user.socketid!==data.socketid)
     },
 
     setRoom(state,data){

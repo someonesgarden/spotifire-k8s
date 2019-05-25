@@ -25,6 +25,8 @@ const redisPublisher = redisClient.duplicate();
 //*-------------------------------  SOCKET.IO
 const io = require('socket.io')(http);
 
+let connect_history = {};
+
 // io :     全員に送られる
 // socket : そのユーザーだけに送られる
 
@@ -34,17 +36,38 @@ io.on('connection',function(socket){
     console.log('socket_id: ' + socket.id + ' is connected');
     socket.emit('new-socket-id',{socketid:socket.id});
 
-    // 新規ユーザーのアクセス
+    // 新規ユーザーの回線オープン
     socket.on('open-socket', function(msg) {
+
+        console.log(Object.keys(connect_history));
+
+        // 指定ユーザーだけ
         let resmsg = {...msg,socketid:socket.id};
-        io.emit('open-socket-success',resmsg);
-        console.log("open-socket:success");
+        socket.emit('open-socket-success',resmsg);
+        connect_history[socket.id] = resmsg;
+
+        // 全ユーザーへ
+        clients = Object.keys(io.eio.clients).map(key=> connect_history[key])
+        clients = clients.filter(v => !!v)
+        io.emit('new-user-added',{clients:clients});
     });
 
     socket.on('close-socket', function(msg) {
         console.log("close-socket:success");
-        let resmsg = {...msg,socketid:socket.id};
-        socket.emit('close-socket-success',resmsg);
+
+        // 個別
+        socket.emit('close-socket-success',null);
+
+        //自分がdisconnectする最後の一人の場合、connect_history=を空に戻す。
+        if(Object.keys(io.eio.clients).length===1 && Object.keys(io.eio.clients)[0]===socket.id) connect_history = {};
+
+        // 指定ユーザーを削除した全ユーザーIDの配列
+        let id_ary_after =  Object.keys(io.eio.clients).filter( key=> key !== socket.id)
+
+        clients = id_ary_after.map(key=> connect_history[key])
+        clients = clients.filter(v => !!v)
+        io.emit('user-disconnected',{clients:clients});
+
         socket.disconnect();
     });
 

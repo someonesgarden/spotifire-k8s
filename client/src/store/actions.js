@@ -104,6 +104,9 @@ export const a_ws =  ({commit}, [type, action, data]) => {
         },
         add: {
             user: (data) => commit('ws/addUser', data),
+        },
+        pop: {
+            user: (data) => commit('ws/popUser', data),
         }
     }
     actions[type][action](data)

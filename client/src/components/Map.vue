@@ -41,11 +41,7 @@
                         <mu-list-item-title>{{ws.you.name}}</mu-list-item-title>
                     </mu-list-item>
 
-                    <map-user-item></map-user-item>
-                    <map-user-item></map-user-item>
-                    <map-user-item></map-user-item>
-                    <map-user-item></map-user-item>
-                    <map-user-item></map-user-item>
+                    <map-user-item :user="user" v-for="(user,key,index) in ws.users" :key="'user'+key+index"></map-user-item>
 
 
                 </mu-list>
