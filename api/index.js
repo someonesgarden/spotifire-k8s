@@ -60,12 +60,10 @@ io.on('connection',function(socket){
 });
 //*-------------------------------  SOCKET.IO
 
-
 app.use(cors());
 app.use(bodyParser.json());
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
-
 
 // CORSを許可する
 app.use(function(req, res, next) {
