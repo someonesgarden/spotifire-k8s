@@ -37,7 +37,15 @@ io.on('connection',function(socket){
     // 受信メッセージをつながっているクライアント全員に送信
     socket.on('to-server', function(msg) {
         console.log('broadcast',JSON.stringify(msg));
-        io.emit('from-server', msg);
+
+        let msg_fromserver = {
+            ...msg,
+            user:'api!',
+            now:new Date(),
+            status:'socket.io is working fine!',
+        };
+
+        io.emit('from-server', msg_fromserver);
     });
 
     // クライアントが切断したときの処理
