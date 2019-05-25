@@ -7,7 +7,7 @@
                             <h4 class="title">emory.</h4>
                     </div>
 
-                    <mu-form :model="mapform" ref="mapform" label-position="left" label-width="0" style="background-color:white;" class="userform">
+                    <mu-form :model="mapform" ref="mapform" label-position="left" label-width="0" class="userform">
                         <div class="ui">
                             <div class="sixteen wide">
                                 <mu-button full-width color="pink500" @click="trackToggle" v-if="!mapstore.tracking">
@@ -36,6 +36,10 @@
                     </mu-form>
 
                 <mu-list class="users_list">
+
+                    <mu-list-item avatar button :ripple="false" class="you range" v-if="ws.you.connected">
+                        <mu-list-item-title>MY NAME IS.</mu-list-item-title>
+                    </mu-list-item>
 
                     <map-user-item></map-user-item>
                     <map-user-item></map-user-item>
@@ -163,16 +167,5 @@
         }
     }
 
-    .userform{
-        .mu-form-item{
-            margin-bottom:0;
-            padding-bottom:2px;
-        }
-    }
 
-    .users_list{
-
-        background-color:white;
-
-    }
 </style>

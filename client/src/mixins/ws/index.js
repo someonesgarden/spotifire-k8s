@@ -3,7 +3,6 @@ import {mapGetters, mapActions} from 'vuex';
 
 let socket = io({path: '/ws/socket.io'});
 
-window.alert(JSON.stringify({co:socket.connected,dis:socket.disconnected}));
 //socket.close(); //一度接続して置いておく
 
 export default{

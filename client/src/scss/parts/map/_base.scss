@@ -16,3 +16,42 @@
     font-weight:bold;
   }
 }
+
+
+.userform{
+  background-color:white;
+
+  .mu-form-item{
+    margin-bottom:0;
+    padding-bottom:2px;
+  }
+}
+
+.users_list{
+  background-color:white;
+
+  li.range{
+
+    &.you{
+      background-color:$black;
+      text-align:center;
+
+      .mu-item-title{
+        color:$white;
+        font-weight:bold;
+      }
+    }
+
+    margin:0;
+    .mu-item{
+      &.has-avatar{
+        height:40px;
+      }
+
+      .mu-item-title{
+        font-size:13px;
+      }
+    }
+  }
+
+}
