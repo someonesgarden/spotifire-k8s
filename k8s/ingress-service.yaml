@@ -33,7 +33,7 @@ spec:
               serviceName: api-cluster-ip-service
               servicePort: 5000
 
-          - path: /socket.io/
+          - path: /ws/(.*)
             backend:
               serviceName: api-cluster-ip-service
               servicePort: 5000
@@ -50,7 +50,7 @@ spec:
             backend:
               serviceName: client-cluster-ip-service
               servicePort: 3000
-          - path: /socket.io/
+          - path: /ws/(.*)
             backend:
               serviceName: api-cluster-ip-service
               servicePort: 5000

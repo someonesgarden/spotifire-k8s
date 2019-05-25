@@ -189,7 +189,6 @@
                     }else{
                         this.friendsWindowClicked.call(this,m.pid);
                     }
-                 x
                 });
 
                 marker.addListener("click", ()=> {
