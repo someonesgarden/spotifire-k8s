@@ -16,21 +16,18 @@ export default{
             socket.on('new-socket-id', (msg)=>{
                 console.log("new-socket-id");
                 console.log(msg);
-                window.alert(JSON.stringify(msg));
                 this.a_ws(['set','socketid',msg.socketid]);
             });
 
             socket.on('open-socket-success',(msg)=>{
                 console.log("open-socket-success");
                 console.log(msg);
-                window.alert(JSON.stringify(msg));
                 this.a_ws(['set','connect',socket.connected]);
             });
 
             socket.on('close-socket-success',(msg)=>{
                 console.log("close-socket-success");
                 console.log(msg);
-                window.alert(JSON.stringify(msg));
                 this.a_ws(['reset','you']);
             });
         },
