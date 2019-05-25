@@ -67,7 +67,7 @@
         mounted(){
             this.filter = this.spotify.filter;
 
-            this.socket = io();
+            this.socket = io({path: '/ws/socket.io'});
 
             let message = {
                 user: "sdfsdf",
