@@ -70,9 +70,9 @@
         },
 
         beforeDestroy() {
-            GoogleMapsLoader.release(function () {
-                console.log("No google maps api around");
-            });
+            // GoogleMapsLoader.release(function () {
+            //     console.log("No google maps api around");
+            // });
         },
 
         methods: {
@@ -302,9 +302,3 @@
         }
     };
 </script>
-
-<style lang="scss" scoped>
-
-
-
-</style>

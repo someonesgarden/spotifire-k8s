@@ -23,10 +23,6 @@
                     <tweets :col="col" :tweets="tweets"/>
                 </div>
             </div>
-
-            <div class="graph">
-                <feed-graph></feed-graph>
-            </div>
         </div>
     </div>
 </template>
@@ -37,15 +33,13 @@
     import feedMixin from '../../mixins/feed/index';
     import utilMixin from '../../mixins/util';
 
-    import FeedGraph from './FeedGraph';
     import Tweets from '../Tweets/Tweets';
-    import {mapActions} from 'vuex';
-
+    import {mapGetters,mapActions} from 'vuex';
     export default {
         name: "FeedBlock",
-        props:['item','col','wide'],
+        props:['item','col'],
         mixins:[feedMixin,tweetMixin,utilMixin],
-        components:{Tweets,FeedGraph},
+        components:{Tweets},
         methods:{
             ...mapActions(['a_index']),
 
@@ -153,27 +147,5 @@
 </script>
 
 <style scoped lang="scss">
-
-    .card{
-        .inner{
-            position:relative;
-            .graph{
-                // pointer-events: none;
-
-                position:absolute;
-                top:0;
-                left:0;
-                width:100%;
-                height:100%;
-                background-color:rgba(29,20,20,0.3);
-                opacity: 0.0;
-                transition: 1.0s;
-
-                &:hover{
-                    opacity:1.0;
-                }
-            }
-        }
-    }
 
 </style>
