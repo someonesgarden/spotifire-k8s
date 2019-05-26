@@ -4,21 +4,38 @@
     </mu-list-item>
 </template>
 
+
 <script>
-    import {mapGetters} from 'vuex';
+    import {mapGetters,mapActions} from 'vuex';
     import mapMixin from '../../mixins/map/index';
+    import spotifyMixin from '../../mixins/spotify/index';
     export default {
         name: "MapUserItem",
         props:['user'],
-        mixins:[mapMixin],
-        computed:mapGetters(['ws']),
+        mixins:[mapMixin,spotifyMixin],
+        computed:mapGetters(['ws','spotify',]),
         methods:{
+            ...mapActions(['a_mapstore','a_spotify','a_index']),
+
             userItemClick(){
-                console.log("userItemClick:trackstop!");
-                this.trackStop();
-                //緯度経度に移動
-                //playlistを開く
+               this.a_mapstore(['set','tracking',false]);
+
+               this.$emit('mapPanTo',this.user.lat,this.user.lng);
+
+               this.play();
+            },
+
+            play(){
+                let tid = this.user.tid ? this.user.tid : '62LJFaYihsdVrrkgUOJC05';
+                this.a_spotify(['player','play',tid]);
+                this.c_getTrack(tid,(res)=>{
+                    if(!!res.data){
+                        this.a_spotify(['player','track',res.data]);
+                        this.a_index(['bottom','open']);
+                    }
+                },false);
             }
+
         }
 
     }

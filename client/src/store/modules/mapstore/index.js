@@ -2,13 +2,12 @@ import tracking from './tracking';
 import mapbase from './mapbase';
 
 const state = {
-    ...tracking.state,
-    ...mapbase.state
+    ...mapbase.state,
+    ...tracking.state
 }
 
 const mutations = {
-    ...tracking.mutations,
-    ...mapbase.mutations
+    ...tracking.mutations
 }
 
 export default {

@@ -1,25 +1,17 @@
 
 export default{
 
-    computed:{
-
-    },
-
     methods: {
         findMe(){
             console.log("moveToMe");
         },
 
-        trackToggle(){
-            this.a_mapstore(['toggle','tracking']);
-        },
-
-        trackStop(){
-            this.a_mapstore(['set','tracking',false]);
-        },
-
         trackStart(){
             this.a_mapstore(['set','tracking',true]);
+        },
+
+        trackToggle(){
+            this.a_mapstore(['toggle','tracking']);
         },
 
         distKmOfTwo(lat1, lng1, lat2, lng2) {

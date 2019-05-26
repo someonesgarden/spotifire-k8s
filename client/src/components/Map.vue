@@ -35,7 +35,7 @@
                     </mu-form>
 
                 <mu-list class="users_list">
-                    <map-user-item :user="user" v-for="(user,key,index) in ws.users" :key="'user'+key+index"/>
+                    <map-user-item :user="user" v-for="(user,key,index) in ws.users" :key="'user'+key+index" @mapPanTo="mapPanTo"/>
                 </mu-list>
                 <mu-divider></mu-divider>
             </mu-col>
@@ -94,6 +94,12 @@
                 'a_spotify',
                 'a_mapstore',
                 'a_ws']),
+
+            mapPanTo(lat,lng){
+                console.log("setMapCenter",lat,lng);
+
+                this.$refs.mapref.mapPanTo(lat,lng);
+            },
 
             connectToSocket() {
 

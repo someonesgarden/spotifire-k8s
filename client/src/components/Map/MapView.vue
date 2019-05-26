@@ -35,11 +35,9 @@
                 watchId:        null,
                 userpoly:       null,
 
-                geocodingOptions : {
-                    enableHighAccuracy: true,
-                    timeout : 5000,
-                    maximumAge: 0
-                },
+                geocodingOptions : {enableHighAccuracy: true, timeout : 5000, maximumAge: 0},
+
+                geocodingOptions2:{enableHighAccuracy: true, timeout: 6000, maximumAge: 600000},
 
                 userpolyOptions:{
                     strokeColor: '#FF0000',
@@ -166,6 +164,11 @@
                 }
             },
 
+            mapPanTo(lat,lng){
+                let latLng = new google.maps.LatLng(lat,lng);
+                this.map.panTo(latLng);
+            },
+
             resetPos(position){
                 if(!!this.map && !!position){
                     this.lat = position.coords.latitude;
@@ -174,11 +177,12 @@
                     this.map.panTo(latLng);
                     // this.map.setCenter(latLng);
                     this.mainuser.setPosition(latLng);
+                    this.drawUserPoly();
                 }
             },
 
             geolocation() {
-                if(!!navigator.geolocation) navigator.geolocation.getCurrentPosition(this.resetPos, this.geoError);
+                if(!!navigator.geolocation) navigator.geolocation.getCurrentPosition(this.resetPos, this.geoError,this.geocodingOptions2);
             },
 
             geoError(error) {

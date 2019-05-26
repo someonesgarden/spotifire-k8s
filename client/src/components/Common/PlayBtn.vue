@@ -27,6 +27,7 @@
                     this.c_getTrack(this.id,(res)=>{
                         if(!!res.data){
                             this.a_spotify(['player','track',res.data]);
+                            this.a_spotify(['set','track',　res.data]);
                             this.a_index(['bottom','open']);
                         }
                     },false);

@@ -5,13 +5,16 @@ const state = {
 
 const mutations = {
     setTracking(state,val){
-        console.log("setTracking",val);
         state.tracking = val;
     },
 
     toggleTracking(state){
         console.log("toggleTracking!");
         state.tracking = !state.tracking;
+    },
+
+    setLocations(state,val){
+        state.locations = val;
     }
 }
 
