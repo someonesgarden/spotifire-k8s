@@ -37,9 +37,9 @@
 
                 <mu-list class="users_list">
 
-                    <mu-list-item avatar button :ripple="false" class="you range" v-if="ws.you.connected">
-                        <mu-list-item-title>{{ws.you.name}}</mu-list-item-title>
-                    </mu-list-item>
+<!--                    <mu-list-item avatar button :ripple="false" class="you range" v-if="ws.you.connected">-->
+<!--                        <mu-list-item-title>{{ws.you.name}}</mu-list-item-title>-->
+<!--                    </mu-list-item>-->
 
                     <map-user-item :user="user" v-for="(user,key,index) in ws.users" :key="'user'+key+index"/>
 
@@ -50,7 +50,7 @@
             <mu-col span="8" sm="9" md="9" lg="10" class="maparea">
 
                 <div class="grid-cell">
-                    <map-view id="map"></map-view>
+                    <map-view id="map" ref="mapref"></map-view>
                 </div>
             </mu-col>
         </mu-row>
@@ -104,6 +104,15 @@
                 'a_ws']),
 
             connectToSocket() {
+
+                let your_pos_and_data = {
+                    lat:this.$refs.mapref.lat,
+                    lng:this.$refs.mapref.lng,
+                    pid:this.spotify.playlist ? this.spotify.playlist.id : '',
+                    tid:this.spotify.track ? this.spotify.track.id : ''
+                };
+                console.log(your_pos_and_data);
+
                 this.$refs.mapform.validate().then(valid => {
                     if (valid) this.socketConnect(this.mapform.username);
                 })
@@ -119,12 +128,6 @@
         width:100%;
         margin:0;
         padding:0;
-
-        /*@media only screen and (min-width: 768px) {*/
-        /*    margin-top:64px;*/
-        /*    width: 100vw;*/
-        /*    height: calc(80vh - 64px) !important;*/
-        /*}*/
     }
 
     .container.reset{
