@@ -23,6 +23,7 @@ export default{
                 console.log("open-socket-success");
                 console.log(msg);
                 this.a_ws(['set','connect',socket.connected]);
+                this.a_ws(['set','socketid',msg.socketid]);
                 this.a_ws(['set','youname',msg.name]);
             });
 

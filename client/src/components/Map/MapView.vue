@@ -228,7 +228,12 @@
                         w:48,
                         h:48
                     }
-                    if(user.socketid !== this.ws.you.socketid) this.usermarkers.push(this.markerMaker(m))
+                    if(this.ws.you.socketid){
+                        if(user.socketid !== this.ws.you.socketid) this.usermarkers.push(this.markerMaker(m))
+                    }else{
+                        if(user.name !== this.ws.you.name) this.usermarkers.push(this.markerMaker(m))
+                    }
+
 
                 })
             },
