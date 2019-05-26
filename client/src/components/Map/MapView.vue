@@ -1,6 +1,6 @@
 <template>
     <div ref="map">
-        <div id="map" :style="{width: mapWidth + 'px',height: mapHeight + 'px'}"></div>
+        <div id="map"></div>
     </div>
 </template>
 <script>
@@ -30,16 +30,21 @@
                 othermarkers:   [],
                 usermarkers:    [],
                 mainuser:       null,
-
-                trackTimeout:   null,
-                infowindow:     null
+                trackTimeout:   false,
+                infowindow:     null,
+                watchId:        null,
+                geocodingOptions : {
+                    enableHighAccuracy: true,
+                    timeout : 5000,
+                    maximumAge: 0
+                }
             };
         },
         computed: mapGetters(['mapstore','ws']),
         watch: {
             'mapstore.tracking': {
                 handler: function () {
-                    if(!this.trackTimeout) this.keepTracking();
+                    if(this.mapstore.tracking) this.keepTracking();
                 }
             },
 
@@ -55,21 +60,17 @@
         },
         mounted() {
             GoogleMapsLoader.load(this.loadMap);
-            this.initMap();
-            this.a_mapstore(['set', 'tracking', null]);
-            this.resetDivSize();
-            window.addEventListener('resize', this.resetDivSize);
-            this.keepTracking();
+            //this.a_mapstore(['set', 'tracking', false]);
         },
 
         beforeDestroy() {
-            window.removeEventListener("resize", this.resetDivSize)
         },
         methods: {
             ...mapActions(['a_mapstore','a_ws']),
 
             keepTracking(){
                 this.geolocation();
+
                 // 3秒後に実行
                 if(this.mapstore.tracking){
                     this.trackTimeout = true;
@@ -80,59 +81,57 @@
                 }
             },
 
-            resetDivSize() {
-                this.mapWidth = window.innerWidth;
-                if (window.innerHeight > 768) {
-                    this.mapHeight = window.innerHeight - 100;
-                } else {
-                    this.mapHeight = 300;
+            resetPos(position){
+
+                console.log("resetPos");
+                if(!!this.map && !!position){
+                    this.lat = position.coords.latitude;
+                    this.lng = position.coords.longitude;
+                    let latLng = new google.maps.LatLng(this.lat,this.lng);
+                    this.map.panTo(latLng);
+                    // this.map.setCenter(latLng);
+                    this.mainuser.setPosition(latLng);
                 }
+
             },
 
-            initMap() {
-                if (!navigator.geolocation) {
-                    alert('Geolocation APIに対応していません');
-                    return false;
-                }
+            afterMapLoaded(){
+
+                console.log("afterMapLoaded");
 
                 // 現在地の取得
-                navigator.geolocation.getCurrentPosition((position) => {
+                navigator.geolocation.getCurrentPosition(position => {
                     this.lat = position.coords.latitude;
                     this.lng = position.coords.longitude;
 
                     //自分のいる近傍にランダムにポイントを生成する
                     let rand_points = this.randomPointsRange(this.lat,this.lng,60,8,80)
-
                     this.a_mapstore(['set','locations',rand_points]);
-
                     //自分のいるポイントを起点に生成したランダムポイントをマーク
+
+                    this.resetPos(position);
+
                     setTimeout(()=>{
                         this.addOtherMarker();
-                    },3000);
+                    },2000);
+
+                }, this.geoError);
 
 
-                }, function () {
-                    alert('位置情報取得に失敗しました');
-                });
+                // this.watchId = navigator.geolocation.watchPosition(position=>{
+                //
+                //    // if(this.mapstore.tracking){
+                //         console.log("watching");
+                //         this.resetPos(position);
+                //     //}
+                // },this.geoError,this.geocodingOptions);
             },
-
 
             geolocation() {
-                if(!!navigator.geolocation) navigator.geolocation.getCurrentPosition(this.buildUrl, this.geoError);
+                console.log("geolocation");
+                if(!!navigator.geolocation) navigator.geolocation.getCurrentPosition(this.resetPos, this.geoError);
             },
 
-            buildUrl(position) {
-                this.lat = position.coords.latitude;
-                this.lng = position.coords.longitude;
-
-                if (!!this.map) {
-                    let latLng = new google.maps.LatLng(this.lat, this.lng);
-                    this.map.panTo(latLng);
-                    this.mainuser.setPosition(latLng);
-                }
-
-                //マップ読み込み成功時の処理をここに。
-            },
             geoError(error) {
                 console.log(error);
             },
@@ -145,7 +144,6 @@
               window.alert(pid);
 
             },
-
 
             markerMaker(m){
                 let icons = this.mapstore.icons[m.type];
@@ -162,9 +160,10 @@
                         url: icon,
                         scaledSize: new google.maps.Size(w, h)
                     },
+                    bouncy:false
                 };
 
-                //if(m.type==='mainuser') options = {...options, animation: google.maps.Animation.DROP}
+                if(m.type==='mainuser') options = {...options, animation: google.maps.Animation.DROP}
 
                 let marker = new google.maps.Marker(options);
                 let dom = document.createElement("div");
@@ -235,19 +234,26 @@
             },
 
             loadMap(google) {
+                console.log("loadMap");
                 let mapOptions = {
                     mapTypeControlOptions:      { position: google.maps.ControlPosition.TOP_CENTER },
                     fullscreenControlOptions:   { position: google.maps.ControlPosition.TOP_LEFT },
                     streetViewControlOptions:   { position: google.maps.ControlPosition.LEFT_CENTER },
                     zoomControlOptions:         { position: google.maps.ControlPosition.RIGHT_CENTER },
                     rotateControlOptions:       { position: google.maps.ControlPosition.RIGHT_TOP },
-                    center: {lat: this.lat0, lng: this.lng0}, //初期座標
+                    center: {lat: this.lat, lng: this.lng}, //初期座標
                     zoom: this.zoom,
-                    //gestureHandling: "greedy",    // スワイプ判定を強めに設定(地図を移動させるには..問題)
-                    //gestureHandling: "auto"
+                    gestureHandling: "greedy",    // スワイプ判定を強めに設定(地図を移動させるには..問題)
+                    //gestureHandling: "auto",
+                    draggable: true,
+                    disableDoubleClickZoom: false// ダブルクリックズーム制限
                 };
 
                 this.map = new google.maps.Map(document.getElementById("map"), mapOptions);
+
+                // google.maps.event.addListener( "dragend", ( argument )=> {
+                //     console.log( argument ) ;
+                // });
 
                 this.infowindow = new google.maps.InfoWindow();
 
@@ -264,9 +270,9 @@
                     lng: this.lng,
                     w:54,
                     h:54
-                },)
+                })
 
-                //this.othermarkers.push(this.mainuser);
+                this.afterMapLoaded();
             },
 
             release() {
