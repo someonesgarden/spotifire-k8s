@@ -28,6 +28,7 @@
                 mapHeight:      window.innerHeight,
 
                 markers:        [],
+                usermarkers:    [],
                 mainuser:       null,
                 trackTimeout:   null,
                 trackDuration:  2000,
@@ -69,15 +70,6 @@
         },
         methods: {
             ...mapActions(['a_mapstore','a_ws']),
-
-            removeAllMarkers(){
-                console.log("removeAllMarkers");
-                this.markers.forEach(marker => marker.setMap(null));
-                this.markers.splice(0, this.markers.length);
-
-                // this.mapstore.locations.forEach(marker => marker.setMap(null));
-                // this.a_mapstore(['set','locations',[]]);
-            },
 
             keepTracking(){
                 this.geolocation();
@@ -158,6 +150,7 @@
 
             },
 
+
             markerMaker(m){
                 let icons = this.mapstore.icons[m.type];
                 let icon  = icons[Math.floor(Math.random() * icons.length)];
@@ -189,7 +182,7 @@
                     ' </div>';
 
                 dom.addEventListener("click", ()=> {
-                    if(m.type==='mainuser'){
+                    if(m.type==='mainuser' || m.type==='user'){
                         this.mainuserWindowClicked.call(this);
                     }else{
                         this.friendsWindowClicked.call(this,m.pid);
@@ -203,13 +196,41 @@
                 return marker;
             },
 
+            removeAllOtherMarkers(){
+                this.markers.forEach(marker => marker.setMap(null));
+                this.markers.splice(0, this.markers.length);
+            },
+
+            removeAllUserMarkers(){
+                // ユーザーマーカーだけを全部クリア
+                this.usermarkers.forEach(marker => marker.setMap(null));
+                this.usermarkers.splice(0, this.usermarkers.length);
+            },
+
             addOtherMarker() {
+                this.removeAllOtherMarkers();
                 this.mapstore.locations.forEach(m => this.markers.push(this.markerMaker(m)))
             },
 
             addUserMarker(){
-              console.log("addUserMarker");
-              console.log(this.ws.users);
+                // ユーザーマーカーだけを再描画
+                this.removeAllUserMarkers();
+                this.ws.users.forEach(user=>{
+                    let m = {
+                        lat:    user.lat,
+                        lng:    user.lng,
+                        type:   'user',
+                        thumb:  '/static/img/covers/dummy.jpg',
+                        title:  user.name,
+                        subtitle:"サブタイトル",
+                        body:   "本文",
+                        pid:    user.pid,
+                        w:48,
+                        h:48
+                    }
+                    this.usermarkers.push(this.markerMaker(m))
+
+                })
             },
 
             loadMap(google) {
@@ -240,8 +261,8 @@
                     type:'mainuser',
                     lat: this.lat,
                     lng: this.lng,
-                    w:48,
-                    h:48
+                    w:54,
+                    h:54
                 },)
 
                 this.markers.push(this.mainuser);
