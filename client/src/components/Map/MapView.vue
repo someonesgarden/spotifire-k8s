@@ -27,9 +27,10 @@
                 mapWidth:       window.innerWidth,
                 mapHeight:      window.innerHeight,
 
-                markers:        [],
+                othermarkers:   [],
                 usermarkers:    [],
                 mainuser:       null,
+
                 trackTimeout:   null,
                 trackDuration:  2000,
                 infowindow:     null
@@ -47,10 +48,7 @@
                 handler:function(newUsers){
                     console.log("ws.users updated: in mapview");
 
-                    // Userマーカーだけを再描画させる！
-                    //     console.log("watch:markers");
-                    //     this.removeAllMarkers();
-
+                    this.removeAllUserMarkers();
                     this.addUserMarker();
 
                 },deep:true
@@ -197,8 +195,8 @@
             },
 
             removeAllOtherMarkers(){
-                this.markers.forEach(marker => marker.setMap(null));
-                this.markers.splice(0, this.markers.length);
+                this.othermarkers.forEach(marker => marker.setMap(null));
+                this.othermarkers.splice(0, this.othermarkers.length);
             },
 
             removeAllUserMarkers(){
@@ -208,8 +206,10 @@
             },
 
             addOtherMarker() {
-                this.removeAllOtherMarkers();
-                this.mapstore.locations.forEach(m => this.markers.push(this.markerMaker(m)))
+
+                //this.removeAllOtherMarkers();
+
+                this.mapstore.locations.forEach(m => this.othermarkers.push(this.markerMaker(m)))
             },
 
             addUserMarker(){
@@ -265,7 +265,7 @@
                     h:54
                 },)
 
-                this.markers.push(this.mainuser);
+                //this.othermarkers.push(this.mainuser);
             },
 
             release() {
