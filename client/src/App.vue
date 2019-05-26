@@ -78,7 +78,7 @@ export default {
   watch:{
    '$route':{
      handler(route){
-       console.log(JSON.stringify(this.$route));
+
      }
    }
   }

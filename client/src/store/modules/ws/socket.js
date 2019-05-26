@@ -5,7 +5,8 @@ const state = {
         connected:false,
         lat:null,
         lng:null,
-        pid:null
+        pid:null,
+        tid:null
     },
     users:[],
     rooms:{}
@@ -25,14 +26,15 @@ const mutations = {
         state.you.connected = data;
     },
 
-    resetYou(state){
-       state.you={
-                name:null,
-                socketid:null,
-                connected:false,
-               lat:null,
-               lng:null,
-               pid:null
+    resetYou(state) {
+        state.you = {
+            name: null,
+            socketid: null,
+            connected: false,
+            lat: null,
+            lng: null,
+            pid: null,
+            tid: null
         }
     },
 

@@ -46,9 +46,9 @@ export default{
             });
         },
 
-        socketConnect(username=null){
+        socketConnect(userdata){
             if(socket.disconnected) socket.open();
-            socket.emit('open-socket', {name:username, date:new Date});
+            socket.emit('open-socket', {...userdata, date:new Date});
         },
 
         socketDisconnect(){

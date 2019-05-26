@@ -4,7 +4,7 @@
             <mu-col span="4" sm="3" md="3" lg="2" class="controlarea">
 
                     <div class="ui">
-                            <h4 class="title">emory.</h4>
+                        <h4 class="title">emory.</h4>
                     </div>
 
                     <mu-form :model="mapform" ref="mapform" label-position="left" label-width="0" class="userform">
@@ -32,23 +32,15 @@
                                 </mu-button>
                             </div>
                         </div>
-
                     </mu-form>
 
                 <mu-list class="users_list">
-
-<!--                    <mu-list-item avatar button :ripple="false" class="you range" v-if="ws.you.connected">-->
-<!--                        <mu-list-item-title>{{ws.you.name}}</mu-list-item-title>-->
-<!--                    </mu-list-item>-->
-
                     <map-user-item :user="user" v-for="(user,key,index) in ws.users" :key="'user'+key+index"/>
-
                 </mu-list>
                 <mu-divider></mu-divider>
-
             </mu-col>
-            <mu-col span="8" sm="9" md="9" lg="10" class="maparea">
 
+            <mu-col span="8" sm="9" md="9" lg="10" class="maparea">
                 <div class="grid-cell">
                     <map-view id="map" ref="mapref"></map-view>
                 </div>
@@ -106,15 +98,15 @@
             connectToSocket() {
 
                 let your_pos_and_data = {
-                    lat:this.$refs.mapref.lat,
-                    lng:this.$refs.mapref.lng,
-                    pid:this.spotify.playlist ? this.spotify.playlist.id : '',
-                    tid:this.spotify.track ? this.spotify.track.id : ''
+                    name:       this.mapform.username,
+                    lat:        this.$refs.mapref.lat,
+                    lng:        this.$refs.mapref.lng,
+                    pid:        this.spotify.playlist ? this.spotify.playlist.id : null,
+                    tid:        this.spotify.track ? this.spotify.track.id : null
                 };
-                console.log(your_pos_and_data);
 
                 this.$refs.mapform.validate().then(valid => {
-                    if (valid) this.socketConnect(this.mapform.username);
+                    if (valid) this.socketConnect(your_pos_and_data);
                 })
             }
         }

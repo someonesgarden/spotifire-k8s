@@ -61,7 +61,7 @@ export default{
                      subtitle:this.mapstore.marker_types[type].subtitle,
                      body:this.mapstore.marker_types[type].body,
                      pid:this.mapstore.marker_types[type].pid,
-                     icon: this.mapstore.marker_types[type].icon,
+                     tid:this.mapstore.marker_types[type].tid,
                      thumb: this.mapstore.marker_types[type].thumb,
                      id: this.mapstore.marker_types[type].id,
                 })

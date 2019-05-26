@@ -37,14 +37,8 @@
                 infowindow:     null
             };
         },
-        computed: mapGetters(['mapstore']),
+        computed: mapGetters(['mapstore','ws']),
         watch: {
-
-            'mainuser':{
-              handler(newUser){
-              },deep:true
-            },
-
             markers() {
                 console.log("watch:markers");
                 this.removeAllMarkers();
@@ -55,6 +49,13 @@
                 handler: function () {
                     if(!this.trackTimeout) this.keepTracking();
                 }
+            },
+
+            'ws.users':{
+                handler:function(newUsers){
+                    console.log("ws.users updated: in mapview");
+                    console.log(newUsers);
+                },deep:true
             }
         },
         mounted() {
@@ -70,12 +71,12 @@
             window.removeEventListener("resize", this.resetDivSize)
         },
         methods: {
-            ...mapActions(['a_mapstore']),
+            ...mapActions(['a_mapstore','a_ws']),
 
             removeAllMarkers(){
                 console.log("removeAllMarkers");
                 this.markerlist.forEach(marker => marker.setMap(null));
-               this.markerlist.splice(0, this.markerlist.length);
+                this.markerlist.splice(0, this.markerlist.length);
 
                 // this.mapstore.locations.forEach(marker => marker.setMap(null));
                 // this.a_mapstore(['set','locations',[]]);
@@ -161,20 +162,23 @@
             },
 
             markerMaker(m){
+                let icons = this.mapstore.icons[m.type];
+                let icon  = icons[Math.floor(Math.random() * icons.length)];
+                let w = m.w ? parseInt(m.w) : 22;
+                let h = m.h ? parseInt(m.h) : 22;
 
                 let options = {
                     map: this.map,
                     position: {lat: parseFloat(m.lat), lng: parseFloat(m.lng)},
                     icon: {
-                        url: m.icon ? m.icon : '/static/img/markers/m_friend_girl_1.png',
-                        scaledSize: new google.maps.Size(parseInt(m.w), parseInt(m.h))
+                        url: icon,
+                        scaledSize: new google.maps.Size(w, h)
                     },
                 };
 
                 if(m.type==='mainuser') options = {...options, animation: google.maps.Animation.DROP}
 
                 let marker = new google.maps.Marker(options);
-
                 let dom = document.createElement("div");
                 dom.innerHTML ='<div class="mu-card marker" style="width:150px; margin: 0 auto;">'+
                     '<div class=" mu-card-media">'+
@@ -224,12 +228,12 @@
                 this.infowindow = new google.maps.InfoWindow();
 
                 this.usermarker = this.markerMaker( {
-                    icon:'/static/img/markers/m_user_girl_1.png',
                     title:'For Your Holidays.',
                     subtitle:'top smooth tracks',
                     body:'あなたは現在視聴中です。',
                     thumb:'/static/img/covers/p1.jpg',
                     pid:'',
+                    tid:'',
                     id:0,
                     type:'mainuser',
                     lat: this.lat,
