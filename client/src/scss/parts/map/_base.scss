@@ -1,17 +1,22 @@
 .mu-card.marker{
-  width:150px !important;
+  width:140px !important;
 
   .mu-card-media{
-    width:145px !important;
+    width:130px !important;
 
     img{
-      width:140px !important;
+      width:100% !important;
       height:auto !important;
     }
   }
 
+  .mu-card-media-title .mu-card-title{
+    font-size:20px;
+    line-height:23px;
+  }
+
   .mu-card-text{
-    padding:5px 0;
+    padding:4px 0;
     font-size:12px;
     font-weight:bold;
   }

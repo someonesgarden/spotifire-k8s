@@ -18,20 +18,17 @@
         props: {},
         data() {
             return {
-                mainuser:          {
-                  ready:false
-                },
                 zoom:           20,
                 lat0:           34.722677,
                 lng0:           135.492364,
                 lat:            34.722677,
                 lng:            135.492364,
                 map:            null,
-                markerlist:     [],
-                markers:        [],
-                userMarker:     null,
                 mapWidth:       window.innerWidth,
                 mapHeight:      window.innerHeight,
+
+                markers:        [],
+                mainuser:       null,
                 trackTimeout:   null,
                 trackDuration:  2000,
                 infowindow:     null
@@ -39,12 +36,6 @@
         },
         computed: mapGetters(['mapstore','ws']),
         watch: {
-            markers() {
-                console.log("watch:markers");
-                this.removeAllMarkers();
-                this.addMarker();
-            },
-
             'mapstore.tracking': {
                 handler: function () {
                     if(!this.trackTimeout) this.keepTracking();
@@ -54,7 +45,13 @@
             'ws.users':{
                 handler:function(newUsers){
                     console.log("ws.users updated: in mapview");
-                    console.log(newUsers);
+
+                    // Userマーカーだけを再描画させる！
+                    //     console.log("watch:markers");
+                    //     this.removeAllMarkers();
+
+                    this.addUserMarker();
+
                 },deep:true
             }
         },
@@ -75,8 +72,8 @@
 
             removeAllMarkers(){
                 console.log("removeAllMarkers");
-                this.markerlist.forEach(marker => marker.setMap(null));
-                this.markerlist.splice(0, this.markerlist.length);
+                this.markers.forEach(marker => marker.setMap(null));
+                this.markers.splice(0, this.markers.length);
 
                 // this.mapstore.locations.forEach(marker => marker.setMap(null));
                 // this.a_mapstore(['set','locations',[]]);
@@ -121,7 +118,7 @@
 
                     //自分のいるポイントを起点に生成したランダムポイントをマークする
                     setTimeout(()=>{
-                        this.addMarker();
+                        this.addOtherMarker();
                     },3000);
 
 
@@ -142,7 +139,7 @@
                 if (!!this.map) {
                     let latLng = new google.maps.LatLng(this.lat, this.lng);
                     this.map.panTo(latLng);
-                    this.usermarker.setPosition(latLng);
+                    this.mainuser.setPosition(latLng);
                 }
 
                 //マップ読み込み成功時の処理！
@@ -206,8 +203,13 @@
                 return marker;
             },
 
-            addMarker() {
-                this.mapstore.locations.forEach(m => this.markerlist.push(this.markerMaker(m)))
+            addOtherMarker() {
+                this.mapstore.locations.forEach(m => this.markers.push(this.markerMaker(m)))
+            },
+
+            addUserMarker(){
+              console.log("addUserMarker");
+              console.log(this.ws.users);
             },
 
             loadMap(google) {
@@ -227,7 +229,7 @@
 
                 this.infowindow = new google.maps.InfoWindow();
 
-                this.usermarker = this.markerMaker( {
+                this.mainuser = this.markerMaker( {
                     title:'For Your Holidays.',
                     subtitle:'top smooth tracks',
                     body:'あなたは現在視聴中です。',
@@ -242,7 +244,7 @@
                     h:48
                 },)
 
-                this.markerlist.push(this.usermarker);
+                this.markers.push(this.mainuser);
             },
 
             release() {
