@@ -5,7 +5,7 @@ const state = {
 
     icons:{
         mainuser:[
-            '/static/img/markers/m_user_girl_1.png',
+            '/static/img/markers/m_mainuser_1.png',
         ],
 
         friend:[
