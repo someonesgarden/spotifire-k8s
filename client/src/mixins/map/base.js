@@ -11,17 +11,14 @@ export default{
         },
 
         trackToggle(){
-            console.log("trackStart");
-            this.a_mapstore(['set','tracking',null]);
+            this.a_mapstore(['toggle','tracking']);
         },
 
         trackStop(){
-            console.log("trackStop");
             this.a_mapstore(['set','tracking',false]);
         },
 
         trackStart(){
-            console.log("trackStop");
             this.a_mapstore(['set','tracking',true]);
         },
 

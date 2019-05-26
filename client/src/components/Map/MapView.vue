@@ -32,7 +32,6 @@
                 mainuser:       null,
 
                 trackTimeout:   null,
-                trackDuration:  2000,
                 infowindow:     null
             };
         },
@@ -75,7 +74,7 @@
                 if(this.mapstore.tracking){
                     this.trackTimeout = true;
                     console.log(this.lat,this.lng);
-                    setTimeout(this.keepTracking, this.trackDuration);
+                    setTimeout(this.keepTracking, this.mapstore.trackDuration);
                 }else{
                     this.trackTimeout = false;
                 }
@@ -102,11 +101,11 @@
                     this.lng = position.coords.longitude;
 
                     //自分のいる近傍にランダムにポイントを生成する
-                    let rand_points = this.randomPointsRange(this.lat,this.lng,80,5,50)
+                    let rand_points = this.randomPointsRange(this.lat,this.lng,60,8,80)
 
                     this.a_mapstore(['set','locations',rand_points]);
 
-                    //自分のいるポイントを起点に生成したランダムポイントをマークする
+                    //自分のいるポイントを起点に生成したランダムポイントをマーク
                     setTimeout(()=>{
                         this.addOtherMarker();
                     },3000);
@@ -132,8 +131,7 @@
                     this.mainuser.setPosition(latLng);
                 }
 
-                //マップ読み込み成功時の処理！
-                //this.getWeather(API + '&lat=' + lat + '&lon=' + lon + KEY);
+                //マップ読み込み成功時の処理をここに。
             },
             geoError(error) {
                 console.log(error);
@@ -151,7 +149,9 @@
 
             markerMaker(m){
                 let icons = this.mapstore.icons[m.type];
-                let icon  = icons[Math.floor(Math.random() * icons.length)];
+
+                //乱数ではなく、タイトルの一文字目でアイコン画像を判別する
+                let icon  = icons[m.title.charCodeAt(0) % icons.length];
                 let w = m.w ? parseInt(m.w) : 22;
                 let h = m.h ? parseInt(m.h) : 22;
 
@@ -164,7 +164,7 @@
                     },
                 };
 
-                if(m.type==='mainuser') options = {...options, animation: google.maps.Animation.DROP}
+                //if(m.type==='mainuser') options = {...options, animation: google.maps.Animation.DROP}
 
                 let marker = new google.maps.Marker(options);
                 let dom = document.createElement("div");
@@ -206,9 +206,7 @@
             },
 
             addOtherMarker() {
-
-                //this.removeAllOtherMarkers();
-
+                this.removeAllOtherMarkers();
                 this.mapstore.locations.forEach(m => this.othermarkers.push(this.markerMaker(m)))
             },
 
@@ -233,8 +231,6 @@
                     }else{
                         if(user.name !== this.ws.you.name) this.usermarkers.push(this.markerMaker(m))
                     }
-
-
                 })
             },
 
@@ -247,7 +243,7 @@
                     rotateControlOptions:       { position: google.maps.ControlPosition.RIGHT_TOP },
                     center: {lat: this.lat0, lng: this.lng0}, //初期座標
                     zoom: this.zoom,
-                    gestureHandling: "greedy",    // スワイプ判定を強めに設定(地図を移動させるには..問題)
+                    //gestureHandling: "greedy",    // スワイプ判定を強めに設定(地図を移動させるには..問題)
                     //gestureHandling: "auto"
                 };
 

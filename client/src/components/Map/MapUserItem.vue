@@ -1,23 +1,25 @@
 <template>
-    <mu-list-item avatar button :ripple="false" class="range user" v-if="user" :class="{disconnected:!ws.you.connected, you:user.name===ws.you.name}">
-<!--        <mu-list-item-action>-->
-<!--            <mu-avatar>-->
-<!--                <img src="/static/img/a1.jpg">-->
-<!--            </mu-avatar>-->
-<!--        </mu-list-item-action>-->
+    <mu-list-item avatar button :ripple="false" class="range user" v-if="user" :class="{disconnected:!ws.you.connected, you:user.name===ws.you.name}" @click="userItemClick">
         <mu-list-item-title>{{user.name}}</mu-list-item-title>
-<!--        <mu-list-item-action>-->
-<!--            <mu-icon value="location_on" :size="15"></mu-icon>-->
-<!--        </mu-list-item-action>-->
     </mu-list-item>
 </template>
 
 <script>
     import {mapGetters} from 'vuex';
+    import mapMixin from '../../mixins/map/index';
     export default {
         name: "MapUserItem",
         props:['user'],
-        computed:mapGetters(['ws'])
+        mixins:[mapMixin],
+        computed:mapGetters(['ws']),
+        methods:{
+            userItemClick(){
+                console.log("userItemClick:trackstop!");
+                this.trackStop();
+                //緯度経度に移動
+                //playlistを開く
+            }
+        }
 
     }
 </script>

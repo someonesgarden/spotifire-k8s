@@ -1,14 +1,17 @@
 const state = {
-    tracking:false
+    tracking:false,
+    trackDuration:  2000,
 }
 
 const mutations = {
     setTracking(state,val){
-        if(!!val) {
-            state.tracking = val;
-        }else{
-            state.tracking = !state.tracking;
-        }
+        console.log("setTracking",val);
+        state.tracking = val;
+    },
+
+    toggleTracking(state){
+        console.log("toggleTracking!");
+        state.tracking = !state.tracking;
     }
 }
 

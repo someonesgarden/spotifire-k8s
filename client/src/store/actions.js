@@ -62,6 +62,9 @@ export const a_mapstore = ({commit},[type, action, data]) => {
         set: {
             tracking:  (data) => commit('mapstore/setTracking', data),
             locations: (data) => commit('mapstore/setLocations', data)
+        },
+        toggle: {
+            tracking: () => commit('mapstore/toggleTracking')
         }
     }
     actions[type][action](data)
