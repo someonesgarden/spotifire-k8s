@@ -33,10 +33,20 @@
                 trackTimeout:   false,
                 infowindow:     null,
                 watchId:        null,
+                userpoly:       null,
+
                 geocodingOptions : {
                     enableHighAccuracy: true,
                     timeout : 5000,
                     maximumAge: 0
+                },
+
+                userpolyOptions:{
+                    strokeColor: '#FF0000',
+                    strokeOpacity: 0.8,
+                    strokeWeight: 2,
+                    fillColor: '#FF0000',
+                    fillOpacity: 0.35
                 }
             };
         },
@@ -49,50 +59,67 @@
             },
 
             'ws.users':{
-                handler:function(newUsers){
-                    console.log("ws.users updated: in mapview");
-
+                handler:function(){
                     this.removeAllUserMarkers();
-                    this.addUserMarker();
+                    this.addUserMarkers();
+                    this.drawUserPoly();
 
                 },deep:true
             }
         },
         mounted() {
             GoogleMapsLoader.load(this.loadMap);
-            //this.a_mapstore(['set', 'tracking', false]);
         },
 
         beforeDestroy() {
+            GoogleMapsLoader.release(function () {
+                console.log("No google maps api around");
+            });
         },
+
         methods: {
             ...mapActions(['a_mapstore','a_ws']),
 
-            keepTracking(){
-                this.geolocation();
+            loadMap(google) {
+                console.log("loadMap");
+                let mapOptions = {
+                    mapTypeControlOptions:      { position: google.maps.ControlPosition.TOP_CENTER },
+                    fullscreenControlOptions:   { position: google.maps.ControlPosition.TOP_LEFT },
+                    streetViewControlOptions:   { position: google.maps.ControlPosition.LEFT_CENTER },
+                    zoomControlOptions:         { position: google.maps.ControlPosition.RIGHT_CENTER },
+                    rotateControlOptions:       { position: google.maps.ControlPosition.RIGHT_TOP },
+                    center: {lat: this.lat, lng: this.lng}, //初期座標
+                    zoom: this.zoom,
+                    gestureHandling: "greedy",    // スワイプ判定を強めに設定(地図を移動させるには..問題)
+                    //gestureHandling: "auto",
+                    draggable: true,
+                    disableDoubleClickZoom: false// ダブルクリックズーム制限
+                };
 
-                // 3秒後に実行
-                if(this.mapstore.tracking){
-                    this.trackTimeout = true;
-                    console.log(this.lat,this.lng);
-                    setTimeout(this.keepTracking, this.mapstore.trackDuration);
-                }else{
-                    this.trackTimeout = false;
-                }
-            },
+                this.map = new google.maps.Map(document.getElementById("map"), mapOptions);
 
-            resetPos(position){
+                // google.maps.event.addListener( "dragend", ( argument )=> {
+                //     console.log( argument ) ;
+                // });
 
-                console.log("resetPos");
-                if(!!this.map && !!position){
-                    this.lat = position.coords.latitude;
-                    this.lng = position.coords.longitude;
-                    let latLng = new google.maps.LatLng(this.lat,this.lng);
-                    this.map.panTo(latLng);
-                    // this.map.setCenter(latLng);
-                    this.mainuser.setPosition(latLng);
-                }
+                this.infowindow = new google.maps.InfoWindow();
 
+                this.mainuser = this.markerMaker( {
+                    title:'For Your Holidays.',
+                    subtitle:'top smooth tracks',
+                    body:'あなたは現在視聴中です。',
+                    thumb:'/static/img/covers/p1.jpg',
+                    pid:'',
+                    tid:'',
+                    id:0,
+                    type:'mainuser',
+                    lat: this.lat,
+                    lng: this.lng,
+                    w:54,
+                    h:54
+                })
+
+                this.afterMapLoaded();
             },
 
             afterMapLoaded(){
@@ -112,7 +139,7 @@
                     this.resetPos(position);
 
                     setTimeout(()=>{
-                        this.addOtherMarker();
+                        this.addOtherMarkers();
                     },2000);
 
                 }, this.geoError);
@@ -127,8 +154,30 @@
                 // },this.geoError,this.geocodingOptions);
             },
 
+            keepTracking(){
+                this.geolocation();
+
+                // 3秒後に実行
+                if(this.mapstore.tracking){
+                    this.trackTimeout = true;
+                    setTimeout(this.keepTracking, this.mapstore.trackDuration);
+                }else{
+                    this.trackTimeout = false;
+                }
+            },
+
+            resetPos(position){
+                if(!!this.map && !!position){
+                    this.lat = position.coords.latitude;
+                    this.lng = position.coords.longitude;
+                    let latLng = new google.maps.LatLng(this.lat,this.lng);
+                    this.map.panTo(latLng);
+                    // this.map.setCenter(latLng);
+                    this.mainuser.setPosition(latLng);
+                }
+            },
+
             geolocation() {
-                console.log("geolocation");
                 if(!!navigator.geolocation) navigator.geolocation.getCurrentPosition(this.resetPos, this.geoError);
             },
 
@@ -142,6 +191,20 @@
 
             friendsWindowClicked(pid){
               window.alert(pid);
+            },
+
+            drawUserPoly(){
+
+                if(this.userpoly) this.userpoly.setMap(null);
+
+                let userpoly_coords = [];
+                this.ws.users.forEach((user,index)=> userpoly_coords.push({lat:user.lat, lng:user.lng}));
+
+               if(this.ws.users && this.ws.users.length>=3){
+                   // Construct the polygon.
+                   this.userpoly = new google.maps.Polygon({...this.userpolyOptions, paths:userpoly_coords});
+                   this.userpoly.setMap(this.map);
+               }
 
             },
 
@@ -204,12 +267,12 @@
                 this.usermarkers.splice(0, this.usermarkers.length);
             },
 
-            addOtherMarker() {
+            addOtherMarkers() {
                 this.removeAllOtherMarkers();
                 this.mapstore.locations.forEach(m => this.othermarkers.push(this.markerMaker(m)))
             },
 
-            addUserMarker(){
+            addUserMarkers(){
                 // ユーザーマーカーだけを再描画
                 this.removeAllUserMarkers();
                 this.ws.users.forEach(user=>{
@@ -231,54 +294,6 @@
                         if(user.name !== this.ws.you.name) this.usermarkers.push(this.markerMaker(m))
                     }
                 })
-            },
-
-            loadMap(google) {
-                console.log("loadMap");
-                let mapOptions = {
-                    mapTypeControlOptions:      { position: google.maps.ControlPosition.TOP_CENTER },
-                    fullscreenControlOptions:   { position: google.maps.ControlPosition.TOP_LEFT },
-                    streetViewControlOptions:   { position: google.maps.ControlPosition.LEFT_CENTER },
-                    zoomControlOptions:         { position: google.maps.ControlPosition.RIGHT_CENTER },
-                    rotateControlOptions:       { position: google.maps.ControlPosition.RIGHT_TOP },
-                    center: {lat: this.lat, lng: this.lng}, //初期座標
-                    zoom: this.zoom,
-                    gestureHandling: "greedy",    // スワイプ判定を強めに設定(地図を移動させるには..問題)
-                    //gestureHandling: "auto",
-                    draggable: true,
-                    disableDoubleClickZoom: false// ダブルクリックズーム制限
-                };
-
-                this.map = new google.maps.Map(document.getElementById("map"), mapOptions);
-
-                // google.maps.event.addListener( "dragend", ( argument )=> {
-                //     console.log( argument ) ;
-                // });
-
-                this.infowindow = new google.maps.InfoWindow();
-
-                this.mainuser = this.markerMaker( {
-                    title:'For Your Holidays.',
-                    subtitle:'top smooth tracks',
-                    body:'あなたは現在視聴中です。',
-                    thumb:'/static/img/covers/p1.jpg',
-                    pid:'',
-                    tid:'',
-                    id:0,
-                    type:'mainuser',
-                    lat: this.lat,
-                    lng: this.lng,
-                    w:54,
-                    h:54
-                })
-
-                this.afterMapLoaded();
-            },
-
-            release() {
-                GoogleMapsLoader.release(function () {
-                    console.log("No google maps api around");
-                });
             }
         }
     };

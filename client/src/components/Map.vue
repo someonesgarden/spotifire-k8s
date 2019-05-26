@@ -10,11 +10,11 @@
                     <mu-form :model="mapform" ref="mapform" label-position="left" label-width="0" class="userform">
                         <div class="ui">
                             <div class="sixteen wide">
-                                <mu-button full-width color="pink500" @click="trackToggle" v-if="!mapstore.tracking">
-                                    <mu-icon value="settings_input_antenna" style="width:20px;"></mu-icon>&nbsp;Start
-                                </mu-button>
-                                <mu-button full-width color="cyan400" @click="trackToggle" v-else>
+                                <mu-button full-width color="cyan400" @click="trackToggle" v-if="mapstore.tracking">
                                     <mu-icon value="portable_wifi_off" style="width:20px;"></mu-icon>&nbsp;Stop
+                                </mu-button>
+                                <mu-button full-width color="pink500" @click="trackToggle" v-else>
+                                    <mu-icon value="settings_input_antenna" style="width:20px;"></mu-icon>&nbsp;Start
                                 </mu-button>
                             </div>
                         </div>
