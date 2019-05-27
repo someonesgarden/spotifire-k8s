@@ -7,7 +7,8 @@ const scopes = [
     'playlist-modify-private',
     'user-library-read',
     'user-modify-playback-state',
-    'user-read-playback-state'
+    'user-read-playback-state',
+    'user-top-read'
 ];
 const SpotifyWebApi = require('spotify-web-api-node');
 const spotifyApi = new SpotifyWebApi({
