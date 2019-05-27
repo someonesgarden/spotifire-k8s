@@ -365,7 +365,20 @@
                     //レコメンデーションの取得を呼び出す
                     this.c_reco();
                 },
+            },
+        watch:{
+            'spotify.credential':{
+                handler(){
+                    if(!!this.spotify.credential.expires_in){
+                        console.log("c_getMe call");
+                        this.c_getMe();
+                        console.log("c_getMyTopTracks call");
+                        this.c_getMyTopTracks();
+                    }
+                },
+                deep:true
             }
+        }
     }
 </script>
 

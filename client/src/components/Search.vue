@@ -68,11 +68,11 @@
 </template>
 <script>
     import {mapGetters,mapActions} from 'vuex';
-    import commonMixin from '../mixins/spotify/index';
+    import spotifyMixin from '../mixins/spotify/index';
     import searchResList from './List/SearchResList';
     export default {
         name: 'mysearch',
-        mixins:[commonMixin],
+        mixins:[spotifyMixin],
         components:{'search-res-list':searchResList},
         methods:{
             ...mapActions(['a_spotify']),
@@ -80,14 +80,6 @@
                 this.a_spotify(['set','searchQuery',{key:'datatypes',val:val}]);
             }
         },
-        computed:mapGetters(['spotify']),
-        watch:{
-            'spotify.credential':{
-                handler(){
-                    if(!!this.spotify.credential.expires_in) this.c_getMe();
-                },
-                deep:true
-            }
-        }
+        computed:mapGetters(['spotify'])
     }
 </script>

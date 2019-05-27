@@ -9,6 +9,7 @@ const state = {
     me:{
         id:null
     },
+    bookmarks:null,
 
     update:{
         date:new Date(),
@@ -36,6 +37,10 @@ const mutations = {
 
     setMe(state,val){
         state.me = val;
+    },
+
+    setBookmarks(state,val){
+      state.bookmarks = val;
     },
 
     setMeId(state,val){

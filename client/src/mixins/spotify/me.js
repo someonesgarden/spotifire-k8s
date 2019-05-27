@@ -20,6 +20,23 @@ export default{
                 }).catch(error => {
                 console.log(error);
             });
+        },
+
+        c_getMyTopTracks:function(){
+            axios.get('/api/spotify/me/get_my_toptracks/'+this.spotify.credential.access_token)
+                .then(res => {
+                    if(!!res.data){
+                       console.log("getMyTopTracks success!");
+                       if(res.data.items){
+                           console.log(res.data.items);
+                           this.a_spotify(['set','track',res.data.items[0]]);
+                           this.a_spotify(['set','bookmarks',res.data.items]);
+                       }
+
+                    }
+                }).catch(error => {
+                console.log(error);
+            });
         }
     }
 }

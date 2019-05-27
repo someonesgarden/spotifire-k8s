@@ -1,7 +1,9 @@
 <template>
     <mu-flex justify-content="center" align-items="center">
         <mu-flex justify-content="center"  direction="column" class="inner">
+
             <mu-flex justify-content="center" class="param_area">
+                <bottom-slider></bottom-slider>
             </mu-flex>
             <mu-flex justify-content="center" class="player_area" v-if="!!spotify.player.track">
                 <mu-chip class="demo-chip" color="black">
@@ -26,8 +28,12 @@
 
 <script>
     import {mapGetters,mapActions} from 'vuex';
+    import BottomSlider from './BottomSlider';
     export default {
         name: "BottomView",
+        components:{
+          BottomSlider
+        },
         computed:mapGetters(['spotify']),
         methods:mapActions(['a_spotify'])
     }
