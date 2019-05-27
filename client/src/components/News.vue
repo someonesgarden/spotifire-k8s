@@ -9,10 +9,13 @@
                 </mu-form-item>
             </mu-form>
             <div class="hello" v-if="!!feed.feed.items">
+
                 <feed-block :item="feed.feed.items[0]" class="large" :col="3"/>
+
                 <masonry ref="itemarea" :cols="cols" :gutter="gutter">
                     <feed-block :item="item" v-for="(item,index) in feed.feed.items" v-if="index>0 && index<7" :key="'item'+index" :col="1"/>
                 </masonry>
+
             </div>
         </div>
     </mu-container>

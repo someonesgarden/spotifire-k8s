@@ -468,10 +468,10 @@
                 data.datasets = af_series.map((e, i) => {
                     return {
                         data:                   af_data[i],
-                        label:                  af_series[i],
-                        borderColor:            this.backgroundColor[i].replace(/1\)$/, '.5)'),
-                        pointBackgroundColor:   this.backgroundColor[i],
-                        backgroundColor:        this.backgroundColor[i].replace(/1\)$/, '.5)')
+                        label:                  af_series,
+                        borderColor:            this.spotify.backgroundColors[i],
+                        pointBackgroundColor:   this.spotify.backgroundColors[i],
+                        backgroundColor:        this.spotify.backgroundColors[i]
                     }
                 });
                 return data

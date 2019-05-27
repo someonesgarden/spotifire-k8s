@@ -66,8 +66,16 @@
                 }
             }
         },
-        computed:mapGetters(['bottom']),
-        methods:mapActions(['a_index'])
+        computed:mapGetters(['bottom','rootAction']),
+        methods:mapActions(['a_index']),
+
+        watch:{
+            'rootAction':{
+                handler(newAction){
+                    if(newAction.type==='leftopen') this.side.left.open = true;
+                },deep:true
+            }
+        }
     }
 </script>
 <style>

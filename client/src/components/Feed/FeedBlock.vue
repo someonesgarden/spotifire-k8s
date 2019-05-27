@@ -1,32 +1,38 @@
 <template>
     <div class="card flex_v">
         <div class="inner">
-            <a @click="clickAction('title',item.title)">
-                <h1>
-                    <mu-icon value="format_quote" size="45"></mu-icon>
-                    {{item.title}}
-                </h1>
-            </a>
-            <a @click="clickAction('title',item.content)">
-                <h3>{{item.content | truncate}}</h3>
-            </a>
-            <hr>
-            <div class="tweets" v-if="nicelist">
-                <div class="header">
-                    <mu-form :model="form" label-width="100">
-                    <mu-form-item prop="checkbox">
-                        <mu-checkbox v-model="form.searchwords" :value="nl" :label="nl"  v-for="(nl,index) in nicelist" :key="'nl'+index" @change="twitterSearch"></mu-checkbox>
-                    </mu-form-item>
-                    </mu-form>
-                </div>
-                <div class="inner">
-                    <tweets :col="col" :tweets="tweets"/>
+
+            <div class="graph">
+                <feed-graph :feature="generateFeature"></feed-graph>
+            </div>
+
+            <div class="feed">
+
+                <a @click="clickAction('title',item.title)">
+                    <h1>
+                        <mu-icon value="format_quote" size="45"></mu-icon>
+                        {{item.title}}
+                    </h1>
+                </a>
+                <a @click="clickAction('title',item.content)">
+                    <h3>{{item.content | truncate}}</h3>
+                </a>
+                <hr>
+                <div class="tweets" v-if="nicelist">
+                    <div class="header">
+                        <mu-form :model="form" label-width="100">
+                        <mu-form-item prop="checkbox">
+                            <mu-checkbox v-model="form.searchwords" :value="nl" :label="nl"  v-for="(nl,index) in nicelist" :key="'nl'+index" @change="twitterSearch"></mu-checkbox>
+                        </mu-form-item>
+                        </mu-form>
+                    </div>
+                    <div class="inner">
+                        <tweets :col="col" :tweets="tweets"/>
+                    </div>
                 </div>
             </div>
 
-            <div class="graph">
-                <feed-graph></feed-graph>
-            </div>
+
         </div>
     </div>
 </template>
@@ -43,9 +49,32 @@
 
     export default {
         name: "FeedBlock",
-        props:['item','col','wide'],
+        props:['item','col'],
         mixins:[feedMixin,tweetMixin,utilMixin],
         components:{Tweets,FeedGraph},
+        computed:{
+            generateFeature(){
+
+                return {
+                    acousticness:(Math.random()*10000)/10000,
+                    danceability:(Math.random()*10000)/10000,
+                    duration_ms:520787,
+                    energy:(Math.random()*10000)/10000,
+                    id:"54X78diSLoUDI3joC2bjMz",
+                    instrumentalness:(Math.random()*10000)/10000,
+                    key:Math.floor(Math.random()*11),
+                    liveness:(Math.random()*10000)/10000,
+                    loudness:-10.422,
+                    mode:Math.floor(Math.random()*2),
+                    speechiness:(Math.random()*10000)/10000,
+                    tempo:Math.random()*200,
+                    time_signature:4,
+                    valence:(Math.random()*10000)/10000
+                }
+
+
+            }
+        },
         methods:{
             ...mapActions(['a_index']),
 
@@ -57,7 +86,6 @@
             twitterSearch(){
                 this.tweetSearch(this.form.searchwords.join(' ')).then((data)=>this.tweets = data.data);
             },
-
             parseContent(){
                 if(this.item.content){
                     this.nicelist = null;
@@ -154,18 +182,25 @@
 
 <style scoped lang="scss">
 
-    .card{
+    .card.flex_v{
         .inner{
             position:relative;
+
+            .feed{
+                z-index: 100;
+            }
+
             .graph{
                 // pointer-events: none;
+
+                margin:0 auto;
 
                 position:absolute;
                 top:0;
                 left:0;
-                width:100%;
+                /*width:100%;*/
                 height:100%;
-                background-color:rgba(29,20,20,0.3);
+                background-color: rgba(255, 255, 255, 0.91);
                 opacity: 0.0;
                 transition: 1.0s;
 
@@ -173,6 +208,12 @@
                     opacity:1.0;
                 }
             }
+        }
+
+        &.large{
+                .charjs{
+                    width:200px;
+                }
         }
     }
 

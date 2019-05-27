@@ -2,6 +2,11 @@ const state = {
     loggedIn: false,
     bottom: {
         open: false
+    },
+
+    rootAction:{
+        type:'',
+        date:new Date(),
     }
 }
 
@@ -20,6 +25,11 @@ const  mutations = {
         }else{
             state.bottom.open = val;
         }
+    },
+
+    setRootAction(state,val){
+        state.rootAction.type = val;
+        state.rootAction.date = new Date();
     }
 }
 

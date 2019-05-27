@@ -73,6 +73,10 @@ export const a_mapstore = ({commit},[type, action, data]) => {
 
 export const a_index =  ({commit}, [type, action, data]) => {
     const actions = {
+        root:{
+          action:   (data) => commit('setRootAction', data),
+        },
+
         bottom:{
             open:   () => commit('setBottomState', true),
             close:  () => commit('setBottomState', false),

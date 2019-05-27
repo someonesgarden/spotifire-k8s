@@ -10,7 +10,7 @@
 
                     <mu-col span="8" sm="8" md="8" lg="8" xl="8">
                         <mu-form-item prop="textarea" label="ID" class="range">
-                            <mu-text-field multi-line :rows="1" :rows-max="2" :value="spotify.searchQuery.id" :disabled="id_or_term==='term'" @change="(val)=> a_spotify(['set','searchQuery',{key:'id',val:val}])"></mu-text-field>
+                            <mu-text-field :value="spotify.searchQuery.id" :disabled="id_or_term==='term'" @change="(val)=> a_spotify(['set','searchQuery',{key:'id',val:val}])"></mu-text-field>
                         </mu-form-item>
                     </mu-col>
                     <mu-col span="3" sm="3" md="3" lg="3" xl="3" style="text-align:right;">
