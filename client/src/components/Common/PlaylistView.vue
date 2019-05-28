@@ -187,6 +187,14 @@
                     </mu-list>
                     <mu-divider></mu-divider>
                 </div>
+
+                <mu-row gutter  v-if="track.id">
+                    <mu-col span="12" style="margin-bottom:12px;">
+                        <mu-button full-width color="cyan500" @click="getAudioAnalysis">
+                            <mu-icon value="blur_on"></mu-icon>&nbsp;Audio Analysis
+                        </mu-button>
+                    </mu-col>
+                </mu-row>
                 <!--/FEATUERS-->
             </mu-list>
             <!---/ TRACK --->
@@ -362,7 +370,7 @@
                     '#97cd76'
                 ],
 
-                labels:         ['Acousticness', 'Dance', 'Energy', 'Instrumental', 'Liveness', 'Speechiness', 'Valence'],
+                labels:  ['Acousticness', 'Dance', 'Energy', 'Instrumental', 'Liveness', 'Speechiness', 'Valence'],
                 options: {
                     segmentShowStroke: false,
                     tooltips: {
@@ -451,6 +459,12 @@
                     this.a_spotify(['update','item','track']);
                     this.a_spotify(['set','track',this.track]);
                 })
+            },
+
+            getAudioAnalysis(){
+                 this.c_getAudioAnalysis(this.track.id,(res)=>{
+                     this.a_spotify(['set','analysis',res.data]);
+                 })
             },
 
             seriesData (af) {

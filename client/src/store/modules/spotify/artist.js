@@ -9,8 +9,11 @@ const mutations = {
     setArtists(state,val){
       state.artists = val;
     },
-    setArtist(state,val){
+    setArtistID(state,val){
         state.artist.id = val;
+    },
+    setArtist(state,val){
+        state.artist = val;
     }
 }
 

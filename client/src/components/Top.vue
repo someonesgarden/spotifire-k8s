@@ -8,7 +8,6 @@
 </template>
 <script>
     import {mapActions,mapGetters} from 'vuex';
-    import anime from 'animejs';
 
     import * as THREE from 'three'
     //import TrackballControls from 'three-trackballcontrols'
@@ -71,7 +70,6 @@
         },
 
         beforeDestroy() {
-            console.log("Before Destroy");
             this.orbit.enabled = false;
             //this.orbit = null;
             window.removeEventListener('resize', this.resize)

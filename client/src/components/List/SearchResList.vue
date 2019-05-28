@@ -19,13 +19,7 @@
             ...mapActions(['a_spotify']),
 
             changeAction(val){
-
-                if(this.type==='playlist'){
-                    this.a_spotify(['set','playlistID', val]);
-                } else{
-                    this.a_spotify(['set',this.type, val]);
-                }
-
+                this.a_spotify(['set',this.type+'ID', val]);
                 this.a_spotify(['update','item',this.type]);
             }
         }

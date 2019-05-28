@@ -14,12 +14,18 @@ const mutations = {
       state.shows = val;
     },
     setShow(state,val){
+        state.show = val;
+    },
+    setShowID(state,val){
         state.show.id = val;
     },
     setEpisodes(state,val){
         state.episodes = val;
     },
     setEpisode(state,val){
+        state.episode = val;
+    },
+    setEpisodeID(state,val){
         state.episode.id = val;
     }
 }

@@ -28,7 +28,6 @@ class App {
     }
 
     init() {
-
         this.camera = new THREE.PerspectiveCamera( 25, window.innerWidth / window.innerHeight, 0.1, 1000 );
         this.camera.position.x = -45;
         this.camera.position.y = 20;
@@ -36,12 +35,10 @@ class App {
 
         this.controls = new THREE.OrbitControls(this.camera);
         this.controls.target = new THREE.Vector3(5,-5,5);
-
         this.scene = new THREE.Scene();
 
         this.resizeListener = e => this.onResize(e);
         window.addEventListener( 'resize', this.resizeListener, false );
-
         this.createBoxes();
 
         this.renderer = new THREE.WebGLRenderer({
@@ -54,13 +51,11 @@ class App {
         document.body.appendChild( this.renderer.domElement );
 
         this.beginAnimationLoop();
-
         this.animate();
     }
 
     createBoxes() {
         this.geometry = new THREE.BoxBufferGeometry(1, 10, 1);
-
         let vertexShader = `
       varying vec2 vUv;
       void main()	{

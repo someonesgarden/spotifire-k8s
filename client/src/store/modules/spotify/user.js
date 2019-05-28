@@ -43,7 +43,7 @@ const mutations = {
       state.bookmarks = val;
     },
 
-    setMeId(state,val){
+    setMeID(state,val){
         state.me.id = val;
     }
 }

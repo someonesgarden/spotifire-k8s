@@ -10,8 +10,8 @@
     "build": "node build/build.js"
   },
   "dependencies": {
-    "axios": "^0.18.0",
     "animejs": "^3.0.1",
+    "axios": "^0.18.0",
     "babel-polyfill": "^6.26.0",
     "chart.js": "^2.8.0",
     "cors": "^2.8.5",
@@ -29,6 +29,7 @@
     "vue": "^2.5.2",
     "vue-carousel": "^0.18.0-alpha",
     "vue-chartjs": "^3.4.2",
+    "vue-class-component": "^7.1.0",
     "vue-grid-layout": "^2.3.4",
     "vue-masonry-css": "^1.0.3",
     "vue-router": "^3.0.1",

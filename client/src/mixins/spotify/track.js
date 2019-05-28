@@ -25,6 +25,18 @@ export default{
             });
         },
 
+        c_getAudioAnalysis:function(trackid,cb){
+            let params =  {'trackid': trackid};
+            let headers = {Authorization:this.spotify.credential.access_token};
+
+            axios.get('/api/spotify/track/analysis',{params:params, headers: headers}).then(
+                res => {
+                    cb(res);
+                }).catch(error => {
+                console.log(error);
+            });
+        },
+
         c_getTrackFeatures:function(trackid, cb){
             let params =  {'trackid': trackid};
             let headers = {Authorization:this.spotify.credential.access_token};

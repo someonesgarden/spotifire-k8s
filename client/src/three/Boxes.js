@@ -1,10 +1,9 @@
 import * as THREE from 'three'
 import anime from 'animejs';
-// import Models  from './Models';
-
 export default class Boxes {
 
     constructor(scene) {
+
         this.scene = scene
 
         this.randFrom = [
@@ -91,24 +90,6 @@ export default class Boxes {
         }
     }
 
-    // droneAnimationLoop(){
-    //
-    //     anime.timeline({loop: true})
-    //         .add({
-    //             targets: this.box.position,
-    //             y: [
-    //                 {value: (this.geometry.parameters.height*0.25)+10, duration: 500},
-    //                 {value: -(this.geometry.parameters.height*0.25)+10, duration: 2000},
-    //             ],
-    //             x: [
-    //                 {value: anime.random(-50,50), duration: 500},
-    //                 {value: anime.random(-30,30), duration: 2000},
-    //             ],
-    //             delay: 100
-    //         })
-    // }
-
-
     beginAnimationLoop() {
 
         // random from array
@@ -125,21 +106,5 @@ export default class Boxes {
             easing: easingString,
             complete: (anim) => this.beginAnimationLoop()
         });
-
-        // anime({
-        //         targets: this.box.position,
-        //         y: [
-        //             {value: (this.geometry.parameters.height*0.25)+10, duration: 500},
-        //             {value: -(this.geometry.parameters.height*0.25)+10, duration: 2000},
-        //         ],
-        //         x: [
-        //             {value: anime.random(-15,15), duration: 500},
-        //             {value: anime.random(-13,13), duration: 2000},
-        //         ],
-        //         delay: anime.stagger(200, {grid: [this.nRows, this.nCols], from: randFrom}),
-        //         easing: easingString
-        //     })
-
-
     }
 }

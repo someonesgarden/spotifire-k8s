@@ -32,8 +32,6 @@
                         </mu-col>
                     </div>
                 </mu-form>
-
-
             </mu-flex>
 
         </div>
@@ -42,10 +40,12 @@
 <script>
     import {mapGetters,mapActions} from 'vuex';
 
+    import spotifyMixin from '../mixins/spotify/index';
     import {ruleEmpty} from '../store/rules';
 
     export default {
         name: 'mylogin',
+        mixins:[spotifyMixin],
         data(){
           return{
               emptyRules: [ruleEmpty],
@@ -56,7 +56,7 @@
               }
           }
         },
-        computed:mapGetters(['loggedIn']),
+        computed:mapGetters(['loggedIn','spotify']),
         methods:{
             ...mapActions(['a_login']),
 
@@ -64,6 +64,7 @@
                 this.$refs.adminform.validate().then(valid => {
 
                     if(valid){
+                        if(!this.spotify.credential.expires_in) this.c_getCredential();
                         this.a_login(this.admin);
                         if(this.loggedIn) this.$router.push('/');
                     }

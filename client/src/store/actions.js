@@ -14,24 +14,37 @@ export const a_spotify =  ({commit}, [type, action, data]) => {
             credential: (data) => commit('spotify/setCredential', data),
             code: (data) => commit('spotify/setCode', data),
             me: (data) => commit('spotify/setMe', data),
-            meId:(data) => commit('spotify/setMeId', data),
+            meID:(data) => commit('spotify/setMeId', data),
             searchNum: (data) => commit('spotify/setSearchResNum', data),
             searchQuery:(data) => commit('spotify/setSearchQuery', data),
+            analysis:(data) => commit('spotify/setTrackAnalysis', data),
+
             playlistID: (data) => commit('spotify/setPlaylistID', data),
             playlist: (data) => commit('spotify/setPlaylist', data),
             playlists: (data) => commit('spotify/setPlaylists', data),
+
             trackID: (data) => commit('spotify/setTrackID', data),
             track: (data) => commit('spotify/setTrack', data),
             tracks: (data) => commit('spotify/setTracks', data),
+
             bookmarks:(data) => commit('spotify/setBookmarks', data),
+
             album: (data) => commit('spotify/setAlbum', data),
+            albumID: (data) => commit('spotify/setAlbumID', data),
             albums: (data) => commit('spotify/setAlbums', data),
+
             artist: (data) => commit('spotify/setArtist', data),
+            artistID: (data) => commit('spotify/setArtistID', data),
             artists: (data) => commit('spotify/setArtists', data),
+
             episode: (data) => commit('spotify/setEpisode', data),
+            episodeID: (data) => commit('spotify/setEpisodeID', data),
             episodes: (data) => commit('spotify/setEpisodes', data),
+
             show: (data) => commit('spotify/setShow', data),
+            showID: (data) => commit('spotify/setShowID', data),
             shows: (data) => commit('spotify/setShows', data),
+
             gen: (data) => commit('spotify/setGen', data),
             feature:(data) => commit('spotify/setGenFeatures', data),
             seeds:(data) => commit('spotify/setGenSeeds', data),

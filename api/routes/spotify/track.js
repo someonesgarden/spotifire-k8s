@@ -20,7 +20,7 @@ router.get('/byid', (req,res)=>{
     );
 });
 
-//getAudioFeaturesForTrack
+
 router.get('/features', (req,res)=>{
     const access_token = req.headers.authorization;
     const trackid = req.query.trackid;
@@ -32,6 +32,23 @@ router.get('/features', (req,res)=>{
         },
         function(err) {
             console.log('Could not get track audio features!', err.message);
+            res.send(null);
+        }
+    );
+});
+
+
+router.get('/analysis', (req,res)=>{
+    const access_token = req.headers.authorization;
+    const trackid = req.query.trackid;
+
+    spotifyApi.setAccessToken(access_token);
+    spotifyApi.getAudioAnalysisForTrack(trackid).then(
+        function(data) {
+            res.send(data.body);
+        },
+        function(err) {
+            console.log('Could not get track audio analysis!', err.message);
             res.send(null);
         }
     );

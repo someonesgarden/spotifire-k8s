@@ -10,6 +10,9 @@ const mutations = {
       state.albums = val;
     },
     setAlbum(state,val){
+        state.album = val;
+    },
+    setAlbumID(state,val){
         state.album.id = val;
     }
 }
