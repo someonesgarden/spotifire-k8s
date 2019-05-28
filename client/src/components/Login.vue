@@ -23,6 +23,7 @@
                         </div>
                     </div>
 
+
                     <div class="ui grid">
                         <mu-col span="12" sm="12" md="12" lg="12" xl="12">
                             <div class="grid-cell">
