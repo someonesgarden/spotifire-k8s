@@ -463,7 +463,10 @@
 
             getAudioAnalysis(){
                  this.c_getAudioAnalysis(this.track.id,(res)=>{
+                     console.log(res);
                      this.a_spotify(['set','analysis',res.data]);
+                     this.a_index(['root','action','analysis']);
+                     this.$router.push('/analysis');
                  })
             },
 
@@ -496,36 +499,29 @@
                 handler(newState){
                     if(newState) this.$emit('open');
 
-                    console.log("newState.type");
-                    console.log(newState);
-
                     switch(newState.type){
 
                         case 'playlist':
                             this.mode = 'playlist';
                             this.c_getPlaylistById((res)=>{
-                                console.log(res);
                                 if(res.data) this.playlist = res.data;
                             });
                             break;
                         case 'track':
                             this.mode = 'track';
                             this.c_getTrack(this.spotify.track.id,(res)=>{
-                                console.log(res);
                                 if(res.data) this.track = res.data;
                             });
                             break;
                         case 'album':
                             this.mode = 'album';
                             this.c_getAlbum(this.spotify.album.id,(res)=>{
-                                console.log(res);
                                 if(res.data) this.album = res.data;
                             });
                             break;
                         case 'artist':
                             this.mode = 'artist';
                             this.c_getArtist(this.spotify.artist.id,(res)=>{
-                                console.log(res);
                                 if(res.data) this.artist = res.data;
                             });
 
@@ -538,7 +534,6 @@
             },
             'spotify.credential.access_token':{
                 handler(newToken){
-                    console.log("newToken!:"+newToken);
                     this.c_initplayer();
                 }
             },

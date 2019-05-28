@@ -9,6 +9,7 @@ import News from '../components/News.vue';
 import Login from '../components/Login.vue';
 import Anime from '../components/Anime.vue';
 import Anime2 from '../components/Anime2.vue';
+import Analysis from '../components/Analysis.vue';
 
 let routes =  [
   { path:'/login', name: 'Login', component: Login},
@@ -17,6 +18,7 @@ let routes =  [
   { path:'/map',    name: 'Map',  component: Map,   meta: { requiresAuth: true }},
   { path:'/anime',   name: 'Anime',component: Anime, meta: { requiresAuth: true }},
   { path:'/anime2',  name: 'Anime2',component: Anime2, meta: { requiresAuth: true }},
+  { path:'/analysis',  name: 'Analysis',component: Analysis, meta: { requiresAuth: true }}
 ];
 
 
