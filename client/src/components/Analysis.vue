@@ -30,7 +30,7 @@
                             <mu-icon class="toggle-icon" size="24" value="keyboard_arrow_down"></mu-icon>
                         </mu-list-item-action>
 
-                        <mu-list-item button :ripple="false" slot="nested" v-for="(val,key,index) in this.analysis.track" v-if="!isNaN(val) && index < 12" :key="'track'+key+index">
+                        <mu-list-item button :ripple="false" slot="nested" v-for="(val,key,index) in this.analysis.track" v-if="!isNaN(val) && index" :key="'track'+key+index">
                             <mu-list-item-title>{{key}}</mu-list-item-title>
                             <mu-list-item-sub-title>{{val}}</mu-list-item-sub-title>
                         </mu-list-item>
@@ -63,7 +63,7 @@
                 }
             }
         },
-        computed:mapGetters(['spotify','ws']),
+        computed:mapGetters(['spotify','ws','rootAction']),
 
         mounted(){
           this.analysis = this.spotify.analysis;
