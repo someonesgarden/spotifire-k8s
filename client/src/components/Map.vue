@@ -59,7 +59,7 @@
     import MapView from './Map/MapView';
     import MapUserItem from './Map/MapUserItem';
     export default {
-        name: 'myfilters',
+        name: 'mymap',
         mixins:[
             spotifyMixin,
             mapMixin,
