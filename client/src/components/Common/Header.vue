@@ -5,7 +5,10 @@
                 <mu-icon value="border_left"></mu-icon>
             </mu-button>
 
-            <img class="menu-icon" src="/static/img/spotifire_logo.png" style="width:110px; height:auto;">
+            <router-link to="/">
+                <img class="menu-icon" src="/static/img/spotifire_logo.png" style="width:110px; height:auto;">
+            </router-link>
+
 
             <mu-button flat slot="right" @click="side.right.open=true">
                 <mu-icon value="border_right"></mu-icon>

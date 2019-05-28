@@ -7,6 +7,7 @@ import spotify from './modules/spotify/index';
 import feed from './modules/feed/index';
 import mapstore from './modules/mapstore/index';
 import ws from './modules/ws/index';
+import three from './modules/three/index';
 
 Vue.use(Vuex);
 
@@ -19,7 +20,8 @@ export default new Vuex.Store({
         spotify,
         feed,
         mapstore,
-        ws
+        ws,
+        three
     }
 });
 

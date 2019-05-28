@@ -71,7 +71,6 @@ export const a_mapstore = ({commit},[type, action, data]) => {
     actions[type][action](data)
 };
 
-
 export const a_index =  ({commit}, [type, action, data]) => {
     const actions = {
         root:{
@@ -87,7 +86,6 @@ export const a_index =  ({commit}, [type, action, data]) => {
     actions[type][action](data)
 };
 
-
 export const a_feed =  ({commit}, [type, action, data]) => {
     const actions = {
         set:{
@@ -97,7 +95,6 @@ export const a_feed =  ({commit}, [type, action, data]) => {
     }
     actions[type][action](data)
 }
-
 
 export const a_ws =  ({commit}, [type, action, data]) => {
     const actions = {
@@ -120,3 +117,6 @@ export const a_ws =  ({commit}, [type, action, data]) => {
     }
     actions[type][action](data)
 }
+
+// -------- Three -----------
+export const a_three =  ({commit},param) => commit('three/setParam', param)

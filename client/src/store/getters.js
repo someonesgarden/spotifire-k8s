@@ -5,6 +5,7 @@ const spotify = modules => modules.spotify
 const feed = modules => modules.feed
 const mapstore = modules => modules.mapstore
 const ws  = modules => modules.ws
+const g_three = modules => modules.three
 export {
     rootAction,
     loggedIn,
@@ -12,5 +13,6 @@ export {
     spotify,
     feed,
     mapstore,
-    ws
+    ws,
+    g_three
 }
