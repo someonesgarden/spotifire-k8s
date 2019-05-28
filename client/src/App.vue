@@ -9,7 +9,8 @@
       <mu-bottom-nav style="background-color:inherit;color:inherit;margin-top:40px;">
         <mu-bottom-nav-item title="News" icon="filter_list" to="/news"></mu-bottom-nav-item>
         <mu-bottom-nav-item title="Map" icon="location_on" to="/map"></mu-bottom-nav-item>
-        <mu-bottom-nav-item title="Anime" icon="theaters" to="/anime"></mu-bottom-nav-item>
+<!--        <mu-bottom-nav-item title="Wave" icon="theaters" to="/anime"></mu-bottom-nav-item>-->
+        <mu-bottom-nav-item title="Dots" icon="dialpad" to="/anime2"></mu-bottom-nav-item>
       </mu-bottom-nav>
     </mu-container>
 
