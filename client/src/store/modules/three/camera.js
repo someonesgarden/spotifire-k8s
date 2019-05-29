@@ -3,10 +3,10 @@ let state = {
     camera:{
         lookAt:[0,0,0],
         param:{
-            fov:    {val:38,  min:0,   max:150,  step:1},
+            fov:    {val:48,  min:0,   max:150,  step:1},
             aspect: {val:1,   min:0.1, max:5,  step:0.1},
             near:   {val:0.1, min:0.0, max:10.0, step:0.02},
-            far:    {val:100, min:20,  max:2200, step:20}
+            far:    {val:100, min:20,  max:2500, step:20}
         },
 
         position:{

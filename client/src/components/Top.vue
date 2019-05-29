@@ -10,7 +10,7 @@
     import {mapActions,mapGetters} from 'vuex';
 
     import * as THREE from 'three'
-    //import TrackballControls from 'three-trackballcontrols'
+    import TrackballControls from 'three-trackballcontrols'
     import OrbitControls from 'three-orbitcontrols';
     import Camera  from '../three/Camera';
     import Light   from '../three/Light';
@@ -22,71 +22,122 @@
 
         },
         data: function () {
-            const scene       = new THREE.Scene()
-            const renderer    = new THREE.WebGLRenderer( { alpha: true } )
-            const camera      = new Camera().camera;
-            const light       = new Light().light;
-            const boxesAnime  = new Boxes(scene);
-
-            return {
-                scene:      scene,
-                renderer:   renderer,
-                camera:     camera,
-                light:      light,
-                boxesAnime: boxesAnime,
-                //trackball:  null,
-                orbit:      null
-            }
+            const scene         = new THREE.Scene()
+            const renderer      = new THREE.WebGLRenderer( { alpha: true } )
+            const camera        = new Camera().camera;
+            const ambientLight  = new Light().light;
+            const directLight   = new Light('direct').light;
+            const boxesAnime    = null;
+            const control       = null;
+            return {scene, renderer, camera, ambientLight,directLight, boxesAnime, control}
         },
 
         computed:mapGetters(['g_three']),
 
-        created () {
-            // === sceneにmodel,light, cameraを追加 ===
-            this.scene.add(this.camera)
-            this.scene.add(this.light)
-
-            this.boxesAnime.createBoxes()
-            this.boxesAnime.beginAnimationLoop()
-        },
-
         mounted () {
-            this.$refs.stage.appendChild(this.renderer.domElement)
+            this.boxesAnime    = new Boxes(this.scene, this.camera, this.g_three.shaders,(val)=>{
+                console.log("box callback!");
+                console.log(val.object);
+                if(val.object.name!=='') this.threeClickAction(val.object.name);
+            });
+
+            this.control       = this.setControl();
+            this.$refs.stage.appendChild(this.renderer.domElement);
             window.addEventListener('resize', this.resize)
-            this.resize()
+            this.resize();
 
-            // === TrackBall ===
-            // this.trackball = new TrackballControls(this.camera, this.renderer.domElement)
-            // this.trackball.noZoom = true
-            // this.trackball.noPan = true
-            // this.trackball.rotateSpeed = 1.0
-
-            // === Orbit ===
-            this.orbit = new THREE.OrbitControls(this.camera,this.renderer.domElement);
-            this.orbit.autoRotate = true;
-            this.orbit.enabled = false;
-
-            this.animate()
+            this.scene.add(this.camera);
+            this.scene.add(this.ambientLight);
+            this.scene.add(this.directLight);
+            this.animate();
         },
 
         beforeDestroy() {
-            this.orbit.enabled = false;
-            //this.orbit = null;
+            this.control.enabled = false;
+            this.control = null;
             window.removeEventListener('resize', this.resize)
         },
-
 
         methods: {
             ...mapActions(['a_three']),
 
+            threeClickAction(val){
+
+                const reducers = {
+
+                    link1: () => {
+                        this.$router.push("/news");
+                        return true;
+                    },
+                    link2: () => {
+                        this.$router.push("/map");
+                        return true;
+                    },
+                    link3: () => {
+                        this.$router.push("/anime2");
+                        return true;
+                    },
+                    link4: () => {
+                        this.$router.push("/news");
+                        return true;
+                    },
+                    link5: () => {
+                        this.$router.push("/map");
+                        return true;
+                    },
+                    link6: () => {
+                        this.$router.push("/anime2");
+                        return true;
+                    },
+                    link7: () => {
+                        this.$router.push("/news");
+                        return true;
+                    },
+                    link8: () => {
+                        this.$router.push("/map");
+                        return true;
+                    },
+                    link9: () => {
+                        this.$router.push("/anime2");
+                        return true;
+                    },
+
+
+                };
+                if(!reducers[val]) return false;
+
+                return reducers[val]();
+
+
+
+            },
+
+            setControl(mode='orbit'){
+                let control = null;
+
+                if(mode==='orbit'){
+                    // === Orbit ===
+                    control = new OrbitControls(this.camera, this.renderer.domElement);
+                    control.autoRotate = true;
+                    control.enabled = false;
+                }else{
+                    // === TrackBall ===
+                    control = new TrackballControls(this.camera, this.renderer.domElement)
+                    control.noZoom = true
+                    control.noPan = true
+                    control.rotateSpeed = 1.0
+                }
+                return control;
+            },
+
             mouseOver(evt){
                 console.log("mouseOver!")
-                this.orbit.enabled = true;
+                this.control.enabled = true;
             },
 
             mouseOut(evt){
                 console.log("mouseOut!")
-                this.orbit.enabled = false;
+                this.control.enabled = false;
             },
 
             resetCamera(c){
@@ -95,7 +146,6 @@
                 this.camera.near    = c.param.near.val
                 this.camera.far     = c.param.far.val
                 this.camera.updateProjectionMatrix()
-
                 this.resetCameraPosition();
             },
 
@@ -111,16 +161,15 @@
                 this.renderer.setSize(stage.offsetWidth, stage.offsetHeight)
                 let aspect = (stage.offsetWidth) / stage.offsetHeight
                 this.a_three({obj:'camera', type:'param', key:'aspect', val:aspect})
-
                 this.resetCamera(this.g_three.camera)
             },
 
             animate () {
                 requestAnimationFrame(this.animate)
+
                 this.quaternion()
                 this.renderer.render(this.scene, this.camera)
-                //this.trackball.update()
-                this.orbit.update()
+                this.control.update()
             },
 
             quaternion () {
@@ -145,7 +194,6 @@
                 },
                 deep:true
             }
-
         }
     }
 </script>
