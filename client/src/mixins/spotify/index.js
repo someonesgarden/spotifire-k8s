@@ -8,6 +8,7 @@ import artistMix from './artist';
 import albumMix from './album';
 import playerMix from './player';
 import filterMix from './filter';
+import analyseMix from './analysis';
 
 export default{
     mixins:[
@@ -19,7 +20,8 @@ export default{
         artistMix,
         albumMix,
         playerMix,
-        filterMix
+        filterMix,
+        analyseMix
     ],
     computed: mapGetters(['spotify']),
     methods: mapActions(['a_spotify'])

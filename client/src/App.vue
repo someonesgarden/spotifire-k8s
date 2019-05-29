@@ -11,6 +11,7 @@
         <mu-bottom-nav-item title="Map" icon="location_on" to="/map"></mu-bottom-nav-item>
 <!--        <mu-bottom-nav-item title="Wave" icon="theaters" to="/anime"></mu-bottom-nav-item>-->
         <mu-bottom-nav-item title="Dots" icon="dialpad" to="/anime2"></mu-bottom-nav-item>
+        <mu-bottom-nav-item title="A" icon="dialpad" to="/analysis"></mu-bottom-nav-item>
       </mu-bottom-nav>
     </mu-container>
 

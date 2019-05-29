@@ -41,6 +41,12 @@
     <noscript>
       This is your fallback content in case JavaScript fails to load.
     </noscript>
+
+    <script>
+      //プレイヤーは共通して利用する
+      window.player = null;
+    </script>
+
     <script src="https://sdk.scdn.co/spotify-player.js"></script>
     <script>
       window.onSpotifyWebPlaybackSDKReady = () => {};

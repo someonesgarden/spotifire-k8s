@@ -2,8 +2,6 @@ import axios from 'axios';
 
 export default{
 
-
-
     methods: {
         c_devices: function (cb) {
             let headers = {Authorization:this.spotify.credential.access_token};
@@ -48,31 +46,31 @@ export default{
                 const token = this.spotify.credential.access_token;
                 console.log(token);
 
-                const player = new Spotify.Player({
+                window.player = new Spotify.Player({
                     name: 'Web Playback SDK Quick Start Player',
                     getOAuthToken: cb => { cb(token); }
                 });
 
                 // Error handling
-                player.addListener('initialization_error', ({ message }) => {
+                window.player.addListener('initialization_error', ({ message }) => {
                     //window.alert(message);
                     console.error(message);
                 });
-                player.addListener('authentication_error', ({ message }) => {
+                window.player.addListener('authentication_error', ({ message }) => {
                     //window.alert(message);
                     console.error(message);
                 });
-                player.addListener('account_error', ({ message }) => {
+                window.player.addListener('account_error', ({ message }) => {
                     //window.alert(message);
                     console.error(message);
                 });
-                player.addListener('playback_error', ({ message }) => {
+                window.player.addListener('playback_error', ({ message }) => {
                     //window.alert(message);
                     console.error(message);
                 });
 
                 // Playback status updates
-                player.addListener('player_state_changed', state => {
+                window.player.addListener('player_state_changed', state => {
 
                     //window.alert("paused?:"+state.paused);
                     console.log(state);
@@ -84,18 +82,18 @@ export default{
                 });
 
                 // Ready
-                player.addListener('ready', ({ device_id }) => {
+                window.player.addListener('ready', ({ device_id }) => {
                     //window.alert("ready with: "+device_id);
                     console.log('Ready with Device ID', device_id);
                 });
 
                 // Not Ready
-                player.addListener('not_ready', ({ device_id }) => {
+                window.player.addListener('not_ready', ({ device_id }) => {
                     console.log('Device ID has gone offline', device_id);
                 });
 
                 // Connect to the player!
-                player.connect();
+                window.player.connect();
             };
 
             window.onSpotifyWebPlaybackSDKReady();
