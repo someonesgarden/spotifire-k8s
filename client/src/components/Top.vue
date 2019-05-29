@@ -36,8 +36,6 @@
 
         mounted () {
             this.boxesAnime    = new Boxes(this.scene, this.camera, this.g_three.shaders,(val)=>{
-                console.log("box callback!");
-                console.log(val.object);
                 if(val.object.name!=='') this.threeClickAction(val.object.name);
             });
 
@@ -56,6 +54,7 @@
             this.control.enabled = false;
             this.control = null;
             window.removeEventListener('resize', this.resize)
+
         },
 
         methods: {
@@ -169,7 +168,7 @@
 
                 this.quaternion()
                 this.renderer.render(this.scene, this.camera)
-                this.control.update()
+                if(this.control) this.control.update()
             },
 
             quaternion () {

@@ -3,7 +3,6 @@
         <div id="analysis_area" class="base" style="padding:0;">
             <mu-paper :z-depth="1" class="analysis_metalist">
 
-
                 <mu-list toggle-nested>
                     <mu-list-item button :ripple="false" nested :open="open === 'meta'" @toggle-nested="open = arguments[0] ? 'meta' : ''" v-if="analysis.meta">
                         <mu-list-item-action>
