@@ -11,7 +11,41 @@ router.get('/devices', (req,res)=>{
             res.send(data.body);
         },
         function(err) {
-            console.log('Could not get playlist info!', err.message);
+            console.log('Could not get connected devices!', err.message);
+            res.send(null);
+        }
+    );
+});
+
+router.get('/currentplayback', (req,res)=>{
+    const access_token = req.headers.authorization;
+    spotifyApi.setAccessToken(access_token);
+    spotifyApi.getMyCurrentPlaybackState().then(
+        function(data) {
+            res.send(data.body);
+        },
+        function(err) {
+            console.log('Could not get current playback state!', err.message);
+            res.send(null);
+        }
+    );
+});
+
+router.get('/transferplayback', (req,res)=>{
+    const access_token = req.headers.authorization;
+    const deviceid   = req.query.deviceid;
+    console.log(deviceid);
+    spotifyApi.setAccessToken(access_token);
+
+    spotifyApi.transferMyPlayback({
+        deviceIds: [ deviceid ],
+        play: false
+    }).then(
+        function(data) {
+            res.send(data.body);
+        },
+        function(err) {
+            console.log('Could not transfer playback!', err.message);
             res.send(null);
         }
     );

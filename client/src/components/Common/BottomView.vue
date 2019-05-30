@@ -5,6 +5,13 @@
             <mu-flex justify-content="center" class="param_area">
                 <bottom-slider></bottom-slider>
             </mu-flex>
+
+            <mu-flex v-if="spotify.devices" style="width:100%;">
+                <mu-select :value="spotify.device" full-width class="devices_list" icon="speaker" @change="deviceSelected">
+                    <mu-option v-for="(device,index) in spotify.devices" :key="'device'+index" :label="device.name" :value="device.id"></mu-option>
+                </mu-select>
+            </mu-flex>
+
             <mu-flex justify-content="center" class="player_area" v-if="!!spotify.player.track">
                 <mu-chip class="demo-chip" color="black">
                     <mu-avatar :size="32" v-if="spotify.player.track.album.images">
@@ -24,6 +31,7 @@
 
                 </mu-chip>
             </mu-flex>
+
         </mu-flex>
     </mu-flex>
 </template>
@@ -42,8 +50,18 @@
         methods:{
             ...mapActions(['a_spotify']),
 
-            Analyse(trackid){
+            deviceSelected(val){
 
+                console.log("deviceselected");
+                console.log(val);
+
+                this.c_transferplayback(val,(res)=>{
+                    console.log("c_transferplayback");
+                    console.log(res);
+                })
+            },
+
+            Analyse(trackid){
                 if(!!this.spotify.analysing_track && this.spotify.analysing_track===trackid){
                     this.$router.push('/analysis');
                 }else{
@@ -51,7 +69,6 @@
                     this.a_spotify(['set','analysingTrack',trackid]);
                 }
             },
-
             clickAction(type,val){
                 this.a_spotify(['set',type+'ID', val]);
                 this.a_spotify(['update','item',type]);
@@ -61,4 +78,7 @@
 </script>
 
 <style scoped lang="scss">
+
+
+
 </style>

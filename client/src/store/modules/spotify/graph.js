@@ -1,6 +1,24 @@
 const state = {
     labels:     ['Acousticness', 'Dance', 'Energy', 'Instrumental', 'Liveness', 'Speechiness', 'Valence'],
     music_keys: ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'],
+
+
+    randomColors:[
+        'rgba(30,215,96, 0.9)',
+        'rgba(245,115,160, 0.9)',
+        'rgba(80,155,245, 0.9)',
+        'rgba(255,100,55, 0.9)',
+        'rgba(180,155,200, 0.9)',
+        'rgba(250,230,45, 0.9)',
+        'rgba(0,100,80, 0.9)',
+        'rgba(175,40,150, 0.9)',
+        'rgba(36,59,119,0.9)',
+        'rgba(250,146,26,0.9)',
+        'rgba(144,42,58,0.9)',
+        'rgba(135,175,23,0.9)',
+        'rgba(19,129,143,0.9)'
+    ],
+
     backgroundColors: [
         [
             'rgba(219,128,115,0.78)',

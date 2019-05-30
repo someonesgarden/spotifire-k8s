@@ -1,5 +1,8 @@
 const state = {
 
+    devices:null,
+    device:null,
+
     player:{
         playing: false,
         nowid:null,
@@ -9,6 +12,15 @@ const state = {
 }
 
 const mutations = {
+
+    setDevices(state,data){
+      state.devices = data;
+    },
+
+    setDevice(state,data){
+        state.device = data;
+    },
+
     setPlayerPlay(state,data){
       state.player.playing = true;
       state.player.nowid = data;

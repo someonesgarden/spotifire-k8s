@@ -79,5 +79,24 @@
       }
 
     }
+
+    .mu-input.devices_list{
+      font-size:11px;
+      text-align:center;
+      display:inline-block;
+      position:relative;
+      min-height:inherit;
+      color: rgb(10, 169, 202);
+      padding-top:2px;
+      padding-bottom:0;
+      margin-bottom:0;
+      .mu-select-input{
+        text-align: center;
+        color:#2196f3 !important;
+        input{
+          text-align: center;
+        }
+      }
+    }
   }
 }

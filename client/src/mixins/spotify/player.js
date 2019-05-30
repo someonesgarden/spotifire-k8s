@@ -13,11 +13,34 @@ export default{
             });
         },
 
-        c_pause: function (cb) {
+        c_currentplayback:function(cb){
+            let headers = {Authorization:this.spotify.credential.access_token};
+            axios.get('/api/spotify/player/currentplayback',{params:{}, headers: headers})
+                .then(res => {
+                    cb(res);
+                }).catch(error => {
+                console.log(error);
+            });
+        },
+
+        c_transferplayback:function(deviceid, cb){
+
+            this.a_spotify(['set','device',deviceid]);
+
+            let params =  {'deviceid': deviceid};
+            let headers = {Authorization:this.spotify.credential.access_token};
+            axios.get('/api/spotify/player/transferplayback',{params:params, headers: headers})
+                .then(res => {
+                    cb(res);
+                }).catch(error => {
+                console.log(error);
+            });
+        },
+
+        c_pause: function () {
             let headers = {Authorization:this.spotify.credential.access_token};
             axios.get('/api/spotify/player/pause',{params:{}, headers: headers})
                 .then(res => {
-                    cb(res);
                 }).catch(error => {
                 console.log(error);
             });
@@ -31,23 +54,20 @@ export default{
             };
             axios.post('/api/spotify/player/play',params)
                 .then(res => {
-                    console.log(res);
                 }).catch(error => {
                 console.log(error);
             });
         },
 
         c_initplayer: function () {
-            console.log("c_initplayer");
+
             window.onSpotifyWebPlaybackSDKReady = () => {
 
                 //window.alert("onSpotifyWebPlaybackSDKReady!");
-
                 const token = this.spotify.credential.access_token;
-                console.log(token);
 
                 window.player = new Spotify.Player({
-                    name: 'Web Playback SDK Quick Start Player',
+                    name: 'Spotifire PC',
                     getOAuthToken: cb => { cb(token); }
                 });
 
@@ -70,27 +90,16 @@ export default{
                 });
 
                 // Playback status updates
-                window.player.addListener('player_state_changed', state => {
-
-                    //window.alert("paused?:"+state.paused);
-                    console.log(state);
-
-                    //Paused
-                    console.log("paused:"+state.paused);
-                    this.a_spotify(['player','playing',!state.paused]);
-
-                });
+                window.player.addListener('player_state_changed', state => this.a_spotify(['player','playing',!state.paused]));
 
                 // Ready
                 window.player.addListener('ready', ({ device_id }) => {
-                    //window.alert("ready with: "+device_id);
-                    console.log('Ready with Device ID', device_id);
+                    this.c_devices((res)=> this.a_spotify(['set','devices',res.data.devices]))
+                    this.c_transferplayback(device_id,(res)=> this.a_spotify(['set','device', device_id]))
                 });
 
                 // Not Ready
-                window.player.addListener('not_ready', ({ device_id }) => {
-                    console.log('Device ID has gone offline', device_id);
-                });
+                window.player.addListener('not_ready', ({ device_id }) => this.a_spotify(['set','device', null]));
 
                 // Connect to the player!
                 window.player.connect();

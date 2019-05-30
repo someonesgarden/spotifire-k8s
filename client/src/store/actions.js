@@ -24,6 +24,9 @@ export const a_spotify =  ({commit}, [type, action, data]) => {
             playlist: (data) => commit('spotify/setPlaylist', data),
             playlists: (data) => commit('spotify/setPlaylists', data),
 
+            device:  (data) => commit('spotify/setDevice', data),
+            devices: (data) => commit('spotify/setDevices', data),
+
             trackID: (data) => commit('spotify/setTrackID', data),
             track: (data) => commit('spotify/setTrack', data),
             tracks: (data) => commit('spotify/setTracks', data),

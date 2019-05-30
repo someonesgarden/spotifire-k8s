@@ -8,6 +8,7 @@ import track from './track';
 import player from './player';
 import filter from './filter';
 import graph from './graph';
+import analysis from './analysis';
 
 const state = {
     ...filter.state,
@@ -19,7 +20,8 @@ const state = {
     ...podcast.state,
     ...track.state,
     ...player.state,
-    ...graph.state
+    ...graph.state,
+    ...analysis.state
 }
 
 const mutations = {
@@ -32,7 +34,8 @@ const mutations = {
     ...podcast.mutations,
     ...track.mutations,
     ...player.mutations,
-    ...graph.mutations
+    ...graph.mutations,
+    ...analysis.mutations
 }
 
 export default {

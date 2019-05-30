@@ -13,7 +13,9 @@ export default {
                 this.a_index(['root','action','analysis']);
                 this.$router.push('/analysis');
             })
-        }
+        },
+
+
 
     }
 }
