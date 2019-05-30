@@ -19,21 +19,16 @@
                         <mu-list-item-title><mu-icon value="filter_list" :size="12"></mu-icon>&nbsp;texts</mu-list-item-title>
                     </mu-list-item>
 
-                    <mu-list-item button flat>
-                        <mu-menu>
-                            <mu-button flat>
-                                <mu-icon value="dialpad" :size="12"></mu-icon>&nbsp;motions</mu-button>
-                            <mu-list slot="content">
-                                <mu-list-item button to="/anime2">
-                                    <mu-list-item-title> <mu-icon value="dialpad" :size="12"></mu-icon>&nbsp;anime2</mu-list-item-title>
-                                </mu-list-item>
-                            </mu-list>
-                        </mu-menu>
+                    <mu-list-item button to="/anime2">
+                        <mu-list-item-title> <mu-icon value="dialpad" :size="12"></mu-icon>&nbsp;anime2</mu-list-item-title>
                     </mu-list-item>
 
                 </mu-list>
             </mu-menu>
 
+            <mu-button flat slot="right" color="grey500" @click="a_index(['bottom','open'])">
+                <mu-icon value="border_bottom"></mu-icon>
+            </mu-button>
 
             <mu-button flat slot="right" @click="side.right.open=true">
                 <mu-icon value="border_right"></mu-icon>
@@ -53,17 +48,17 @@
             </mu-list>
         </mu-drawer>
 
-        <mu-button fab small color="grey500" @click="a_index(['bottom','open'])" range style="position:fixed;bottom:60px;left:10px;z-index:10;">
-            <mu-icon value="border_bottom"></mu-icon>
-        </mu-button>
+<!--        <mu-button fab small color="grey500" @click="a_index(['bottom','open'])" range style="position:fixed;bottom:60px;left:10px;z-index:10;">-->
+<!--            <mu-icon value="border_bottom"></mu-icon>-->
+<!--        </mu-button>-->
 
-        <mu-button fab small color="black" @click="side.left.open=true" range style="position:fixed;bottom:10px;left:10px;z-index:10;">
-            <mu-icon value="border_left"></mu-icon>
-        </mu-button>
+<!--        <mu-button fab small color="black" @click="side.left.open=true" range style="position:fixed;bottom:10px;left:10px;z-index:10;">-->
+<!--            <mu-icon value="border_left"></mu-icon>-->
+<!--        </mu-button>-->
 
-        <mu-button fab small color="black" @click="side.right.open=true" range style="position:fixed;bottom:10px;right:10px;z-index:10;">
-            <mu-icon value="border_right"></mu-icon>
-        </mu-button>
+<!--        <mu-button fab small color="black" @click="side.right.open=true" range style="position:fixed;bottom:10px;right:10px;z-index:10;">-->
+<!--            <mu-icon value="border_right"></mu-icon>-->
+<!--        </mu-button>-->
 
     </div>
 </template>
