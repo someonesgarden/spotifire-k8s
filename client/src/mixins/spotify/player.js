@@ -94,12 +94,15 @@ export default{
 
                 // Ready
                 window.player.addListener('ready', ({ device_id }) => {
-                    this.c_devices((res)=> this.a_spotify(['set','devices',res.data.devices]))
                     this.c_transferplayback(device_id,(res)=> this.a_spotify(['set','device', device_id]))
+                    this.c_devices((res)=> this.a_spotify(['set','devices',res.data.devices]));
                 });
 
                 // Not Ready
-                window.player.addListener('not_ready', ({ device_id }) => this.a_spotify(['set','device', null]));
+                window.player.addListener('not_ready', ({ device_id }) => {
+                    this.a_spotify(['set','device', null]);
+                    this.c_devices((res)=> this.a_spotify(['set','devices',res.data.devices]));
+                });
 
                 // Connect to the player!
                 window.player.connect();

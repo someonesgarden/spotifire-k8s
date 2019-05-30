@@ -18,7 +18,7 @@
             ...mapGetters(['spotify']),
 
             col(){
-                return Math.floor(window.innerWidth  / 100)-1;
+                return Math.floor(window.innerWidth  / 100);
             }
         },
 
