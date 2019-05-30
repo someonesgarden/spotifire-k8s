@@ -1,31 +1,37 @@
-#analysis_area{
+#features-chart-container{
+  width: 100%;
+  #features-chart {
+    min-height: 300px;
+    width: 100%;
+    background-color:#efefee;
+  }
+}
 
+
+#analysis_area{
   display: flex;
   justify-content: center;
   align-items: center;
   position: absolute;
   width: 100vw;
   height: 100vh;
-
   padding:0;
-
   background-color:#252423;
 
-
   .analysis_metalist{
-    width:86%;
+    width:94%;
 
     ul.mu-list{
       width:100%;
       li{
         .mu-item{
-          height:22px;
+          height:18px;
           padding:0 6px;
 
           .mu-item-title {
-            font-size: 12px;
-            height: 15px;
-            line-height: 12px;
+            font-size: 11px;
+            height: 12px;
+            line-height: 11px;
           }
         }
       }

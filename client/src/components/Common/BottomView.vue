@@ -20,6 +20,8 @@
                     <mu-icon value="pause_circle_outline" v-if="spotify.player.playing" @click="a_spotify(['player','stop',null])"></mu-icon>
                     <mu-icon value="play_circle_outline" v-else @click="a_spotify(['player','play',spotify.player.track.id])"></mu-icon>
 
+                    <mu-icon value="equalizer" @click="c_audioAnalyse(spotify.player.track.id)"></mu-icon>
+
                 </mu-chip>
             </mu-flex>
         </mu-flex>
@@ -27,10 +29,12 @@
 </template>
 
 <script>
+    import spotifyMixsin from '../../mixins/spotify/index';
     import {mapGetters,mapActions} from 'vuex';
     import BottomSlider from './BottomSlider';
     export default {
         name: "BottomView",
+        mixins:[spotifyMixsin],
         components:{
           BottomSlider
         },

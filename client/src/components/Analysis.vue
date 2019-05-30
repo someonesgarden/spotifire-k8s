@@ -1,6 +1,6 @@
 <template>
     <mu-container class="flex_v">
-        <div id="analysis_area" class="base" style="padding:0;">
+        <div id="analysis_area" class="base">
             <mu-paper :z-depth="1" class="analysis_metalist">
                 <mu-list toggle-nested>
                     <mu-list-item button :ripple="false" nested :open="open === 'meta'" @toggle-nested="open = arguments[0] ? 'meta' : ''" v-if="analysis.meta">
@@ -32,13 +32,10 @@
                             <mu-list-item-sub-title>{{val}}</mu-list-item-sub-title>
                         </mu-list-item>
                     </mu-list-item>
-
-                    <div id="features-chart-container">
-                        <canvas id="features-chart"></canvas>
-                    </div>
-
-
                 </mu-list>
+                <div id="features-chart-container">
+                    <canvas id="features-chart"></canvas>
+                </div>
             </mu-paper>
         </div>
     </mu-container>
@@ -103,14 +100,19 @@
 
         mounted(){
 
-            this.c_getAudioAnalysis(this.dummy_id,(res)=>{
-                console.log(res);
-                this.a_spotify(['set','analysis',res.data]);
-                this.a_index(['root','action','analysis']);
-                this.analysis = this.spotify.analysis;
+            if(!this.spotify.analysis){
+                this.c_getAudioAnalysis(this.spotify.track.id,(res)=>{
+                    console.log(res);
+                    this.a_spotify(['set','analysis',res.data]);
+                    this.a_index(['root','action','analysis']);
 
-                if(!!this.analysis && !!window.player)  this.init(this.analysis);
-            })
+                    this.analysis = this.spotify.analysis;
+                    if(!!window.player)  this.init(this.analysis);
+                })
+            }else{
+                this.analysis = this.spotify.analysis;
+                if(!!window.player)  this.init(this.analysis);
+            }
 
          // this.analysis = this.spotify.analysis;
         },
@@ -272,8 +274,19 @@
             'rootAction':{
                 handler(newAction){
                     if(newAction.type==='analysis') {
-                        console.log("type==analysis");
-                        this.analysis = this.spotify.analysis;
+                        if(!this.spotify.analysis){
+                            this.c_getAudioAnalysis(this.spotify.track.id,(res)=>{
+                                console.log(res);
+                                this.a_spotify(['set','analysis',res.data]);
+                                this.a_index(['root','action','analysis']);
+
+                                this.analysis = this.spotify.analysis;
+                                if(!!window.player)  this.init(this.analysis);
+                            })
+                        }else{
+                            this.analysis = this.spotify.analysis;
+                            if(!!window.player)  this.init(this.analysis);
+                        }
                     }
                 },deep:true
             }
@@ -285,11 +298,6 @@
 
 <style lang="scss" scoped>
 
-    #features-chart {
-        width: 100%;
-        min-height:400px;
-        background-color:#efefee;
-    }
 
 
 </style>
