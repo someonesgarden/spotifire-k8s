@@ -18,6 +18,7 @@ export const a_spotify =  ({commit}, [type, action, data]) => {
             searchNum: (data) => commit('spotify/setSearchResNum', data),
             searchQuery:(data) => commit('spotify/setSearchQuery', data),
             analysis:(data) => commit('spotify/setTrackAnalysis', data),
+            analysingTrack:(data)=> commit('spotify/setAnalysingTrack',data),
 
             playlistID: (data) => commit('spotify/setPlaylistID', data),
             playlist: (data) => commit('spotify/setPlaylist', data),

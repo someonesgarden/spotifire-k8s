@@ -46,7 +46,6 @@
     import anime from 'animejs';
     import spotifyMixin from '../mixins/spotify/index';
 
-
     const colors = [
         'rgba(30,215,96, 0.9)',
         'rgba(245,115,160, 0.9)',
@@ -59,8 +58,6 @@
         'rgba(30,50,100, 0.9)'
     ]
 
-    let img = new Image;
-
 
     export default {
         name: 'analysis',
@@ -72,6 +69,7 @@
 
                 dummy_id:'5RLBZePs33aN2F8uCzcSeo',
                 featuresChart:null,
+                img:new Image,
 
                 open: 'send',
                 analysis:{
@@ -82,7 +80,8 @@
                     sections:null,
                     segments:null,
                     tatums:null
-                }
+                },
+                provideAnimationFrame:null
             }
         },
         computed:{
@@ -100,6 +99,12 @@
 
         mounted(){
 
+            if(!!this.provideAnimationFrame){
+                window.cancelAnimationFrame(this.provideAnimationFrame);
+                this.provideAnimationFrame = null;
+            }
+
+
             if(!this.spotify.analysis){
                 this.c_getAudioAnalysis(this.spotify.track.id,(res)=>{
                     console.log(res);
@@ -116,9 +121,18 @@
 
          // this.analysis = this.spotify.analysis;
         },
+
+        beforeDestroy(){
+
+            if(!!this.provideAnimationFrame){
+                window.cancelAnimationFrame(this.provideAnimationFrame);
+                this.provideAnimationFrame = null;
+            }
+
+        },
+
         methods: {
             ...mapActions(['a_spotify','a_index']),
-
 
 
             init(data){
@@ -174,12 +188,6 @@
                 const arrayLikesKeys = arrayLikesEntries.map(entry => entry[0]);
                 const arrayLikes = arrayLikesEntries.map(entry => entry[1]);
 
-                console.log("arrayLikesKeys");
-                console.log(arrayLikesKeys);
-
-                console.log("arrayLikes");
-                console.log(arrayLikes);
-
                 const rowHeight = height / arrayLikes.length;
 
                 arrayLikes.forEach((arrayLike, arrayLikeIndex) => {
@@ -199,74 +207,66 @@
 
                 const markerHeight = getRowPosition(arrayLikes.length) * rowHeight;
 
-                let provideAnimationFrame=(timestamp)=> {
-
+                this.provideAnimationFrame=(timestamp)=> {
 
                         window.player && window.player.getCurrentState().then(state => {
 
-                            if(!!state){
+                            if(data.track && state){
 
+                                    ctx.clearRect(0, 0, this.featuresChart.width, this.featuresChart.height);
+                                    ctx.drawImage(this.img,0,0);
+                                    ctx.fillStyle = "#000";
 
+                                    const position = state.position/1000/data.track.duration*width
+                                    ctx.fillRect(position-2, 0, 5, markerHeight);
 
-                            ctx.clearRect(0, 0, this.featuresChart.width, this.featuresChart.height);
-                            ctx.drawImage(img,0,0);
-                            ctx.fillStyle = "#000";
+                                    const currentAndLastArrayLikes = getCurrentAndLastArrayLikes(arrayLikes, state.position/1000);
+                                    const pitchChanges = currentAndLastArrayLikes ? currentAndLastArrayLikes[3][0].pitches.map((pitch, index) => Math.abs(pitch - currentAndLastArrayLikes[3][1].pitches[index])) : [];
+                                    const timbreChanges = currentAndLastArrayLikes ? currentAndLastArrayLikes[3][0].timbre.map((timbre, index) => Math.abs(timbre - currentAndLastArrayLikes[3][1].timbre[index])) : [];
 
-                            const position = state.position/1000/data.track.duration*width
-                            ctx.fillRect(position-2, 0, 5, markerHeight);
-
-                            const currentAndLastArrayLikes = getCurrentAndLastArrayLikes(arrayLikes, state.position/1000);
-                            const pitchChanges = currentAndLastArrayLikes[3][0].pitches.map((pitch, index) => Math.abs(pitch - currentAndLastArrayLikes[3][1].pitches[index]));
-                            const timbreChanges = currentAndLastArrayLikes[3][0].timbre.map((timbre, index) => Math.abs(timbre - currentAndLastArrayLikes[3][1].timbre[index]));
-
-                            // Pitch boxes
-                            const pitchBoxWidth = 60;
-                            ctx.strokeStyle = "#AAA";
-                            pitchChanges.forEach((pitchChange, i) => {
-                                ctx.fillStyle = `hsl(0, 0%, ${pitchChange * 100}%)`;
-                                ctx.fillRect(i*pitchBoxWidth,
-                                    height - 2 * pitchBoxWidth,
-                                    pitchBoxWidth,
-                                    pitchBoxWidth);
-                            });
-                            timbreChanges.forEach((timbreChange, i) => {
-                                ctx.fillStyle = `hsl(0, 0%, ${timbreChange * 100}%)`;
-                                ctx.fillRect(i*pitchBoxWidth,
-                                    height - 4 * pitchBoxWidth,
-                                    pitchBoxWidth,
-                                    pitchBoxWidth);
-                            });
-                            currentAndLastArrayLikes[3][0].pitches.forEach((pitchChange, i) => {
-                                ctx.fillStyle = `hsl(0, 0%, ${pitchChange * 100}%)`;
-                                ctx.fillRect(i*pitchBoxWidth,
-                                    height - pitchBoxWidth,
-                                    pitchBoxWidth,
-                                    pitchBoxWidth);
-                            });
-                            currentAndLastArrayLikes[3][0].timbre.forEach((pitchChange, i) => {
-                                ctx.fillStyle = `hsl(0, 0%, ${pitchChange * 100}%)`;
-                                ctx.fillRect(i*pitchBoxWidth,
-                                    height - 3 * pitchBoxWidth,
-                                    pitchBoxWidth,
-                                    pitchBoxWidth);
-                            });
-
+                                    // Pitch boxes
+                                    const pitchBoxWidth = 60;
+                                    ctx.strokeStyle = "#AAA";
+                                    pitchChanges.forEach((pitchChange, i) => {
+                                        ctx.fillStyle = `hsl(0, 0%, ${pitchChange * 100}%)`;
+                                        ctx.fillRect(i*pitchBoxWidth,
+                                            height - 2 * pitchBoxWidth,
+                                            pitchBoxWidth,
+                                            pitchBoxWidth);
+                                    });
+                                    timbreChanges.forEach((timbreChange, i) => {
+                                        ctx.fillStyle = `hsl(0, 0%, ${timbreChange * 100}%)`;
+                                        ctx.fillRect(i*pitchBoxWidth,
+                                            height - 4 * pitchBoxWidth,
+                                            pitchBoxWidth,
+                                            pitchBoxWidth);
+                                    });
+                                    currentAndLastArrayLikes[3][0].pitches.forEach((pitchChange, i) => {
+                                        ctx.fillStyle = `hsl(0, 0%, ${pitchChange * 100}%)`;
+                                        ctx.fillRect(i*pitchBoxWidth,
+                                            height - pitchBoxWidth,
+                                            pitchBoxWidth,
+                                            pitchBoxWidth);
+                                    });
+                                    currentAndLastArrayLikes[3][0].timbre.forEach((pitchChange, i) => {
+                                        ctx.fillStyle = `hsl(0, 0%, ${pitchChange * 100}%)`;
+                                        ctx.fillRect(i*pitchBoxWidth,
+                                            height - 3 * pitchBoxWidth,
+                                            pitchBoxWidth,
+                                            pitchBoxWidth);
+                                    });
                             }
 
-                            window.requestAnimationFrame(provideAnimationFrame);
-
-
+                            window.requestAnimationFrame(this.provideAnimationFrame);
 
                         }).catch(e => {
                             console.error("Animation: ", e);
-                            window.requestAnimationFrame(provideAnimationFrame);
+                            window.requestAnimationFrame(this.provideAnimationFrame);
+
                         });
-
-
                 }
-
-                window.requestAnimationFrame(provideAnimationFrame);
-                img.src = this.featuresChart.toDataURL('png');
+                window.requestAnimationFrame(this.provideAnimationFrame);
+                this.img.src = this.featuresChart.toDataURL('png');
 
             }
         },
@@ -274,6 +274,13 @@
             'rootAction':{
                 handler(newAction){
                     if(newAction.type==='analysis') {
+
+                        if(!!this.provideAnimationFrame){
+                            window.cancelAnimationFrame(this.provideAnimationFrame);
+                            this.provideAnimationFrame = null;
+                        }
+
+
                         if(!this.spotify.analysis){
                             this.c_getAudioAnalysis(this.spotify.track.id,(res)=>{
                                 console.log(res);

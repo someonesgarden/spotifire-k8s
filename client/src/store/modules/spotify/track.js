@@ -4,6 +4,7 @@ const state = {
     //track.analysis
 
     analysis:null,
+    analysing_track:null,
 
     tracks:null,
     track:{
@@ -12,6 +13,10 @@ const state = {
 }
 
 const mutations = {
+
+    setAnalysingTrack(state,val){
+      state.analysing_track = val;
+    },
 
     setTrackAnalysis(state,val){
         state.analysis = val;
