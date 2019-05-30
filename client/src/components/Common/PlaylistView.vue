@@ -188,13 +188,13 @@
                     <mu-divider></mu-divider>
                 </div>
 
-                <mu-row gutter  v-if="track.id">
-                    <mu-col span="12" style="margin-bottom:12px;">
-                        <mu-button full-width color="cyan500" @click="getAudioAnalysis">
-                            <mu-icon value="blur_on"></mu-icon>&nbsp;Audio Analysis
-                        </mu-button>
-                    </mu-col>
-                </mu-row>
+<!--                <mu-row gutter  v-if="track.id">-->
+<!--                    <mu-col span="12" style="margin-bottom:12px;">-->
+<!--                        <mu-button full-width color="cyan500" @click="getAudioAnalysis">-->
+<!--                            <mu-icon value="blur_on"></mu-icon>&nbsp;Audio Analysis-->
+<!--                        </mu-button>-->
+<!--                    </mu-col>-->
+<!--                </mu-row>-->
                 <!--/FEATUERS-->
             </mu-list>
             <!---/ TRACK --->
@@ -461,14 +461,14 @@
                 })
             },
 
-            getAudioAnalysis(){
-                 this.c_getAudioAnalysis(this.track.id,(res)=>{
-                     console.log(res);
-                     this.a_spotify(['set','analysis',res.data]);
-                     this.a_index(['root','action','analysis']);
-                     this.$router.push('/analysis');
-                 })
-            },
+            // getAudioAnalysis(){
+            //      this.c_getAudioAnalysis(this.track.id,(res)=>{
+            //          console.log(res);
+            //          this.a_spotify(['set','analysis',res.data]);
+            //          this.a_index(['root','action','analysis']);
+            //          this.$router.push('/analysis');
+            //      })
+            // },
 
             seriesData (af) {
                 let music_keys = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];

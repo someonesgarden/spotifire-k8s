@@ -5,9 +5,34 @@
                 <mu-icon value="border_left"></mu-icon>
             </mu-button>
 
-            <router-link to="/">
-                <img class="menu-icon" src="/static/img/spotifire_logo.png" style="width:110px; height:auto;">
-            </router-link>
+            <mu-menu cover>
+                <mu-button flat>
+                    <img class="menu-icon" src="/static/img/spotifire_logo.png" style="width:110px; height:auto;"></mu-button>
+                <mu-list slot="content">
+                    <mu-list-item button to="/">
+                        <mu-list-item-title>/</mu-list-item-title>
+                    </mu-list-item>
+                    <mu-list-item button to="/map">
+                        <mu-list-item-title><mu-icon value="location_on" :size="12"></mu-icon>&nbsp;map</mu-list-item-title>
+                    </mu-list-item>
+                    <mu-list-item button to="/news">
+                        <mu-list-item-title><mu-icon value="filter_list" :size="12"></mu-icon>&nbsp;texts</mu-list-item-title>
+                    </mu-list-item>
+
+                    <mu-list-item button flat>
+                        <mu-menu>
+                            <mu-button flat>
+                                <mu-icon value="dialpad" :size="12"></mu-icon>&nbsp;motions</mu-button>
+                            <mu-list slot="content">
+                                <mu-list-item button to="/anime2">
+                                    <mu-list-item-title> <mu-icon value="dialpad" :size="12"></mu-icon>&nbsp;anime2</mu-list-item-title>
+                                </mu-list-item>
+                            </mu-list>
+                        </mu-menu>
+                    </mu-list-item>
+
+                </mu-list>
+            </mu-menu>
 
 
             <mu-button flat slot="right" @click="side.right.open=true">
