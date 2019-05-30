@@ -2,6 +2,9 @@ import Vue from 'vue'
 import moment from 'moment'
 
 
+
+Vue.filter('slice5', str => str.length  > 5 ? str.slice(0,5)+'.' : str);
+
 //Filter
 Vue.filter('listdate', time => moment(time).format('MMMM Do YYYY'));
 Vue.filter('date2', time => moment(time).format('MMM.YYYY'));

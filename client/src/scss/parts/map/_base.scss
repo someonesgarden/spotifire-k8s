@@ -1,3 +1,48 @@
+.mapflex{
+  width:100%;
+  margin: 63px 0 0 0;
+  height:calc(100vh - 63px);
+  overflow: hidden;
+
+  .controlarea{
+    width:80px;
+    height:100%;
+    background-color:rgba(34,12,111,0.8);
+    text-align:center;
+
+    .ui{
+      background-color: #13111e;
+
+      h4.title{
+        font-family: 'Allerta Stencil' !important;
+        font-weight:bold;
+        padding-top:12px;
+        padding-bottom:12px;
+        color:white;
+        font-size:11px;
+      }
+    }
+
+
+    .mu-text-field-input{
+     font-size:9px;
+    }
+
+  }
+
+  .maparea{
+    height:100%;
+    #map {
+      height:calc(100%);
+      width:100%;
+      margin:0;
+      padding:0;
+    }
+  }
+}
+
+
+
 .mu-card.marker{
   width:80px !important;
 
@@ -34,9 +79,9 @@
 
 .users_list{
   background-color:white;
+  padding:3px;
 
   li.range{
-
     &.you{
       background-color:$black;
       text-align:center;

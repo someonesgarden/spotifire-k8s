@@ -1,6 +1,6 @@
 <template>
     <mu-list-item avatar button :ripple="false" class="range user" v-if="user" :class="{disconnected:!ws.you.connected, you:user.name===ws.you.name}" @click="userItemClick">
-        <mu-list-item-title>{{user.name}}</mu-list-item-title>
+        <mu-list-item-title>{{user.name | slide5}}</mu-list-item-title>
     </mu-list-item>
 </template>
 
@@ -55,8 +55,8 @@
             background-color: #e6004c;
             color:white;
             font-weight:bold;
-            margin:3px;
-            border-radius:3px;
+            margin:0;
+            border-radius:12px;
         }
     }
 
