@@ -261,7 +261,7 @@
 
                         }).catch(e => {
                             console.error("Animation: ", e);
-                            window.requestAnimationFrame(this.provideAnimationFrame);
+                            //window.requestAnimationFrame(this.provideAnimationFrame);
 
                         });
                 }
