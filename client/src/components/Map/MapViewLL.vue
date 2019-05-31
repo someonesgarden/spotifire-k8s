@@ -32,7 +32,7 @@
         data() {
             return {
                 center: L.latLng(34.722677, 135.492364),
-                url:'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
+                url:'https://{s}.tile.osm.org/{z}/{x}/{y}.png',
                 attribution:'&copy; soms',
                 marker: L.latLng(34.722677, 135.492364),
 
