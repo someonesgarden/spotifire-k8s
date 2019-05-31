@@ -138,6 +138,8 @@
     import MapView from './Map/MapViewLL';
     import MapUserItem from './Map/MapUserItem';
 
+    import firebase from 'firebase'
+
     export default {
         name: 'mymapLL',
         mixins: [
@@ -150,8 +152,11 @@
             MapUserItem
         },
 
+
         data() {
             return {
+                database: null,
+                markersRef:null,
                 newMarker: {
                   center:null,
                   title:"",
@@ -168,6 +173,13 @@
         },
         computed: mapGetters(['spotify', 'mapstore', 'ws']),
 
+        created() {
+            this.database = firebase.database();
+            this.markersRef = this.database.ref('markers');
+            this.markersRef.on('value', (snapshot)=>{  console.log(snapshot)  });
+
+            console.log(this.database);
+        },
         mounted() {
             this.filter = this.spotify.filter;
             this.socketInit();
@@ -249,9 +261,12 @@
             },
 
             saveNewMarker() {
-                this.newMarker.center = null;
                 console.log("save new marker");
                 console.log(this.newMarker);
+
+                if (!this.newMarker.center) { return; }
+                this.markersRef.push(this.newMarker);
+                this.newMarker.center = null;
             },
 
             editEnd() {

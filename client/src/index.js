@@ -27,6 +27,26 @@ Vue.use(VueCarousel);
 
 import './filters';
 
+
+import firebase from 'firebase'
+
+Vue.config.productionTip = false
+
+console.log(process.env.FIRE_BASE);
+
+// Initialize Firebase
+let config = {
+  apiKey: process.env.FIREBASE_APIKEY,
+  authDomain: process.env.FIREBASE_AUTHDOMAIN,
+  databaseURL: "https://emory-76722.firebaseio.com",
+  projectId: "emory-76722",
+  storageBucket: "emory-76722.appspot.com",
+  messagingSenderId: process.env.FIREBASE_SENDERID,
+  appId:process.env.FIREBASE_APPID,
+};
+firebase.initializeApp(config);
+
+
 /* eslint-disable no-new */
 window.vm = new Vue({
   el: '#app',
