@@ -28,7 +28,7 @@ const state = {
         {
             title:'For Your Holidays.',
             subtitle:'top smooth tracks',
-            body:'もう半世紀以上のあいだ名詞や動詞や助詞や形容詞や疑問符など言葉どもに揉まれながら暮らしてきましたからどちらかと言うと無言を好みます',
+            body:'もう半世紀以',
             thumb:'/static/img/covers/p1.jpg',
             pid:'7eHF88LCLCE2UopFldXTsn',
             tid:'62LJFaYihsdVrrkgUOJC05',
@@ -38,7 +38,7 @@ const state = {
         {
             title:'Poets for Your Life',
             subtitle:'',
-            body:'私は工具類が嫌いではありませんまた樹木が灌木も含めて大好きですがそれらの名称を覚えるのは苦手です',
+            body:'私は工具類が嫌いで',
             thumb:'/static/img/covers/p2.jpg',
             pid:'4EyRBVIJwQulEHUll0z87a',
             tid:'62LJFaYihsdVrrkgUOJC05',
@@ -48,7 +48,7 @@ const state = {
         {
             title:'Electro Tokyo',
             subtitle:'',
-            body:'夏はほとんどＴシャツで過ごします私の書く言葉には値段がつくことがあります',
+            body:'夏はほとんどＴ',
             thumb:'/static/img/covers/p3.jpg',
             pid:'5hewb2r9OMPSYxIq904pRw',
             tid:'62LJFaYihsdVrrkgUOJC05',
@@ -58,7 +58,7 @@ const state = {
         {
             title:'Michael Jackson',
             subtitle:'this is life.',
-            body:'私は過去の日付にあまり関心がなく権威というものに反感をもっています斜視で乱視で老眼です',
+            body:'私は過去の日',
             thumb:'/static/img/covers/p4.jpg',
             pid:'3j5jYaHYl71waEg7en89Mb',
             tid:'62LJFaYihsdVrrkgUOJC05',
@@ -68,7 +68,7 @@ const state = {
         {
             title:'My Summer REwind',
             subtitle:'How good!',
-            body:'家には仏壇も神棚もありませんが室内に直結の巨大な郵便受けがあります私にとって睡眠は快楽の一種です',
+            body:'家には仏壇も',
             thumb:'/static/img/covers/p5.jpg',
             pid:'07HXB6tAHFNniJ6RSearyX',
             tid:'62LJFaYihsdVrrkgUOJC05',
@@ -79,7 +79,7 @@ const state = {
         {
             title:'Podcart',
             subtitle:'How good!',
-            body:'夢は見ても目覚めたときには忘れていますここに述べていることはすべて事実です',
+            body:'夢は見ても',
             thumb:'/static/img/covers/p6.jpg',
             pid:'6Yd7Bfa3NL3MptunZeqrT0',
             tid:'62LJFaYihsdVrrkgUOJC05',
@@ -89,7 +89,7 @@ const state = {
         {
             title:'To Crates',
             subtitle:'How good!',
-            body:'こうして言葉にしてしまうとどこか噓くさい別居の子ども二人孫四人犬猫は飼っていません',
+            body:'こうして言',
             thumb:'/static/img/covers/p7.jpg',
             pid:'0FF67Zklnw8St6E38TmS9m',
             tid:'62LJFaYihsdVrrkgUOJC05',
@@ -99,7 +99,7 @@ const state = {
         {
             title:'旅と音楽',
             subtitle:'How good!',
-            body:'夏はほとんどＴシャツで過ごします私の書く言葉には値段がつくことがあります',
+            body:'夏はほとん',
             thumb:'/static/img/covers/p8.jpg',
             pid:'2hDwaHM3K5njtybfCsZklm',
             tid:'62LJFaYihsdVrrkgUOJC05',
@@ -119,7 +119,7 @@ const state = {
         {
             title:'NEW NEW NEW',
             subtitle:'How good!',
-            body:'夏はほとんどＴシャツで過ごします私の書く言葉には値段がつくことがあります',
+            body:'夏はほとんど',
             thumb:'/static/img/covers/p10.jpg',
             pid:'5hewb2r9OMPSYxIq904pRw',
             tid:'62LJFaYihsdVrrkgUOJC05',

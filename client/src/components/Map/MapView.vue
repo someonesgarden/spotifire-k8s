@@ -36,7 +36,6 @@
                 userpoly:       null,
 
                 geocodingOptions : {enableHighAccuracy: true, timeout : 5000, maximumAge: 0},
-
                 geocodingOptions2:{enableHighAccuracy: true, timeout: 6000, maximumAge: 600000},
 
                 userpolyOptions:{
@@ -48,7 +47,7 @@
                 }
             };
         },
-        computed: mapGetters(['mapstore','ws']),
+        computed: mapGetters(['mapstore','ws','spotify']),
         watch: {
             'mapstore.tracking': {
                 handler: function () {
@@ -79,22 +78,36 @@
             ...mapActions(['a_mapstore','a_ws']),
 
             loadMap(google) {
-                console.log("loadMap");
                 let mapOptions = {
+                    // zoomControlOptions:         { position: google.maps.ControlPosition.RIGHT_CENTER },
+                    zoomControl: false,
+
+                    // fullscreenControlOptions:   { position: google.maps.ControlPosition.TOP_LEFT },
+                    fullscreenControl: false,
+
                     mapTypeControlOptions:      { position: google.maps.ControlPosition.TOP_CENTER },
-                    fullscreenControlOptions:   { position: google.maps.ControlPosition.TOP_LEFT },
+                    mapTypeControl: true,
+
                     streetViewControlOptions:   { position: google.maps.ControlPosition.LEFT_CENTER },
-                    zoomControlOptions:         { position: google.maps.ControlPosition.RIGHT_CENTER },
+                    streetViewControl: false,
+
                     rotateControlOptions:       { position: google.maps.ControlPosition.RIGHT_TOP },
+                    rotateControl: true,
+
                     center: {lat: this.lat, lng: this.lng}, //初期座標
                     zoom: this.zoom,
-                    gestureHandling: "greedy",    // スワイプ判定を強めに設定(地図を移動させるには..問題)
+                    //gestureHandling: "greedy",    // スワイプ判定を強めに設定(地図を移動させるには..問題)
                     //gestureHandling: "auto",
-                    draggable: true,
-                    disableDoubleClickZoom: false// ダブルクリックズーム制限
+                    draggable: false,
+                    disableDoubleClickZoom: true, // ダブルクリックズーム制限
+                    mapTypeId: google.maps.MapTypeId.ROADMAP,
                 };
 
                 this.map = new google.maps.Map(document.getElementById("map"), mapOptions);
+
+
+
+                google.maps.event.addListener(this.map, 'click', this.voidAreaClicked);
 
                 // google.maps.event.addListener( "dragend", ( argument )=> {
                 //     console.log( argument ) ;
@@ -103,10 +116,9 @@
                 this.infowindow = new google.maps.InfoWindow();
 
                 this.mainuser = this.markerMaker( {
-                    title:'For Your Holidays.',
-                    subtitle:'top smooth tracks',
-                    body:'あなたは現在視聴中です。',
-                    thumb:'/static/img/covers/p1.jpg',
+                    title: this.spotify.bookmarks ? this.spotify.bookmarks[0].name : 'EMORY.',
+                    body: this.spotify.bookmarks ? this.spotify.bookmarks[0].name : 'ようこそ',
+                    thumb:this.spotify.bookmarks ? this.spotify.bookmarks[0].album.images[0].url : '/static/img/covers/p1.jpg',
                     pid:'',
                     tid:'',
                     id:0,
@@ -121,9 +133,6 @@
             },
 
             afterMapLoaded(){
-
-                console.log("afterMapLoaded");
-
                 // 現在地の取得
                 navigator.geolocation.getCurrentPosition(position => {
                     this.lat = position.coords.latitude;
@@ -136,20 +145,10 @@
 
                     this.resetPos(position);
 
-                    setTimeout(()=>{
-                        this.addOtherMarkers();
-                    },2000);
+                    setTimeout(()=>this.addOtherMarkers(), 2000);
 
                 }, this.geoError);
 
-
-                // this.watchId = navigator.geolocation.watchPosition(position=>{
-                //
-                //    // if(this.mapstore.tracking){
-                //         console.log("watching");
-                //         this.resetPos(position);
-                //     //}
-                // },this.geoError,this.geocodingOptions);
             },
 
             keepTracking(){
@@ -190,17 +189,19 @@
             },
 
             mainuserWindowClicked(){
-                window.alert("あなたはメインユーザーです");
+                this.$emit('switchLayer','user');
             },
 
             friendsWindowClicked(pid){
-              window.alert(pid);
+                this.$emit('switchLayer','net');
+            },
+
+            voidAreaClicked(){
+                this.$emit('switchLayer','info');
             },
 
             drawUserPoly(){
-
                 if(this.userpoly) this.userpoly.setMap(null);
-
                 let userpoly_coords = [];
                 this.ws.users.forEach((user,index)=> userpoly_coords.push({lat:user.lat, lng:user.lng}));
 
@@ -209,7 +210,6 @@
                    this.userpoly = new google.maps.Polygon({...this.userpolyOptions, paths:userpoly_coords});
                    this.userpoly.setMap(this.map);
                }
-
             },
 
             markerMaker(m){
@@ -234,15 +234,14 @@
 
                 let marker = new google.maps.Marker(options);
                 let dom = document.createElement("div");
-                dom.innerHTML ='<div class="mu-card marker" style="width:150px; margin: 0 auto;">'+
-                    '<div class=" mu-card-media">'+
-                    '<img src="'+m.thumb+'">'+
-                    '<div class="mu-card-media-title">'+
-                    '<div class="mu-card-title">'+m.title+'</div>'+
-                    '<div class="mu-card-sub-title">'+m.subtitle+'</div>'+
-                    '</div>'+
-                    '</div>'+
-                    '<div class="mu-card-text">'+m.body+
+
+                dom.innerHTML
+                    ='<div class="mu-card marker" style="width:150px; margin: 0 auto;">'+
+                        '<div class=" mu-card-media">'+
+                            '<img src="'+m.thumb+'"/>'+
+                        '</div>'+
+                        '<div class="mu-card-title">'+m.title+'</div>'+
+                        '<div class="mu-card-text">'+m.body+' </div>'+
                     ' </div>';
 
                 dom.addEventListener("click", ()=> {

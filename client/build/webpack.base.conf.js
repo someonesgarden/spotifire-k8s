@@ -5,6 +5,7 @@ const utils = require('./utils')
 const config = require('../config')
 const vueLoaderConfig = require('./vue-loader.conf')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const HardSourceWebpackPlugin = require('hard-source-webpack-plugin')
 
 function resolve (dir) {
   return path.join(__dirname, '..', dir)
@@ -46,7 +47,7 @@ module.exports = {
       },
       {
         test: /\.js$/,
-        loader: 'babel-loader',
+        loader: 'babel-loader?cacheDirectory',
         include: [resolve('src'), resolve('test')]
       },
       {
@@ -91,6 +92,7 @@ module.exports = {
   plugins: [
     new ExtractTextPlugin("static/css/[name].css", {
       allChunks: true
-    })
+    }),
+    new HardSourceWebpackPlugin()
   ]
 }

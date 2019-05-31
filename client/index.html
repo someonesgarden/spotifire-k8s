@@ -36,6 +36,9 @@
     <link rel="stylesheet" href="static/css/common.css">
     <!-- SOCKET.IO をAPIサーバーを経由して接続する-->
     <script src="/ws/socket.io/socket.io.js"></script>
+
+<!--    <script src='https://api.mapbox.com/mapbox-gl-js/v1.0.0/mapbox-gl.js'></script>-->
+<!--    <link href='https://api.mapbox.com/mapbox-gl-js/v1.0.0/mapbox-gl.css' rel='stylesheet' />-->
   </head>
   <body>
     <noscript>
@@ -51,6 +54,15 @@
     <script>
       window.onSpotifyWebPlaybackSDKReady = () => {};
     </script>
+
+<!--    <script>-->
+<!--      mapboxgl.accessToken = 'pk.eyJ1IjoiZGFpc3VrZW5pc2hpbXVyYSIsImEiOiJjandiaXJnYjMwMnpkM3lvZ3UzbGZveHllIn0.Ajc8GA2rnzTt1QlYSr8mZA';-->
+<!--      let map = new mapboxgl.Map({-->
+<!--        container: 'map',-->
+<!--        style: 'mapbox://styles/mapbox/streets-v11'-->
+<!--      });-->
+<!--    </script>-->
+
     <div id="app"></div>
     <!-- Todo: only include in production -->
     <%= htmlWebpackPlugin.options.serviceWorkerLoader %>

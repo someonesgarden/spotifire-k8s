@@ -1,45 +1,3 @@
-.mapflex{
-  width:100%;
-  margin: 63px 0 0 0;
-  height:calc(100vh - 63px);
-  overflow: hidden;
-
-  .controlarea{
-    width:80px;
-    height:100%;
-    background-color:rgba(34,12,111,0.8);
-    text-align:center;
-
-    .ui{
-      background-color: #13111e;
-
-      h4.title{
-        font-family: 'Allerta Stencil' !important;
-        font-weight:bold;
-        padding-top:12px;
-        padding-bottom:12px;
-        color:white;
-        font-size:11px;
-      }
-    }
-
-
-    .mu-text-field-input{
-     font-size:9px;
-    }
-
-  }
-
-  .maparea{
-    height:100%;
-    #map {
-      height:calc(100%);
-      width:100%;
-      margin:0;
-      padding:0;
-    }
-  }
-}
 
 
 
@@ -107,3 +65,188 @@
   }
 
 }
+
+
+/*     LEAFLET */
+
+.leaflet-fake-icon-image-2x {
+  background-image: none !important;
+}
+
+.leaflet-fake-icon-shadow {
+  background-image: url('/static/img/markers/marker-shadow.png');
+}
+
+
+.leaflet-popup {
+  width: 150px;
+
+  .leaflet-popup-tip{
+    background: #20b521;
+  }
+
+  .leaflet-popup-content-wrapper {
+
+    //border:thin solid #000;
+    background: #20b521;
+    padding:0;
+    border-radius:0;
+
+
+
+    .leaflet-popup-content {
+      margin:0;
+      width: 100% !important;
+      height: auto;
+
+      img {
+          width:100%;
+      }
+
+      .inner{
+        padding:5px;
+        text-align:center;
+        h1{
+          font-size:1.2rem;
+          font-weight:bold;
+          color:white;
+        }
+        p{
+          color:black;
+          font-size:0.7rem;
+          margin: 4px 0;
+        }
+      }
+    }
+
+  }
+}
+
+
+.mapflex {
+  width:100%;
+  margin: 63px 0 0 0;
+  height:calc(100vh - 63px);
+  overflow: hidden;
+
+  .controlarea{
+    width:80px;
+    height:100%;
+    background-color:rgba(34,12,111,0.8);
+    text-align:center;
+
+    .ui{
+      background-color: #13111e;
+
+      h4.title{
+        font-family: 'Allerta Stencil' !important;
+        font-weight:bold;
+        padding-top:12px;
+        padding-bottom:12px;
+        color:white;
+        font-size:11px;
+      }
+    }
+
+    .mu-text-field-input{
+      font-size:9px;
+    }
+  }
+
+  .maparea{
+    height:100%;
+    position:relative;
+    z-index:0;
+
+    #map {
+      height:calc(100%);
+      width:100%;
+      margin:0;
+      padding:0;
+    }
+  }
+
+  .overlay {
+    position: absolute;
+    width: calc(100%);
+    height: calc(100%);
+    /*mix-blend-mode: hard-light;*/
+    margin: 0;
+    left: 0;
+    top: 0;
+
+    &.info_overlay {
+
+      z-index: 100;
+      /*background-color:rgba(20,20,20,0.80);*/
+      background-color: rgba(41, 119, 132, 0.75);
+      mix-blend-mode: hard-light;
+
+      .info_menu {
+        font-family: 'Allerta Stencil' !important;
+        margin: 0 5px;
+        background-color: rgba(255, 102, 133, 0.01);
+        min-width: 350px;
+      }
+
+      .info_box {
+        margin: 5px;
+        min-height: 90px;
+        font-size: 1.0rem;
+        font-weight: bold;
+        color: #fff;
+        text-align: center;
+        border-radius: 4px;
+
+        &.how {
+          background-color: rgba(193, 21, 21, 0.96);
+        }
+
+        &.story {
+          background-color: rgba(2, 72, 18, 0.96);
+        }
+
+        &.edit {
+          background-color: rgba(54, 10, 125, 0.96);
+        }
+
+        &.area {
+          background-color: rgba(3, 50, 109, 0.96);
+        }
+      }
+    }
+
+    &.user_overlay {
+      z-index: -1;
+      /*background-color:rgba(20,20,20,0.80);*/
+      background-color: rgba(5, 189, 108, 0.59);
+    }
+
+    &.net_overlay {
+      z-index: -1;
+      /*background-color:rgba(20,20,20,0.80);*/
+      background-color: rgba(147, 50, 212, 0.6);
+    }
+
+    &.edit_overlay {
+      z-index: -1;
+      /*background-color:rgba(20,20,20,0.80);*/
+      background-color: rgba(9, 0, 8, 0.62);
+
+      .edit_info_box {
+
+        h1{
+          color: white;
+          font-size: 1.5rem;
+        }
+
+        h2{
+          color: white;
+          font-size: 1.3rem;
+        }
+
+      }
+    }
+  }
+}
+

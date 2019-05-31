@@ -1,6 +1,6 @@
 <template>
     <mu-list-item avatar button :ripple="false" class="range user" v-if="user" :class="{disconnected:!ws.you.connected, you:user.name===ws.you.name}" @click="userItemClick">
-        <mu-list-item-title>{{user.name | slide5}}</mu-list-item-title>
+        <mu-list-item-title v-if="user.name">{{user.name | slice5}}</mu-list-item-title>
     </mu-list-item>
 </template>
 
