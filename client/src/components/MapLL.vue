@@ -44,16 +44,14 @@
 
             <map-view id="map" ref="emorymap" @switchLayer="switchLayer" @mapClick="mapClick"/>
 
+            <!-- MENU -->
             <mu-flex justify-content="center" direction="column" align-items="center" class="info_overlay overlay"
                      ref="info_overlay">
-
                 <mu-flex class="info_menu" justify-content="center" align-items="center">
                     <mu-flex class="info_box how" justify-content="center" align-items="center" direction="column" fill>
-                        <mu-icon value="announcement" :size="20"></mu-icon>
-                        how to.
+                        <img src="/static/img/emory/emory_logo_w.png" style="width:180px;height:auto;">
                     </mu-flex>
                 </mu-flex>
-
                 <mu-flex class="info_menu" justify-content="center" align-items="center">
                     <mu-flex class="info_box area" justify-content="center" align-items="center" direction="column" fill
                              @click="switchLayer('map')">
@@ -71,37 +69,59 @@
                         edit.
                     </mu-flex>
                 </mu-flex>
-
             </mu-flex>
+            <!--/ MENU-->
 
+
+
+            <!-- USER OVERLAY-->
             <div class="user_overlay overlay" ref="user_overlay" @click="overlayClick">
-
             </div>
+            <!--/ USRE OVERLAY-->
+
+            <!-- NET OVERLAY -->
             <div class="net_overlay overlay" ref="net_overlay" @click="overlayClick">
-
             </div>
+            <!--/NET OVERLAY -->
+
+
+            <!--EDIT OVERLAY-->
             <div class="edit_overlay overlay" ref="edit_overlay" @click="editOverlayClick">
 
+                <mu-flex class="edit_info_box" justify-content="center" align-items="center" direction="column" style="height:100%;">
 
-                <mu-flex class="edit_info_box" justify-content="center" align-items="center" direction="column"
-                         style="height:100%;">
+
+
                     <h1>
                         <mu-icon value="build" :size="20"></mu-icon>
                         edit.
                     </h1>
-                    <h2>地図上をクリックすると座標が選択されます。</h2>
+                    <h2 v-if="!newMarker">地図上をクリックすると座標が選択されます。</h2>
+                    <h2 v-else>このポイントを保存する場合は「保存」を押してください。</h2>
+
+
+                    <mu-form :model="newMarker" ref="newmarkerform" :label-position="'top'" label-width="100" v-if="newMarker.center" class="edit_form">
+                        <mu-form-item prop="title" :rules="blankRules" label="タイトル">
+                            <mu-text-field v-model="newMarker.title"/>
+                        </mu-form-item>
+                        <mu-form-item prop="type" label="タイプを選択">
+                            <mu-select color="primary" v-model="newMarker.type">
+                                <mu-option  label="other" :value="0"></mu-option>
+                                <mu-option  label="user" :value="1"></mu-option>
+                            </mu-select>
+                        </mu-form-item>
+                    </mu-form>
 
                     <mu-flex>
-                        <mu-button color="info" class="smallbtn" @click="saveNewMarker" v-if="newMarker">保存</mu-button>
-                        <mu-button color="warning" class="smallbtn" @click="cancelNewMarker" v-if="newMarker">キャンセル
+                        <mu-button color="info" class="smallbtn" @click="saveNewMarker" v-if="newMarker.center">保存</mu-button>
+                        <mu-button color="warning" class="smallbtn" @click="cancelNewMarker" v-if="newMarker.center">キャンセル
                         </mu-button>
                         <mu-button color="primary" class="smallbtn" @click="editEnd">終了</mu-button>
                     </mu-flex>
-
-
+                    <div ref="selectedPoint" class="selectedPoint"></div>
                 </mu-flex>
-
             </div>
+            <!--/EDIT OVERLAY-->
         </mu-flex>
 
     </mu-flex>
@@ -132,7 +152,11 @@
 
         data() {
             return {
-                newMarker: null,
+                newMarker: {
+                  center:null,
+                  title:"",
+                  type:'other'
+                },
                 editing: false,
                 mode: 'info',
                 socket: null,
@@ -174,7 +198,9 @@
                 if (this.editing) {
                     console.log("add marker at");
 
-                    this.addNewMarker(val.latlng);
+                    console.log(val);
+
+                    this.addNewMarker(val.latlng,val.containerPoint);
 
                     this.switchLayer('edit');
                     //editモードの時はinfoには抜けずに
@@ -208,24 +234,33 @@
             },
 
 
-            addNewMarker(latlng) {
+            addNewMarker(latlng,mouseXY) {
                 console.log("add new marker");
                 console.log(latlng);
-                this.newMarker = {
-                    center: latlng
-                }
+                this.newMarker.center = latlng;
+
+                this.$refs.selectedPoint.style.top = mouseXY.y-10+'px';
+                this.$refs.selectedPoint.style.left = mouseXY.x-10+'px';
             },
 
             cancelNewMarker() {
-                this.newMarker = null;
+                this.newMarker.center = null;
                 this.editOverlayClick();
-
             },
 
             saveNewMarker() {
-                this.newMarker = null;
+                this.newMarker.center = null;
                 console.log("save new marker");
                 console.log(this.newMarker);
+            },
+
+            editEnd() {
+                console.log("editend");
+                this.newMarker.center = null;
+                this.editing = false;
+                this.mode = "info";
+                this.switchLayer('info');
+                this.$refs.selectedPoint.style.top = -300+'px';
             },
 
             switchLayer(mode) {
@@ -271,16 +306,8 @@
                 }
             },
 
-            editEnd() {
-                console.log("editend");
-                this.newMarker = null;
-                this.editing = false;
-                this.mode = "info";
-                this.switchLayer('info');
-            },
-
             editOverlayClick(val) {
-                if (this.editing) this.switchLayer('map');
+                if (this.editing && !this.newMarker.center) this.switchLayer('map');
             },
 
             overlayClick(val) {
@@ -293,4 +320,13 @@
 </script>
 
 <style lang="scss">
+    .selectedPoint{
+        position:absolute;
+        top:-300px;
+        width:20px;
+        height:20px;
+        border-radius:50%;
+        background-color:red;
+    }
+
 </style>

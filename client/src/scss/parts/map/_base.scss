@@ -199,19 +199,19 @@
         border-radius: 4px;
 
         &.how {
-          background-color: rgba(193, 21, 21, 0.96);
+          background-color: rgba(105, 53, 105, 0.84);
         }
 
         &.story {
-          background-color: rgba(2, 72, 18, 0.96);
+          background-color: rgba(2, 72, 18, 0.56);
         }
 
         &.edit {
-          background-color: rgba(54, 10, 125, 0.96);
+          background-color: rgba(54, 10, 125, 0.56);
         }
 
         &.area {
-          background-color: rgba(3, 50, 109, 0.96);
+          background-color: rgba(3, 50, 109, 0.55);
         }
       }
     }
@@ -243,6 +243,14 @@
         h2{
           color: white;
           font-size: 1.3rem;
+        }
+
+        .edit_form{
+          background-color: rgba(255, 255, 255, 0.78);
+          width:300px;
+          padding:12px;
+          border-radius:4px;
+          margin:12px 0;
         }
 
       }
