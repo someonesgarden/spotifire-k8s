@@ -42,7 +42,7 @@
 
         <mu-flex justify-content="center" class="maparea" fill>
 
-            <map-view id="map" ref="emorymap" @switchLayer="switchLayer" @mapClick="mapClick"/>
+            <map-view id="map" ref="emorymap" @switchLayer="switchLayer" @mapClick="mapClick" @mClick="mClick" @pClick="pClick"/>
 
             <!-- MENU -->
             <mu-flex justify-content="center" direction="column" align-items="center" class="info_overlay overlay"
@@ -73,7 +73,6 @@
             <!--/ MENU-->
 
 
-
             <!-- USER OVERLAY-->
             <div class="user_overlay overlay" ref="user_overlay" @click="overlayClick">
             </div>
@@ -84,7 +83,6 @@
             </div>
             <!--/NET OVERLAY -->
 
-
             <!--EDIT OVERLAY-->
             <div class="edit_overlay overlay" ref="edit_overlay" @click="editOverlayClick">
 
@@ -94,12 +92,14 @@
                         <mu-icon value="build" :size="20"></mu-icon>
                         edit.
                     </h1>
-                    <h2 v-if="!newMarker">地図上をクリックすると座標が選択されます。</h2>
+                    <h2 v-if="!newMarker.center">地図上をクリックすると座標が選択されます。</h2>
                     <h2 v-else>このポイントを保存する場合は「保存」を押してください。</h2>
+                    <p v-if="newMarker.center">
+                        {{newMarker.center.lat}}{{newMarker.center.lng}}
+                    </p>
 
                     <mu-form :model="newMarker" ref="newmarkerform" :label-position="'top'" label-width="100" v-if="newMarker.center" class="range edit_form">
                         <img src="/static/img/covers/p3.jpg">
-
                         <mu-form-item prop="title" :rules="blankRules">
                             <mu-text-field prop="title" placeholder="タイトル" v-model="newMarker.title"/>
                         </mu-form-item>
@@ -130,11 +130,18 @@
                         </mu-form-item>
 
                         <mu-flex justify-content="center" align-items="center" direction="row">
-                            <mu-button color="info"     class="smallbtn" @click="saveNewMarker" v-if="newMarker.center">保存</mu-button>
-                            <mu-button color="warning"  class="smallbtn" @click="cancelNewMarker" v-if="newMarker.center">キャンセル</mu-button>
-                            <mu-button color="primary"  class="smallbtn" @click="editEnd">終了</mu-button>
+                            <mu-button color="red"      class="smallbtn" @click="delMarker"           v-if="newMarker.id">del</mu-button>
+                            <mu-button color="info"     class="smallbtn" @click="saveNewMarker"     v-if="newMarker.center">save</mu-button>
+                            <mu-button color="warning"  class="smallbtn" @click="cancelNewMarker"   v-if="newMarker.center">cancel</mu-button>
+                            <mu-button color="primary"  class="smallbtn" @click="editEnd">done</mu-button>
                         </mu-flex>
                     </mu-form>
+
+                    <mu-flex justify-content="center" align-items="center" direction="row" v-else>
+                        <mu-button color="warning"  class="smallbtn" @click="cancelNewMarker">編集用マップ</mu-button>
+                        <mu-button color="primary"  class="smallbtn" @click="editEnd">終了</mu-button>
+                    </mu-flex>
+
                     <div ref="selectedPoint" class="selectedPoint"></div>
                 </mu-flex>
             </div>
@@ -169,11 +176,20 @@
             MapUserItem
         },
 
-
         data() {
             return {
                 database: null,
                 markersRef:null,
+                newMarker0:{
+                    center: null,
+                    title: "",
+                    desc:"",
+                    type: 'other',
+                    spotifyid: "",
+                    project: "",
+                    public: 'open',
+                    thumb:null
+                },
                 newMarker: {
                     center: null,
                     title: "",
@@ -198,27 +214,26 @@
         created() {
             this.database = firebase.database();
             this.markersRef = this.database.ref('markers');
-            this.markersRef.on('value', (snapshot)=>{
-                console.log(snapshot)
-                console.log(snapshot.val())
-            });
 
         },
         mounted() {
+            this.markersRef.on('value', (snapshot)=> {
+                this.a_mapstore(['set','markers',snapshot.val()])
+            });
+
             this.filter = this.spotify.filter;
             this.socketInit();
             this.connectToSocket();
             // this.a_mapstore(['set','tracking',true]);
-
             this.switchLayer('info');
         },
 
         beforeDestroy() {
             this.socketDisconnect();
             this.a_mapstore(['set', 'tracking', false]);
-        },
 
-        watch: {},
+            this.markersRef = null;
+        },
 
         methods: {
             ...mapActions([
@@ -232,6 +247,24 @@
                     this.switchLayer('edit');
                 } else {
                     this.switchLayer('info');
+                }
+            },
+
+            mClick(val,id){
+                if (this.editing){
+                    this.switchLayer('edit');
+                    this.newMarker = val;
+                    if(id) this.newMarker.id =id;
+                }
+            },
+
+            pClick(val,id){
+                if(this.editing){
+                    this.switchLayer('edit');
+                    this.newMarker = val;
+                    if(id) this.newMarker.id =id;
+                }else{
+                    this.switchLayer('user');
                 }
             },
 
@@ -260,32 +293,55 @@
             },
 
             cancelNewMarker() {
+                this.newMarker = this.newMarker0;
                 this.newMarker.center = null;
                 this.editOverlayClick();
+                this.switchLayer('map');
+            },
+
+
+            editOverlayClick(val) {
+                //if (this.editing) this.switchLayer('map');
+            },
+
+            editEnd() {
+                this.editing = false;
+                this.switchLayer('info');
+                this.newMarker = this.newMarker0;
+                this.newMarker.center = null;
+                this.mode = "info";
+                this.$refs.selectedPoint.style.top = -300+'px';
+            },
+
+            delMarker(){
+                this.markersRef.child(this.newMarker.id).remove();
+                this.cancelNewMarker();
             },
 
             saveNewMarker() {
-
                 this.$refs.newmarkerform.validate().then(valid => {
                     if (valid) {
                         if (!this.newMarker.center) { return; }
+
+                        let icons = this.mapstore.icons[this.newMarker.type];
+                        let icon  = icons[this.newMarker.title.charCodeAt(0) % icons.length];
+
+                        this.newMarker = {
+                            ...this.newMarker,
+                            w:35,
+                            h:35,
+                            icon:icon,
+                            thumb:'/static/img/covers/dummy.jpg'
+                        }
+
                         this.markersRef.push(this.newMarker);
+                        this.newMarker = this.newMarker0;
                         this.newMarker.center = null;
                     }
                 });
             },
 
-            editEnd() {
-                console.log("editend");
-                this.newMarker.center = null;
-                this.editing = false;
-                this.mode = "info";
-                this.switchLayer('info');
-                this.$refs.selectedPoint.style.top = -300+'px';
-            },
-
             switchLayer(mode) {
-                console.log("switchLayer", mode);
                 let info_overlay = this.$refs.info_overlay;
                 let user_overlay = this.$refs.user_overlay;
                 let net_overlay = this.$refs.net_overlay;
@@ -327,13 +383,7 @@
                 }
             },
 
-            editOverlayClick(val) {
-                if (this.editing && !this.newMarker.center) this.switchLayer('map');
-            },
-
             overlayClick(val) {
-                console.log("overlay from");
-                console.log(val);
                 this.switchLayer('map');
             }
         }

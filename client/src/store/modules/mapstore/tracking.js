@@ -1,6 +1,7 @@
 const state = {
     tracking:false,
     trackDuration:  2000,
+    locations:null
 }
 
 const mutations = {

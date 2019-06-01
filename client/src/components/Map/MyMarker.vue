@@ -1,5 +1,5 @@
 <template>
-    <l-marker :lat-lng="marker.center">
+    <l-marker :lat-lng="marker.center" @click="$emit('mClick')">
         <l-icon
                 :icon-size="[marker.w,marker.h]"
                 :icon-anchor="[marker.w/2,marker.h]"
@@ -10,7 +10,7 @@
                 class-name="marker_base">
         </l-icon>
         <l-popup>
-            <div @click="$emit('pclick')">
+            <div @click="$emit('pClick')">
                 <img :src="marker.thumb"/>
                 <div class="inner">
                     <h1>
@@ -59,9 +59,12 @@
 
 <style scoped lang="scss">
 
-    .marker_base {
-
+    .leaflet-fake-icon-image-2x {
+        background-image: none !important;
     }
 
+    .leaflet-fake-icon-shadow {
+        background-image: url('/static/img/markers/marker-shadow.png');
+    }
 
 </style>

@@ -21,7 +21,12 @@ const state = {
             '/static/img/markers/m_user_girl_2.png',
             '/static/img/markers/m_user_boy_1.png',
             '/static/img/markers/m_user_boy_2.png'
+        ],
+        spot:[
+            '/static/img/markers/m_spot_1.png',
+            '/static/img/markers/m_spot_2.png'
         ]
+
     },
 
     marker_types:[

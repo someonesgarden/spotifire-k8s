@@ -1,12 +1,9 @@
 <template>
         <l-map  ref="map" :zoom="zoom" :center="center" @click="(val)=> $emit('mapClick',val)">
             <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
-
-            <my-marker v-if="mainmarker" :marker="mainmarker"
-                       @pclick="$emit('switchLayer','user')" @mclick="markerClick"/>
-
-            <my-marker v-if="othermarkers" v-for="(marker,index) in othermarkers" :marker="marker" :key="'othermarker'+index"
-                       @pclick="$emit('switchLayer','user')" @mclick="markerClick"/>
+            <my-marker v-if="mainmarker" :marker="mainmarker" @pclick="$emit('switchLayer','user')"></my-marker>
+            <my-marker v-if="mapstore.markers" v-for="(marker,id) in mapstore.markers" :marker="marker" :key="'marker'+id" :id="id"
+                       @pClick="$emit('pClick',marker,id)"  @mClick="$emit('mClick',marker,id)"></my-marker>
         </l-map>
 </template>
 <script>
@@ -31,30 +28,20 @@
         },
         data() {
             return {
-                center: L.latLng(34.722677, 135.492364),
                 url:'https://{s}.tile.osm.org/{z}/{x}/{y}.png',
-                attribution:'&copy; soms',
-                marker: L.latLng(34.722677, 135.492364),
-
+                attribution:'&copy; sg',
                 zoom:           20,
                 lat0:           34.722677,
                 lng0:           135.492364,
                 lat:            34.722677,
                 lng:            135.492364,
-                map:            null,
-
-                mainmarker:     null,
-                othermarkers:   [],
-                usermarkers:    [],
-
-                trackTimeout:   false,
-                infowindow:     null,
-                watchId:        null,
-                userpoly:       null,
+                center:         L.latLng(34.722677, 135.492364),
 
                 geocodingOptions : {enableHighAccuracy: true, timeout : 5000, maximumAge: 0},
                 geocodingOptions2:{enableHighAccuracy: true, timeout: 6000, maximumAge: 600000},
-
+                trackTimeout:   false,
+                mainmarker:     null,
+                userpoly:       null,
                 userpolyOptions:{
                     strokeColor: '#FF0000',
                     strokeOpacity: 0.8,
@@ -73,19 +60,9 @@
                         this.keepTracking();
                     }
                 }
-            },
-
-            // 'ws.users':{
-            //     handler:function(){
-            //         this.removeAllUserMarkers();
-            //         this.addUserMarkers();
-            //         this.drawUserPoly();
-            //
-            //     },deep:true
-            // }
+            }
         },
         mounted() {
-
             this.mainmarker = {
                 title: this.spotify.bookmarks ? this.spotify.bookmarks[0].name : 'EMORY.',
                 body: this.spotify.bookmarks ? this.spotify.bookmarks[0].name : 'ようこそ',
@@ -100,36 +77,18 @@
                 w:48,
                 h:48
             }
-
             this.init();
-        },
-
-        beforeDestroy() {
-
         },
 
         methods: {
             ...mapActions(['a_mapstore','a_ws']),
 
-            markerClick(marker){
-                console.log("markerClick");
-                console.log(marker);
-            },
-
             init(){
                 // 現在地の取得
                 navigator.geolocation.getCurrentPosition(position => {
-
                     this.lat = position.coords.latitude;
                     this.lng = position.coords.longitude;
-
-                    let rand_points = this.randomPointsRange(this.lat,this.lng,40,12,200);
-                    this.a_mapstore(['set','locations',rand_points]);
-
-                    this.addOtherMarkers();
-
-                    setTimeout(()=>this.resetPos(position), 2000);
-
+                    setTimeout(()=>this.resetPos(position), 1000);
                 }, this.geoError);
             },
 
@@ -146,122 +105,36 @@
             },
 
             geolocation() {
-                if(!!navigator.geolocation) navigator.geolocation.getCurrentPosition(this.resetPos, this.geoError,this.geocodingOptions2);
+                if(!!navigator.geolocation) navigator.geolocation.getCurrentPosition(this.resetPos, this.geoError,this.geocodingOptions);
             },
 
             resetPos(position){
 
                 if(!!position){
-                    this.lat = position.coords.latitude;
-                    this.lng = position.coords.longitude;
-
+                    this.lat    = position.coords.latitude;
+                    this.lng    = position.coords.longitude;
                     this.center = L.latLng(this.lat,this.lng);
-                    this.zoom = 20;
+                    this.zoom   = 20;
                     this.mainmarker.center = L.latLng(this.lat,this.lng);
-
                     this.$refs.map.mapObject.setView(L.latLng(this.lat,this.lng), 20);
 
                     // this.drawUserPoly();
                 }
             },
 
-            geoError(error) {
-                console.log(error);
-            },
+            geoError(error) { console.log(error);},
 
-            mainuserWindowClicked(){
-                this.$emit('switchLayer','user');
-            },
-
-            friendsWindowClicked(pid){
-                this.$emit('switchLayer','net');
-            },
-
-            voidAreaClicked(){
-                this.$emit('switchLayer','info');
-            },
-
-            drawUserPoly(){
-                if(this.userpoly) this.userpoly.setMap(null);
-                let userpoly_coords = [];
-                this.ws.users.forEach((user,index)=> userpoly_coords.push({lat:user.lat, lng:user.lng}));
-
-               if(this.ws.users && this.ws.users.length>=3){
-                   // Construct the polygon.
-                   this.userpoly = new google.maps.Polygon({...this.userpolyOptions, paths:userpoly_coords});
-                   this.userpoly.setMap(this.map);
-               }
-            },
-
-            markerMaker(m){
-                let icons = this.mapstore.icons[m.type];
-
-                //乱数ではなく、タイトルの一文字目でアイコン画像を判別する
-
-                let icon  = icons[m.title.charCodeAt(0) % icons.length];
-
-                let w = m.w ? parseInt(m.w) : 22;
-                let h = m.h ? parseInt(m.h) : 22;
-
-                let marker = {
-                    title: m.title,
-                    body:m.body,
-                    thumb:m.thumb,
-                    pid:'',
-                    tid:'',
-                    id:0,
-                    icon:icon,
-                    type:'user',
-                    lat: m.lat,
-                    lng: m.lng,
-                    center:L.latLng(m.lat,m.lng),
-                    w:w,
-                    h:h
-                }
-                return marker;
-            },
-
-
-            removeAllOtherMarkers(){
-                this.othermarkers.forEach(marker => marker.setMap(null));
-                this.othermarkers.splice(0, this.othermarkers.length);
-            },
-
-            removeAllUserMarkers(){
-                // ユーザーマーカーだけを全部クリア
-                this.usermarkers.forEach(marker => marker.setMap(null));
-                this.usermarkers.splice(0, this.usermarkers.length);
-            },
-
-            addOtherMarkers() {
-               // this.removeAllOtherMarkers();
-
-                this.mapstore.locations.forEach(m => this.othermarkers.push(this.markerMaker(m)))
-            },
-
-            addUserMarkers(){
-                // ユーザーマーカーだけを再描画
-                this.removeAllUserMarkers();
-                this.ws.users.forEach(user=>{
-                    let m = {
-                        lat:    user.lat,
-                        lng:    user.lng,
-                        type:   'user',
-                        thumb:  '/static/img/covers/dummy.jpg',
-                        title:  user.name,
-                        subtitle:"サブタイトル",
-                        body:   "本文",
-                        pid:    user.pid,
-                        w:48,
-                        h:48
-                    }
-                    if(this.ws.you.socketid){
-                        if(user.socketid !== this.ws.you.socketid) this.usermarkers.push(this.markerMaker(m))
-                    }else{
-                        if(user.name !== this.ws.you.name) this.usermarkers.push(this.markerMaker(m))
-                    }
-                })
-            }
+            // drawUserPoly(){
+            //     if(this.userpoly) this.userpoly.setMap(null);
+            //     let userpoly_coords = [];
+            //     this.ws.users.forEach((user,index)=> userpoly_coords.push({lat:user.lat, lng:user.lng}));
+            //
+            //    if(this.ws.users && this.ws.users.length>=3){
+            //        // Construct the polygon.
+            //        this.userpoly = new google.maps.Polygon({...this.userpolyOptions, paths:userpoly_coords});
+            //        this.userpoly.setMap(this.map);
+            //    }
+            // }
         }
     };
 </script>
