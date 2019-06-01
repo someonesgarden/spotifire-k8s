@@ -100,6 +100,12 @@ export const a_index =  ({commit}, [type, action, data]) => {
             open:   () => commit('setBottomState', true),
             close:  () => commit('setBottomState', false),
             toggle: () => commit('setBottomState', 'toggle')
+        },
+
+        alert:{
+            open: ()=> commit('setAlertState', true),
+            close:()=> commit('setAlertState', false),
+            set: (data)=> commit('setAlertText', data)
         }
     };
     actions[type][action](data)

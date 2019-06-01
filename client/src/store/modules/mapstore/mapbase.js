@@ -7,7 +7,7 @@ const state = {
             '/static/img/markers/m_mainuser_1.png',
         ],
 
-        friend:[
+        other:[
             '/static/img/markers/m_friend_boy_1.png',
             '/static/img/markers/m_friend_boy_2.png',
             '/static/img/markers/m_friend_girl_1.png',

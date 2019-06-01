@@ -19,9 +19,7 @@
 
             userItemClick(){
                this.a_mapstore(['set','tracking',false]);
-
-               this.$emit('mapPanTo',this.user.lat,this.user.lng);
-
+               //this.$emit('mapPanTo',this.user.lat,this.user.lng);
                this.play();
             },
 
@@ -35,15 +33,11 @@
                     }
                 },false);
             }
-
         }
-
     }
 </script>
 
 <style scoped lang="scss">
-
-
     li.user{
 
         &.disconnected{
@@ -56,7 +50,11 @@
             color:white;
             font-weight:bold;
             margin:0;
-            border-radius:12px;
+            border-radius:4px;
+
+            .mu-item.has-avatar{
+                height:36px;
+            }
         }
     }
 

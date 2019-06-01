@@ -1,6 +1,3 @@
-
-
-
 .mu-card.marker{
   width:80px !important;
 
@@ -74,7 +71,7 @@
 }
 
 .leaflet-fake-icon-shadow {
-  background-image: url('/static/img/markers/marker-shadow.png');
+  background-image: url('/static/img/markers/marker-shadow.png') !important;
 }
 
 
@@ -129,29 +126,29 @@
   height:calc(100vh - 63px);
   overflow: hidden;
 
-  .controlarea{
-    width:80px;
-    height:100%;
-    background-color:rgba(34,12,111,0.8);
-    text-align:center;
-
-    .ui{
-      background-color: #13111e;
-
-      h4.title{
-        font-family: 'Allerta Stencil' !important;
-        font-weight:bold;
-        padding-top:12px;
-        padding-bottom:12px;
-        color:white;
-        font-size:11px;
-      }
-    }
-
-    .mu-text-field-input{
-      font-size:9px;
-    }
-  }
+  //.controlarea{
+  //  width:80px;
+  //  height:100%;
+  //  background-color:rgba(34,12,111,0.8);
+  //  text-align:center;
+  //
+  //  .ui{
+  //    background-color: #13111e;
+  //
+  //    h4.title{
+  //      font-family: 'Allerta Stencil' !important;
+  //      font-weight:bold;
+  //      padding-top:12px;
+  //      padding-bottom:12px;
+  //      color:white;
+  //      font-size:11px;
+  //    }
+  //  }
+  //
+  //  .mu-text-field-input{
+  //    font-size:9px;
+  //  }
+  //}
 
   .maparea{
     height:100%;
@@ -175,6 +172,41 @@
     left: 0;
     top: 0;
 
+    .info_box {
+      text-align:center;
+      h1,h2{
+        color: white;
+        padding:2px auto;
+        margin:2px;
+        display:block;
+      }
+
+      h1{
+        font-size: 1.6rem;
+      }
+
+      h2{
+        font-size: 1rem;
+      }
+
+
+
+      .edit_form{
+        background-color: rgba(255, 255, 255, 0.9);
+        width:260px;
+        padding:3px;
+        border-radius:2px;
+        margin:6px 0 0 0;
+
+        img{
+          width:45%;
+          height:auto;
+          margin: 5px auto;
+        }
+      }
+
+    }
+
     &.info_overlay {
 
       z-index: 100;
@@ -186,7 +218,7 @@
         font-family: 'Allerta Stencil' !important;
         margin: 0 5px;
         background-color: rgba(255, 102, 133, 0.01);
-        min-width: 350px;
+        min-width: 300px;
       }
 
       .info_box {
@@ -216,57 +248,24 @@
       }
     }
 
-    &.user_overlay {
+    &.area_overlay {
       z-index: -1;
       /*background-color:rgba(20,20,20,0.80);*/
-      background-color: rgba(5, 189, 108, 0.59);
+      background-color: rgba(11, 46, 118, 0.59);
     }
 
     &.net_overlay {
       z-index: -1;
       /*background-color:rgba(20,20,20,0.80);*/
-      background-color: rgba(147, 50, 212, 0.6);
+      background-color: rgba(37, 32, 46, 0.7);
     }
 
     &.edit_overlay {
       z-index: -1;
       /*background-color:rgba(20,20,20,0.80);*/
-      background-color: rgba(9, 0, 8, 0.62);
-
-      .edit_info_box {
-        text-align:center;
-        h1,h2{
-          color: white;
-          padding:2px auto;
-          margin:2px;
-          display:block;
-        }
-
-        h1{
-          font-size: 1.6rem;
-        }
-
-        h2{
-          font-size: 1rem;
-        }
+      background-color: rgba(44, 0, 61, 0.62);
 
 
-
-        .edit_form{
-          background-color: rgba(255, 255, 255, 0.9);
-          width:260px;
-          padding:3px;
-          border-radius:2px;
-          margin:6px 0 0 0;
-
-          img{
-            width:45%;
-            height:auto;
-            margin: 5px auto;
-          }
-        }
-
-      }
     }
   }
 }

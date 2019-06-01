@@ -17,7 +17,7 @@
                         {{marker.title}}
                     </h1>
                     <p>
-                        {{marker.body}}
+                        {{marker.desc}}
                     </p>
                 </div>
 
@@ -29,6 +29,16 @@
 <script>
     //LEAF
     import {LIcon, LMarker, LPopup} from "vue2-leaflet";
+
+    import icon from 'leaflet/dist/images/marker-icon.png';
+    import iconShadow from 'leaflet/dist/images/marker-shadow.png';
+
+    let DefaultIcon = L.icon({
+        iconUrl: icon,
+        shadowUrl: iconShadow
+    });
+
+    L.Marker.prototype.options.icon = DefaultIcon;
 
     export default {
         name: "MyMarker",
@@ -64,7 +74,7 @@
     }
 
     .leaflet-fake-icon-shadow {
-        background-image: url('/static/img/markers/marker-shadow.png');
+        background-image: url('/static/img/markers/marker-shadow.png') !important;
     }
 
 </style>

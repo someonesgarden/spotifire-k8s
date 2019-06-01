@@ -1,44 +1,6 @@
 <template>
 
     <mu-flex class="mapflex" align-items="center">
-        <mu-flex justify-content="center" class="controlarea">
-            <div>
-                <div class="ui">
-                    <h4 class="title">emory.</h4>
-                </div>
-                <mu-form :model="mapform" ref="mapform" label-position="left" label-width="0" class="userform">
-                    <div class="ui">
-                        <div class="sixteen wide">
-                            <mu-button full-width color="cyan400" @click="trackToggle" v-if="mapstore.tracking">
-                                <mu-icon value="portable_wifi_off" :size="15"></mu-icon>
-                                OFF
-                            </mu-button>
-                            <mu-button full-width color="pink500" @click="trackToggle" v-else>
-                                <mu-icon value="settings_input_antenna" :size="15"></mu-icon>
-                                ON
-                            </mu-button>
-                        </div>
-                    </div>
-
-                    <div class="ui">
-                        <div class="sixteen wide">
-                            <mu-button full-width color="indigo500" @click="connectToSocket" v-if="!ws.you.connected">
-                                <mu-icon value="device_hub" :size="15"></mu-icon>
-                                ON
-                            </mu-button>
-                            <mu-button full-width color="red500" @click="socketDisconnect" v-else>
-                                <mu-icon value="settings_input_composite" :size="15"></mu-icon>
-                                OFF
-                            </mu-button>
-                        </div>
-                    </div>
-                </mu-form>
-                <mu-list class="users_list">
-                    <map-user-item :user="user" v-for="(user,key,index) in ws.users" :key="'user'+key+index"
-                                   @mapPanTo="mapPanTo"/>
-                </mu-list>
-            </div>
-        </mu-flex>
 
         <mu-flex justify-content="center" class="maparea" fill>
 
@@ -50,23 +12,25 @@
                 <mu-flex class="info_menu" justify-content="center" align-items="center">
                     <mu-flex class="info_box how" justify-content="center" align-items="center" direction="column" fill>
                         <img src="/static/img/emory/emory_logo_w.png" style="width:180px;height:auto;">
+                        <mu-button full-width color="cyan400" @click="trackToggle" v-if="mapstore.tracking">
+                            <mu-icon value="portable_wifi_off" :size="15"></mu-icon>
+                            GEOLOCATION : OFF
+                        </mu-button>
+                        <mu-button full-width color="pink500" @click="trackToggle" v-else>
+                            <mu-icon value="settings_input_antenna" :size="15"></mu-icon>
+                            GEOLOCATION : ON
+                        </mu-button>
                     </mu-flex>
                 </mu-flex>
                 <mu-flex class="info_menu" justify-content="center" align-items="center">
-                    <mu-flex class="info_box area" justify-content="center" align-items="center" direction="column" fill
-                             @click="switchLayer('map')">
-                        <mu-icon value="pets" :size="20"></mu-icon>
-                        area.
+                    <mu-flex class="info_box area" justify-content="center" align-items="center" direction="column" fill @click="switchLayer('map')">
+                        <mu-icon value="pets" :size="20"></mu-icon>area.
                     </mu-flex>
-                    <mu-flex class="info_box story" justify-content="center" align-items="center" direction="column"
-                             fill>
-                        <mu-icon value="book" :size="20"></mu-icon>
-                        story.
+                    <mu-flex class="info_box story" justify-content="center" align-items="center" direction="column" fill @click="switchLayer('net')">
+                        <mu-icon value="network_check" :size="20"></mu-icon>socket.
                     </mu-flex>
-                    <mu-flex class="info_box edit" justify-content="center" align-items="center" direction="column" fill
-                             @click="switchLayer('edit')">
-                        <mu-icon value="build" :size="20"></mu-icon>
-                        edit.
+                    <mu-flex class="info_box edit" justify-content="center" align-items="center" direction="column" fill @click="switchLayer('edit')">
+                        <mu-icon value="build" :size="20"></mu-icon>edit.
                     </mu-flex>
                 </mu-flex>
             </mu-flex>
@@ -74,19 +38,50 @@
 
 
             <!-- USER OVERLAY-->
-            <div class="user_overlay overlay" ref="user_overlay" @click="overlayClick">
+            <div class="area_overlay overlay" ref="area_overlay" @click="overlayClick">
             </div>
             <!--/ USRE OVERLAY-->
 
+
             <!-- NET OVERLAY -->
-            <div class="net_overlay overlay" ref="net_overlay" @click="overlayClick">
+            <div class="net_overlay overlay" ref="net_overlay">
+
+                <mu-flex class="info_box"　justify-content="center" align-items="center" direction="column" style="height:100%;">
+
+                    <h1>
+                        <mu-icon value="network_check" :size="20"></mu-icon>
+                        socket.io.
+                    </h1>
+                    <h2>WebSocketを経由してリアルタイムにつながったユーザーを確認します。</h2>
+
+                    <mu-list style="width:inherit;">
+                        <map-user-item :user="user" v-for="(user,key,index) in ws.users" :key="'user'+key+index" @mapPanTo="mapPanTo"/>
+                    </mu-list>
+
+
+                    <mu-flex justify-content="center" align-items="center" direction="row">
+
+                        <mu-button color="indigo500" @click="connectToSocket" v-if="!ws.you.connected">
+                            <mu-icon value="device_hub" :size="15"></mu-icon>
+                            CONNECT
+                        </mu-button>
+                        <mu-button  color="red500" @click="socketDisconnect" v-else>
+                            <mu-icon value="settings_input_composite" :size="15"></mu-icon>
+                            DISCONNECT
+                        </mu-button>
+
+                        <mu-button color="primary"  class="smallbtn" @click="netEnd">終了</mu-button>
+                    </mu-flex>
+
+                </mu-flex>
             </div>
             <!--/NET OVERLAY -->
 
-            <!--EDIT OVERLAY-->
-            <div class="edit_overlay overlay" ref="edit_overlay" @click="editOverlayClick">
 
-                <mu-flex class="edit_info_box" justify-content="center" align-items="center" direction="column" style="height:100%;">
+            <!--EDIT OVERLAY-->
+            <div class="edit_overlay overlay" ref="edit_overlay">
+
+                <mu-flex class="info_box" justify-content="center" align-items="center" direction="column" style="height:100%;">
 
                     <h1>
                         <mu-icon value="build" :size="20"></mu-icon>
@@ -94,12 +89,10 @@
                     </h1>
                     <h2 v-if="!newMarker.center">地図上をクリックすると座標が選択されます。</h2>
                     <h2 v-else>このポイントを保存する場合は「保存」を押してください。</h2>
-                    <p v-if="newMarker.center">
-                        {{newMarker.center.lat}}{{newMarker.center.lng}}
-                    </p>
+
 
                     <mu-form :model="newMarker" ref="newmarkerform" :label-position="'top'" label-width="100" v-if="newMarker.center" class="range edit_form">
-                        <img src="/static/img/covers/p3.jpg">
+                        <img :src="newMarker.thumb" v-if="newMarker.thumb">
                         <mu-form-item prop="title" :rules="blankRules">
                             <mu-text-field prop="title" placeholder="タイトル" v-model="newMarker.title"/>
                         </mu-form-item>
@@ -130,15 +123,15 @@
                         </mu-form-item>
 
                         <mu-flex justify-content="center" align-items="center" direction="row">
-                            <mu-button color="red"      class="smallbtn" @click="delMarker"           v-if="newMarker.id">del</mu-button>
-                            <mu-button color="info"     class="smallbtn" @click="saveNewMarker"     v-if="newMarker.center">save</mu-button>
-                            <mu-button color="warning"  class="smallbtn" @click="cancelNewMarker"   v-if="newMarker.center">cancel</mu-button>
-                            <mu-button color="primary"  class="smallbtn" @click="editEnd">done</mu-button>
+                            <mu-button color="red"      class="smallbtn" @click="delMarker" v-if="newMarker.id"><mu-icon value="delete_forever" :size="20"></mu-icon></mu-button>
+                            <mu-button color="info"     class="smallbtn" @click="saveNewMarker"     v-if="newMarker.center">保存</mu-button>
+                            <mu-button color="warning"  class="smallbtn" @click="cancelNewMarker"   v-if="newMarker.center">キャンセル</mu-button>
+                            <mu-button color="primary"  class="smallbtn" @click="editEnd">終了</mu-button>
                         </mu-flex>
                     </mu-form>
 
                     <mu-flex justify-content="center" align-items="center" direction="row" v-else>
-                        <mu-button color="warning"  class="smallbtn" @click="cancelNewMarker">編集用マップ</mu-button>
+                        <mu-button color="warning"  class="smallbtn" @click="cancelNewMarker">編集・新規作成へ</mu-button>
                         <mu-button color="primary"  class="smallbtn" @click="editEnd">終了</mu-button>
                     </mu-flex>
 
@@ -158,10 +151,8 @@
     import mapMixin from '../mixins/map/index';
     import wsMixin from '../mixins/ws/index';
     import {ruleEmpty} from '../store/rules';
-
     import MapView from './Map/MapViewLL';
     import MapUserItem from './Map/MapUserItem';
-
     import firebase from 'firebase'
 
     export default {
@@ -178,6 +169,11 @@
 
         data() {
             return {
+                mapform: {
+                    username: ''
+                },
+                socket: null,
+                blankRules: [ruleEmpty],
                 database: null,
                 markersRef:null,
                 newMarker0:{
@@ -188,7 +184,9 @@
                     spotifyid: "",
                     project: "",
                     public: 'open',
-                    thumb:null
+                    thumb:null,
+                    w:35,
+                    h:35
                 },
                 newMarker: {
                     center: null,
@@ -198,15 +196,12 @@
                     spotifyid: "",
                     project: "",
                     public: 'open',
-                    thumb:null
+                    thumb:null,
+                    w:35,
+                    h:35
                 },
                 editing: false,
-                mode: 'info',
-                socket: null,
-                blankRules: [ruleEmpty],
-                mapform: {
-                    username: ''
-                }
+                mode: 'info'
             }
         },
         computed: mapGetters(['spotify', 'mapstore', 'ws']),
@@ -237,6 +232,7 @@
 
         methods: {
             ...mapActions([
+                'a_index',
                 'a_spotify',
                 'a_mapstore',
                 'a_ws']),
@@ -285,7 +281,6 @@
                 }
             },
 
-
             addNewMarker(latlng,mouseXY) {
                 this.newMarker.center = latlng;
                 this.$refs.selectedPoint.style.top = mouseXY.y-10+'px';
@@ -294,21 +289,20 @@
 
             cancelNewMarker() {
                 this.newMarker = this.newMarker0;
-                this.newMarker.center = null;
-                this.editOverlayClick();
+                this.resetNewMarker();
                 this.switchLayer('map');
             },
 
-
-            editOverlayClick(val) {
-                //if (this.editing) this.switchLayer('map');
+            netEnd(){
+                this.switchLayer('info');
             },
+
 
             editEnd() {
                 this.editing = false;
                 this.switchLayer('info');
                 this.newMarker = this.newMarker0;
-                this.newMarker.center = null;
+                this.resetNewMarker();
                 this.mode = "info";
                 this.$refs.selectedPoint.style.top = -300+'px';
             },
@@ -318,32 +312,66 @@
                 this.cancelNewMarker();
             },
 
+            resetNewMarker(){
+                this.newMarker = this.newMarker0;
+                this.newMarker.center = null;
+                this.newMarker.thumb = null;
+                this.newMarker.spotifyid = "";
+                this.newMarker.title ="";
+                this.newMarker.desc = "";
+            },
+
             saveNewMarker() {
                 this.$refs.newmarkerform.validate().then(valid => {
                     if (valid) {
                         if (!this.newMarker.center) { return; }
 
-                        let icons = this.mapstore.icons[this.newMarker.type];
-                        let icon  = icons[this.newMarker.title.charCodeAt(0) % icons.length];
+                        if(this.newMarker.id){
+                            console.log("idがあるので編集モード");
+                            let updates = {};
+                            updates[this.newMarker.id] = this.newMarker;
+                            this.markersRef.update(updates);
+                            this.resetNewMarker();
 
-                        this.newMarker = {
-                            ...this.newMarker,
-                            w:35,
-                            h:35,
-                            icon:icon,
-                            thumb:'/static/img/covers/dummy.jpg'
+                        }else{
+
+                            this.c_anyid(this.newMarker.spotifyid, (res)=>{
+                                console.log("c_anyid");
+                                console.log(res);
+
+                                if(res.data===""){
+                                    console.log("IDが違う");
+                                    this.a_index(['alert','set','IDが間違えています。入力し直してください。']);
+                                    this.a_index(['alert','open']);
+                                }else{
+                                    if(res.data.body.type==='track'){
+                                        this.newMarker.thumb = res.data.body.album.images[0].url;
+                                        this.newMarker.spotifytype = 'track';
+                                        this.newMarker.desc = res.data.body.name;
+                                    }
+
+                                    let icons = this.mapstore.icons[this.newMarker.type];
+                                    this.newMarker.icon = icons[this.newMarker.title.charCodeAt(0) % icons.length];
+
+                                    this.markersRef.push(this.newMarker);
+                                    this.resetNewMarker();
+
+                                }
+
+                            });
+
                         }
 
-                        this.markersRef.push(this.newMarker);
-                        this.newMarker = this.newMarker0;
-                        this.newMarker.center = null;
+
+
+
                     }
                 });
             },
 
             switchLayer(mode) {
                 let info_overlay = this.$refs.info_overlay;
-                let user_overlay = this.$refs.user_overlay;
+                let area_overlay = this.$refs.area_overlay;
                 let net_overlay = this.$refs.net_overlay;
                 let edit_overlay = this.$refs.edit_overlay;
                 this.mode = mode;
@@ -351,32 +379,32 @@
                 switch (mode) {
                     case 'info':
                         info_overlay.style.zIndex = 401;
-                        user_overlay.style.zIndex = -1;
+                        area_overlay.style.zIndex = -1;
                         net_overlay.style.zIndex = -1;
                         edit_overlay.style.zIndex = -1;
                         break;
                     case 'user':
                         info_overlay.style.zIndex = -1;
-                        user_overlay.style.zIndex = 401;
+                        area_overlay.style.zIndex = 401;
                         net_overlay.style.zIndex = -1;
                         edit_overlay.style.zIndex = -1;
                         break;
                     case 'net':
                         info_overlay.style.zIndex = -1;
-                        user_overlay.style.zIndex = -1;
+                        area_overlay.style.zIndex = -1;
                         net_overlay.style.zIndex = 401;
                         edit_overlay.style.zIndex = -1;
                         break;
                     case 'edit':
                         this.editing = true;
                         info_overlay.style.zIndex = -1;
-                        user_overlay.style.zIndex = -1;
+                        area_overlay.style.zIndex = -1;
                         net_overlay.style.zIndex = -1;
                         edit_overlay.style.zIndex = 401;
                         break;
                     case 'map':
                         info_overlay.style.zIndex = -1;
-                        user_overlay.style.zIndex = -1;
+                        area_overlay.style.zIndex = -1;
                         net_overlay.style.zIndex = -1;
                         edit_overlay.style.zIndex = -1;
                         break;

@@ -233,6 +233,15 @@ export default{
             this.p_out_seeds_csv(gen);
         },
 
+        c_anyid(id,cb){
+            let params =  {'anyid': id};
+            let headers = {Authorization:this.spotify.credential.access_token};
+            axios.get('/api/spotify/browse/idcheck',{params:params, headers: headers}).then(
+                res => {
+                    cb(res);
+                }
+            );
+        },
 
         c_search:function(isTerm=true){
 

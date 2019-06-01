@@ -3,6 +3,10 @@ const state = {
     bottom: {
         open: false
     },
+    alert:{
+        open:false,
+        text:""
+    },
 
     rootAction:{
         type:'',
@@ -25,6 +29,14 @@ const  mutations = {
         }else{
             state.bottom.open = val;
         }
+    },
+
+    setAlertState(state,val){
+       state.alert.open = val;
+    },
+
+    setAlertText(state,val){
+      state.alert.text = val;
     },
 
     setRootAction(state,val){

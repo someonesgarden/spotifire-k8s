@@ -5,7 +5,7 @@
                 <mu-icon value="border_left"></mu-icon>
             </mu-button>
 
-            <mu-menu cover>
+            <mu-menu  open-on-hover>
                 <mu-button flat>
                     <img class="menu-icon" src="/static/img/spotifire_logo.png" style="width:110px; height:auto;"></mu-button>
                 <mu-list slot="content">
@@ -37,7 +37,7 @@
         </mu-appbar>
 
         <mu-drawer :open.sync="side.left.open" :docked="side.left.docked" :width="300">
-            <mu-list>
+            <mu-list style="width:inherit;">
                 <aside-view @rightopen="side.right.open=true"></aside-view>
             </mu-list>
         </mu-drawer>

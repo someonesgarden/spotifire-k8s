@@ -4,20 +4,14 @@
     <mu-container fluid>
       <router-view></router-view>
     </mu-container>
-
-<!--    <mu-container style="position:fixed;bottom:0;width:100%;max-width:inherit;">-->
-<!--      <mu-bottom-nav style="background-color:inherit;color:inherit;margin-top:40px;">-->
-<!--        <mu-bottom-nav-item title="News" icon="filter_list" to="/news"></mu-bottom-nav-item>-->
-<!--        <mu-bottom-nav-item title="Map" icon="location_on" to="/map"></mu-bottom-nav-item>-->
-<!--&lt;!&ndash;        <mu-bottom-nav-item title="Wave" icon="theaters" to="/anime"></mu-bottom-nav-item>&ndash;&gt;-->
-<!--        <mu-bottom-nav-item title="Dots" icon="dialpad" to="/anime2"></mu-bottom-nav-item>-->
-<!--      </mu-bottom-nav>-->
-<!--    </mu-container>-->
-
     <mu-bottom-sheet :open.sync="bottom.open" class="bottomnav">
       <bottom-view></bottom-view>
     </mu-bottom-sheet>
 
+    <mu-dialog title="Notice" width="600" max-width="80%" :esc-press-close="false" :overlay-close="false" :open="alert.open">
+      {{alert.text}}<br/>
+      <mu-button slot="actions" flat color="secondary" @click="a_index(['alert','close'])">閉じる</mu-button>
+    </mu-dialog>
   </div>
 </template>
 
@@ -38,7 +32,7 @@ export default {
       'magazine':Magazine,
     'bottom-view':BottomView
   },
-  computed:mapGetters(['bottom']),
+  computed:mapGetters(['bottom','alert']),
   methods:mapActions(['a_index']),
 
   data:function(){

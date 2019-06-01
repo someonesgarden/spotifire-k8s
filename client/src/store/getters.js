@@ -6,6 +6,7 @@ const feed = modules => modules.feed
 const mapstore = modules => modules.mapstore
 const ws  = modules => modules.ws
 const g_three = modules => modules.three
+const alert = state => state.alert
 export {
     rootAction,
     loggedIn,
@@ -14,5 +15,6 @@ export {
     feed,
     mapstore,
     ws,
-    g_three
+    g_three,
+    alert
 }
