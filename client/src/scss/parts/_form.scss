@@ -1,0 +1,138 @@
+form.mu-form.range {
+  //LAYOUT
+  .col{
+    padding-left:4px;
+    padding-right:4px;
+  }
+
+  .row{
+      .col{
+        padding-right:0;
+        padding-left:0;
+      }
+  }
+
+  .mu-button{
+    &.mu-raised-button{
+      min-width:40px;
+    }
+  }
+
+  // FORMS
+  .mu-form-item {
+    width:100%;
+    padding-bottom:0;
+    margin-bottom:0;
+    padding-top:0;
+    min-height:inherit;
+  }
+  .mu-form-item-label {
+    font-size:10px;
+    width:100%;
+  }
+  .mu-form-item-help {
+    font-size:9px;
+    width:100%;
+  }
+  .mu-form-item-content {
+    font-size:12px;
+    width:100%;
+    padding-bottom:0;
+    margin-bottom:0;
+    padding-top:0;
+    min-height:inherit;
+
+  }
+  .mu-input {
+    font-size:12px;
+    width:100%;
+    padding-bottom:0;
+    margin-bottom:0;
+    padding-top:0;
+    min-height:inherit;
+
+    &.mu-input__error{
+      bottom:-3px;
+    }
+  }
+
+  .mu-input-content {
+    //TEXT FIELD
+    &.mu-text-field {
+      input.mu-text-field-input{
+        text-align:center;
+        font-size:9px;
+      }
+    }
+    //SELECT
+    &.mu-select {
+      .mu-select-content{
+        input.mu-select-input{
+          font-size:10px;
+        }
+        .mu-option-list{
+          ul.mu-list{
+            li.mu-option{
+              a.mu-item-wrapper{
+                .mu-item{
+                  .mu-item-content{
+                    .mu-item-title{
+
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // RADIO
+  .mu-radio{
+    font-size:11px;
+    &.mu-radio-checked{
+
+    }
+
+    .mu-radio-wrapper{
+      .mu-radio-icon{
+        svg.mu-radio-svg-icon{
+          width:16px;
+          height:16px;
+        }
+      }
+      .mu-radio-label{
+        font-size:11px !important;
+      }
+    }
+  }
+
+  //CHECKBOX
+  .mu-checkbox{
+    margin-right: 3px;
+
+    &.mu-checkbox-checked{
+    }
+
+    .mu-checkbox-wrapper{
+
+      .mu-checkbox-icon, svg.mu-checkbox-svg-icon{
+        width:15px !important;
+        height:15px !important;
+        margin-right: 3px !important;
+        //svg.mu-checkbox-svg-icon{
+        //  width:16px;
+        //  height:16px;
+        //  margin-right: 3px;
+        //}
+
+      }
+      .mu-checkbox-label{
+
+      }
+    }
+  }
+
+}

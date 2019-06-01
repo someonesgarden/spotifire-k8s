@@ -90,8 +90,6 @@
 
                 <mu-flex class="edit_info_box" justify-content="center" align-items="center" direction="column" style="height:100%;">
 
-
-
                     <h1>
                         <mu-icon value="build" :size="20"></mu-icon>
                         edit.
@@ -99,25 +97,44 @@
                     <h2 v-if="!newMarker">地図上をクリックすると座標が選択されます。</h2>
                     <h2 v-else>このポイントを保存する場合は「保存」を押してください。</h2>
 
+                    <mu-form :model="newMarker" ref="newmarkerform" :label-position="'top'" label-width="100" v-if="newMarker.center" class="range edit_form">
+                        <img src="/static/img/covers/p3.jpg">
 
-                    <mu-form :model="newMarker" ref="newmarkerform" :label-position="'top'" label-width="100" v-if="newMarker.center" class="edit_form">
-                        <mu-form-item prop="title" :rules="blankRules" label="タイトル">
-                            <mu-text-field v-model="newMarker.title"/>
+                        <mu-form-item prop="title" :rules="blankRules">
+                            <mu-text-field prop="title" placeholder="タイトル" v-model="newMarker.title"/>
                         </mu-form-item>
-                        <mu-form-item prop="type" label="タイプを選択">
-                            <mu-select color="primary" v-model="newMarker.type">
-                                <mu-option  label="other" :value="0"></mu-option>
-                                <mu-option  label="user" :value="1"></mu-option>
+                        <mu-form-item prop="desc" :rules="blankRules">
+                            <mu-text-field prop="desc" placeholder="20文字メモ" v-model="newMarker.desc"/>
+                        </mu-form-item>
+                        <mu-form-item prop="spotifyid" :rules="blankRules">
+                            <mu-text-field prop="spotifyid" placeholder="Spotify ID" v-model="newMarker.spotifyid"/>
+                        </mu-form-item>
+                        <mu-form-item prop="type">
+                            <mu-select prop="type" color="primary" v-model="newMarker.type">
+                                <mu-option  label="スポット" value="spot"></mu-option>
+                                <mu-option  label="ユーザー" value="user"></mu-option>
+                                <mu-option  label="その他" value="other"></mu-option>
                             </mu-select>
                         </mu-form-item>
-                    </mu-form>
+                        <mu-form-item prop="project" label="プロジェクトを選択">
+                            <mu-select  prop="project" v-model="newMarker.project">
+                                <mu-option  label="全て" value="all"></mu-option>
+                                <mu-option  label="箱根001" value="hakone001"></mu-option>
+                                <mu-option  label="東京001" value="tokyo001"></mu-option>
+                            </mu-select>
+                        </mu-form-item>
 
-                    <mu-flex>
-                        <mu-button color="info" class="smallbtn" @click="saveNewMarker" v-if="newMarker.center">保存</mu-button>
-                        <mu-button color="warning" class="smallbtn" @click="cancelNewMarker" v-if="newMarker.center">キャンセル
-                        </mu-button>
-                        <mu-button color="primary" class="smallbtn" @click="editEnd">終了</mu-button>
-                    </mu-flex>
+                        <mu-form-item prop="radio" label="公開">
+                            <mu-radio v-model="newMarker.public" value="open" label="公開"></mu-radio>
+                            <mu-radio v-model="newMarker.public" value="close" label="非公開"></mu-radio>
+                        </mu-form-item>
+
+                        <mu-flex justify-content="center" align-items="center" direction="row">
+                            <mu-button color="info"     class="smallbtn" @click="saveNewMarker" v-if="newMarker.center">保存</mu-button>
+                            <mu-button color="warning"  class="smallbtn" @click="cancelNewMarker" v-if="newMarker.center">キャンセル</mu-button>
+                            <mu-button color="primary"  class="smallbtn" @click="editEnd">終了</mu-button>
+                        </mu-flex>
+                    </mu-form>
                     <div ref="selectedPoint" class="selectedPoint"></div>
                 </mu-flex>
             </div>
@@ -158,9 +175,14 @@
                 database: null,
                 markersRef:null,
                 newMarker: {
-                  center:null,
-                  title:"",
-                  type:'other'
+                    center: null,
+                    title: "",
+                    desc:"",
+                    type: 'other',
+                    spotifyid: "",
+                    project: "",
+                    public: 'open',
+                    thumb:null
                 },
                 editing: false,
                 mode: 'info',
@@ -176,9 +198,11 @@
         created() {
             this.database = firebase.database();
             this.markersRef = this.database.ref('markers');
-            this.markersRef.on('value', (snapshot)=>{  console.log(snapshot)  });
+            this.markersRef.on('value', (snapshot)=>{
+                console.log(snapshot)
+                console.log(snapshot.val())
+            });
 
-            console.log(this.database);
         },
         mounted() {
             this.filter = this.spotify.filter;
@@ -203,35 +227,19 @@
                 'a_ws']),
 
             mapClick(val) {
-                //
-                console.log("mapClick in:" + this.mode);
-                console.log(val);
-
                 if (this.editing) {
-                    console.log("add marker at");
-
-                    console.log(val);
-
                     this.addNewMarker(val.latlng,val.containerPoint);
-
                     this.switchLayer('edit');
-                    //editモードの時はinfoには抜けずに
-                    //点を編集し続ける。finishボタンでthis.editing = falseになる
-
                 } else {
-                    console.log("mapClick else");
                     this.switchLayer('info');
                 }
             },
 
             mapPanTo(lat, lng) {
-                console.log("setMapCenter", lat, lng);
-
                 this.$refs.emorymap.mapPanTo(lat, lng);
             },
 
             connectToSocket() {
-
                 if (this.spotify.me && this.spotify.me.id) {
                     let your_pos_and_data = {
                         name: this.spotify.me.id,
@@ -242,15 +250,11 @@
                     };
                     this.socketConnect(your_pos_and_data);
                 }
-
             },
 
 
             addNewMarker(latlng,mouseXY) {
-                console.log("add new marker");
-                console.log(latlng);
                 this.newMarker.center = latlng;
-
                 this.$refs.selectedPoint.style.top = mouseXY.y-10+'px';
                 this.$refs.selectedPoint.style.left = mouseXY.x-10+'px';
             },
@@ -261,12 +265,14 @@
             },
 
             saveNewMarker() {
-                console.log("save new marker");
-                console.log(this.newMarker);
 
-                if (!this.newMarker.center) { return; }
-                this.markersRef.push(this.newMarker);
-                this.newMarker.center = null;
+                this.$refs.newmarkerform.validate().then(valid => {
+                    if (valid) {
+                        if (!this.newMarker.center) { return; }
+                        this.markersRef.push(this.newMarker);
+                        this.newMarker.center = null;
+                    }
+                });
             },
 
             editEnd() {
