@@ -83,6 +83,10 @@ export const a_mapstore = ({commit},[type, action, data]) => {
             tracking:(data)   => commit('mapstore/setTracking',  data),
             locations: (data) => commit('mapstore/setLocations', data)
         },
+        center:{
+            mainuser:(data)   => commit('mapstore/setMainuserCenter',data),
+            map:(data)        => commit('mapstore/setMapCenter',data)
+        },
         toggle: {
             tracking: (data) => commit('mapstore/toggleTracking',data)
         }

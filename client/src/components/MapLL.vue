@@ -7,8 +7,8 @@
             <map-view id="map" ref="emorymap" @switchLayer="switchLayer" @mapClick="mapClick" @mClick="mClick" @pClick="pClick"/>
 
             <!-- MENU -->
-            <mu-flex justify-content="center" direction="column" align-items="center" class="info_overlay overlay"
-                     ref="info_overlay">
+            <mu-flex justify-content="center" direction="column" align-items="center" class="info_overlay overlay" ref="info_overlay">
+
                 <mu-flex class="info_menu" justify-content="center" align-items="center">
                     <mu-flex class="info_box how" justify-content="center" align-items="center" direction="column" fill>
                         <img src="/static/img/emory/emory_logo_w.png" style="width:180px;height:auto;">
@@ -22,6 +22,17 @@
                         </mu-button>
                     </mu-flex>
                 </mu-flex>
+
+                <mu-flex class="info_menu" justify-content="center" align-items="center">
+                    <mu-flex class="info_box address" fill>
+                    <mu-form :model="mapform" class="range">
+                        <mu-form-item prop="searchTerm" class="range">
+                            <mu-text-field prop="searchTerm" v-model="mapform.searchTerm" placeholder="Address.." @change="searchAddress"></mu-text-field>
+                        </mu-form-item>
+                    </mu-form>
+                    </mu-flex>
+                </mu-flex>
+
                 <mu-flex class="info_menu" justify-content="center" align-items="center">
                     <mu-flex class="info_box area" justify-content="center" align-items="center" direction="column" fill @click="switchLayer('map')">
                         <mu-icon value="pets" :size="20"></mu-icon>area.
@@ -33,6 +44,7 @@
                         <mu-icon value="build" :size="20"></mu-icon>edit.
                     </mu-flex>
                 </mu-flex>
+
             </mu-flex>
             <!--/ MENU-->
 
@@ -55,9 +67,8 @@
                     <h2>WebSocketを経由してリアルタイムにつながったユーザーを確認します。</h2>
 
                     <mu-list style="width:inherit;">
-                        <map-user-item :user="user" v-for="(user,key,index) in ws.users" :key="'user'+key+index" @mapPanTo="mapPanTo"/>
+                        <map-user-item :user="user" v-for="(user,key,index) in ws.users" :key="'user'+key+index"/>
                     </mu-list>
-
 
                     <mu-flex justify-content="center" align-items="center" direction="row">
 
@@ -104,9 +115,9 @@
                         </mu-form-item>
                         <mu-form-item prop="type">
                             <mu-select prop="type" color="primary" v-model="newMarker.type">
-                                <mu-option  label="スポット" value="spot"></mu-option>
-                                <mu-option  label="ユーザー" value="user"></mu-option>
-                                <mu-option  label="その他" value="other"></mu-option>
+                                <mu-option  label="スポット"  value="spot"></mu-option>
+                                <mu-option  label="人"       value="person"></mu-option>
+                                <mu-option  label="その他"    value="other"></mu-option>
                             </mu-select>
                         </mu-form-item>
                         <mu-form-item prop="project" label="プロジェクトを選択">
@@ -155,6 +166,8 @@
     import MapUserItem from './Map/MapUserItem';
     import firebase from 'firebase'
 
+    import M from '../class/map/EMarker';
+
     export default {
         name: 'mymapLL',
         mixins: [
@@ -169,25 +182,16 @@
 
         data() {
             return {
+                mainuser:null,
+
                 mapform: {
-                    username: ''
+                    username: '',
+                    searchTerm:"",
                 },
+
                 socket: null,
                 blankRules: [ruleEmpty],
-                database: null,
                 markersRef:null,
-                newMarker0:{
-                    center: null,
-                    title: "",
-                    desc:"",
-                    type: 'other',
-                    spotifyid: "",
-                    project: "",
-                    public: 'open',
-                    thumb:null,
-                    w:35,
-                    h:35
-                },
                 newMarker: {
                     center: null,
                     title: "",
@@ -204,29 +208,50 @@
                 mode: 'info'
             }
         },
+        watch:{
+          'mapstore.map':{
+              handler(newMap){
+                  console.log("mapstore.map changed");
+
+                  if(this.mapstore.mainuser.id){
+                      this.markersRef.child(this.mapstore.mainuser.id).once('value').then(res=>{
+                          let mainuser = res.val();
+                          mainuser = {...mainuser,center:newMap.center,id:this.mapstore.mainuser.id};
+                          new M(mainuser).updateOrNew(this.markersRef);
+                      });
+                  }
+              },deep:true
+          }
+        },
         computed: mapGetters(['spotify', 'mapstore', 'ws']),
-
         created() {
-            this.database = firebase.database();
-            this.markersRef = this.database.ref('markers');
-
+            this.markersRef = firebase.database().ref('markers');
         },
         mounted() {
-            this.markersRef.on('value', (snapshot)=> {
-                this.a_mapstore(['set','markers',snapshot.val()])
-            });
-
-            this.filter = this.spotify.filter;
             this.socketInit();
             this.connectToSocket();
-            // this.a_mapstore(['set','tracking',true]);
             this.switchLayer('info');
+
+            //ユーザーのマーカー
+            this.markersRef.orderByChild('userid').equalTo(this.spotify.me.id).on("value",ss=>{
+
+                if(ss.val()){
+                    //もしユーザーのマーカーがFirebaseに見つかった時、それを使う
+                    let keys = Object.keys(ss.val());
+                    this.a_mapstore(['set','mainuser',{id:keys[0]}]);
+                }else{
+                    //新規作成
+                    new M({type:'mainuser'}).updateOrNew(this.markersRef);
+                }
+            });
+
+            //FireBase
+            this.markersRef.on('value', (snapshot)=> this.a_mapstore(['set','markers',snapshot.val()]));
         },
 
         beforeDestroy() {
             this.socketDisconnect();
             this.a_mapstore(['set', 'tracking', false]);
-
             this.markersRef = null;
         },
 
@@ -237,9 +262,13 @@
                 'a_mapstore',
                 'a_ws']),
 
+            searchAddress(){
+              console.log(this.mapform.searchTerm);
+            },
+
             mapClick(val) {
                 if (this.editing) {
-                    this.addNewMarker(val.latlng,val.containerPoint);
+                    this.setNewCenter(val.latlng,val.containerPoint);
                     this.switchLayer('edit');
                 } else {
                     this.switchLayer('info');
@@ -264,10 +293,6 @@
                 }
             },
 
-            mapPanTo(lat, lng) {
-                this.$refs.emorymap.mapPanTo(lat, lng);
-            },
-
             connectToSocket() {
                 if (this.spotify.me && this.spotify.me.id) {
                     let your_pos_and_data = {
@@ -281,15 +306,14 @@
                 }
             },
 
-            addNewMarker(latlng,mouseXY) {
+            setNewCenter(latlng,mouseXY) {
                 this.newMarker.center = latlng;
                 this.$refs.selectedPoint.style.top = mouseXY.y-10+'px';
                 this.$refs.selectedPoint.style.left = mouseXY.x-10+'px';
             },
 
             cancelNewMarker() {
-                this.newMarker = this.newMarker0;
-                this.resetNewMarker();
+                this.newMarker = new M({}).marker;
                 this.switchLayer('map');
             },
 
@@ -297,12 +321,10 @@
                 this.switchLayer('info');
             },
 
-
             editEnd() {
                 this.editing = false;
                 this.switchLayer('info');
-                this.newMarker = this.newMarker0;
-                this.resetNewMarker();
+                this.newMarker = new M({}).marker;
                 this.mode = "info";
                 this.$refs.selectedPoint.style.top = -300+'px';
             },
@@ -312,59 +334,16 @@
                 this.cancelNewMarker();
             },
 
-            resetNewMarker(){
-                this.newMarker = this.newMarker0;
-                this.newMarker.center = null;
-                this.newMarker.thumb = null;
-                this.newMarker.spotifyid = "";
-                this.newMarker.title ="";
-                this.newMarker.desc = "";
-            },
-
             saveNewMarker() {
                 this.$refs.newmarkerform.validate().then(valid => {
                     if (valid) {
                         if (!this.newMarker.center) { return; }
-
                         if(this.newMarker.id){
-                            console.log("idがあるので編集モード");
-                            let updates = {};
-                            updates[this.newMarker.id] = this.newMarker;
-                            this.markersRef.update(updates);
-                            this.resetNewMarker();
-
+                            new M(this.newMarker).updateOrNew(this.markersRef);  // 編集モード
                         }else{
-
-                            this.c_anyid(this.newMarker.spotifyid, (res)=>{
-                                console.log("c_anyid");
-                                console.log(res);
-
-                                if(res.data===""){
-                                    console.log("IDが違う");
-                                    this.a_index(['alert','set','IDが間違えています。入力し直してください。']);
-                                    this.a_index(['alert','open']);
-                                }else{
-                                    if(res.data.body.type==='track'){
-                                        this.newMarker.thumb = res.data.body.album.images[0].url;
-                                        this.newMarker.spotifytype = 'track';
-                                        this.newMarker.desc = res.data.body.name;
-                                    }
-
-                                    let icons = this.mapstore.icons[this.newMarker.type];
-                                    this.newMarker.icon = icons[this.newMarker.title.charCodeAt(0) % icons.length];
-
-                                    this.markersRef.push(this.newMarker);
-                                    this.resetNewMarker();
-
-                                }
-
-                            });
-
+                            new M(this.newMarker).updateOrNew(this.markersRef);  // 新規作成モード
                         }
-
-
-
-
+                        this.newMarker = new M({}).marker;                  // フォームの初期化
                     }
                 });
             },
@@ -427,5 +406,4 @@
         border-radius:50%;
         background-color:red;
     }
-
 </style>

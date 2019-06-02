@@ -1,16 +1,19 @@
 import tracking from './tracking';
-import mapbase from './mapbase';
+import common from './common';
 import markers from './markers';
+import map from './map';
 
 const state = {
     ...markers.state,
-    ...mapbase.state,
-    ...tracking.state
+    ...common.state,
+    ...tracking.state,
+    ...map.state
 }
 
 const mutations = {
     ...markers.mutations,
-    ...tracking.mutations
+    ...tracking.mutations,
+    ...map.mutations
 }
 
 export default {

@@ -8,6 +8,10 @@ const mutations = {
         state.mainuser = val;
     },
 
+    setMainuserCenter(state,center){
+        if(state.mainuser) state.mainuser.center = center;
+    },
+
    setMarkers(state,val){
         state.markers = val;
    }

@@ -7,26 +7,29 @@ const state = {
             '/static/img/markers/m_mainuser_1.png',
         ],
 
-        other:[
-            '/static/img/markers/m_friend_boy_1.png',
-            '/static/img/markers/m_friend_boy_2.png',
-            '/static/img/markers/m_friend_girl_1.png',
-            '/static/img/markers/m_friend_girl_2.png',
-            '/static/img/markers/m_friend_woman_1.png',
-            '/static/img/markers/m_friend_guy_1.png'
-        ],
-
         user:[
             '/static/img/markers/m_user_girl_1.png',
             '/static/img/markers/m_user_girl_2.png',
             '/static/img/markers/m_user_boy_1.png',
             '/static/img/markers/m_user_boy_2.png'
         ],
+
+        other:[
+            '/static/img/markers/m_friend_woman_1.png',
+            '/static/img/markers/m_friend_guy_1.png'
+        ],
+
+        person:[
+            '/static/img/markers/m_friend_boy_1.png',
+            '/static/img/markers/m_friend_boy_2.png',
+            '/static/img/markers/m_friend_girl_1.png',
+            '/static/img/markers/m_friend_girl_2.png',
+        ],
+
         spot:[
             '/static/img/markers/m_spot_1.png',
             '/static/img/markers/m_spot_2.png'
         ]
-
     },
 
     marker_types:[

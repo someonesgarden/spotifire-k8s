@@ -55,14 +55,7 @@
         },
 
         mounted(){
-        },
 
-        watch:{
-            'marker':{
-                handler(newMarker){
-                    console.log(newMarker);
-                },deep:true
-            }
         }
     }
 </script>

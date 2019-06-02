@@ -5,7 +5,7 @@
                 <mu-icon value="border_left"></mu-icon>
             </mu-button>
 
-            <mu-menu  open-on-hover>
+            <mu-menu  open-on-hover cover placement="left-start">
                 <mu-button flat>
                     <img class="menu-icon" src="/static/img/spotifire_logo.png" style="width:110px; height:auto;"></mu-button>
                 <mu-list slot="content">
@@ -22,7 +22,6 @@
                     <mu-list-item button to="/anime2">
                         <mu-list-item-title> <mu-icon value="dialpad" :size="12"></mu-icon>&nbsp;anime2</mu-list-item-title>
                     </mu-list-item>
-
                 </mu-list>
             </mu-menu>
 
@@ -77,6 +76,7 @@
         },
         data:function(){
             return{
+                open:false,
                 side:{
                     left:{
                         open:false,
@@ -90,7 +90,15 @@
             }
         },
         computed:mapGetters(['bottom','rootAction']),
-        methods:mapActions(['a_index']),
+        methods:{
+            ...mapActions(['a_index']),
+
+            toggleMenu(){
+                console.log("toggleMenu!");
+
+                this.open = !this.open;
+            }
+        },
 
         watch:{
             'rootAction':{
