@@ -55,7 +55,7 @@
 
                Object.keys(this.mapstore.markers).forEach(key=> {
                    let marker = this.mapstore.markers[key];
-                   if(this.mapstore.emory.project===this.mapstore.emory.all || marker.project===this.mapstore.emory.project || marker.project==='all') result[key]= marker;
+                   if(marker.project===this.mapstore.emory.all || marker.project===this.mapstore.emory.project || marker.project==='all') result[key]= marker;
                })
                 return result;
             }

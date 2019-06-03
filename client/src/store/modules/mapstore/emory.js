@@ -19,7 +19,7 @@ const state = {
             }
         },
         all:'-LgQfo9-XfQHou8ixUre',
-        project: '-LgQfo9-XfQHou8ixUre'
+        project: "プロジェクトを選択してください"
     }
 
 }

@@ -24,7 +24,7 @@
                     <mu-form :model="newMarker" class="range">
                         <mu-form-item prop="project" class="range">
                             <mu-select  prop="project" :value="mapstore.emory.project" @change="onProjectSelected">
-                                <mu-option v-for="(p,key,inx) in mapstore.emory.projects" :key="'proj'+key" :label="p.title" :value="key"></mu-option>
+                                <mu-option v-for="(p,key,inx) in mapstore.emory.projects" :key="'proj'+key" :label="p.title" :value="key" v-if="key !== mapstore.emory.all"></mu-option>
                             </mu-select>
                         </mu-form-item>
                     </mu-form>
@@ -53,15 +53,64 @@
             <!--/ MENU-->
 
 
-            <!-- USER OVERLAY-->
+            <!-- PLAY OVERLAY-->
             <div class="play_overlay overlay" ref="play_overlay">
                 <mu-flex class="info_box"　justify-content="center" align-items="center" direction="column" style="height:100%;">
-                    <mu-flex justify-content="center" align-items="center" direction="row">
-                        <mu-button color="primary"  class="smallbtn" @click="backToInfo">メニューへ戻る</mu-button>
+                    <mu-flex justify-content="center" align-items="center" direction="column" style="width:100%;height:100%;padding:20px;">
+                        <mu-flex justify-content="center" align-items="center" direction="column" class="inner" style="background-color:rgba(31, 6, 6, 0.19);height:100%;width:100%;border-radius:6px;padding:15px 22px;">
+
+                            <div gutter style="width:100%;">
+                                <mu-col span="12" sm="4" md="4" lg="3" xl="2" style="float:left;">
+                                    <mu-card style="width: 100%; max-width: 375px; margin: 0 auto;">
+                                        <mu-card-media title="Image Title" sub-title="Image Sub Title">
+                                            <img src="/static/img/covers/dummy.jpg">
+                                        </mu-card-media>
+
+                                    </mu-card>
+                                </mu-col>
+
+                                <mu-col span="12" sm="8" md="8" lg="9" xl="10" style="float:left;">
+                                    <mu-card style="width: 100%; margin: 0 auto;">
+
+                                        <mu-card-title title="新宿探検マップ"></mu-card-title>
+                                        <mu-card-text>
+                                            新宿エリアに仕掛けられた「耳で楽しむ」物語が『新宿探検マップ』です。地図に表示された５箇所のスポットに近づくと物語が始まります。
+                                        </mu-card-text>
+
+                                        <mu-card-header style="white-space: inherit;">
+                                            <mu-avatar slot="avatar">
+                                                <img src="/static/img/a1.jpg">
+                                            </mu-avatar>
+                                            <mu-avatar slot="avatar">
+                                                <img src="/static/img/a1.jpg">
+                                            </mu-avatar>
+                                            <mu-avatar slot="avatar">
+                                                <img src="/static/img/a1.jpg">
+                                            </mu-avatar>
+                                            <mu-avatar slot="avatar">
+                                                <img src="/static/img/a1.jpg">
+                                            </mu-avatar>
+                                            <mu-avatar slot="avatar">
+                                                <img src="/static/img/a1.jpg">
+                                            </mu-avatar>
+                                            <mu-avatar slot="avatar">
+                                                <img src="/static/img/a1.jpg">
+                                            </mu-avatar>
+                                            <mu-avatar slot="avatar">
+                                                <img src="/static/img/a1.jpg">
+                                            </mu-avatar>
+                                        </mu-card-header>
+                                    </mu-card>
+                                </mu-col>
+
+                            </div>
+
+                        </mu-flex>
+                        <mu-button color="primary"  class="smallbtn"  @click="backToInfo">メニューへ戻る</mu-button>
                     </mu-flex>
                 </mu-flex>
             </div>
-            <!--/ USRE OVERLAY-->
+            <!--/ PLAY OVERLAY-->
 
 
             <!-- NET OVERLAY -->
@@ -320,7 +369,7 @@
 
                 }else{
                     //this.switchLayer('user');
-                    this.a_spotify(['player','play',val.spotifyid]);
+                    // this.a_spotify(['player','play',val.spotifyid]);
                     this.a_index(['bottom','open']);
 
                     this.c_getTrack(val.spotifyid,(res)=>{
