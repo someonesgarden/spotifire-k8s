@@ -1,43 +1,34 @@
 <template>
     <l-marker :lat-lng="marker.center" @click="$emit('mClick')">
         <l-icon
-                :icon-size="[marker.w,marker.h]"
-                :icon-anchor="[marker.w/2,marker.h]"
-                :icon-url="marker.icon"
-                :shadow-size="[marker.w,marker.h]"
-                :shadow-anchow="[marker.w/2,-2]"
+                :icon-size="[iconImg.w,iconImg.h]"
+                :icon-anchor="[iconImg.w/2,iconImg.h]"
+                :icon-url="iconImg.url"
+                :shadow-size="[iconImg.w,iconImg.h]"
+                :shadow-anchow="[iconImg.w/2,-2]"
                 shadow-url='/static/img/markers/marker-shadow.png'
                 class-name="marker_base">
         </l-icon>
         <l-popup>
-            <div @click="$emit('pClick')">
+            <div @click="$emit('mClick')">
                 <img :src="marker.thumb"/>
                 <div class="inner">
-                    <h1>
-                        {{marker.title}}
-                    </h1>
-                    <p>
-                        {{marker.desc}}
-                    </p>
+                    <h1>{{marker.title}}</h1>
+                    <p>{{marker.desc}}</p>
                 </div>
-
             </div>
         </l-popup>
     </l-marker>
 </template>
 
 <script>
+    import {mapGetters} from 'vuex';
     //LEAF
     import {LIcon, LMarker, LPopup} from "vue2-leaflet";
-
     import icon from 'leaflet/dist/images/marker-icon.png';
     import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 
-    let DefaultIcon = L.icon({
-        iconUrl: icon,
-        shadowUrl: iconShadow
-    });
-
+    let DefaultIcon = L.icon({iconUrl: icon, shadowUrl: iconShadow});
     L.Marker.prototype.options.icon = DefaultIcon;
 
     export default {
@@ -48,26 +39,43 @@
             LPopup,
             LIcon
         },
-        data(){
-          return{
-                center:null
-          }
-        },
+        computed:{
+            ...mapGetters(['mapstore']),
 
-        mounted(){
-
+            iconImg(){
+                let icontype = (this.marker.id === this.mapstore.mainuser.id) ? 'you' : this.marker.type;
+                let icon  = this.mapstore.icons[icontype][this.marker.title.charCodeAt(0) % this.mapstore.icons[icontype].length];
+                    let w = 30;
+                    let h = 30;
+                    switch(icontype){
+                        case 'you':
+                            w = 58;
+                            h = 58;
+                            break;
+                        case 'mainuser':
+                        case 'user':
+                            w = 45;
+                            h = 45;
+                            break;
+                        case 'spot':
+                            w = 36;
+                            h = 36;
+                            break;
+                        case 'other':
+                            w = 30;
+                            h = 30;
+                            break;
+                    }
+                    return {url:icon, w:w, h:h};
+            }
         }
     }
 </script>
-
-<style scoped lang="scss">
-
+<style lang="scss">
     .leaflet-fake-icon-image-2x {
         background-image: none !important;
     }
-
     .leaflet-fake-icon-shadow {
         background-image: url('/static/img/markers/marker-shadow.png') !important;
     }
-
 </style>

@@ -1,11 +1,7 @@
 <template>
-
     <mu-flex class="mapflex" align-items="center">
-
         <mu-flex justify-content="center" class="maparea" fill>
-
             <map-view id="map" ref="emorymap" @switchLayer="switchLayer" @mapClick="mapClick" @mClick="mClick" @pClick="pClick"/>
-
             <!-- MENU -->
             <mu-flex justify-content="center" direction="column" align-items="center" class="info_overlay overlay" ref="info_overlay">
 
@@ -25,20 +21,24 @@
 
                 <mu-flex class="info_menu" justify-content="center" align-items="center">
                     <mu-flex class="info_box address" fill>
-                    <mu-form :model="mapform" class="range">
-                        <mu-form-item prop="searchTerm" class="range">
-                            <mu-text-field prop="searchTerm" v-model="mapform.searchTerm" placeholder="Address.." @change="searchAddress"></mu-text-field>
+                    <mu-form :model="newMarker" class="range">
+                        <mu-form-item prop="project" class="range">
+
+                            <mu-select  prop="project" :value="mapstore.emory.project" @change="onProjectSelected">
+                                <mu-option v-for="(p,key,inx) in mapstore.emory.projects" :key="'proj'+key" :label="p.title" :value="key"></mu-option>
+                            </mu-select>
                         </mu-form-item>
+
                     </mu-form>
                     </mu-flex>
                 </mu-flex>
 
                 <mu-flex class="info_menu" justify-content="center" align-items="center">
                     <mu-flex class="info_box area" justify-content="center" align-items="center" direction="column" fill @click="switchLayer('map')">
-                        <mu-icon value="pets" :size="20"></mu-icon>area.
+                        <mu-icon value="pets" :size="20"></mu-icon>play.
                     </mu-flex>
                     <mu-flex class="info_box story" justify-content="center" align-items="center" direction="column" fill @click="switchLayer('net')">
-                        <mu-icon value="network_check" :size="20"></mu-icon>socket.
+                        <mu-icon value="network_check" :size="20"></mu-icon>around.
                     </mu-flex>
                     <mu-flex class="info_box edit" justify-content="center" align-items="center" direction="column" fill @click="switchLayer('edit')">
                         <mu-icon value="build" :size="20"></mu-icon>edit.
@@ -97,18 +97,20 @@
                     <h1>
                         <mu-icon value="build" :size="20"></mu-icon>
                         edit.
+                        <span v-if="editing.type==='marker'">[ マーカー編集 ] </span>
+                        <span v-else>[ プロジェクト編集 ] </span>
                     </h1>
-                    <h2 v-if="!newMarker.center">地図上をクリックすると座標が選択されます。</h2>
+                    <h2 v-if="!newMarker.center">「編集」で表示される地図をクリックすると座標選択できます。</h2>
                     <h2 v-else>このポイントを保存する場合は「保存」を押してください。</h2>
+                    <br>
 
-
-                    <mu-form :model="newMarker" ref="newmarkerform" :label-position="'top'" label-width="100" v-if="newMarker.center" class="range edit_form">
+                    <mu-form :model="newMarker" ref="newmarkerform" :label-position="'top'" label-width="100" v-if="newMarker.center && editing.type==='marker'" class="range edit_form">
                         <img :src="newMarker.thumb" v-if="newMarker.thumb">
                         <mu-form-item prop="title" :rules="blankRules">
-                            <mu-text-field prop="title" placeholder="タイトル" v-model="newMarker.title"/>
+                            <mu-text-field prop="title" placeholder="マーカーのタイトル" v-model="newMarker.title"/>
                         </mu-form-item>
                         <mu-form-item prop="desc" :rules="blankRules">
-                            <mu-text-field prop="desc" placeholder="20文字メモ" v-model="newMarker.desc"/>
+                            <mu-text-field prop="desc" placeholder="メモ（20文字以内）" v-model="newMarker.desc"/>
                         </mu-form-item>
                         <mu-form-item prop="spotifyid" :rules="blankRules">
                             <mu-text-field prop="spotifyid" placeholder="Spotify ID" v-model="newMarker.spotifyid"/>
@@ -122,9 +124,7 @@
                         </mu-form-item>
                         <mu-form-item prop="project" label="プロジェクトを選択">
                             <mu-select  prop="project" v-model="newMarker.project">
-                                <mu-option  label="全て" value="all"></mu-option>
-                                <mu-option  label="箱根001" value="hakone001"></mu-option>
-                                <mu-option  label="東京001" value="tokyo001"></mu-option>
+                                <mu-option v-for="(p,key,inx) in mapstore.emory.projects" :key="'proj'+key" :label="p.title" :value="key"></mu-option>
                             </mu-select>
                         </mu-form-item>
 
@@ -134,19 +134,28 @@
                         </mu-form-item>
 
                         <mu-flex justify-content="center" align-items="center" direction="row">
-                            <mu-button color="red"      class="smallbtn" @click="delMarker" v-if="newMarker.id"><mu-icon value="delete_forever" :size="20"></mu-icon></mu-button>
-                            <mu-button color="info"     class="smallbtn" @click="saveNewMarker"     v-if="newMarker.center">保存</mu-button>
-                            <mu-button color="warning"  class="smallbtn" @click="cancelNewMarker"   v-if="newMarker.center">キャンセル</mu-button>
-                            <mu-button color="primary"  class="smallbtn" @click="editEnd">終了</mu-button>
+                            <mu-button color="red"      class="smallbtn" @click="delMarker" v-if="newMarker.id"><mu-icon value="delete_forever" :size="20"></mu-icon>&nbsp;削除</mu-button>
+                            <mu-button color="info"     class="smallbtn" @click="saveNewMarker"     v-if="newMarker.center"><mu-icon value="save" :size="20"></mu-icon>&nbsp;保存</mu-button>
                         </mu-flex>
                     </mu-form>
 
-                    <mu-flex justify-content="center" align-items="center" direction="row" v-else>
-                        <mu-button color="warning"  class="smallbtn" @click="cancelNewMarker">編集・新規作成へ</mu-button>
-                        <mu-button color="primary"  class="smallbtn" @click="editEnd">終了</mu-button>
+                    <mu-form :model="newProject" ref="newprojectform" :label-position="'top'" label-width="100" v-if="newMarker.center && editing.type==='project'" class="range edit_form">
+                        <mu-form-item prop="title" :rules="blankRules">
+                            <mu-text-field prop="title" placeholder="プロジェクトのタイトル" v-model="newProject.title"/>
+                        </mu-form-item>
+
+                        <mu-flex justify-content="center" align-items="center" direction="row">
+                            <mu-button color="info" class="smallbtn" @click="saveNewProject" v-if="newMarker.center"><mu-icon value="save" :size="20"></mu-icon>&nbsp;保存</mu-button>
+                        </mu-flex>
+                    </mu-form>
+
+                    <mu-flex justify-content="center" align-items="center" direction="row">
+                        <mu-button color="indigo400" class="smallbtn" @click="editProject">プロジェクト編集</mu-button>
+                        <mu-button color="indigo600" class="smallbtn" @click="editMarker">マーカー編集</mu-button>
+                        <mu-button color="indigo800" class="smallbtn" @click="editEnd">終了</mu-button>
                     </mu-flex>
 
-                    <div ref="selectedPoint" class="selectedPoint"></div>
+                    <div ref="selectedPoint" class="selectedPoint" :class="{'project':editing.type==='project'}"></div>
                 </mu-flex>
             </div>
             <!--/EDIT OVERLAY-->
@@ -183,36 +192,38 @@
         data() {
             return {
                 mainuser:null,
-
-                mapform: {
-                    username: '',
-                    searchTerm:"",
-                },
-
                 socket: null,
                 blankRules: [ruleEmpty],
                 markersRef:null,
+                projsRef:null,
+
                 newMarker: {
                     center: null,
                     title: "",
                     desc:"",
                     type: 'other',
                     spotifyid: "",
-                    project: "",
+                    project: "all",
                     public: 'open',
                     thumb:null,
                     w:35,
                     h:35
                 },
-                editing: false,
+                newProject:{
+                    center:null,
+                    zoom:22,
+                    title:""
+                },
+                editing: {
+                    status:false,
+                    type:'marker'
+                },
                 mode: 'info'
             }
         },
         watch:{
           'mapstore.map':{
               handler(newMap){
-                  console.log("mapstore.map changed");
-
                   if(this.mapstore.mainuser.id){
                       this.markersRef.child(this.mapstore.mainuser.id).once('value').then(res=>{
                           let mainuser = res.val();
@@ -226,6 +237,7 @@
         computed: mapGetters(['spotify', 'mapstore', 'ws']),
         created() {
             this.markersRef = firebase.database().ref('markers');
+            this.projsRef = firebase.database().ref('projects');
         },
         mounted() {
             this.socketInit();
@@ -247,6 +259,7 @@
 
             //FireBase
             this.markersRef.on('value', (snapshot)=> this.a_mapstore(['set','markers',snapshot.val()]));
+            this.projsRef.on('value',   (snapshot)=> this.a_mapstore(['emory','setprojects',snapshot.val()]));
         },
 
         beforeDestroy() {
@@ -262,12 +275,19 @@
                 'a_mapstore',
                 'a_ws']),
 
-            searchAddress(){
-              console.log(this.mapform.searchTerm);
+
+            onProjectSelected(key){
+
+              this.a_mapstore(['emory','setproject',key]);
+
+              let proj = this.mapstore.emory.projects[key];
+              this.a_mapstore(['set','tracking',false]);
+              this.$refs.emorymap.setView(proj.center,proj.zoom);
+              setTimeout(()=> this.$refs.emorymap.setView(proj.center,proj.zoom),2000);
             },
 
             mapClick(val) {
-                if (this.editing) {
+                if (this.editing.status) {
                     this.setNewCenter(val.latlng,val.containerPoint);
                     this.switchLayer('edit');
                 } else {
@@ -275,16 +295,17 @@
                 }
             },
 
-            mClick(val,id){
-                if (this.editing){
+
+            pClick(val,id){
+                if (this.editing.status){
                     this.switchLayer('edit');
-                    this.newMarker = val;
-                    if(id) this.newMarker.id =id;
+                    this.newProject = val;
+                    if(id) this.newProject.id =id;
                 }
             },
 
-            pClick(val,id){
-                if(this.editing){
+            mClick(val,id){
+                if (this.editing.status){
                     this.switchLayer('edit');
                     this.newMarker = val;
                     if(id) this.newMarker.id =id;
@@ -312,7 +333,17 @@
                 this.$refs.selectedPoint.style.left = mouseXY.x-10+'px';
             },
 
-            cancelNewMarker() {
+            editProject(){
+                this.editing.type='project';
+                this.cancelEditMode();
+            },
+
+            editMarker(){
+                this.editing.type='marker';
+                this.cancelEditMode();
+            },
+
+            cancelEditMode() {
                 this.newMarker = new M({}).marker;
                 this.switchLayer('map');
             },
@@ -322,7 +353,7 @@
             },
 
             editEnd() {
-                this.editing = false;
+                this.editing.status = false;
                 this.switchLayer('info');
                 this.newMarker = new M({}).marker;
                 this.mode = "info";
@@ -331,7 +362,7 @@
 
             delMarker(){
                 this.markersRef.child(this.newMarker.id).remove();
-                this.cancelNewMarker();
+                this.cancelEditMode();
             },
 
             saveNewMarker() {
@@ -344,6 +375,20 @@
                             new M(this.newMarker).updateOrNew(this.markersRef);  // 新規作成モード
                         }
                         this.newMarker = new M({}).marker;                  // フォームの初期化
+                        this.cancelEditMode();
+                    }
+                });
+            },
+
+            saveNewProject(){
+                this.$refs.newprojectform.validate().then(valid => {
+                    if (valid) {
+                        if (!this.newMarker.center) { return; }
+                        this.newProject.center = this.newMarker.center;
+                        this.newProject.zoom = 20;
+                        this.projsRef.push(this.newProject);
+                        this.newProject.title = "";
+                        this.cancelEditMode();
                     }
                 });
             },
@@ -375,7 +420,7 @@
                         edit_overlay.style.zIndex = -1;
                         break;
                     case 'edit':
-                        this.editing = true;
+                        this.editing.status = true;
                         info_overlay.style.zIndex = -1;
                         area_overlay.style.zIndex = -1;
                         net_overlay.style.zIndex = -1;
@@ -404,6 +449,10 @@
         width:20px;
         height:20px;
         border-radius:50%;
-        background-color:red;
+        background-color: rgba(255, 0, 0, 0.75);
+
+        &.project{
+            background-color: rgba(0, 128, 0, 0.75);
+        }
     }
 </style>

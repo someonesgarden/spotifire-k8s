@@ -3,8 +3,15 @@ const state = {
     baseimg:'/static/img/markers/m_friend_girl_1.png',
 
     icons:{
-        mainuser:[
+        you:[
             '/static/img/markers/m_mainuser_1.png',
+        ],
+
+        mainuser:[
+            '/static/img/markers/m_user_girl_1.png',
+            '/static/img/markers/m_user_girl_2.png',
+            '/static/img/markers/m_user_boy_1.png',
+            '/static/img/markers/m_user_boy_2.png'
         ],
 
         user:[

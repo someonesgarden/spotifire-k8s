@@ -1,9 +1,8 @@
 <template>
         <l-map  ref="map" :zoom="mapstore.map.zoom" :center="center" @click="(val)=> $emit('mapClick',val)">
             <l-tile-layer :url="mapstore.map.url" :attribution="mapstore.map.attribution"></l-tile-layer>
-            <my-marker v-if="mapstore.markers" v-for="(marker,id) in mapstore.markers"
-                       :marker="marker" :key="'marker'+id" :id="id"
-                       @pClick="$emit('pClick',marker,id)"  @mClick="$emit('mClick',marker,id)"></my-marker>
+            <my-marker v-if="mapstore.markers" v-for="(marker,id) in mapstore.markers" :marker="marker" :key="'marker'+id" :id="id" @mClick="$emit('mClick',marker,id)"></my-marker>
+            <my-tooltip v-if="mapstore.emory.projects" v-for="(project,id) in mapstore.emory.projects" :title="project.title" :center="project.center" :key="'proj'+id" @pClick="$emit('pClick',project,id)"></my-tooltip>
         </l-map>
 </template>
 <script>
@@ -16,6 +15,7 @@
     import { latLng, icon } from "leaflet";
 
     import MyMarker from './MyMarker';
+    import MyTooltip from './MyTooltip';
 
     export default {
         name: "MapViewLL",
@@ -23,8 +23,10 @@
         props: [],
         components:{
             MyMarker,
+            MyTooltip,
             LMap,
             LTileLayer,
+
         },
         data() {
             return {
@@ -32,6 +34,7 @@
                 lng:            135.492364,
                 center:         L.latLng(34.722677, 135.492364),
                 trackTimeout:   false,
+                timeout:null,
 
                 userpoly:       null,
                 userpolyOptions:{
@@ -62,14 +65,24 @@
                 this.geolocation();
                 if(this.mapstore.tracking){
                     this.trackTimeout = true;
-                    setTimeout(this.keepTracking, this.mapstore.trackDuration);
+                    this.timeout = setTimeout(this.keepTracking, this.mapstore.trackDuration);
                 }else{
                     this.trackTimeout = false;
+                    this.timeout      = null;
                 }
             },
 
             geolocation() {
+                if ("geolocation" in navigator) {
+                    console.log("geolocation is avaibable");
+                } else {
+                    console.log("geolocation is NOT available");
+                }
                 if(!!navigator.geolocation) navigator.geolocation.getCurrentPosition(this.resetPos, this.geoError,this.mapstore.map.geocodingOptions);
+            },
+
+            setView(center,zoom){
+                this.$refs.map.mapObject.setView(center,zoom);
             },
 
             resetPos(position){
@@ -78,11 +91,9 @@
                     this.lat    = position.coords.latitude;
                     this.lng    = position.coords.longitude;
                     this.center = L.latLng(this.lat,this.lng);
-
                     this.a_mapstore(['center','map',this.center]);
                     this.a_mapstore(['center','mainuser',this.center]);
-
-                    this.$refs.map.mapObject.setView(this.center, this.mapstore.map.zoom);
+                    this.setView(this.center, this.mapstore.map.zoom);
 
                     // this.drawUserPoly();
                 }

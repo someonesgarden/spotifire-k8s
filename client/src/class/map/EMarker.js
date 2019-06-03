@@ -27,7 +27,6 @@ export default class EMarker{
     init(){
         this.marker.title = this.marker.title ? this.marker.title : 'new '+this.marker.type;
         if(this.marker.type==='mainuser')  this.initMainuser();
-        this.initIcon();
         return this.marker;
     }
 
@@ -85,33 +84,5 @@ export default class EMarker{
     checkSpotify(cb){
         let headers = {Authorization:store.state.spotify.credential.access_token};
         axios.get('/api/spotify/browse/idcheck',{params:{'anyid': this.marker.spotifyid}, headers: headers}).then(res => cb(res));
-    }
-
-    initIcon(){
-        // SET ICON
-        let icon  = store.state.mapstore.icons[this.marker.type][this.marker.title.charCodeAt(0) % store.state.mapstore.icons[this.marker.type].length];
-        let w = 30;
-        let h = 30;
-        switch(this.marker.type){
-            case 'mainuser':
-                w = 52;
-                h = 52;
-                break;
-            case 'user':
-                w = 48;
-                h = 48;
-                break;
-            case 'spot':
-                w = 40;
-                h = 40;
-                break;
-            case 'other':
-                w = 35;
-                h = 35;
-                break;
-        }
-        this.marker.icon = icon;
-        this.marker.w = w;
-        this.marker.h = h;
     }
 }
