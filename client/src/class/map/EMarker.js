@@ -72,6 +72,7 @@ export default class EMarker{
 
     initMainuser(){
         if(store.state.spotify.me){
+            this.marker.title       = store.state.spotify.me.display_name;
             this.marker.userid      = store.state.spotify.me.id;
             this.marker.spotifyid   = store.state.spotify.bookmarks[0].id;
             this.marker.spotifytype = store.state.spotify.bookmarks[0].type;

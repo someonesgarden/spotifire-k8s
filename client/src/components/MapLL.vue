@@ -23,18 +23,16 @@
                     <mu-flex class="info_box address" fill>
                     <mu-form :model="newMarker" class="range">
                         <mu-form-item prop="project" class="range">
-
                             <mu-select  prop="project" :value="mapstore.emory.project" @change="onProjectSelected">
                                 <mu-option v-for="(p,key,inx) in mapstore.emory.projects" :key="'proj'+key" :label="p.title" :value="key"></mu-option>
                             </mu-select>
                         </mu-form-item>
-
                     </mu-form>
                     </mu-flex>
                 </mu-flex>
 
                 <mu-flex class="info_menu" justify-content="center" align-items="center">
-                    <mu-flex class="info_box area" justify-content="center" align-items="center" direction="column" fill @click="switchLayer('map')">
+                    <mu-flex class="info_box play" justify-content="center" align-items="center" direction="column" fill @click="switchLayer('play')">
                         <mu-icon value="pets" :size="20"></mu-icon>play.
                     </mu-flex>
                     <mu-flex class="info_box story" justify-content="center" align-items="center" direction="column" fill @click="switchLayer('net')">
@@ -45,12 +43,23 @@
                     </mu-flex>
                 </mu-flex>
 
+                <mu-flex class="info_menu" justify-content="center" align-items="center">
+                    <mu-flex class="info_box map" justify-content="center" align-items="center" direction="column" fill @click="switchLayer('map')">
+                        <span><mu-icon value="map" :size="14"></mu-icon>&nbsp;map</span>
+                    </mu-flex>
+                </mu-flex>
+
             </mu-flex>
             <!--/ MENU-->
 
 
             <!-- USER OVERLAY-->
-            <div class="area_overlay overlay" ref="area_overlay" @click="overlayClick">
+            <div class="play_overlay overlay" ref="play_overlay">
+                <mu-flex class="info_box"　justify-content="center" align-items="center" direction="column" style="height:100%;">
+                    <mu-flex justify-content="center" align-items="center" direction="row">
+                        <mu-button color="primary"  class="smallbtn" @click="backToInfo">メニューへ戻る</mu-button>
+                    </mu-flex>
+                </mu-flex>
             </div>
             <!--/ USRE OVERLAY-->
 
@@ -81,7 +90,7 @@
                             DISCONNECT
                         </mu-button>
 
-                        <mu-button color="primary"  class="smallbtn" @click="netEnd">終了</mu-button>
+                        <mu-button color="primary"  class="smallbtn" @click="backToInfo">終了</mu-button>
                     </mu-flex>
 
                 </mu-flex>
@@ -139,13 +148,13 @@
                         </mu-flex>
                     </mu-form>
 
-                    <mu-form :model="newProject" ref="newprojectform" :label-position="'top'" label-width="100" v-if="newMarker.center && editing.type==='project'" class="range edit_form">
+                    <mu-form :model="newProject" ref="newprojectform" :label-position="'top'" label-width="100" v-if="newProject.center && editing.type==='project'" class="range edit_form">
                         <mu-form-item prop="title" :rules="blankRules">
                             <mu-text-field prop="title" placeholder="プロジェクトのタイトル" v-model="newProject.title"/>
                         </mu-form-item>
 
                         <mu-flex justify-content="center" align-items="center" direction="row">
-                            <mu-button color="info" class="smallbtn" @click="saveNewProject" v-if="newMarker.center"><mu-icon value="save" :size="20"></mu-icon>&nbsp;保存</mu-button>
+                            <mu-button color="info" class="smallbtn" @click="saveNewProject" v-if="newProject.center"><mu-icon value="save" :size="20"></mu-icon>&nbsp;保存</mu-button>
                         </mu-flex>
                     </mu-form>
 
@@ -295,7 +304,6 @@
                 }
             },
 
-
             pClick(val,id){
                 if (this.editing.status){
                     this.switchLayer('edit');
@@ -309,8 +317,18 @@
                     this.switchLayer('edit');
                     this.newMarker = val;
                     if(id) this.newMarker.id =id;
+
                 }else{
-                    this.switchLayer('user');
+                    //this.switchLayer('user');
+                    this.a_spotify(['player','play',val.spotifyid]);
+                    this.a_index(['bottom','open']);
+
+                    this.c_getTrack(val.spotifyid,(res)=>{
+                        if(!!res.data){
+                            this.a_spotify(['player','track',res.data]);
+                            this.a_spotify(['set','track',　res.data]);
+                        }
+                    });
                 }
             },
 
@@ -329,6 +347,7 @@
 
             setNewCenter(latlng,mouseXY) {
                 this.newMarker.center = latlng;
+                this.newProject.center = latlng;
                 this.$refs.selectedPoint.style.top = mouseXY.y-10+'px';
                 this.$refs.selectedPoint.style.left = mouseXY.x-10+'px';
             },
@@ -348,7 +367,7 @@
                 this.switchLayer('map');
             },
 
-            netEnd(){
+            backToInfo(){
                 this.switchLayer('info');
             },
 
@@ -361,6 +380,8 @@
             },
 
             delMarker(){
+                console.log("delMarker");
+                console.log(this.newMarker.id);
                 this.markersRef.child(this.newMarker.id).remove();
                 this.cancelEditMode();
             },
@@ -386,7 +407,15 @@
                         if (!this.newMarker.center) { return; }
                         this.newProject.center = this.newMarker.center;
                         this.newProject.zoom = 20;
-                        this.projsRef.push(this.newProject);
+
+                        if(this.newProject.id){
+                            let updates = {};
+                            updates[this.newProject.id] = this.newProject;
+                            this.projsRef.update(updates);
+                        }else{
+                            this.projsRef.push(this.newProject);
+                        }
+
                         this.newProject.title = "";
                         this.cancelEditMode();
                     }
@@ -395,7 +424,7 @@
 
             switchLayer(mode) {
                 let info_overlay = this.$refs.info_overlay;
-                let area_overlay = this.$refs.area_overlay;
+                let play_overlay = this.$refs.play_overlay;
                 let net_overlay = this.$refs.net_overlay;
                 let edit_overlay = this.$refs.edit_overlay;
                 this.mode = mode;
@@ -403,32 +432,32 @@
                 switch (mode) {
                     case 'info':
                         info_overlay.style.zIndex = 401;
-                        area_overlay.style.zIndex = -1;
+                        play_overlay.style.zIndex = -1;
                         net_overlay.style.zIndex = -1;
                         edit_overlay.style.zIndex = -1;
                         break;
-                    case 'user':
+                    case 'play':
                         info_overlay.style.zIndex = -1;
-                        area_overlay.style.zIndex = 401;
+                        play_overlay.style.zIndex = 401;
                         net_overlay.style.zIndex = -1;
                         edit_overlay.style.zIndex = -1;
                         break;
                     case 'net':
                         info_overlay.style.zIndex = -1;
-                        area_overlay.style.zIndex = -1;
+                        play_overlay.style.zIndex = -1;
                         net_overlay.style.zIndex = 401;
                         edit_overlay.style.zIndex = -1;
                         break;
                     case 'edit':
                         this.editing.status = true;
                         info_overlay.style.zIndex = -1;
-                        area_overlay.style.zIndex = -1;
+                        play_overlay.style.zIndex = -1;
                         net_overlay.style.zIndex = -1;
                         edit_overlay.style.zIndex = 401;
                         break;
                     case 'map':
                         info_overlay.style.zIndex = -1;
-                        area_overlay.style.zIndex = -1;
+                        play_overlay.style.zIndex = -1;
                         net_overlay.style.zIndex = -1;
                         edit_overlay.style.zIndex = -1;
                         break;

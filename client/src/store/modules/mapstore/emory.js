@@ -18,6 +18,7 @@ const state = {
                 zoom:25
             }
         },
+        all:'-LgQfo9-XfQHou8ixUre',
         project: '-LgQfo9-XfQHou8ixUre'
     }
 

@@ -9,8 +9,9 @@
                 shadow-url='/static/img/markers/marker-shadow.png'
                 class-name="marker_base">
         </l-icon>
-        <l-tooltip :options="{ permanent: true, interactive: true }" @click="$emit('pClick')">
-            <div><p class="tooltip">
+        <l-tooltip :options="{ permanent: true, interactive: true }">
+            <div @click="$emit('pClick')">
+                <p class="tooltip">
                 {{title}}
             </p></div>
         </l-tooltip>

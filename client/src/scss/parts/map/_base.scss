@@ -229,6 +229,7 @@
         color: #fff;
         text-align: center;
         border-radius: 4px;
+        cursor:pointer;
 
         &.address{
           background-color:rgba(255,255,255,0.5);
@@ -247,13 +248,19 @@
           background-color: rgba(54, 10, 125, 0.56);
         }
 
-        &.area {
+        &.play {
           background-color: rgba(3, 50, 109, 0.55);
+        }
+
+        &.map {
+          background-color: rgba(6, 6, 6, 0.45);
+          min-height: 28px;
+          font-size: 0.7rem;
         }
       }
     }
 
-    &.area_overlay {
+    &.play_overlay {
       z-index: -1;
       /*background-color:rgba(20,20,20,0.80);*/
       background-color: rgba(11, 46, 118, 0.59);

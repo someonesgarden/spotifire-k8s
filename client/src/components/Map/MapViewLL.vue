@@ -1,7 +1,7 @@
 <template>
         <l-map  ref="map" :zoom="mapstore.map.zoom" :center="center" @click="(val)=> $emit('mapClick',val)">
             <l-tile-layer :url="mapstore.map.url" :attribution="mapstore.map.attribution"></l-tile-layer>
-            <my-marker v-if="mapstore.markers" v-for="(marker,id) in mapstore.markers" :marker="marker" :key="'marker'+id" :id="id" @mClick="$emit('mClick',marker,id)"></my-marker>
+            <my-marker v-if="mapstore.markers" v-for="(marker,id) in sortedMarkers" :marker="marker" :key="'marker'+id" :id="id" @mClick="$emit('mClick',marker,id)"></my-marker>
             <my-tooltip v-if="mapstore.emory.projects" v-for="(project,id) in mapstore.emory.projects" :title="project.title" :center="project.center" :key="'proj'+id" @pClick="$emit('pClick',project,id)"></my-tooltip>
         </l-map>
 </template>
@@ -46,7 +46,20 @@
                 }
             };
         },
-        computed: mapGetters(['mapstore','ws','spotify']),
+        computed: {
+            ...mapGetters(['mapstore','ws','spotify']),
+
+            sortedMarkers(){
+
+                let result = {};
+
+               Object.keys(this.mapstore.markers).forEach(key=> {
+                   let marker = this.mapstore.markers[key];
+                   if(this.mapstore.emory.project===this.mapstore.emory.all || marker.project===this.mapstore.emory.project || marker.project==='all') result[key]= marker;
+               })
+                return result;
+            }
+        },
         watch: {
             'mapstore.tracking': {
                 handler: function () {
