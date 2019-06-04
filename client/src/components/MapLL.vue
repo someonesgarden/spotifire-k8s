@@ -76,7 +76,7 @@
                                         </mu-card-text>
 
                                         <mu-card-header style="white-space: inherit;">
-                                            <my-avatar :marker="marker" v-for="(marker,id) in sortedMarkers"></my-avatar>
+                                            <my-avatar :marker="marker" v-for="(marker,id) in sortedMarkers" :key="'mv'+id"></my-avatar>
                                         </mu-card-header>
                                     </mu-card>
                                 </mu-col>
@@ -217,7 +217,7 @@
     import MapView from './Map/MapViewLL';
     import MapUserItem from './Map/MapUserItem';
     import MyAvatar from './Map/MyAvatar';
-    import firebase from 'firebase'
+    import firebase from 'firebase';
 
     import M from '../class/map/EMarker';
     import P from '../class/map/EProject';

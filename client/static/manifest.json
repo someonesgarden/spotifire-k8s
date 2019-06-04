@@ -1,6 +1,6 @@
 {
-  "name": "my-project",
-  "short_name": "my-project",
+  "name": "spotifire-tokyo",
+  "short_name": "spotifire-tokyo",
   "icons": [
     {
       "src": "/static/img/icons/android-chrome-192x192.png",

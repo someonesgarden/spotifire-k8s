@@ -99,7 +99,7 @@
                 </mu-card>
 
                 <div v-if="album.tracks">
-                    <mu-list-item avatar :ripple="false" button class="range" v-for="(item,inx) in album.tracks.items">
+                    <mu-list-item avatar :ripple="false" button class="range" v-for="(item,inx) in album.tracks.items" :key="'album'+inx">
                         <mu-list-item-content @click="getTrack(item.id)">
                             <mu-list-item-title>{{item.name}}</mu-list-item-title>
                             <mu-list-item-sub-title>

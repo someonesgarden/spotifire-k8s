@@ -27,12 +27,9 @@ Vue.use(VueCarousel);
 
 import './filters';
 
-
-import firebase from 'firebase'
+import firebase from "firebase"
 
 Vue.config.productionTip = false
-
-console.log(process.env.FIRE_BASE);
 
 // Initialize Firebase
 let config = {
