@@ -48,10 +48,8 @@
                         <span><mu-icon value="map" :size="14"></mu-icon>&nbsp;map</span>
                     </mu-flex>
                 </mu-flex>
-
             </mu-flex>
             <!--/ MENU-->
-
 
             <!-- PLAY OVERLAY-->
             <div class="play_overlay overlay" ref="play_overlay">
@@ -78,27 +76,10 @@
                                         </mu-card-text>
 
                                         <mu-card-header style="white-space: inherit;">
-                                            <mu-avatar slot="avatar">
-                                                <img src="/static/img/a1.jpg">
+                                            <mu-avatar slot="avatar"  v-for="(marker,id) in sortedMarkers">
+                                                <img src="/static/img/a1.jpg">{{marker.title}}
                                             </mu-avatar>
-                                            <mu-avatar slot="avatar">
-                                                <img src="/static/img/a1.jpg">
-                                            </mu-avatar>
-                                            <mu-avatar slot="avatar">
-                                                <img src="/static/img/a1.jpg">
-                                            </mu-avatar>
-                                            <mu-avatar slot="avatar">
-                                                <img src="/static/img/a1.jpg">
-                                            </mu-avatar>
-                                            <mu-avatar slot="avatar">
-                                                <img src="/static/img/a1.jpg">
-                                            </mu-avatar>
-                                            <mu-avatar slot="avatar">
-                                                <img src="/static/img/a1.jpg">
-                                            </mu-avatar>
-                                            <mu-avatar slot="avatar">
-                                                <img src="/static/img/a1.jpg">
-                                            </mu-avatar>
+
                                         </mu-card-header>
                                     </mu-card>
                                 </mu-col>
@@ -111,7 +92,6 @@
                 </mu-flex>
             </div>
             <!--/ PLAY OVERLAY-->
-
 
             <!-- NET OVERLAY -->
             <div class="net_overlay overlay" ref="net_overlay">
@@ -155,8 +135,8 @@
                     <h1>
                         <mu-icon value="build" :size="20"></mu-icon>
                         edit.
-                        <span v-if="editing.type==='marker'">[ マーカー編集 ] </span>
-                        <span v-else>[ プロジェクト編集 ] </span>
+                        <span v-if="editing.type==='marker'"> - マーカー編集  </span>
+                        <span v-else> - プロジェクト編集 </span>
                     </h1>
                     <h2 v-if="!newMarker.center">「編集」で表示される地図をクリックすると座標選択できます。</h2>
                     <h2 v-else>このポイントを保存する場合は「保存」を押してください。</h2>
@@ -180,7 +160,8 @@
                                 <mu-option  label="その他"    value="other"></mu-option>
                             </mu-select>
                         </mu-form-item>
-                        <mu-form-item prop="project" label="プロジェクトを選択">
+                        <mu-form-item prop="project" label="プロジェクトを選択" :rules="blankRules">
+                            {{newMarker.project}}
                             <mu-select  prop="project" v-model="newMarker.project">
                                 <mu-option v-for="(p,key,inx) in mapstore.emory.projects" :key="'proj'+key" :label="p.title" :value="key"></mu-option>
                             </mu-select>
@@ -261,7 +242,6 @@
                     desc:"",
                     type: 'other',
                     spotifyid: "",
-                    project: "all",
                     public: 'open',
                     thumb:null,
                     w:35,
@@ -292,7 +272,18 @@
               },deep:true
           }
         },
-        computed: mapGetters(['spotify', 'mapstore', 'ws']),
+        computed: {
+            ...mapGetters(['spotify', 'mapstore', 'ws']),
+
+            // sortedMarkers(){
+            //     let result = {};
+            //     Object.keys(this.mapstore.markers).forEach(key=> {
+            //         let marker = this.mapstore.markers[key];
+            //         if(marker.project===this.mapstore.emory.all || marker.project===this.mapstore.emory.project || marker.project==='all') result[key]= marker;
+            //     })
+            //     return result;
+            // }
+        },
         created() {
             this.markersRef = firebase.database().ref('markers');
             this.projsRef = firebase.database().ref('projects');
@@ -304,13 +295,12 @@
 
             //ユーザーのマーカー
             this.markersRef.orderByChild('userid').equalTo(this.spotify.me.id).on("value",ss=>{
-
                 if(ss.val()){
                     //もしユーザーのマーカーがFirebaseに見つかった時、それを使う
                     let keys = Object.keys(ss.val());
                     this.a_mapstore(['set','mainuser',{id:keys[0]}]);
                 }else{
-                    //新規作成
+                    //見つからない場合、新規作成
                     new M({type:'mainuser'}).updateOrNew(this.markersRef);
                 }
             });
@@ -336,12 +326,18 @@
 
             onProjectSelected(key){
 
+
               this.a_mapstore(['emory','setproject',key]);
 
               let proj = this.mapstore.emory.projects[key];
               this.a_mapstore(['set','tracking',false]);
               this.$refs.emorymap.setView(proj.center,proj.zoom);
               setTimeout(()=> this.$refs.emorymap.setView(proj.center,proj.zoom),2000);
+
+                this.newMarker.project = key;
+
+                console.log("onProjectSelected");
+                console.log(this.newMarker.project);
             },
 
             mapClick(val) {
@@ -512,10 +508,6 @@
                         break;
                 }
             },
-
-            overlayClick(val) {
-                this.switchLayer('map');
-            }
         }
     }
 </script>

@@ -49,16 +49,16 @@
         computed: {
             ...mapGetters(['mapstore','ws','spotify']),
 
-            sortedMarkers(){
-
-                let result = {};
-
-               Object.keys(this.mapstore.markers).forEach(key=> {
-                   let marker = this.mapstore.markers[key];
-                   if(marker.project===this.mapstore.emory.all || marker.project===this.mapstore.emory.project || marker.project==='all') result[key]= marker;
-               })
-                return result;
-            }
+            // sortedMarkers(){
+            //
+            //     let result = {};
+            //
+            //    Object.keys(this.mapstore.markers).forEach(key=> {
+            //        let marker = this.mapstore.markers[key];
+            //        if(marker.project===this.mapstore.emory.all || marker.project===this.mapstore.emory.project || marker.project==='all') result[key]= marker;
+            //    })
+            //     return result;
+            // }
         },
         watch: {
             'mapstore.tracking': {

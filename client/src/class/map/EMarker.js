@@ -8,7 +8,6 @@ const marker0 = {
         spotifyid: "",
         userid:null,
         desc: "",
-        project: "",
         public: 'open',
         thumb: null,
         w: 35,
@@ -77,7 +76,7 @@ export default class EMarker{
             this.marker.spotifyid   = store.state.spotify.bookmarks[0].id;
             this.marker.spotifytype = store.state.spotify.bookmarks[0].type;
             this.marker.thumb       = store.state.spotify.bookmarks[0].album.images[0].url;
-            this.marker.project     = "all";
+            this.marker.project     = "mainuser";
         }
 
         this.marker.center = store.state.mapstore.map.center;

@@ -1,6 +1,26 @@
 
 export default{
 
+    computed:{
+        sortedMarkers(){
+            let result = {};
+            Object.keys(this.mapstore.markers).forEach(key=> {
+                let marker = this.mapstore.markers[key];
+                console.log(marker.project, this.mapstore.emory.project)
+
+                if(marker.project === 'mainuser'){
+                    console.log("MAINUSER!");
+                    result[key]= marker;
+                }else if(marker.project===this.mapstore.emory.project){
+                    console.log("YE!");
+                    result[key]= marker;
+                }
+
+            })
+            return result;
+        }
+    },
+
     methods: {
         findMe(){
             console.log("moveToMe");
