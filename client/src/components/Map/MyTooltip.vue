@@ -31,7 +31,7 @@
 </script>
 <style>
     .tooltip{
-        font-size:1.5rem;
+        font-size:1.2rem;
         color:#26a65b;
         font-weight:bold;
     }

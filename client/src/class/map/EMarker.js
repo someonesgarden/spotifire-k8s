@@ -19,8 +19,7 @@ export default class EMarker{
 
     //data: {title,type,spotifyid,desc,project,public}
     constructor(data) {
-        this.marker = marker0;
-        this.marker = {...this.marker, ...data};
+        this.marker = {...marker0, ...data};
     }
 
     init(){
@@ -46,8 +45,16 @@ export default class EMarker{
                     if(res.data.body.type==='track'){
                         this.marker.thumb = res.data.body.album.images[0].url;
                         this.marker.spotifytype = 'track';
-                        this.marker.desc = res.data.body.name;
+                        this.marker.spotifyname = res.data.body.name;
+                    }else if(res.data.body.type==='playlist' || res.data.body.type==='album' || res.data.body.type==='artist'){
+                        this.marker.thumb = res.data.body.images[0].url;
+                        this.marker.spotifytype = res.data.body.type;
+                        this.marker.spotifyname = res.data.body.name;
+                    }else{
+                        console.log(res.data.body);
                     }
+
+
                     if(update){
                         //アップデート
                         updates[this.marker.id] = this.marker;

@@ -23,6 +23,7 @@
 
 <script>
     import {mapGetters} from 'vuex';
+
     //LEAF
     import {LIcon, LMarker, LPopup} from "vue2-leaflet";
     import icon from 'leaflet/dist/images/marker-icon.png';

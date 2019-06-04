@@ -76,10 +76,7 @@
                                         </mu-card-text>
 
                                         <mu-card-header style="white-space: inherit;">
-                                            <mu-avatar slot="avatar"  v-for="(marker,id) in sortedMarkers">
-                                                <img src="/static/img/a1.jpg">{{marker.title}}
-                                            </mu-avatar>
-
+                                            <my-avatar :marker="marker" v-for="(marker,id) in sortedMarkers"></my-avatar>
                                         </mu-card-header>
                                     </mu-card>
                                 </mu-col>
@@ -161,7 +158,6 @@
                             </mu-select>
                         </mu-form-item>
                         <mu-form-item prop="project" label="プロジェクトを選択" :rules="blankRules">
-                            {{newMarker.project}}
                             <mu-select  prop="project" v-model="newMarker.project">
                                 <mu-option v-for="(p,key,inx) in mapstore.emory.projects" :key="'proj'+key" :label="p.title" :value="key"></mu-option>
                             </mu-select>
@@ -173,17 +169,25 @@
                         </mu-form-item>
 
                         <mu-flex justify-content="center" align-items="center" direction="row">
-                            <mu-button color="red"      class="smallbtn" @click="delMarker" v-if="newMarker.id"><mu-icon value="delete_forever" :size="20"></mu-icon>&nbsp;削除</mu-button>
+                            <mu-button color="red"      class="smallbtn" @click="delFirebase(markersRef,newMarker.id)" v-if="newMarker.id"><mu-icon value="delete_forever" :size="20"></mu-icon>&nbsp;削除</mu-button>
                             <mu-button color="info"     class="smallbtn" @click="saveNewMarker"     v-if="newMarker.center"><mu-icon value="save" :size="20"></mu-icon>&nbsp;保存</mu-button>
                         </mu-flex>
                     </mu-form>
 
                     <mu-form :model="newProject" ref="newprojectform" :label-position="'top'" label-width="100" v-if="newProject.center && editing.type==='project'" class="range edit_form">
+                        <img :src="newProject.thumb" v-if="newProject.thumb">
                         <mu-form-item prop="title" :rules="blankRules">
                             <mu-text-field prop="title" placeholder="プロジェクトのタイトル" v-model="newProject.title"/>
                         </mu-form-item>
+                        <mu-form-item prop="desc" :rules="blankRules">
+                            <mu-text-field prop="desc" placeholder="プロジェクトの概要(100文字程度）" multi-line :rows="2" v-model="newProject.desc"/>
+                        </mu-form-item>
+                        <mu-form-item prop="spotifyid" :rules="blankRules">
+                            <mu-text-field prop="spotifyid" placeholder="Spotify ID" v-model="newProject.spotifyid"/>
+                        </mu-form-item>
 
                         <mu-flex justify-content="center" align-items="center" direction="row">
+                            <mu-button color="red"      class="smallbtn" @click="delFirebase(projsRef,newProject.id)" v-if="newProject.id"><mu-icon value="delete_forever" :size="20"></mu-icon>&nbsp;削除</mu-button>
                             <mu-button color="info" class="smallbtn" @click="saveNewProject" v-if="newProject.center"><mu-icon value="save" :size="20"></mu-icon>&nbsp;保存</mu-button>
                         </mu-flex>
                     </mu-form>
@@ -212,9 +216,11 @@
     import {ruleEmpty} from '../store/rules';
     import MapView from './Map/MapViewLL';
     import MapUserItem from './Map/MapUserItem';
+    import MyAvatar from './Map/MyAvatar';
     import firebase from 'firebase'
 
     import M from '../class/map/EMarker';
+    import P from '../class/map/EProject';
 
     export default {
         name: 'mymapLL',
@@ -225,7 +231,8 @@
         ],
         components: {
             MapView,
-            MapUserItem
+            MapUserItem,
+            MyAvatar
         },
 
         data() {
@@ -244,13 +251,16 @@
                     spotifyid: "",
                     public: 'open',
                     thumb:null,
+                    project:"",
                     w:35,
                     h:35
                 },
                 newProject:{
                     center:null,
                     zoom:22,
-                    title:""
+                    desc:"",
+                    title:"",
+                    spotifyid: ""
                 },
                 editing: {
                     status:false,
@@ -274,15 +284,6 @@
         },
         computed: {
             ...mapGetters(['spotify', 'mapstore', 'ws']),
-
-            // sortedMarkers(){
-            //     let result = {};
-            //     Object.keys(this.mapstore.markers).forEach(key=> {
-            //         let marker = this.mapstore.markers[key];
-            //         if(marker.project===this.mapstore.emory.all || marker.project===this.mapstore.emory.project || marker.project==='all') result[key]= marker;
-            //     })
-            //     return result;
-            // }
         },
         created() {
             this.markersRef = firebase.database().ref('markers');
@@ -325,19 +326,12 @@
 
 
             onProjectSelected(key){
-
-
               this.a_mapstore(['emory','setproject',key]);
-
               let proj = this.mapstore.emory.projects[key];
               this.a_mapstore(['set','tracking',false]);
               this.$refs.emorymap.setView(proj.center,proj.zoom);
               setTimeout(()=> this.$refs.emorymap.setView(proj.center,proj.zoom),2000);
-
                 this.newMarker.project = key;
-
-                console.log("onProjectSelected");
-                console.log(this.newMarker.project);
             },
 
             mapClick(val) {
@@ -409,7 +403,9 @@
 
             cancelEditMode() {
                 this.newMarker = new M({}).marker;
+                this.newProject = new P({}).project;
                 this.switchLayer('map');
+                console.log("cancelEditMode!");
             },
 
             backToInfo(){
@@ -424,22 +420,16 @@
                 this.$refs.selectedPoint.style.top = -300+'px';
             },
 
-            delMarker(){
-                console.log("delMarker");
-                console.log(this.newMarker.id);
-                this.markersRef.child(this.newMarker.id).remove();
-                this.cancelEditMode();
+            delFirebase(ref,id){
+              ref.child(id).remove();
+              this.cancelEditMode();
             },
 
             saveNewMarker() {
                 this.$refs.newmarkerform.validate().then(valid => {
                     if (valid) {
                         if (!this.newMarker.center) { return; }
-                        if(this.newMarker.id){
-                            new M(this.newMarker).updateOrNew(this.markersRef);  // 編集モード
-                        }else{
-                            new M(this.newMarker).updateOrNew(this.markersRef);  // 新規作成モード
-                        }
+                        new M(this.newMarker).updateOrNew(this.markersRef);
                         this.newMarker = new M({}).marker;                  // フォームの初期化
                         this.cancelEditMode();
                     }
@@ -449,20 +439,12 @@
             saveNewProject(){
                 this.$refs.newprojectform.validate().then(valid => {
                     if (valid) {
-                        if (!this.newMarker.center) { return; }
-                        this.newProject.center = this.newMarker.center;
+                        if (!this.newProject.center) { return; }
                         this.newProject.zoom = 20;
-
-                        if(this.newProject.id){
-                            let updates = {};
-                            updates[this.newProject.id] = this.newProject;
-                            this.projsRef.update(updates);
-                        }else{
-                            this.projsRef.push(this.newProject);
-                        }
-
-                        this.newProject.title = "";
+                        new P(this.newProject).updateOrNew(this.projsRef);
+                        this.newProject = new P({}).project;    // フォームの初期化
                         this.cancelEditMode();
+                        console.log("save new projct!");
                     }
                 });
             },
