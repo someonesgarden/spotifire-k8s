@@ -1,20 +1,23 @@
 const state = {
     mainuser:null,
-    markers:{}
+    markers:{},
+    markerDists:null
 }
 
 const mutations = {
-    setMainuser(state,val){
+    setMainuser(state, val) {
         state.mainuser = val;
     },
 
-    setMainuserCenter(state,center){
-        if(state.mainuser) state.mainuser.center = center;
+    setMainuserCenter(state, center) {
+        if (state.mainuser) state.mainuser.center = center;
     },
-
-   setMarkers(state,val){
+    setMarkers(state, val) {
         state.markers = val;
-   }
+    },
+    setMarkerDists(state, val) {
+        state.markerDists = val;
+    }
 }
 
 export default {

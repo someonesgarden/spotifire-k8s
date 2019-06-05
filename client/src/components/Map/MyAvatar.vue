@@ -1,6 +1,6 @@
 <template>
     <mu-avatar slot="avatar">
-        <img :src="iconImg.url" :alt="marker.title" :style="{width:'auto',height:iconImg.h+'px'}"/>
+        <img :src="iconImg.url" :alt="m.title" :style="{width:'auto',height:iconImg.h+'px'}" v-if="m"/>
     </mu-avatar>
 </template>
 
@@ -8,12 +8,24 @@
     import {mapGetters} from 'vuex';
     export default {
         name: "MyAvatar",
-        props:['marker'],
+        props:['marker','id'],
+        data(){
+            return{
+                m:null
+            }
+        },
+        mounted(){
+          if(!this.marker){
+              this.m = this.mapstore.markers[this.id];
+          }else{
+              this.m = this.marker;
+          }
+        },
         computed:{
             ...mapGetters(['mapstore']),
             iconImg(){
-                let icontype = (this.marker.id === this.mapstore.mainuser.id) ? 'you' : this.marker.type;
-                let icon  = this.mapstore.icons[icontype][this.marker.title.charCodeAt(0) % this.mapstore.icons[icontype].length];
+                let icontype = (this.m.id === this.mapstore.mainuser.id) ? 'you' : this.m.type;
+                let icon  = this.mapstore.icons[icontype][this.m.title.charCodeAt(0) % this.mapstore.icons[icontype].length];
                 let w = 30;
                 let h = 30;
                 switch(icontype){

@@ -6,16 +6,9 @@ export default{
             let result = {};
             Object.keys(this.mapstore.markers).forEach(key=> {
                 let marker = this.mapstore.markers[key];
-                console.log(marker.project, this.mapstore.emory.project)
-
-                if(marker.project === 'mainuser'){
-                    console.log("MAINUSER!");
-                    result[key]= marker;
-                }else if(marker.project===this.mapstore.emory.project){
-                    console.log("YE!");
+                if(marker.project === 'mainuser' || (marker.project===this.mapstore.emory.project)){
                     result[key]= marker;
                 }
-
             })
             return result;
         }
@@ -40,6 +33,10 @@ export default{
             lat2 *= Math.PI / 180;
             lng2 *= Math.PI / 180;
             return 6371 * Math.acos(Math.cos(lat1) * Math.cos(lat2) * Math.cos(lng2 - lng1) + Math.sin(lat1) * Math.sin(lat2));
+        },
+
+        distKmofCenters(center1,center2){
+            return this.distKmOfTwo(center1.lat,center1.lng,center2.lat,center2.lng);
         },
 
         randomPointsRange(lat0,lng0,num,near,far){

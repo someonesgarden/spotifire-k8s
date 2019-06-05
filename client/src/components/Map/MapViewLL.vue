@@ -45,20 +45,7 @@
                 }
             };
         },
-        computed: {
-            ...mapGetters(['mapstore','ws','spotify']),
-
-            // sortedMarkers(){
-            //
-            //     let result = {};
-            //
-            //    Object.keys(this.mapstore.markers).forEach(key=> {
-            //        let marker = this.mapstore.markers[key];
-            //        if(marker.project===this.mapstore.emory.all || marker.project===this.mapstore.emory.project || marker.project==='all') result[key]= marker;
-            //    })
-            //     return result;
-            // }
-        },
+        computed: mapGetters(['mapstore','ws','spotify']),
         watch: {
             'mapstore.tracking': {
                 handler: function () {
@@ -67,7 +54,7 @@
             }
         },
         mounted() {
-            setTimeout(()=>  this.geolocation(),2000);
+            setTimeout(()=>  this.geolocation(),4000);
         },
 
         methods: {
@@ -90,15 +77,35 @@
                 } else {
                     console.log("geolocation is NOT available");
                 }
-                if(!!navigator.geolocation) navigator.geolocation.getCurrentPosition(this.resetPos, this.geoError,this.mapstore.map.geocodingOptions);
+                if(!!navigator.geolocation) navigator.geolocation.getCurrentPosition(this.geoSuccess,this.geoError,this.mapstore.map.geocodingOptions);
             },
 
             setView(center,zoom){
                 this.$refs.map.mapObject.setView(center,zoom);
             },
 
-            resetPos(position){
+            geoError(error) { console.log(error);},
 
+            geoSuccess(position){
+                this.resetPos(position);
+                this.distOfProjPoints();
+            },
+
+            distOfProjPoints(){
+                //自分と現在のプロジェクトのpointの距離を測る
+                let mainuser = this.mapstore.markers[this.mapstore.mainuser.id];
+
+                let dists = Object.keys(this.sortedMarkers).map(k=> {
+                    return {
+                        id:k,
+                        dist:this.distKmofCenters(mainuser.center, this.sortedMarkers[k].center)
+                    }
+                });
+                 dists.sort((a, b)=> a.dist > b.dist ? 1 : -1);
+                 this.a_mapstore(['set','markerdists',dists]);
+            },
+
+            resetPos(position){
                 if(!!position){
                     this.lat    = position.coords.latitude;
                     this.lng    = position.coords.longitude;
@@ -106,12 +113,9 @@
                     this.a_mapstore(['center','map',this.center]);
                     this.a_mapstore(['center','mainuser',this.center]);
                     this.setView(this.center, this.mapstore.map.zoom);
-
                     // this.drawUserPoly();
                 }
-            },
-
-            geoError(error) { console.log(error);},
+            }
         }
     };
 </script>

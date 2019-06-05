@@ -54,7 +54,7 @@ export default class Boxes {
             if(intersects.length>0) this.cb(intersects[0]);
         }
 
-        document.addEventListener( 'mousedown', clickPosition, false );
+        //document.addEventListener( 'mousedown', clickPosition, false );
 
         this.geometry = new THREE.BoxBufferGeometry(2, 9, 2);
 

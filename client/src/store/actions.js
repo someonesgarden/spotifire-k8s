@@ -81,7 +81,8 @@ export const a_mapstore = ({commit},[type, action, data]) => {
             mainuser:(data)   => commit('mapstore/setMainuser',  data),
             markers:(data)    => commit('mapstore/setMarkers',   data),
             tracking:(data)   => commit('mapstore/setTracking',  data),
-            locations: (data) => commit('mapstore/setLocations', data)
+            locations: (data) => commit('mapstore/setLocations', data),
+            markerdists:(data)=> commit('mapstore/setMarkerDists',data)
         },
         center:{
             mainuser:(data)   => commit('mapstore/setMainuserCenter',data),

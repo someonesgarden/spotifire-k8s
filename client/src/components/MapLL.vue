@@ -76,7 +76,7 @@
                                         </mu-card-text>
 
                                         <mu-card-header style="white-space: inherit;">
-                                            <my-avatar :marker="marker" v-for="(marker,id) in sortedMarkers" :key="'mv'+id"></my-avatar>
+                                            <my-avatar :marker="marker" :id="marker.id" v-for="(marker,id) in sortedMarkers" :key="'mv'+id"></my-avatar>
                                         </mu-card-header>
                                     </mu-card>
                                 </mu-col>
@@ -123,12 +123,9 @@
             </div>
             <!--/NET OVERLAY -->
 
-
             <!--EDIT OVERLAY-->
             <div class="edit_overlay overlay" ref="edit_overlay">
-
                 <mu-flex class="info_box" justify-content="center" align-items="center" direction="column" style="height:100%;">
-
                     <h1>
                         <mu-icon value="build" :size="20"></mu-icon>
                         edit.
@@ -147,8 +144,15 @@
                         <mu-form-item prop="desc" :rules="blankRules">
                             <mu-text-field prop="desc" placeholder="メモ（20文字以内）" v-model="newMarker.desc"/>
                         </mu-form-item>
+                        <mu-form-item prop="isEpisode" :label="newMarker.isEpisode ? 'エピソード' : 'トラック'">
+                            <mu-switch v-model="newMarker.isEpisode"></mu-switch>
+                        </mu-form-item>
                         <mu-form-item prop="spotifyid" :rules="blankRules">
-                            <mu-text-field prop="spotifyid" placeholder="Spotify ID" v-model="newMarker.spotifyid"/>
+                            <mu-select prop="spotifyid" color="primary" v-model="newMarker.spotifyid" v-if="newMarker.isEpisode">
+                                <mu-option  :label="epi.name" :value="epi.id" v-for="(epi,inx) in spotify.episodes.items" :ley="'epi'+inx"></mu-option>
+                            </mu-select>
+                            <mu-text-field prop="spotifyid" placeholder="Track ID" v-model="newMarker.spotifyid" v-else/>
+
                         </mu-form-item>
                         <mu-form-item prop="type">
                             <mu-select prop="type" color="primary" v-model="newMarker.type">
@@ -244,6 +248,7 @@
                 projsRef:null,
 
                 newMarker: {
+                    isEpisode:false,
                     center: null,
                     title: "",
                     desc:"",
@@ -305,7 +310,6 @@
                     new M({type:'mainuser'}).updateOrNew(this.markersRef);
                 }
             });
-
             //FireBase
             this.markersRef.on('value', (snapshot)=> this.a_mapstore(['set','markers',snapshot.val()]));
             this.projsRef.on('value',   (snapshot)=> this.a_mapstore(['emory','setprojects',snapshot.val()]));
@@ -323,7 +327,6 @@
                 'a_spotify',
                 'a_mapstore',
                 'a_ws']),
-
 
             onProjectSelected(key){
               this.a_mapstore(['emory','setproject',key]);
@@ -356,18 +359,29 @@
                     this.switchLayer('edit');
                     this.newMarker = val;
                     if(id) this.newMarker.id =id;
-
                 }else{
-                    //this.switchLayer('user');
-                    // this.a_spotify(['player','play',{id:val.spotifyid,type:track}]);
-                    this.a_index(['bottom','open']);
+                    //自分とpointの距離を測る
+                    let mainuser = this.mapstore.markers[this.mapstore.mainuser.id];
+                    let dist = this.distKmofCenters(mainuser.center, val.center);
 
-                    this.c_getTrack(val.spotifyid,(res)=>{
-                        if(!!res.data){
-                            this.a_spotify(['player','track',res.data]);
-                            this.a_spotify(['set','track',　res.data]);
-                        }
-                    });
+                    if(val.spotifytype==='track'){
+                        //トラック情報を取得してボットムバーを開く
+                        this.c_getTrack(val.spotifyid,(res)=>{
+                            if(!!res.data){
+                                this.a_spotify(['player','track',res.data]);
+                                this.a_spotify(['set','track',　res.data]);
+                            }
+                        });
+                        this.a_index(['bottom','open']);
+
+                    }else if(val.spotifytype==='episode'){
+                        //ポッドキャストepisodeの場合、mp3プレイヤーを開く
+                        console.log("mClick in MapLL");
+                        console.log(val);
+                        this.a_index(['bottom','open']);
+                    }
+
+
                 }
             },
 
@@ -430,7 +444,7 @@
                     if (valid) {
                         if (!this.newMarker.center) { return; }
                         new M(this.newMarker).updateOrNew(this.markersRef);
-                        this.newMarker = new M({}).marker;                  // フォームの初期化
+                        this.newMarker = new M({}).marker;  // フォームの初期化
                         this.cancelEditMode();
                     }
                 });
@@ -442,9 +456,8 @@
                         if (!this.newProject.center) { return; }
                         this.newProject.zoom = 20;
                         new P(this.newProject).updateOrNew(this.projsRef);
-                        this.newProject = new P({}).project;    // フォームの初期化
+                        this.newProject = new P({}).project; // フォームの初期化
                         this.cancelEditMode();
-                        console.log("save new projct!");
                     }
                 });
             },

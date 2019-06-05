@@ -18,7 +18,7 @@
             ...mapGetters(['spotify']),
 
             col(){
-                return Math.floor(window.innerWidth  / 100);
+                return Math.floor(window.innerWidth  / 34);
             }
         },
 
@@ -38,17 +38,14 @@
 
     .bookmark__container{
         width:100%;
-        height:100px;
-
+        height:34px;
         .inner{
-            height:100px;
+            height:34px;
             img.thumb{
                 width:auto;
                 height:100%;
             }
         }
-
-
     }
 
 

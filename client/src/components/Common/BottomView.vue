@@ -12,6 +12,13 @@
                 </mu-select>
             </mu-flex>
 
+            <!-- MP3 EPISODE PLAYER-->
+            <mu-flex  justify-content="center"  align-items="center" style="width:100%;min-height:45px;" v-if="mapstore.mainuser && mapstore.markerDists">
+                <my-avatar :id="dist.id" v-for="(dist,inx) in mapstore.markerDists" :key="'md'+inx"></my-avatar>
+            </mu-flex>
+            <!--/ MP3 EPISODE PLAYER-->
+
+            <!-- TRACK PLAYER -->
             <mu-flex justify-content="center" class="player_area" v-if="!!spotify.player.track">
                 <mu-chip class="demo-chip" color="black">
                     <mu-avatar :size="32" v-if="spotify.player.track.album.images">
@@ -30,23 +37,26 @@
                     <mu-icon value="equalizer" @click="Analyse(spotify.player.track.id)"></mu-icon>
                 </mu-chip>
             </mu-flex>
-
+            <!-- / TRACK PLAYER-->
 
         </mu-flex>
     </mu-flex>
 </template>
 
 <script>
-    import spotifyMixsin from '../../mixins/spotify/index';
+    import spotifyMixin from '../../mixins/spotify/index';
+    import mapMixin from '../../mixins/map/index';
     import {mapGetters,mapActions} from 'vuex';
     import BottomSlider from './BottomSlider';
+    import MyAvatar from '../Map/MyAvatar';
     export default {
         name: "BottomView",
-        mixins:[spotifyMixsin],
+        mixins:[spotifyMixin,mapMixin],
         components:{
-          BottomSlider
+          BottomSlider,
+            MyAvatar
         },
-        computed:mapGetters(['spotify']),
+        computed:mapGetters(['spotify','mapstore']),
         methods:{
             ...mapActions(['a_spotify']),
 
