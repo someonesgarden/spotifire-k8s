@@ -15,6 +15,9 @@ export default{
     },
 
     methods: {
+
+        geoError(error) { console.log(error);},
+
         findMe(){
             console.log("moveToMe");
         },
@@ -35,8 +38,31 @@ export default{
             return 6371 * Math.acos(Math.cos(lat1) * Math.cos(lat2) * Math.cos(lng2 - lng1) + Math.sin(lat1) * Math.sin(lat2));
         },
 
+        drawPoly(){
+            let polys = [];
+            //実際のユーザー以外のポイントでポリゴンを作る
+            this.mapstore.markerDists.forEach(mkr=>{ if(this.mapstore.markers[mkr.id].type!=='mainuser') polys.push(this.mapstore.markers[mkr.id].center) });
+            polys.sort((a, b)=> a.lat > b.lat ? 1 : -1);
+            polys.sort((a, b)=> a.lng > b.lng ? 1 : -1);
+            this.a_mapstore(['set','poly',polys]);
+        },
+
         distKmofCenters(center1,center2){
             return this.distKmOfTwo(center1.lat,center1.lng,center2.lat,center2.lng);
+        },
+
+        distOfProjPoints(){
+            //自分と現在のプロジェクトのpointの距離を測る
+            let mainuser = this.mapstore.markers[this.mapstore.mainuser.id];
+
+            let dists = Object.keys(this.sortedMarkers).map(k=> {
+                return {
+                    id:k,
+                    dist:this.distKmofCenters(mainuser.center, this.sortedMarkers[k].center)
+                }
+            });
+            dists.sort((a, b)=> a.dist > b.dist ? 1 : -1);
+            this.a_mapstore(['set','markerdists',dists]);
         },
 
         randomPointsRange(lat0,lng0,num,near,far){

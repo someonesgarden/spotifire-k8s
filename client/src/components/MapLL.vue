@@ -328,13 +328,20 @@
                 'a_mapstore',
                 'a_ws']),
 
-            onProjectSelected(key){
-              this.a_mapstore(['emory','setproject',key]);
-              let proj = this.mapstore.emory.projects[key];
-              this.a_mapstore(['set','tracking',false]);
-              this.$refs.emorymap.setView(proj.center,proj.zoom);
-              setTimeout(()=> this.$refs.emorymap.setView(proj.center,proj.zoom),2000);
+            onProjectSelected(key) {
                 this.newMarker.project = key;
+
+                //リセット(polyの消去）
+                this.a_mapstore(['set','poly',null]);
+
+                this.a_mapstore(['emory', 'setproject', key]);
+                this.a_mapstore(['set', 'tracking', false]);
+
+                let proj = this.mapstore.emory.projects[key];
+                this.a_mapstore(['center', 'map', proj.center]);
+                setTimeout(() => this.a_mapstore(['center', 'map', proj.center]), 2000);
+
+                this.distOfProjPoints();
             },
 
             mapClick(val) {
@@ -380,8 +387,6 @@
                         console.log(val);
                         this.a_index(['bottom','open']);
                     }
-
-
                 }
             },
 
@@ -461,7 +466,6 @@
                     }
                 });
             },
-
             switchLayer(mode) {
                 let info_overlay = this.$refs.info_overlay;
                 let play_overlay = this.$refs.play_overlay;

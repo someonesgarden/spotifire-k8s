@@ -13,8 +13,11 @@
             </mu-flex>
 
             <!-- MP3 EPISODE PLAYER-->
-            <mu-flex  justify-content="center"  align-items="center" style="width:100%;min-height:45px;" v-if="mapstore.mainuser && mapstore.markerDists">
-                <my-avatar :id="dist.id" v-for="(dist,inx) in mapstore.markerDists" :key="'md'+inx"></my-avatar>
+            <mu-flex  justify-content="center" align-items="center" style="width:100%;min-height:48px;" v-if="mapstore.mainuser && mapstore.markerDists && $route.name ==='Map'">
+                <div v-for="(mkr,inx) in mapstore.markerDists" @click="bottomAvatarClick(mkr)" class="bottom_avatar">
+                    <my-avatar :id="mkr.id" :dist="mkr.dist" :key="'md'+inx"/>
+                </div>
+
             </mu-flex>
             <!--/ MP3 EPISODE PLAYER-->
 
@@ -61,10 +64,6 @@
             ...mapActions(['a_spotify']),
 
             deviceSelected(val){
-
-                console.log("deviceselected");
-                console.log(val);
-
                 this.c_transferplayback(val,(res)=>{
                     console.log("c_transferplayback");
                     console.log(res);
@@ -82,6 +81,13 @@
             clickAction(type,val){
                 this.a_spotify(['set',type+'ID', val]);
                 this.a_spotify(['update','item',type]);
+            },
+
+            bottomAvatarClick(mkr){
+                this.a_mapstore(['set','tracking',false]);
+
+                let marker = this.mapstore.markers[mkr.id];
+                if(marker) this.a_mapstore(['center','map',this.mapstore.markers[mkr.id].center]);
             }
         }
     }

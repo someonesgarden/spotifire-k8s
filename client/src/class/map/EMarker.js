@@ -63,35 +63,37 @@ export default class EMarker{
 
             }else{
                 // Trackの場合
-                this.checkSpotify(res=>{
-                    if(res.data!==""){
-                        if(res.data.body.type==='track'){
-                            this.marker.thumb = res.data.body.album.images[0].url;
-                            this.marker.spotifytype = 'track';
-                            this.marker.spotifyname = res.data.body.name;
-                        }else if(res.data.body.type==='playlist' || res.data.body.type==='album' || res.data.body.type==='artist'){
-                            this.marker.thumb = res.data.body.images[0].url;
-                            this.marker.spotifytype = res.data.body.type;
-                            this.marker.spotifyname = res.data.body.name;
-                        }else{
-                            console.log(res.data.body);
-                        }
+                if(!this.marker.spotifytype){
+                    this.checkSpotify(res => {
+                        if (res.data !== "") {
+                            if (res.data.body.type === 'track') {
+                                this.marker.thumb = res.data.body.album.images[0].url;
+                                this.marker.spotifytype = 'track';
+                                this.marker.spotifyname = res.data.body.name;
+                            } else if (res.data.body.type === 'playlist' || res.data.body.type === 'album' || res.data.body.type === 'artist') {
+                                this.marker.thumb = res.data.body.images[0].url;
+                                this.marker.spotifytype = res.data.body.type;
+                                this.marker.spotifyname = res.data.body.name;
+                            } else {
+                                console.log(res.data.body);
+                            }
 
-                        if(update){
-                            //アップデート
-                            updates[this.marker.id] = this.marker;
-                            firebaseRef.update(updates);
-                        }else{
-                            //新規保存
-                            let result =  firebaseRef.push(this.marker);
-                            if(this.marker.type==='mainuser') store.commit('mapstore/setMainuser',{id:result.key});
-                        }
+                            if (update) {
+                                //アップデート
+                                updates[this.marker.id] = this.marker;
+                                firebaseRef.update(updates);
+                            } else {
+                                //新規保存
+                                let result = firebaseRef.push(this.marker);
+                                if (this.marker.type === 'mainuser') store.commit('mapstore/setMainuser', {id: result.key});
+                            }
 
-                    }else{
-                        store.commit('setAlertText',"IDが間違えています。入力し直してください。");
-                        store.commit('setAlertState',true);
-                    }
-                });
+                        } else {
+                            store.commit('setAlertText', "IDが間違えています。入力し直してください。");
+                            store.commit('setAlertState', true);
+                        }
+                    });
+                }
             }
 
 

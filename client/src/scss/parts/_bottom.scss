@@ -3,6 +3,34 @@
     margin: 5px;
     width: 100%;
 
+    .bottom_avatar{
+      margin:0 3px;
+
+      .mu-avatar{
+        .mu-avatar-inner {
+          position: relative;
+
+          span.dist {
+            display: inline-block;
+            padding: 0 2px;
+            border-radius: 2px;
+
+            font-size: 0.45rem;
+            color: white;
+            font-weight: bold;
+            background-color: rgba(255, 0, 62, 0.81);
+            mix-blend-mode: hard-light;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+          }
+        }
+      }
+    }
+
+
+
+
     .param_area {
       width: 100%;
       //min-height: 120px;

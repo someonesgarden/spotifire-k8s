@@ -1,5 +1,6 @@
 <template>
     <mu-avatar slot="avatar">
+        <span v-if="dist" class="dist">{{dist |dicimal3}}km</span>
         <img :src="iconImg.url" :alt="m.title" :style="{width:'auto',height:iconImg.h+'px'}" v-if="m"/>
     </mu-avatar>
 </template>
@@ -8,7 +9,7 @@
     import {mapGetters} from 'vuex';
     export default {
         name: "MyAvatar",
-        props:['marker','id'],
+        props:['marker','id','dist'],
         data(){
             return{
                 m:null
@@ -28,31 +29,38 @@
                 let icon  = this.mapstore.icons[icontype][this.m.title.charCodeAt(0) % this.mapstore.icons[icontype].length];
                 let w = 30;
                 let h = 30;
-                switch(icontype){
-                    case 'you':
-                        w = 50;
-                        h = 50;
-                        break;
-                    case 'mainuser':
-                    case 'user':
-                        w = 42;
-                        h = 42;
-                        break;
-                    case 'spot':
-                        w = 34;
-                        h = 34;
-                        break;
-                    case 'other':
-                        w = 28;
-                        h = 28;
-                        break;
+
+                if(!this.dist){
+                    switch(icontype){
+                        case 'you':
+                            w = 48;
+                            h = 48;
+                            break;
+                        case 'mainuser':
+                        case 'user':
+                            w = 42;
+                            h = 42;
+                            break;
+                        case 'spot':
+                            w = 34;
+                            h = 34;
+                            break;
+                        case 'other':
+                            w = 28;
+                            h = 28;
+                            break;
+                    }
                 }
+
                 return {url:icon, w:w, h:h};
             }
         }
     }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+
+
+
 
 </style>
