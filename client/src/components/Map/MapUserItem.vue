@@ -25,7 +25,7 @@
 
             play(){
                 let tid = this.user.tid ? this.user.tid : '62LJFaYihsdVrrkgUOJC05';
-                this.a_spotify(['player','play',tid]);
+                this.a_spotify(['player','play',{id:tid,type:'track'}]);
                 this.c_getTrack(tid,(res)=>{
                     if(!!res.data){
                         this.a_spotify(['player','track',res.data]);

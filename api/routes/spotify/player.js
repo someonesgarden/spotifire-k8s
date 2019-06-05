@@ -53,13 +53,18 @@ router.get('/transferplayback', (req,res)=>{
 
 
 router.post('/play', (req,res)=>{
-    const data = req.body;
-    const access_token = data.access_token;
-    const device_id = data.device_id;
-    const trackid = data.trackid;
+    const data          = req.body;
+    const access_token  = data.access_token;
+    const id            = data.id;
+    const type          = data.type ? data.type : 'track';
+
+    let params = {uris:["spotify:"+type+":"+id]};
+    //let params = {uris:["spotify:playlist:37i9dQZF1DX6JzJ8vAK836"]};
+    if(data.device_id) params.device_id = data.device_id;
+
 
     spotifyApi.setAccessToken(access_token);
-    spotifyApi.play({device_id:device_id, uris:["spotify:track:"+trackid]}).then(
+    spotifyApi.play(params).then(
         function(data) {
             res.send(data);
         },

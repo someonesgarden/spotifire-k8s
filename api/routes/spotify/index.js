@@ -8,9 +8,11 @@ let trackRouter = require('./track');
 let artistRouter = require('./artist');
 let albumRouter = require('./album');
 let playerRouter = require('./player');
+let podcastRouter = require('./podcast');
 
 const keys = require('../../keys');
 const spotifyApi = keys.spotifyApi;
+
 
 //------ ROUTINGS
 router.use('/auth', authRouter);
@@ -21,7 +23,7 @@ router.use('/track',trackRouter);
 router.use('/artist',artistRouter);
 router.use('/album', albumRouter);
 router.use('/player',playerRouter);
-
+router.use('/podcast',podcastRouter);
 
 
 //------ CALLBACK FROM SPOTIFY API AUTHENTICATION

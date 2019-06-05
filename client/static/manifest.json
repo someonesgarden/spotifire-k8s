@@ -1,6 +1,6 @@
 {
   "name": "spotifire-tokyo",
-  "short_name": "spotifire-tokyo",
+  "short_name": "spotifire",
   "icons": [
     {
       "src": "/static/img/icons/android-chrome-192x192.png",
@@ -14,7 +14,9 @@
     }
   ],
   "start_url": "/index.html",
-  "display": "standalone",
+  "scope": ".",
+  "display": "fullscreen",
+  "orientation": "portrait-primary",
   "background_color": "#000000",
   "theme_color": "#4DBA87"
 }

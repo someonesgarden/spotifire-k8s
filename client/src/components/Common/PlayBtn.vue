@@ -22,7 +22,7 @@
                     this.a_spotify(['player','stop',null]);
                 }else{
                     //PLAY
-                    this.a_spotify(['player','play',this.id]);
+                    this.a_spotify(['player','play',{id:this.id,type:'track'}]);
 
                     this.c_getTrack(this.id,(res)=>{
                         if(!!res.data){

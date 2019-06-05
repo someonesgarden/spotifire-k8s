@@ -28,7 +28,7 @@
             play(track){
                 console.log("play!",track.id);
                 this.a_spotify(['player','track',track]);
-                this.a_spotify(['player','play',track.id]);
+                this.a_spotify(['player','play',{id:track.id,type:'track'}]);
             }
         }
     }

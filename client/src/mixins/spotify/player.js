@@ -46,17 +46,28 @@ export default{
             });
         },
 
-        c_play: function (device_id, id) {
+        c_play: function (id,type='track',device_id) {
             const params = {
-                trackid:id,
+                id:id,
+                type:type,
                 access_token:this.spotify.credential.access_token,
                 device_id:device_id
             };
+
+            console.log('/api/spotify/player/play');
+            console.log(params);
+
             axios.post('/api/spotify/player/play',params)
                 .then(res => {
+
+                    console.log(res);
                 }).catch(error => {
                 console.log(error);
             });
+        },
+
+        c_playEpisode: function (id) {
+            console.log("c_playEpisode:"+id);
         },
 
         c_initplayer: function () {

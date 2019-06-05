@@ -36,13 +36,23 @@
                 </div></mu-col>
             </mu-row>
             <mu-row gutter>
-                <mu-col span="4"><div class="grid-cell">
+                <mu-col span="6"><div class="grid-cell">
                     <mu-button flat color="primary" v-if="track" @click="mode='track'" :class="{active:mode==='track'}">Track</mu-button>
                     <mu-button flat v-else disabled>Track</mu-button>
                 </div></mu-col>
-                <mu-col span="4"><div class="grid-cell">
+                <mu-col span="6"><div class="grid-cell">
                     <mu-button flat color="primary" v-if="spotify.generated" @click="mode='generated'" :class="{active:mode==='generated'}">Generated</mu-button>
                     <mu-button flat v-else disabled>Generated</mu-button>
+                </div></mu-col>
+            </mu-row>
+            <mu-row gutter>
+                <mu-col span="6"><div class="grid-cell">
+                    <mu-button flat color="primary" v-if="spotify.show" @click="mode='show'" :class="{active:mode==='show'}">Podcast(Show)</mu-button>
+                    <mu-button flat v-else disabled>Podcast(Show)</mu-button>
+                </div></mu-col>
+                <mu-col span="6"><div class="grid-cell">
+                    <mu-button flat color="primary" v-if="spotify.episode" @click="mode='episode'" :class="{active:mode==='episode'}">Podcast(Episode)</mu-button>
+                    <mu-button flat v-else disabled>Podcast(Episode)</mu-button>
                 </div></mu-col>
             </mu-row>
 
@@ -313,6 +323,58 @@
                 </mu-list-item>
             </mu-list>
             <!---/ GENERATED --->
+
+            <!--- PODCAST(Show) --->
+            <mu-list v-if="mode==='show'">
+
+                    <h6 class="topid">SHOW : {{show.id}}</h6>
+                    <mu-card style="width: 100%; margin: 0 auto;">
+
+                        <mu-card-media :title="show.name" :sub-title="'Album'" v-if="show.images.length>0">
+                            <img :src="show.images[0].url">
+                            <mu-card-text>{{show.description}}</mu-card-text>
+                        </mu-card-media>
+                        <mu-card-text>
+                            <mu-icon value="publisher" size="10"></mu-icon>&nbsp;{{show.publisher}}<br/>
+                            <p style="margin:4px;" v-for="(cr,inx) in show.copyrights" :key="'cr'+inx">
+                                <mu-icon value="copyright" size="10"></mu-icon>&nbsp;{{cr.text}}({{cr.type}})</p>
+                            <p style="margin:4px;" v-for="(cr,inx) in show.languages" :key="'cr'+inx">
+                                <mu-icon value="spellcheck" size="10"></mu-icon>&nbsp;{{cr}}</p>
+                        </mu-card-text>
+                        <mu-card-text>
+                            <mu-chip color="brown500" class="range" v-for="(market,inx) in show.available_markets" :key="'markets'+inx">
+                                {{market}}
+                            </mu-chip>
+                        </mu-card-text>
+                    </mu-card>
+            </mu-list>
+            <!---/ PODCAST(Show)--->
+
+            <!--- PODCAST(Episode) --->
+            <mu-list v-if="episode && mode==='episode'">
+                <h6 class="topid">EPISODE : {{episode.id}}</h6>
+                <mu-card style="width: 100%; margin: 0 auto;">
+                    <mu-card-media :title="episode.name" :sub-title="'Episode'" v-if="episode.images.length>0">
+                        <img :src="episode.images[0].url">
+                        <mu-card-text>{{episode.description}}</mu-card-text>
+                    </mu-card-media>
+
+                    <mu-card-text>
+                        <mu-chip color="teal500" class="range">
+                            <a :href="episode.audio_preview_url" target="_blank">AudioPreview</a>
+                        </mu-chip>
+<!--                        <mu-chip color="purple" class="range" @click="c_play(episode.id,'episode',spotify.devices[0].id)">-->
+<!--                            Play Episode-->
+<!--                        </mu-chip>-->
+                        <mu-divider></mu-divider>
+                        <mu-icon value="access_time" size="10"></mu-icon>&nbsp;{{episode.duration_ms}}<br/>
+                        <mu-icon value="label" size="10"></mu-icon>&nbsp;{{episode.language}}<br/>
+                        <mu-icon value="av_timer" size="10"></mu-icon>&nbsp;{{episode.release_date}}
+                    </mu-card-text>
+                </mu-card>
+            </mu-list>
+            <!--- / PODCAST(Episode) --->
+
         </mu-container>
         <br>
     </div>
@@ -529,6 +591,17 @@
                         case 'generated':
                             this.mode = 'generated';
                             break;
+                        case 'episode':
+                            this.mode = 'episode';
+                            this.episode = this.spotify.episodes.items.filter(epi=>epi.id===this.spotify.episode.id)[0];
+                            console.log("episode", this.episode);
+                            break;
+
+                        case 'show':
+                            this.mode = 'show';
+                            this.show =  this.spotify.shows.items.filter(show=>show.id===this.spotify.show.id)[0];
+                            console.log("show",this.show);
+                            break;
                     }
                 },deep:true
             },
@@ -543,7 +616,8 @@
                     if(newState.playing){
                         //PLAY
                         this.c_devices((res)=>{
-                            this.c_play(res.data.devices[0].id, newState.nowid);
+                            console.log("c_device",newState);
+                            this.c_play(newState.nowid, newState.type, res.data.devices[0].id);
                         });
                     }else{
                         //STOP

@@ -359,7 +359,7 @@
 
                 }else{
                     //this.switchLayer('user');
-                    // this.a_spotify(['player','play',val.spotifyid]);
+                    // this.a_spotify(['player','play',{id:val.spotifyid,type:track}]);
                     this.a_index(['bottom','open']);
 
                     this.c_getTrack(val.spotifyid,(res)=>{

@@ -6,7 +6,9 @@ const state = {
     player:{
         playing: false,
         nowid:null,
+        nowtype:null,
         previd:null,
+        prevtype:null,
         track:null
     }
 }
@@ -23,7 +25,8 @@ const mutations = {
 
     setPlayerPlay(state,data){
       state.player.playing = true;
-      state.player.nowid = data;
+      state.player.nowid = data.id;
+      state.player.nowtype = data.type;
     },
 
     setPlayerPlaying(state,data){
@@ -35,9 +38,11 @@ const mutations = {
     },
 
     setPlayerStop(state) {
-        state.player.playing = false;
-        state.player.previd = state.player.nowid;
-        state.player.nowid = null;
+        state.player.playing  = false;
+        state.player.previd   = state.player.nowid;
+        state.player.prevtype = state.player.nowtype;
+        state.player.nowid    = null;
+        state.player.nowtype  = null;
     }
 }
 

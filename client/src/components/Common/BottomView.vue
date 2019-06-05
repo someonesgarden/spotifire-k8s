@@ -25,12 +25,12 @@
                     </div>
 
                     <mu-icon value="pause_circle_outline" v-if="spotify.player.playing" @click="a_spotify(['player','stop',null])"></mu-icon>
-                    <mu-icon value="play_circle_outline" v-else @click="a_spotify(['player','play',spotify.player.track.id])"></mu-icon>
+                    <mu-icon value="play_circle_outline" v-else @click="a_spotify(['player','play',{id:spotify.player.track.id,type:'track'}])"></mu-icon>
 
                     <mu-icon value="equalizer" @click="Analyse(spotify.player.track.id)"></mu-icon>
-
                 </mu-chip>
             </mu-flex>
+
 
         </mu-flex>
     </mu-flex>
