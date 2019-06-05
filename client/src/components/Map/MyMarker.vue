@@ -2,10 +2,10 @@
     <l-marker :lat-lng="marker.center" @click="$emit('mClick')">
         <l-icon
                 :icon-size="[iconImg.w,iconImg.h]"
-                :icon-anchor="[iconImg.w/2,iconImg.h]"
+                :icon-anchor="[iconImg.w/2,iconImg.h/2]"
                 :icon-url="iconImg.url"
                 :shadow-size="[iconImg.w,iconImg.h]"
-                :shadow-anchow="[iconImg.w/2,-2]"
+                :shadow-anchow="[iconImg.w/2,iconImg.h/2]"
                 shadow-url='/static/img/markers/marker-shadow.png'
                 class-name="marker_base">
         </l-icon>
