@@ -1,27 +1,16 @@
 self.addEventListener('install', (event)=>{
     console.log("[Service Worker] Installing Service Worker...", event);
     event.waitUntil(
-        caches.open('v1').then(function(cache) {
+        caches.open('spotifire-tokyo-static').then(function(cache) {
             return cache.addAll([
-                '/static/',
-                '/static/css/common.css'
+                '/static/css/common.css',
+                '/static/css/muse-ui.css',
+                '/static/css/normalize.min.css',
+                '/static/css/semantic.min.css'
             ]);
         })
     );
 })
-
-// self.addEventListener('install', function(event) {
-//     console.log("[Service Worker] Installing Service Worker...", event);
-//     event.waitUntil(
-//         caches.open('first-app')
-//             .then(function(cache) {
-//                 cache.addAll([
-//                     '/static/css/common.css'
-//                 ])
-//             })
-//     );
-//     return self.clients.claim();
-// });
 
 
 self.addEventListener('activate', (event)=>{
@@ -30,12 +19,15 @@ self.addEventListener('activate', (event)=>{
 })
 
 
-
 self.addEventListener('fetch', function(event) {
-  event.respondWith(
-    caches.match(event.request)
-      .then(function(res) {
-        return res;
-      })
-  );
+    event.respondWith(
+        caches.match(event.request)
+            .then(function(response) {
+                if (response) {
+                    return response;
+                } else {
+                    return fetch(event.request);
+                }
+            })
+    );
 });
