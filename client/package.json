@@ -75,6 +75,7 @@
     "rimraf": "^2.6.2",
     "semver": "^5.4.1",
     "shelljs": "^0.7.8",
+    "sw-precache-webpack-plugin": "^0.11.4",
     "three": "^0.104.0",
     "uglify-es": "^3.3.10",
     "uglify-js": "^2.8.29",
@@ -88,8 +89,7 @@
     "webpack-cli": "^3.3.2",
     "webpack-dev-middleware": "^1.12.0",
     "webpack-hot-middleware": "^2.25.0",
-    "webpack-merge": "^4.1.0",
-    "workbox-webpack-plugin": "^4.3.1"
+    "webpack-merge": "^4.1.0"
   },
   "engines": {
     "node": ">= 4.0.0",

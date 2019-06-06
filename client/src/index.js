@@ -1,56 +1,15 @@
 /* 独自のService Workerを/static/以下に適応する */
 
-if('serviceWorker' in navigator){
-  console.log("serviceworker is Available");
-  navigator.serviceWorker
-      .register('/static/sw.js')
-      .then(()=> console.log('Service worker registered!'))
-      .catch((err)=> console.log(err))
-
-}else{
-  console.log("serviceworker is NOT available");
-}
-
-
-let deferredPrompt;
-window.addEventListener('beforeinstallprompt', (event)=>{
-  console.log("beforeinstallprompt fired");
-  event.preventDefault();
-  deferredPrompt = event;
-  return false;
-})
-
-fetch('https://httpbin.org/ip')
-    .then((response) => {
-      console.log(response);
-      return response.json();
-    })
-    .then((data) => {
-      console.log(data);
-    })
-    .catch((err)=>{
-      console.log(err);
-    })
-
-fetch('https://httpbin.org/post', {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-    'Accept': 'application/json'
-  },
-  mode: 'cors',
-  body: JSON.stringify({message: 'Does this work?'})
-}).then((response) => {
-      console.log(response);
-      return response.json();
-    })
-    .then((data) => {
-      console.log(data);
-    })
-    .catch((err) => {
-      console.log(err);
-    })
-
+// if('serviceWorker' in navigator){
+//   console.log("serviceworker is Available");
+//   navigator.serviceWorker
+//       .register('/static/sw.js')
+//       .then(()=> console.log('Service worker registered!'))
+//       .catch((err)=> console.log(err))
+//
+// }else{
+//   console.log("serviceworker is NOT available");
+// }
 
 import Vue from 'vue'
 import App from './App.vue'
