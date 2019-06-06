@@ -240,7 +240,9 @@ export default{
                 res => {
                     cb(res);
                 }
-            );
+            ).catch(error => {
+                console.log(error);
+            });
         },
 
         c_search:function(isTerm=true){

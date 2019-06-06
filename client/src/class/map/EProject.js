@@ -70,6 +70,9 @@ export default class EProject{
 
     checkSpotify(cb){
         let headers = {Authorization:store.state.spotify.credential.access_token};
-        axios.get('/api/spotify/browse/idcheck',{params:{'anyid': this.project.spotifyid}, headers: headers}).then(res => cb(res));
+        axios.get('/api/spotify/browse/idcheck',{params:{'anyid': this.project.spotifyid}, headers: headers})
+            .then(res => cb(res)).catch(error => {
+            console.log(error);
+        });
     }
 }

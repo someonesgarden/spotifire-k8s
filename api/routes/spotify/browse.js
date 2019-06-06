@@ -22,7 +22,9 @@ router.get('/idcheck', (req,res)=>{
                             spotifyApi.getArtist(anyid).then((ok4)=>{res.send(ok4)},
                                 (no4)=>{
                                     res.send('');
-                                })
+                                }).catch(error => {
+                                console.log(error);
+                            });
                         })
                 })
         })

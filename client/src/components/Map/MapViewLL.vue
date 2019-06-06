@@ -42,6 +42,11 @@
                 handler: function () {
                     if(this.mapstore.tracking) this.keepTracking();
                 }
+            },
+            'mapstore.map.center':{
+                handler:function(newCenter){
+                    this.$refs.map.mapObject.setView(this.mapstore.map.center,this.mapstore.map.zoom);
+                }
             }
         },
         mounted() {
