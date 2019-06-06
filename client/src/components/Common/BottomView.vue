@@ -12,6 +12,16 @@
                 </mu-select>
             </mu-flex>
 
+            <div class="mp3_players" v-if="$route.name ==='Map'">
+                <audio-player
+                        file="https://p.scdn.co/mp3-preview/c0ceabc60f2f2393098959d53aa8bdd249d3819e"></audio-player>
+                <audio-player
+                        file="https://p.scdn.co/mp3-preview/c0ceabc60f2f2393098959d53aa8bdd249d3819e"></audio-player>
+                    <audio-player
+                            file="https://p.scdn.co/mp3-preview/c0ceabc60f2f2393098959d53aa8bdd249d3819e"></audio-player>
+            </div>
+
+
             <!-- MP3 EPISODE PLAYER-->
             <mu-flex  justify-content="center" align-items="center" style="width:100%;min-height:48px;" v-if="mapstore.mainuser && mapstore.markerDists && $route.name ==='Map'">
                 <div v-for="(mkr,inx) in mapstore.markerDists" @click="bottomAvatarClick(mkr)" class="bottom_avatar">
@@ -52,12 +62,14 @@
     import {mapGetters,mapActions} from 'vuex';
     import BottomSlider from './BottomSlider';
     import MyAvatar from '../Map/MyAvatar';
+    import AudioPlayer from '../Mp3/AudioPlayer';
     export default {
         name: "BottomView",
         mixins:[spotifyMixin,mapMixin],
         components:{
           BottomSlider,
-            MyAvatar
+            MyAvatar,
+            AudioPlayer
         },
         computed:mapGetters(['spotify','mapstore']),
         methods:{
@@ -94,7 +106,9 @@
 </script>
 
 <style scoped lang="scss">
-
-
-
+    .mp3_players{
+        width:100%;
+        text-align:center;
+        margin:12px auto;
+    }
 </style>
