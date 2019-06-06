@@ -113,9 +113,9 @@ const webpackConfig = merge(baseWebpackConfig, {
     new SWPrecacheWebpackPlugin({
       cacheId: 'spotifire-tokyo',
       filename: 'service-worker.js',
-      staticFileGlobs: ['/**/*.{js,html,css}'],
+      staticFileGlobs: ['dist/**/*.{js,html,css}'],
       minify: true,
-      stripPrefix: '/'
+      stripPrefix: 'dist/'
     })
   ]
 })
