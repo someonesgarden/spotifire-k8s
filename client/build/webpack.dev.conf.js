@@ -8,7 +8,8 @@ const config = require('../config')
 const merge = require('webpack-merge')
 const baseWebpackConfig = require('./webpack.base.conf')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin')
+//const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin')
+const {GenerateSW} = require('workbox-webpack-plugin')
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
 
 // add hot-reload related code to entry chunks
@@ -38,13 +39,23 @@ module.exports = merge(baseWebpackConfig, {
         './service-worker-prod.js'), 'utf-8')}</script>`
     }),
     // service worker caching
-    new SWPrecacheWebpackPlugin({
-      cacheId: 'my-project',
-      filename: 'service-worker.js',
-      staticFileGlobs: ['dist/**/*.{js,html,css}'],
-      minify: true,
-      stripPrefix: 'dist/'
+    // new SWPrecacheWebpackPlugin({
+    //   cacheId: 'my-project',
+    //   filename: 'service-worker.js',
+    //   staticFileGlobs: ['dist/**/*.{js,html,css}'],
+    //   minify: true,
+    //   stripPrefix: 'dist/'
+    // }),
+
+    new GenerateSW({
+       cacheId: 'spotifire-tokyo',
+        globDirectory: config.build.assetsRoot,
+        globPatterns: ['**/*.{html,js,css}'],
+         swDest: path.join(config.build.assetsRoot, 'service-worker.js'),
+         skipWaiting: false,
+         clientsClaim: true
     }),
+
     new FriendlyErrorsPlugin()
   ]
 })

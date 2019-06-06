@@ -13,7 +13,8 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const ExtractTextPlugin = require('mini-css-extract-plugin')
 
 const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
-const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin')
+//const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin')
+const {GenerateSW}= require('workbox-webpack-plugin')
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const loadMinified = require('./load-minified')
 
@@ -109,13 +110,23 @@ const webpackConfig = merge(baseWebpackConfig, {
         ignore: ['.*']
       }
     ]),
+
     // service worker caching
-    new SWPrecacheWebpackPlugin({
+    // new SWPrecacheWebpackPlugin({
+    //   cacheId: 'spotifire-tokyo',
+    //   filename: 'service-worker.js',
+    //   staticFileGlobs: ['dist/**/*.{js,html,css}'],
+    //   minify: true,
+    //   stripPrefix: 'dist/'
+    // }),
+
+    new GenerateSW({
       cacheId: 'spotifire-tokyo',
-      filename: 'service-worker.js',
-      staticFileGlobs: ['dist/**/*.{js,html,css}'],
-      minify: true,
-      stripPrefix: 'dist/'
+      globDirectory: config.build.assetsRoot,
+      globPatterns: ['**/*.{html,js,css}'],
+      swDest: path.join(config.build.assetsRoot, 'service-worker.js'),
+      skipWaiting: false,
+      clientsClaim: true
     })
   ]
 })
