@@ -8,6 +8,7 @@ const config = require('../config')
 const merge = require('webpack-merge')
 const baseWebpackConfig = require('./webpack.base.conf')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin')
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
 
 // add hot-reload related code to entry chunks
@@ -34,7 +35,15 @@ module.exports = merge(baseWebpackConfig, {
       template: 'index.html',
       inject: true,
       serviceWorkerLoader: `<script>${fs.readFileSync(path.join(__dirname,
-        './service-worker-dev.js'), 'utf-8')}</script>`
+        './service-worker-prod.js'), 'utf-8')}</script>`
+    }),
+    // service worker caching
+    new SWPrecacheWebpackPlugin({
+      cacheId: 'my-project',
+      filename: 'service-worker.js',
+      staticFileGlobs: ['dist/**/*.{js,html,css}'],
+      minify: true,
+      stripPrefix: 'dist/'
     }),
     new FriendlyErrorsPlugin()
   ]

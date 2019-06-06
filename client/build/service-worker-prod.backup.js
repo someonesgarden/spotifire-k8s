@@ -1,10 +1,9 @@
 (function() {
   'use strict';
 
-  /*
-  ・ブラウザでSWがサポートされているかチェック
-  ・httpsからのログイン / Localhostでの検査のみ有効
-   */
+  // Check to make sure service workers are supported in the current browser,
+  // and that the current page is accessed from a secure origin. Using a
+  // service worker from an insecure origin will trigger JS console errors.
   var isLocalhost = Boolean(window.location.hostname === 'localhost' ||
       // [::1] is the IPv6 localhost address.
       window.location.hostname === '[::1]' ||
@@ -15,20 +14,12 @@
     );
 
   window.addEventListener('load', function() {
-
-    if ('serviceWorker' in navigator && (window.location.protocol === 'https:' || isLocalhost)) {
-
+      if ('serviceWorker' in navigator &&
+          (window.location.protocol === 'https:' || isLocalhost)) {
         navigator.serviceWorker.register('service-worker.js')
         .then(function(registration) {
-
-          console.log("Service-worker then")
-          console.log(registration);
-
           // updatefound is fired if service-worker.js changes.
           registration.onupdatefound = function() {
-
-            console.log("updatefound is fired if service-worker.js changes.");
-
             // updatefound is also fired the very first time the SW is installed,
             // and there's no need to prompt for a reload at that point.
             // So check here to see if the page is already controlled,
@@ -40,9 +31,6 @@
               installingWorker.onstatechange = function() {
                 switch (installingWorker.state) {
                   case 'installed':
-
-                    console.log("SW installed!");
-
                     // At this point, the old content will have been purged and the
                     // fresh content will have been added to the cache.
                     // It's the perfect time to display a "New content is
@@ -50,9 +38,8 @@
                     break;
 
                   case 'redundant':
-                    console.log('redundant');
-
-                    throw new Error('The installing service worker became redundant.');
+                    throw new Error('The installing ' +
+                                    'service worker became redundant.');
 
                   default:
                     // Ignore

@@ -13,8 +13,8 @@
       "type": "image/png"
     }
   ],
-  "start_url": "/index.html",
-  "scope": ".",
+  "start_url": "/",
+  "scope": "/",
   "display": "fullscreen",
   "orientation": "portrait-primary",
   "background_color": "#000000",

@@ -4,9 +4,15 @@
 // file that will precache your site's local assets.
 // See https://github.com/facebookincubator/create-react-app/issues/2272#issuecomment-302832432
 
-self.addEventListener('install', () => self.skipWaiting());
+self.addEventListener('install', (event) => {
+  console.log("[DEV:Service Worker] Installing Service Worker...", event);
+  self.skipWaiting()
+});
 
-self.addEventListener('activate', () => {
+self.addEventListener('activate', (event) => {
+
+  console.log("[DEV:Service Worker] Activating Service Worker...", event);
+
   self.clients.matchAll({ type: 'window' }).then(windowClients => {
     for (let windowClient of windowClients) {
       // Force open pages to refresh, so that they have a chance to load the

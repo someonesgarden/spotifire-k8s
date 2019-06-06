@@ -1,9 +1,8 @@
 // ----- GENERAL
-
-export const a_login = ({commit},params) => commit('login', params)
+export const a_login    = ({commit},params) => commit('login', params)
 
 // --------------- SPOTIFY ----------------
-export const a_spotify =  ({commit}, [type, action, data]) => {
+export const a_spotify  =  ({commit}, [type, action, data]) => {
     const actions = {
 
         update:{
@@ -101,7 +100,7 @@ export const a_mapstore = ({commit},[type, action, data]) => {
     actions[type][action](data)
 };
 
-export const a_index =  ({commit}, [type, action, data]) => {
+export const a_index    =  ({commit}, [type, action, data]) => {
     const actions = {
         root:{
           action:   (data) => commit('setRootAction', data),
@@ -122,7 +121,7 @@ export const a_index =  ({commit}, [type, action, data]) => {
     actions[type][action](data)
 };
 
-export const a_feed =  ({commit}, [type, action, data]) => {
+export const a_feed     =  ({commit}, [type, action, data]) => {
     const actions = {
         set:{
             feed:   (data) => commit('feed/setFeed', data),
@@ -132,7 +131,7 @@ export const a_feed =  ({commit}, [type, action, data]) => {
     actions[type][action](data)
 }
 
-export const a_ws =  ({commit}, [type, action, data]) => {
+export const a_ws       =  ({commit}, [type, action, data]) => {
     const actions = {
         set:{
             socketid:(data) => commit('ws/setSocketID', data),
@@ -155,4 +154,17 @@ export const a_ws =  ({commit}, [type, action, data]) => {
 }
 
 // -------- Three -----------
-export const a_three =  ({commit},param) => commit('three/setParam', param)
+export const a_three    =  ({commit},param) => commit('three/setParam', param)
+
+// ------ MP3 PLAYERS -----
+
+export const a_mp3 =  ({commit}, [type, action, data]) => {
+    const actions = {
+        pod1:{
+            file:(data)     => commit('mp3/setPodParam', {num:0,key:'file',  val:data}),
+            volume: (data)  => commit('mp3/setPodParam', {num:0,key:'volume',val:data}),
+            loop:   (data)  => commit('mp3/setPodParam', {num:0,key:'loop',  val:data}),
+        }
+    }
+    actions[type][action](data)
+}

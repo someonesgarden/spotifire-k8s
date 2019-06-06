@@ -1,3 +1,16 @@
+/* 独自のService Workerを/static/以下に適応する */
+
+if('serviceWorker' in navigator){
+  console.log("serviceworker is Available");
+  navigator.serviceWorker
+      .register('/static/sw.js')
+      .then(()=> console.log('Service worker registered!'))
+}else{
+  console.log("serviceworker is NOT available");
+}
+
+
+
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'

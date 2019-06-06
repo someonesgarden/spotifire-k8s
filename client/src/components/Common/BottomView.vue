@@ -13,8 +13,7 @@
             </mu-flex>
 
             <div class="mp3_players" v-if="$route.name ==='Map'">
-                <audio-player
-                        file="https://p.scdn.co/mp3-preview/c0ceabc60f2f2393098959d53aa8bdd249d3819e"></audio-player>
+                <audio-player file="https://p.scdn.co/mp3-preview/c0ceabc60f2f2393098959d53aa8bdd249d3819e" :loop="true"></audio-player>
                 <audio-player
                         file="https://p.scdn.co/mp3-preview/c0ceabc60f2f2393098959d53aa8bdd249d3819e"></audio-player>
                     <audio-player
@@ -110,5 +109,7 @@
         width:100%;
         text-align:center;
         margin:12px auto;
+        background-color: rgba(210, 222, 217, 0.3);
+        padding:4px 0 2px 0;
     }
 </style>

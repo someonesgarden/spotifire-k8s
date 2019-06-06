@@ -8,6 +8,7 @@ import feed from './modules/feed/index';
 import mapstore from './modules/mapstore/index';
 import ws from './modules/ws/index';
 import three from './modules/three/index';
+import mp3 from './modules/mp3/index';
 
 Vue.use(Vuex);
 
@@ -21,7 +22,8 @@ export default new Vuex.Store({
         feed,
         mapstore,
         ws,
-        three
+        three,
+        mp3
     }
 });
 
