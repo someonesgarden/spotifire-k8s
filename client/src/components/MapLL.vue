@@ -2,8 +2,10 @@
     <mu-flex class="mapflex" align-items="center">
         <mu-flex justify-content="center" class="maparea" fill>
             <map-view id="map" ref="emorymap" @switchLayer="switchLayer" @mapClick="mapClick" @mClick="mClick" @pClick="pClick"/>
-            <!-- MENU -->
+            <!-- INFO_OVERLAY(MENU) -->
             <mu-flex justify-content="center" direction="column" align-items="center" class="info_overlay overlay" ref="info_overlay">
+
+                <bounce-loader class="bounce-loader" v-if="mapstore.tracking"></bounce-loader>
 
                 <mu-flex class="info_menu" justify-content="center" align-items="center">
                     <mu-flex class="info_box how" justify-content="center" align-items="center" direction="column" fill>
@@ -49,7 +51,7 @@
                     </mu-flex>
                 </mu-flex>
             </mu-flex>
-            <!--/ MENU-->
+            <!--/  INFO_OVERLAY(MENU)-->
 
             <!-- PLAY OVERLAY-->
             <div class="play_overlay overlay" ref="play_overlay">
@@ -218,10 +220,12 @@
     import mapMixin from '../mixins/map/index';
     import wsMixin from '../mixins/ws/index';
     import {ruleEmpty} from '../store/rules';
+    import firebase from 'firebase';
+
     import MapView from './Map/MapViewLL';
     import MapUserItem from './Map/MapUserItem';
     import MyAvatar from './Map/MyAvatar';
-    import firebase from 'firebase';
+    import BounceLoader from 'vue-spinner/src/BounceLoader.vue';
 
     import M from '../class/map/EMarker';
     import P from '../class/map/EProject';
@@ -236,7 +240,8 @@
         components: {
             MapView,
             MapUserItem,
-            MyAvatar
+            MyAvatar,
+            BounceLoader
         },
 
         data() {
@@ -285,7 +290,24 @@
                       });
                   }
               },deep:true
-          }
+          },
+            'spotify.me':{
+              handler(newMe){
+                  if(this.spotify.me){
+                      //ユーザーのマーカーを立てる
+                      this.markersRef.orderByChild('userid').equalTo(this.spotify.me.id).on("value",ss=>{
+                          if(ss.val()){
+                              //もしユーザーのマーカーがFirebaseに見つかった時、それを使う
+                              let keys = Object.keys(ss.val());
+                              this.a_mapstore(['set','mainuser',{id:keys[0]}]);
+                          }else{
+                              //見つからない場合、新規作成
+                              new M({type:'mainuser'}).updateOrNew(this.markersRef);
+                          }
+                      });
+                  }
+              },deep:true
+            }
         },
         computed: {
             ...mapGetters(['spotify', 'mapstore', 'ws']),
@@ -299,17 +321,6 @@
             this.connectToSocket();
             this.switchLayer('info');
 
-            //ユーザーのマーカー
-            this.markersRef.orderByChild('userid').equalTo(this.spotify.me.id).on("value",ss=>{
-                if(ss.val()){
-                    //もしユーザーのマーカーがFirebaseに見つかった時、それを使う
-                    let keys = Object.keys(ss.val());
-                    this.a_mapstore(['set','mainuser',{id:keys[0]}]);
-                }else{
-                    //見つからない場合、新規作成
-                    new M({type:'mainuser'}).updateOrNew(this.markersRef);
-                }
-            });
             //FireBase
             this.markersRef.on('value', (snapshot)=> this.a_mapstore(['set','markers',snapshot.val()]));
             this.projsRef.on('value',   (snapshot)=> this.a_mapstore(['emory','setprojects',snapshot.val()]));
@@ -424,7 +435,6 @@
                 this.newMarker = new M({}).marker;
                 this.newProject = new P({}).project;
                 this.switchLayer('map');
-                console.log("cancelEditMode!");
             },
 
             backToInfo(){
@@ -519,9 +529,16 @@
         height:20px;
         border-radius:50%;
         background-color: rgba(255, 0, 0, 0.75);
-
         &.project{
             background-color: rgba(0, 128, 0, 0.75);
         }
+    }
+
+    .bounce-loader{
+        position:absolute;
+        width:60px;
+        height:60px;
+        left:calc(50vw - 30px);
+        top:calc(50vh - 60px);
     }
 </style>

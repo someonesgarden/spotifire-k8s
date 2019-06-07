@@ -25,34 +25,37 @@
         computed:{
             ...mapGetters(['mapstore']),
             iconImg(){
-                let icontype = (this.m.id === this.mapstore.mainuser.id) ? 'you' : this.m.type;
-                let icon  = this.mapstore.icons[icontype][this.m.title.charCodeAt(0) % this.mapstore.icons[icontype].length];
-                let w = 30;
-                let h = 30;
+                if(!!this.m && !!this.mapstore.mainuser){
+                    let icontype = (this.m.id === this.mapstore.mainuser.id) ? 'you' : this.m.type;
+                    let icon  = this.mapstore.icons[icontype][this.m.title.charCodeAt(0) % this.mapstore.icons[icontype].length];
+                    let w = 30;
+                    let h = 30;
 
-                if(!this.dist){
-                    switch(icontype){
-                        case 'you':
-                            w = 48;
-                            h = 48;
-                            break;
-                        case 'mainuser':
-                        case 'user':
-                            w = 42;
-                            h = 42;
-                            break;
-                        case 'spot':
-                            w = 34;
-                            h = 34;
-                            break;
-                        case 'other':
-                            w = 28;
-                            h = 28;
-                            break;
+                    if (!this.dist) {
+                        switch (icontype) {
+                            case 'you':
+                                w = 48;
+                                h = 48;
+                                break;
+                            case 'mainuser':
+                            case 'user':
+                                w = 42;
+                                h = 42;
+                                break;
+                            case 'spot':
+                                w = 34;
+                                h = 34;
+                                break;
+                            case 'other':
+                                w = 28;
+                                h = 28;
+                                break;
+                        }
                     }
+                    return {url: icon, w: w, h: h};
+                } else {
+                    return {url: '', w: 0, h: 0};
                 }
-
-                return {url:icon, w:w, h:h};
             }
         }
     }
