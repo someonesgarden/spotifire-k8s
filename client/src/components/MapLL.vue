@@ -1,7 +1,8 @@
 <template>
     <mu-flex class="mapflex" align-items="center">
         <mu-flex justify-content="center" class="maparea" fill>
-            <map-view id="map" ref="emorymap" @switchLayer="switchLayer" @mapClick="mapClick" @mClick="mClick" @pClick="pClick"/>
+            <map-view id="map" ref="emorymap" :markersRef="markersRef" @switchLayer="switchLayer" @mapClick="mapClick" @mClick="mClick" @pClick="pClick"/>
+
             <!-- INFO_OVERLAY(MENU) -->
             <mu-flex justify-content="center" direction="column" align-items="center" class="info_overlay overlay" ref="info_overlay">
 
@@ -54,7 +55,7 @@
             <!--/  INFO_OVERLAY(MENU)-->
 
             <!-- PLAY OVERLAY-->
-            <div class="play_overlay overlay" ref="play_overlay">
+            <div class="play_overlay overlay" ref="play_overlay" :class="{hide:!mapstore.mainuser}">
                 <mu-flex class="info_box"　justify-content="center" align-items="center" direction="column" style="height:100%;">
                     <mu-flex justify-content="center" align-items="center" direction="column" style="width:100%;height:100%;padding:20px;">
                         <mu-flex justify-content="center" align-items="center" direction="column" class="inner" style="background-color:rgba(31, 6, 6, 0.19);height:100%;width:100%;border-radius:6px;padding:15px 22px;">
@@ -77,7 +78,7 @@
                                             新宿エリアに仕掛けられた「耳で楽しむ」物語が『新宿探検マップ』です。地図に表示された５箇所のスポットに近づくと物語が始まります。
                                         </mu-card-text>
 
-                                        <mu-card-header style="white-space: inherit;">
+                                        <mu-card-header style="white-space: inherit;" v-if="mapstore.mainuser">
                                             <my-avatar :marker="marker" :id="marker.id" v-for="(marker,id) in sortedMarkers" :key="'mv'+id"></my-avatar>
                                         </mu-card-header>
                                     </mu-card>
@@ -93,7 +94,7 @@
             <!--/ PLAY OVERLAY-->
 
             <!-- NET OVERLAY -->
-            <div class="net_overlay overlay" ref="net_overlay">
+            <div class="net_overlay overlay" ref="net_overlay"  :class="{hide:!mapstore.mainuser}">
 
                 <mu-flex class="info_box"　justify-content="center" align-items="center" direction="column" style="height:100%;">
 
@@ -126,7 +127,7 @@
             <!--/NET OVERLAY -->
 
             <!--EDIT OVERLAY-->
-            <div class="edit_overlay overlay" ref="edit_overlay">
+            <div class="edit_overlay overlay" ref="edit_overlay"  :class="{hide:!mapstore.mainuser}">
                 <mu-flex class="info_box" justify-content="center" align-items="center" direction="column" style="height:100%;">
                     <h1>
                         <mu-icon value="build" :size="20"></mu-icon>
@@ -213,23 +214,20 @@
     </mu-flex>
 
 </template>
-<script>
 
+<script>
     import {mapGetters, mapActions} from 'vuex';
     import spotifyMixin from '../mixins/spotify/index';
     import mapMixin from '../mixins/map/index';
     import wsMixin from '../mixins/ws/index';
     import {ruleEmpty} from '../store/rules';
     import firebase from 'firebase';
-
     import MapView from './Map/MapViewLL';
     import MapUserItem from './Map/MapUserItem';
     import MyAvatar from './Map/MyAvatar';
     import BounceLoader from 'vue-spinner/src/BounceLoader.vue';
-
     import M from '../class/map/EMarker';
     import P from '../class/map/EProject';
-
     export default {
         name: 'mymapLL',
         mixins: [
@@ -243,87 +241,99 @@
             MyAvatar,
             BounceLoader
         },
-
         data() {
             return {
-                mainuser:null,
-                socket: null,
-                blankRules: [ruleEmpty],
-                markersRef:null,
-                projsRef:null,
+                //SOCKET.IO(not in use)
+                socket:     null,
 
+                //MODE
+                mode:       'info',
+                editing: {
+                    status:     false,
+                    type:       'marker'
+                },
+                userisready: false,
+
+                //MAIN USER
+                mainuser:   null,
+
+                //FIREBASE
+                markersRef: null,
+                projsRef:   null,
+
+                //FORM
+                blankRules: [ruleEmpty],
                 newMarker: {
-                    isEpisode:false,
-                    center: null,
-                    title: "",
-                    desc:"",
-                    type: 'other',
-                    spotifyid: "",
-                    public: 'open',
-                    thumb:null,
-                    project:"",
-                    w:35,
-                    h:35
+                    isEpisode:  false,
+                    center:     null,
+                    title:      "",
+                    desc:       "",
+                    type:       'other',
+                    spotifyid:  "",
+                    public:     'open',
+                    thumb:      null,
+                    project:    "",
+                    w:      35,
+                    h:      35
                 },
                 newProject:{
-                    center:null,
-                    zoom:22,
-                    desc:"",
-                    title:"",
-                    spotifyid: ""
-                },
-                editing: {
-                    status:false,
-                    type:'marker'
-                },
-                mode: 'info'
+                    center:     null,
+                    zoom:       22,
+                    desc:       "",
+                    title:      "",
+                    spotifyid:  ""
+                }
             }
         },
         watch:{
-          'mapstore.map':{
-              handler(newMap){
-                  if(this.mapstore.mainuser.id){
-                      this.markersRef.child(this.mapstore.mainuser.id).once('value').then(res=>{
-                          let mainuser = res.val();
-                          mainuser = {...mainuser,center:newMap.center,id:this.mapstore.mainuser.id};
-                          new M(mainuser).updateOrNew(this.markersRef);
-                      });
-                  }
-              },deep:true
-          },
             'spotify.me':{
-              handler(newMe){
-                  if(this.spotify.me){
-                      //ユーザーのマーカーを立てる
-                      this.markersRef.orderByChild('userid').equalTo(this.spotify.me.id).on("value",ss=>{
-                          if(ss.val()){
-                              //もしユーザーのマーカーがFirebaseに見つかった時、それを使う
-                              let keys = Object.keys(ss.val());
-                              this.a_mapstore(['set','mainuser',{id:keys[0]}]);
-                          }else{
-                              //見つからない場合、新規作成
-                              new M({type:'mainuser'}).updateOrNew(this.markersRef);
-                          }
-                      });
-                  }
-              },deep:true
+
+                handler(newMe){
+                    console.log("[watch] me handler");
+                    if(!!newMe){
+                        if(!this.spotify.me.bookmark_num) {
+                            console.log("no bookmark");
+                            this.a_index(['alert', 'set', "Spotifyユーザーデータを調べています"]);
+                            this.a_index(['alert', 'open']);
+                        }
+
+                        //ユーザーのbookmarkデータがなくてもとりあえず初期化する
+                        this.createOrFindMainuser(this.spotify.me.id);
+
+                        //FireBaseのイベントリスナー
+                        this.markersRef.on('value', (snapshot)=> this.a_mapstore(['set','markers',snapshot.val()]));
+                        this.projsRef.on('value',   (snapshot)=> this.a_mapstore(['emory','setprojects',snapshot.val()]));
+
+                    }
+                },deep:true
+            },
+
+            'mapstore.mainuser':{
+                handler(newUser){
+                    if(!!newUser && !this.userisready){
+                        console.log("[watch] mainuser handler");
+                        this.socketInit();
+                        this.connectToSocket();
+                        //this.$refs.emorymap.geolocation();
+
+                        this.userisready = true;
+                    }
+                }
             }
         },
-        computed: {
-            ...mapGetters(['spotify', 'mapstore', 'ws']),
-        },
+        computed:mapGetters(['spotify', 'mapstore', 'ws']),
         created() {
             this.markersRef = firebase.database().ref('markers');
-            this.projsRef = firebase.database().ref('projects');
+            this.projsRef   = firebase.database().ref('projects');
         },
         mounted() {
-            this.socketInit();
-            this.connectToSocket();
             this.switchLayer('info');
 
-            //FireBase
-            this.markersRef.on('value', (snapshot)=> this.a_mapstore(['set','markers',snapshot.val()]));
-            this.projsRef.on('value',   (snapshot)=> this.a_mapstore(['emory','setprojects',snapshot.val()]));
+            if(!this.spotify.me){
+                this.a_index(['alert','set',"Spotifyにログインが必要です。"]);
+                this.a_index(['alert','open']);
+                this.a_index(['alert','action','login']);
+            }
         },
 
         beforeDestroy() {
@@ -331,7 +341,6 @@
             this.a_mapstore(['set', 'tracking', false]);
             this.markersRef = null;
         },
-
         methods: {
             ...mapActions([
                 'a_index',
@@ -339,22 +348,39 @@
                 'a_mapstore',
                 'a_ws']),
 
+
+            createOrFindMainuser(meid){
+
+                console.log("[MapLL : spotify.me.id] ",meid);
+                //メインユーザーを検索してなければ作成
+                this.markersRef.orderByChild('userid').startAt(meid).endAt(meid).once('value', ss=>{
+
+                    if(ss.val()) {
+                        console.log("[MapLL : createOrFindMainuser] FOUND");
+                        let key = Object.keys(ss.val())[0];
+                        let val = Object.values(ss.val())[0];
+                        this.a_mapstore(['set', 'mainuser', {...val, id: key}]);
+                    } else{
+                        //ローカルにユーザーデータがない場合だけ作成される
+                        if(!this.mapstore.mainuser){
+                            console.log("[MapLL : createOrFindMainuser] CREATE");
+                            let newuser = new M({type:'mainuser'}).updateOrNew(this.markersRef);
+                        }
+                    }
+                })
+            },
+
             onProjectSelected(key) {
                 this.newMarker.project = key;
-
                 //リセット(polyの消去）
                 this.a_mapstore(['set','poly',null]);
-
                 this.a_mapstore(['emory', 'setproject', key]);
                 this.a_mapstore(['set', 'tracking', false]);
-
                 let proj = this.mapstore.emory.projects[key];
                 this.a_mapstore(['center', 'map', proj.center]);
                 setTimeout(() => this.a_mapstore(['center', 'map', proj.center]), 2000);
-
                 this.distOfProjPoints();
             },
-
             mapClick(val) {
                 if (this.editing.status) {
                     this.setNewCenter(val.latlng,val.containerPoint);
@@ -363,7 +389,6 @@
                     this.switchLayer('info');
                 }
             },
-
             pClick(val,id){
                 if (this.editing.status){
                     this.switchLayer('edit');
@@ -371,7 +396,6 @@
                     if(id) this.newProject.id =id;
                 }
             },
-
             mClick(val,id){
                 if (this.editing.status){
                     this.switchLayer('edit');
@@ -380,8 +404,8 @@
                 }else{
                     //自分とpointの距離を測る
                     let mainuser = this.mapstore.markers[this.mapstore.mainuser.id];
-                    let dist = this.distKmofCenters(mainuser.center, val.center);
 
+                    let dist = this.distKmofCenters(mainuser.center, val.center);
                     if(val.spotifytype==='track'){
                         //トラック情報を取得してボットムバーを開く
                         this.c_getTrack(val.spotifyid,(res)=>{
@@ -391,16 +415,12 @@
                             }
                         });
                         this.a_index(['bottom','open']);
-
                     }else if(val.spotifytype==='episode'){
                         //ポッドキャストepisodeの場合、mp3プレイヤーを開く
-                        console.log("mClick in MapLL");
-                        console.log(val);
                         this.a_index(['bottom','open']);
                     }
                 }
             },
-
             connectToSocket() {
                 if (this.spotify.me && this.spotify.me.id) {
                     let your_pos_and_data = {
@@ -413,34 +433,28 @@
                     this.socketConnect(your_pos_and_data);
                 }
             },
-
             setNewCenter(latlng,mouseXY) {
                 this.newMarker.center = latlng;
                 this.newProject.center = latlng;
                 this.$refs.selectedPoint.style.top = mouseXY.y-10+'px';
                 this.$refs.selectedPoint.style.left = mouseXY.x-10+'px';
             },
-
             editProject(){
                 this.editing.type='project';
                 this.cancelEditMode();
             },
-
             editMarker(){
                 this.editing.type='marker';
                 this.cancelEditMode();
             },
-
             cancelEditMode() {
                 this.newMarker = new M({}).marker;
                 this.newProject = new P({}).project;
                 this.switchLayer('map');
             },
-
             backToInfo(){
                 this.switchLayer('info');
             },
-
             editEnd() {
                 this.editing.status = false;
                 this.switchLayer('info');
@@ -448,12 +462,10 @@
                 this.mode = "info";
                 this.$refs.selectedPoint.style.top = -300+'px';
             },
-
             delFirebase(ref,id){
-              ref.child(id).remove();
-              this.cancelEditMode();
+                ref.child(id).remove();
+                this.cancelEditMode();
             },
-
             saveNewMarker() {
                 this.$refs.newmarkerform.validate().then(valid => {
                     if (valid) {
@@ -464,7 +476,6 @@
                     }
                 });
             },
-
             saveNewProject(){
                 this.$refs.newprojectform.validate().then(valid => {
                     if (valid) {
@@ -482,7 +493,6 @@
                 let net_overlay = this.$refs.net_overlay;
                 let edit_overlay = this.$refs.edit_overlay;
                 this.mode = mode;
-
                 switch (mode) {
                     case 'info':
                         info_overlay.style.zIndex = 401;

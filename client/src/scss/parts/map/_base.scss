@@ -172,6 +172,10 @@
     left: 0;
     top: 0;
 
+    &.hide{
+      opacity:0.0;
+    }
+
     .info_box {
       text-align:center;
       h1,h2{

@@ -8,9 +8,9 @@
       <bottom-view></bottom-view>
     </mu-bottom-sheet>
 
-    <mu-dialog title="Notice" width="600" max-width="80%" :esc-press-close="false" :overlay-close="false" :open="alert.open">
+    <mu-dialog width="600" max-width="80%" :esc-press-close="false" :overlay-close="false" :open="alert.open">
       {{alert.text}}<br/>
-      <mu-button slot="actions" flat color="secondary" @click="a_index(['alert','close'])">閉じる</mu-button>
+      <mu-button slot="actions" flat color="secondary" @click="dialogClick">{{alert.action ? alert.action : '閉じる'}}</mu-button>
     </mu-dialog>
   </div>
 </template>
@@ -18,6 +18,7 @@
 <script>
   import {mapGetters, mapActions} from 'vuex';
   import feedMixin from './mixins/feed/index';
+  import spotifyMixin from './mixins/spotify/index';
 import HeadTop from './components/Common/Header.vue';
 import Player from './components/Spotify/Player/Player.vue';
 import Magazine from './components/Layout/Magazine.vue';
@@ -25,7 +26,7 @@ import BottomView from './components/Common/BottomView';
 
 export default {
   name: 'app',
-  mixins:[feedMixin],
+  mixins:[feedMixin,spotifyMixin],
   components: {
     'head-top':HeadTop,
     'player':Player,
@@ -33,7 +34,18 @@ export default {
     'bottom-view':BottomView
   },
   computed:mapGetters(['bottom','alert']),
-  methods:mapActions(['a_index']),
+  methods:{
+    ...mapActions(['a_index']),
+
+    dialogClick(){
+      this.a_index(['alert','close']);
+
+      if (this.alert.action === 'login') {
+        if(!this.spotify.credential.expires_in) this.c_getCredential();
+      }
+
+    }
+  },
 
   data:function(){
     return{

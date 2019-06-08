@@ -22,18 +22,17 @@ export default{
             });
         },
 
-        c_getMyTopTracks:function(){
+        c_getMyTopTracks:function(cb=null){
             axios.get('/api/spotify/me/get_my_toptracks/'+this.spotify.credential.access_token)
                 .then(res => {
                     if(!!res.data){
-                       console.log("getMyTopTracks success!");
                        if(res.data.items){
-                           console.log(res.data.items);
                            this.a_spotify(['set','track',res.data.items[0]]);
                            this.a_spotify(['set','bookmarks',res.data.items]);
                        }
-
                     }
+
+                    if(cb) cb(res);
                 }).catch(error => {
                 console.log(error);
             });

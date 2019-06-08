@@ -35,7 +35,7 @@ export default{
 
             // BROADCAST
             socket.on('new-user-added', (msg)=>{
-                console.log("new-user-added!");
+                console.log("[WS] new-user-socket");
                 console.log(msg);
                 this.a_ws(['set','users',msg.clients]);
             });

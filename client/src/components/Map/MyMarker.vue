@@ -44,12 +44,12 @@
             ...mapGetters(['mapstore']),
 
             iconImg(){
-                if (!!this.marker) {
-                    let icontype = (this.marker.id === this.mapstore.mainuser.id) ? 'you' : this.marker.type;
-                    let icon = this.mapstore.icons[icontype][this.marker.title.charCodeAt(0) % this.mapstore.icons[icontype].length];
+                console.log("iconImg",this.marker.id, this.mapstore.mainuser.id);
+                let icontype = (this.marker.id === this.mapstore.mainuser.id) ? 'you' : this.marker.type;
+                let icon  = this.mapstore.icons[icontype][this.marker.title.charCodeAt(0) % this.mapstore.icons[icontype].length];
                     let w = 30;
                     let h = 30;
-                    switch (icontype) {
+                    switch(icontype){
                         case 'you':
                             w = 58;
                             h = 58;
@@ -68,10 +68,7 @@
                             h = 30;
                             break;
                     }
-                    return {url: icon, w: w, h: h};
-                } else {
-                    return {url: '/static/img/markers/m_dummy.png', w: 25, h: 25};
-                }
+                    return {url:icon, w:w, h:h};
             }
         }
     }

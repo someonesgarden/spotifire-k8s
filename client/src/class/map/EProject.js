@@ -57,13 +57,15 @@ export default class EProject{
                     }
 
                 }else{
-                    store.commit('setAlertText',"IDが間違えています。入力し直してください。。");
+                    store.commit('setAlertText',"利用にはSpotifyログインします。p");
                     store.commit('setAlertState',true);
+                    store.commit('setAlertAction',"login");
                 }
             });
         }else{
             store.commit('setAlertText',"Spotify IDが入力されていません。。");
             store.commit('setAlertState',true);
+            store.commit('setAlertAction',"login");
         }
     }
 

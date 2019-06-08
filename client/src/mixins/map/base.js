@@ -4,12 +4,15 @@ export default{
     computed:{
         sortedMarkers(){
             let result = {};
-            Object.keys(this.mapstore.markers).forEach(key=> {
-                let marker = this.mapstore.markers[key];
-                if(marker.project === 'mainuser' || (marker.project===this.mapstore.emory.project)){
-                    result[key]= marker;
-                }
-            })
+            if(this.mapstore.markers){
+                Object.keys(this.mapstore.markers).forEach(key=> {
+                    let marker = this.mapstore.markers[key];
+                    marker.id = key;
+                    if(marker.project === 'mainuser' || (marker.project===this.mapstore.emory.project)){
+                        result[key]= marker;
+                    }
+                })
+            }
             return result;
         }
     },
@@ -41,10 +44,13 @@ export default{
         drawPoly(){
             let polys = [];
             //実際のユーザー以外のポイントでポリゴンを作る
-            this.mapstore.markerDists.forEach(mkr=>{ if(this.mapstore.markers[mkr.id].type!=='mainuser') polys.push(this.mapstore.markers[mkr.id].center) });
-            polys.sort((a, b)=> a.lat > b.lat ? 1 : -1);
-            polys.sort((a, b)=> a.lng > b.lng ? 1 : -1);
-            this.a_mapstore(['set','poly',polys]);
+            if(this.mapstore.markerDists){
+                this.mapstore.markerDists.forEach(mkr=>{ if(this.mapstore.markers[mkr.id].type!=='mainuser') polys.push(this.mapstore.markers[mkr.id].center) });
+                polys.sort((a, b)=> a.lat > b.lat ? 1 : -1);
+                polys.sort((a, b)=> a.lng > b.lng ? 1 : -1);
+                this.a_mapstore(['set','poly',polys]);
+            }
+
         },
 
         distKmofCenters(center1,center2){
@@ -52,17 +58,23 @@ export default{
         },
 
         distOfProjPoints(){
-            //自分と現在のプロジェクトのpointの距離を測る
-            let mainuser = this.mapstore.markers[this.mapstore.mainuser.id];
 
-            let dists = Object.keys(this.sortedMarkers).map(k=> {
-                return {
-                    id:k,
-                    dist:this.distKmofCenters(mainuser.center, this.sortedMarkers[k].center)
+            if(this.mapstore.mainuser){
+                //自分と現在のプロジェクトのpointの距離を測る
+
+                let mainuser = this.mapstore.markers[this.mapstore.mainuser.id];
+
+                if(this.sortedMarkers && mainuser){
+                    let dists = Object.keys(this.sortedMarkers).map(k=> {
+                        return {
+                            id:k,
+                            dist:this.distKmofCenters(mainuser.center, this.sortedMarkers[k].center)
+                        }
+                    });
+                    dists.sort((a, b)=> a.dist > b.dist ? 1 : -1);
+                    this.a_mapstore(['set','markerdists',dists]);
                 }
-            });
-            dists.sort((a, b)=> a.dist > b.dist ? 1 : -1);
-            this.a_mapstore(['set','markerdists',dists]);
+            }
         },
 
         randomPointsRange(lat0,lng0,num,near,far){

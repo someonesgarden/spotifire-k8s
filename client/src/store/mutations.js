@@ -39,6 +39,10 @@ const  mutations = {
       state.alert.text = val;
     },
 
+    setAlertAction(state,val){
+      state.alert.action = val;
+    },
+
     setRootAction(state,val){
         state.rootAction.type = val;
         state.rootAction.date = new Date();

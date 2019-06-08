@@ -47,11 +47,11 @@
             </mu-row>
             <mu-row gutter>
                 <mu-col span="6"><div class="grid-cell">
-                    <mu-button flat color="primary" v-if="spotify.show" @click="mode='show'" :class="{active:mode==='show'}">Podcast(Show)</mu-button>
+                    <mu-button flat color="primary" v-if="show" @click="mode='show'" :class="{active:mode==='show'}">Podcast(Show)</mu-button>
                     <mu-button flat v-else disabled>Podcast(Show)</mu-button>
                 </div></mu-col>
                 <mu-col span="6"><div class="grid-cell">
-                    <mu-button flat color="primary" v-if="spotify.episode" @click="mode='episode'" :class="{active:mode==='episode'}">Podcast(Episode)</mu-button>
+                    <mu-button flat color="primary" v-if="episode" @click="mode='episode'" :class="{active:mode==='episode'}">Podcast(Episode)</mu-button>
                     <mu-button flat v-else disabled>Podcast(Episode)</mu-button>
                 </div></mu-col>
             </mu-row>
@@ -559,48 +559,53 @@
         watch:{
             'spotify.update':{
                 handler(newState){
-                    if(newState) this.$emit('open');
+                    //if(newState) this.$emit('open');
 
                     switch(newState.type){
-
                         case 'playlist':
                             this.mode = 'playlist';
                             this.c_getPlaylistById((res)=>{
                                 if(res.data) this.playlist = res.data;
                             });
+                            this.$emit('open');
                             break;
                         case 'track':
                             this.mode = 'track';
                             this.c_getTrack(this.spotify.track.id,(res)=>{
                                 if(res.data) this.track = res.data;
                             });
+                            this.$emit('open');
                             break;
                         case 'album':
                             this.mode = 'album';
                             this.c_getAlbum(this.spotify.album.id,(res)=>{
                                 if(res.data) this.album = res.data;
                             });
+                            this.$emit('open');
                             break;
                         case 'artist':
                             this.mode = 'artist';
                             this.c_getArtist(this.spotify.artist.id,(res)=>{
                                 if(res.data) this.artist = res.data;
                             });
-
+                            this.$emit('open');
                             break;
                         case 'generated':
                             this.mode = 'generated';
+                            this.$emit('open');
                             break;
                         case 'episode':
                             this.mode = 'episode';
                             this.episode = this.spotify.episodes.items.filter(epi=>epi.id===this.spotify.episode.id)[0];
                             console.log("episode", this.episode);
+                            this.$emit('open');
                             break;
 
                         case 'show':
                             this.mode = 'show';
                             this.show =  this.spotify.shows.items.filter(show=>show.id===this.spotify.show.id)[0];
                             console.log("show",this.show);
+                            this.$emit('open');
                             break;
                     }
                 },deep:true

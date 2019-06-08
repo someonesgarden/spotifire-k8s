@@ -5,7 +5,7 @@ const marker0 = {
         center: null,
         title: "",
         type: "spot",
-        spotifyid: "",
+        spotifyid: null,
         userid:null,
         desc: "",
         public: 'open',
@@ -28,6 +28,15 @@ export default class EMarker{
         return this.marker;
     }
 
+    update(firebaseRef){
+        let updates = {};
+        this.init();
+        if(this.marker.id) {
+            updates[this.marker.id] = this.marker;
+            firebaseRef.update(updates);
+        }
+    }
+
     updateOrNew(firebaseRef){
         let update = true;
         let updates = {};
@@ -39,8 +48,11 @@ export default class EMarker{
             update = false;
         }
 
+
         if(this.marker.spotifyid){
 
+            console.log("updateOrNew");
+            console.log(this.marker);
 
             // Episodeの場合
             // 検索されたEpisodeリストから選択
@@ -63,7 +75,9 @@ export default class EMarker{
 
             }else{
                 // Trackの場合
-                if(!this.marker.spotifytype){
+                console.log("is track!");
+                console.log(this.marker);
+
                     this.checkSpotify(res => {
                         if (res.data !== "") {
                             if (res.data.body.type === 'track') {
@@ -80,20 +94,26 @@ export default class EMarker{
 
                             if (update) {
                                 //アップデート
+                                console.log("update!");
+                                console.log(this.marker);
                                 updates[this.marker.id] = this.marker;
                                 firebaseRef.update(updates);
                             } else {
                                 //新規保存
+                                console.log("uNEW!!");
+                                console.log(this.marker);
                                 let result = firebaseRef.push(this.marker);
+                                console.log(result);
                                 if (this.marker.type === 'mainuser') store.commit('mapstore/setMainuser', {id: result.key});
                             }
 
                         } else {
-                            store.commit('setAlertText', "IDが間違えています。入力し直してください。");
+                            store.commit('setAlertText', "利用にはSpotifyログインします。m");
                             store.commit('setAlertState', true);
+                            store.commit('setAlertAction', "login");
                         }
                     });
-                }
+
             }
 
 
@@ -102,15 +122,24 @@ export default class EMarker{
             store.commit('setAlertText',"Spotify IDが入力されていません。");
             store.commit('setAlertState',true);
         }
+
+        return this.marker;
     }
 
     initMainuser(){
+        console.log("initMainUser!");
         if(store.state.spotify.me){
             this.marker.title       = store.state.spotify.me.display_name;
             this.marker.userid      = store.state.spotify.me.id;
-            this.marker.spotifyid   = store.state.spotify.bookmarks[0].id;
-            this.marker.spotifytype = store.state.spotify.bookmarks[0].type;
-            this.marker.thumb       = store.state.spotify.bookmarks[0].album.images[0].url;
+            if(store.state.spotify.bookmarks){
+                this.marker.spotifyid   = store.state.spotify.bookmarks[0].id;
+                this.marker.spotifytype = store.state.spotify.bookmarks[0].type;
+                this.marker.thumb       = store.state.spotify.bookmarks[0].album.images[0].url;
+            }else{
+                //ダミーでプリンス
+                this.marker.spotifyid   = "5xcb3TD6lZ4X7RId59DNxo";
+            }
+
             this.marker.project     = "mainuser";
         }
 

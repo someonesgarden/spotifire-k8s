@@ -95,7 +95,6 @@
 
             toggleMenu(){
                 console.log("toggleMenu!");
-
                 this.open = !this.open;
             }
         },

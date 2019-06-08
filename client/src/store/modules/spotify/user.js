@@ -7,7 +7,8 @@ const state = {
         expires_in:null
     },
     me:{
-        id:null
+        id:null,
+        update:new Date()
     },
     bookmarks:null,
 
@@ -37,14 +38,23 @@ const mutations = {
 
     setMe(state,val){
         state.me = val;
+        state.me.update = new Date();
+    },
+
+    setMeParam(state,data){
+      state.me[data.key] = data.val;
+      state.me.update = new Date();
     },
 
     setBookmarks(state,val){
       state.bookmarks = val;
+      state.me.bookmark_num = val.length;
+      state.me.update = new Date();
     },
 
     setMeID(state,val){
         state.me.id = val;
+        state.me.update = new Date();
     }
 }
 

@@ -14,6 +14,7 @@ export const a_spotify  =  ({commit}, [type, action, data]) => {
             code: (data) => commit('spotify/setCode', data),
             me: (data) => commit('spotify/setMe', data),
             meID:(data) => commit('spotify/setMeId', data),
+            meParam:(data) => commit('spotify/setMeParam', data),
             searchNum: (data) => commit('spotify/setSearchResNum', data),
             searchQuery:(data) => commit('spotify/setSearchQuery', data),
             analysis:(data) => commit('spotify/setTrackAnalysis', data),
@@ -107,15 +108,16 @@ export const a_index    =  ({commit}, [type, action, data]) => {
         },
 
         bottom:{
-            open:   () => commit('setBottomState', true),
-            close:  () => commit('setBottomState', false),
-            toggle: () => commit('setBottomState', 'toggle')
+            open:   () => commit('setBottomState',  true),
+            close:  () => commit('setBottomState',  false),
+            toggle: () => commit('setBottomState',  'toggle')
         },
 
         alert:{
-            open: ()=> commit('setAlertState', true),
-            close:()=> commit('setAlertState', false),
-            set: (data)=> commit('setAlertText', data)
+            open: ()=> commit('setAlertState',       true),
+            close:()=> commit('setAlertState',       false),
+            set: (data)=> commit('setAlertText',     data),
+            action:(data)=> commit('setAlertAction', data)
         }
     };
     actions[type][action](data)
