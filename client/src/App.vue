@@ -4,6 +4,15 @@
     <mu-container fluid>
       <router-view></router-view>
     </mu-container>
+
+
+    <!-- MP3 EPISODE PLAYER-->
+    <div class="mp3_players" v-if="$route.name ==='Map' && !!mp3.pods">
+      <audio-player :key="'pod'+index" :num="index" :pod="pod" v-for="(pod,index) in mp3.pods"></audio-player>
+    </div>
+    <!--/ MP3 EPISODE PLAYER-->
+
+
     <mu-bottom-sheet :open.sync="bottom.open" class="bottomnav">
       <bottom-view></bottom-view>
     </mu-bottom-sheet>
@@ -23,6 +32,7 @@ import HeadTop from './components/Common/Header.vue';
 import Player from './components/Spotify/Player/Player.vue';
 import Magazine from './components/Layout/Magazine.vue';
 import BottomView from './components/Common/BottomView';
+  import AudioPlayer from './components/Mp3/AudioPlayer';
 
 export default {
   name: 'app',
@@ -31,9 +41,10 @@ export default {
     'head-top':HeadTop,
     'player':Player,
       'magazine':Magazine,
-    'bottom-view':BottomView
+    'bottom-view':BottomView,
+    'audio-player':AudioPlayer
   },
-  computed:mapGetters(['bottom','alert']),
+  computed:mapGetters(['bottom','alert','mp3']),
   methods:{
     ...mapActions(['a_index']),
 
@@ -103,5 +114,17 @@ export default {
   .container-fluid{
     padding-right:0;
     padding-left:0;
+  }
+
+  .mp3_players{
+    width:100%;
+    position:absolute;
+    bottom:6px;
+    text-align:center;
+    margin:2px auto;
+    /*background-color: rgba(210, 222, 217, 0.3);*/
+    padding:4px 0 2px 0;
+    z-index:410;
+    opacity:0.8;
   }
 </style>

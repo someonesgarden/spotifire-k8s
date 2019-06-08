@@ -4,15 +4,13 @@ export default{
     computed:{
         sortedMarkers(){
             let result = {};
-            // if(this.mapstore.markers){
+            if(this.mapstore.markers){
                 Object.keys(this.mapstore.markers).forEach(key=> {
                     let marker = this.mapstore.markers[key];
                     marker.id = key;
-                    if(marker.project === 'mainuser' || (marker.project===this.mapstore.emory.project)){
-                        result[key]= marker;
-                    }
-                })
-            //}
+                    if(marker.project === 'mainuser' || (marker.project===this.mapstore.emory.project)) result[key]= marker;
+                });
+            }
             return result;
         }
     },
@@ -109,7 +107,6 @@ export default{
                      thumb: this.mapstore.marker_types[type].thumb,
                      id: this.mapstore.marker_types[type].id,
                 })
-
             }
 
             return rand_points;

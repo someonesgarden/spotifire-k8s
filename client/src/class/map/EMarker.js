@@ -70,9 +70,6 @@ export default class EMarker{
 
             }else {
                 // Trackの場合
-                console.log("is track!");
-                console.log(this.marker);
-
                 if (!this.marker.thumb) {
                     this.checkSpotify(res => {
                         if (res.data !== "") {
@@ -111,19 +108,15 @@ export default class EMarker{
                     });
                 }
             }
-
-
-
         }else{
             store.commit('setAlertText',"Spotify IDが入力されていません。");
             store.commit('setAlertState',true);
         }
-
         return this.marker;
     }
 
     initMainuser(){
-        console.log("initMainUser!");
+        console.log("[EMarker] initMainUser");
         if(store.state.spotify.me){
             this.marker.title       = store.state.spotify.me.display_name;
             this.marker.userid      = store.state.spotify.me.id;

@@ -75,7 +75,6 @@ export const a_spotify  =  ({commit}, [type, action, data]) => {
 };
 
 export const a_mapstore = ({commit},[type, action, data]) => {
-
     const actions = {
         set: {
             mainuser:(data)   => commit('mapstore/setMainuser',  data),
@@ -160,13 +159,19 @@ export const a_three    =  ({commit},param) => commit('three/setParam', param)
 
 // ------ MP3 PLAYERS -----
 
-export const a_mp3 =  ({commit}, [type, action, data]) => {
+
+// a_mp3(['pod',0,'file','.....'])
+// a_mp3(['pod',0,'playing', true])
+export const a_mp3 =  ({commit}, [type, num, action, data]) => {
+
+    console.log("a_mp3", type, num, action, data);
     const actions = {
-        pod1:{
-            file:(data)     => commit('mp3/setPodParam', {num:0,key:'file',  val:data}),
-            volume: (data)  => commit('mp3/setPodParam', {num:0,key:'volume',val:data}),
-            loop:   (data)  => commit('mp3/setPodParam', {num:0,key:'loop',  val:data}),
+        pod:{
+            file:   (num,data)  => commit('mp3/setPodParam', {num:num, key:'file',    val:data}),
+            volume: (num,data)  => commit('mp3/setPodParam', {num:num, key:'volume',   val:data}),
+            loop:   (num,data)  => commit('mp3/setPodParam', {num:num, key:'loop',     val:data}),
+            playing:(num,data)  => commit('mp3/setPodParam', {num:num, key:'playing',  val:data}),
         }
     }
-    actions[type][action](data)
+    actions[type][action](num,data)
 }

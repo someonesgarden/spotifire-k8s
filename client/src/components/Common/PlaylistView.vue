@@ -618,6 +618,7 @@
 
             'spotify.player':{
                 handler(newState){
+
                     if(newState.playing){
                         //PLAY
                         this.c_devices((res)=>{

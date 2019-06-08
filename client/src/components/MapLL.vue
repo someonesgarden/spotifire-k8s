@@ -339,27 +339,22 @@
         methods: {
             ...mapActions([
                 'a_index',
+                'a_mp3',
                 'a_spotify',
                 'a_mapstore',
                 'a_ws']),
 
-
             createOrFindMainuser(meid){
-                console.log("[MapLL : spotify.me.id] ",meid);
                 //メインユーザーを検索してなければ作成
                 this.markersRef.orderByChild('userid').startAt(meid).endAt(meid).once('value', ss=>{
-
                     if(ss.val()) {
-                        console.log("[MapLL : createOrFindMainuser] FOUND");
+                        console.log("FOUND");
                         let key = Object.keys(ss.val())[0];
                         let val = Object.values(ss.val())[0];
                         this.a_mapstore(['set', 'mainuser', {...val, id: key}]);
                     } else{
                         //ローカルにユーザーデータがない場合だけ作成される
-                        if(!this.mapstore.mainuser){
-                            console.log("[MapLL : createOrFindMainuser] CREATE");
-                            let newuser = new M({type:'mainuser'}).updateOrNew(this.markersRef);
-                        }
+                        if(!this.mapstore.mainuser) new M({type:'mainuser'}).updateOrNew(this.markersRef);
                     }
                 })
             },
@@ -372,7 +367,7 @@
                 this.a_mapstore(['set', 'tracking', false]);
                 let proj = this.mapstore.emory.projects[key];
                 this.a_mapstore(['center', 'map', proj.center]);
-                setTimeout(() => this.a_mapstore(['center', 'map', proj.center]), 2000);
+                //setTimeout(() => this.a_mapstore(['center', 'map', proj.center]), 5100);
                 this.distOfProjPoints();
             },
             mapClick(val) {
@@ -398,20 +393,30 @@
                 }else{
                     //自分とpointの距離を測る
                     let mainuser = this.mapstore.markers[this.mapstore.mainuser.id];
-
                     let dist = this.distKmofCenters(mainuser.center, val.center);
+
                     if(val.spotifytype==='track'){
-                        //トラック情報を取得してボットムバーを開く
                         this.c_getTrack(val.spotifyid,(res)=>{
                             if(!!res.data){
                                 this.a_spotify(['player','track',res.data]);
-                                this.a_spotify(['set','track',　res.data]);
+                                this.a_spotify(['player','play',{id:val.spotifyid,type:'track'}]);
                             }
                         });
                         this.a_index(['bottom','open']);
                     }else if(val.spotifytype==='episode'){
                         //ポッドキャストepisodeの場合、mp3プレイヤーを開く
                         this.a_index(['bottom','open']);
+
+                        //自分ポイントとの距離
+                        console.log(dist);
+
+                        // this.a_mp3(['pod',0,'playing', false]);
+                        // this.a_mp3(['pod',0,'volume',0]);
+
+                        console.log(val);
+                        setTimeout(()=> this.a_mp3(['pod',0,'file',val.mp3]),100);
+                        setTimeout(()=> this.a_mp3(['pod',0,'volume',6]),100);
+                        setTimeout(()=> this.a_mp3(['pod',0,'playing', true]),100);
                     }
                 }
             },

@@ -12,23 +12,13 @@
                 </mu-select>
             </mu-flex>
 
-            <div class="mp3_players" v-if="$route.name ==='Map'">
-                <audio-player file="https://p.scdn.co/mp3-preview/c0ceabc60f2f2393098959d53aa8bdd249d3819e" :loop="true"></audio-player>
-                <audio-player
-                        file="https://p.scdn.co/mp3-preview/c0ceabc60f2f2393098959d53aa8bdd249d3819e"></audio-player>
-                    <audio-player
-                            file="https://p.scdn.co/mp3-preview/c0ceabc60f2f2393098959d53aa8bdd249d3819e"></audio-player>
-            </div>
 
-
-            <!-- MP3 EPISODE PLAYER-->
             <mu-flex  justify-content="center" align-items="center" style="width:100%;min-height:48px;" v-if="mapstore.mainuser && mapstore.markerDists && $route.name ==='Map'">
                 <div v-for="(mkr,inx) in mapstore.markerDists" @click="bottomAvatarClick(mkr)" class="bottom_avatar">
                     <my-avatar :id="mkr.id" :dist="mkr.dist" :key="'md'+inx"/>
                 </div>
-
             </mu-flex>
-            <!--/ MP3 EPISODE PLAYER-->
+
 
             <!-- TRACK PLAYER -->
             <mu-flex justify-content="center" class="player_area" v-if="!!spotify.player.track">
@@ -50,7 +40,6 @@
                 </mu-chip>
             </mu-flex>
             <!-- / TRACK PLAYER-->
-
         </mu-flex>
     </mu-flex>
 </template>
@@ -64,21 +53,33 @@
     import AudioPlayer from '../Mp3/AudioPlayer';
     export default {
         name: "BottomView",
-        mixins:[spotifyMixin,mapMixin],
-        components:{
-          BottomSlider,
+        mixins: [spotifyMixin, mapMixin],
+        components: {
+            BottomSlider,
             MyAvatar,
             AudioPlayer
         },
-        computed:mapGetters(['spotify','mapstore']),
+
+        computed: mapGetters(['spotify','mapstore','mp3']),
+
+
+
+        mounted(){
+            // this.a_mp3(['pod',0,'playing', false]);
+            // this.a_mp3(['pod',1,'playing', false]);
+            // this.a_mp3(['pod',2,'playing', false]);
+        },
         methods:{
-            ...mapActions(['a_spotify']),
+            ...mapActions(['a_spotify','a_mp3']),
+
+            mp3Action(val){
+                //mp3プレイヤーからのアクション
+              console.log("mp3Action");
+              console.log(val);
+            },
 
             deviceSelected(val){
-                this.c_transferplayback(val,(res)=>{
-                    console.log("c_transferplayback");
-                    console.log(res);
-                })
+                this.c_transferplayback(val,(res)=>{  })
             },
 
             Analyse(trackid){
@@ -96,7 +97,6 @@
 
             bottomAvatarClick(mkr){
                 this.a_mapstore(['set','tracking',false]);
-
                 let marker = this.mapstore.markers[mkr.id];
                 if(marker) this.a_mapstore(['center','map',this.mapstore.markers[mkr.id].center]);
             }
