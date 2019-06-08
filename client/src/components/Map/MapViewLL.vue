@@ -31,6 +31,7 @@
         },
         data() {
             return {
+                track_max:0,
                 trackTimeout: false,
                 timeout: null,
                 projectPoly: null,
@@ -59,7 +60,7 @@
             }
         },
         mounted() {
-            setTimeout(() => this.geolocation(), 5000);
+            setTimeout(() => this.geolocation(), 2000);
         },
 
         methods: {
@@ -74,6 +75,14 @@
                 if(this.mapstore.tracking){
                     this.trackTimeout = true;
                     this.timeout = setTimeout(this.keepTracking, this.mapstore.trackDuration);
+
+                    if(this.track_max>50){
+                        this.a_mapstore(['set', 'tracking', false]);
+                        this.track_max=0;
+                    }else{
+                        this.track_max++;
+                    }
+
                 }else{
                     this.trackTimeout = false;
                     this.timeout      = null;
