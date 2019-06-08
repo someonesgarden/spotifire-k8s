@@ -292,14 +292,12 @@
                     console.log("[watch] me handler");
                     if(!!newMe){
                         if(!this.spotify.me.bookmark_num) {
-                            console.log("no bookmark");
                             this.a_index(['alert', 'set', "Spotifyユーザーデータを調べています"]);
                             this.a_index(['alert', 'open']);
                         }
 
                         //ユーザーのbookmarkデータがなくてもとりあえず初期化する
                         this.createOrFindMainuser(this.spotify.me.id);
-
                         //FireBaseのイベントリスナー
                         this.markersRef.on('value', (snapshot)=> this.a_mapstore(['set','markers',snapshot.val()]));
                         this.projsRef.on('value',   (snapshot)=> this.a_mapstore(['emory','setprojects',snapshot.val()]));
@@ -311,11 +309,8 @@
             'mapstore.mainuser':{
                 handler(newUser){
                     if(!!newUser && !this.userisready){
-                        console.log("[watch] mainuser handler");
                         this.socketInit();
                         this.connectToSocket();
-                        //this.$refs.emorymap.geolocation();
-
                         this.userisready = true;
                     }
                 }
@@ -350,7 +345,6 @@
 
 
             createOrFindMainuser(meid){
-
                 console.log("[MapLL : spotify.me.id] ",meid);
                 //メインユーザーを検索してなければ作成
                 this.markersRef.orderByChild('userid').startAt(meid).endAt(meid).once('value', ss=>{
@@ -495,31 +489,34 @@
                 this.mode = mode;
                 switch (mode) {
                     case 'info':
+                        info_overlay.style.visibility = 'visible';
                         info_overlay.style.zIndex = 401;
                         play_overlay.style.zIndex = -1;
                         net_overlay.style.zIndex = -1;
                         edit_overlay.style.zIndex = -1;
                         break;
                     case 'play':
-                        info_overlay.style.zIndex = -1;
+                        info_overlay.style.visibility = 'hidden';
                         play_overlay.style.zIndex = 401;
                         net_overlay.style.zIndex = -1;
                         edit_overlay.style.zIndex = -1;
                         break;
                     case 'net':
-                        info_overlay.style.zIndex = -1;
+                        info_overlay.style.visibility = 'hidden';
                         play_overlay.style.zIndex = -1;
                         net_overlay.style.zIndex = 401;
                         edit_overlay.style.zIndex = -1;
                         break;
                     case 'edit':
                         this.editing.status = true;
+                        info_overlay.style.visibility = 'hidden';
                         info_overlay.style.zIndex = -1;
                         play_overlay.style.zIndex = -1;
                         net_overlay.style.zIndex = -1;
                         edit_overlay.style.zIndex = 401;
                         break;
                     case 'map':
+                        info_overlay.style.visibility = 'hidden';
                         info_overlay.style.zIndex = -1;
                         play_overlay.style.zIndex = -1;
                         net_overlay.style.zIndex = -1;

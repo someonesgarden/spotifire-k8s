@@ -48,12 +48,7 @@ export default class EMarker{
             update = false;
         }
 
-
         if(this.marker.spotifyid){
-
-            console.log("updateOrNew");
-            console.log(this.marker);
-
             // Episodeの場合
             // 検索されたEpisodeリストから選択
             if(this.marker.isEpisode){
@@ -73,11 +68,12 @@ export default class EMarker{
                     if(this.marker.type==='mainuser') store.commit('mapstore/setMainuser',{id:result.key});
                 }
 
-            }else{
+            }else {
                 // Trackの場合
                 console.log("is track!");
                 console.log(this.marker);
 
+                if (!this.marker.thumb) {
                     this.checkSpotify(res => {
                         if (res.data !== "") {
                             if (res.data.body.type === 'track') {
@@ -113,7 +109,7 @@ export default class EMarker{
                             store.commit('setAlertAction', "login");
                         }
                     });
-
+                }
             }
 
 
@@ -139,10 +135,8 @@ export default class EMarker{
                 //ダミーでプリンス
                 this.marker.spotifyid   = "5xcb3TD6lZ4X7RId59DNxo";
             }
-
             this.marker.project     = "mainuser";
         }
-
         this.marker.center = store.state.mapstore.map.center;
     }
 

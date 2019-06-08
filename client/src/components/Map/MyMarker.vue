@@ -75,7 +75,7 @@
 </script>
 <style lang="scss">
     .leaflet-fake-icon-image-2x {
-        background-image: none !important;
+        /*background-image: none !important;*/
     }
     .leaflet-fake-icon-shadow {
         background-image: url('/static/img/markers/marker-shadow.png') !important;

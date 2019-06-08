@@ -29,6 +29,7 @@ export default{
                        if(res.data.items){
                            this.a_spotify(['set','track',res.data.items[0]]);
                            this.a_spotify(['set','bookmarks',res.data.items]);
+                           this.a_index(['alert','close']);
                        }
                     }
 

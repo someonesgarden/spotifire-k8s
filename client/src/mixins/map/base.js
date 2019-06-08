@@ -4,7 +4,7 @@ export default{
     computed:{
         sortedMarkers(){
             let result = {};
-            if(this.mapstore.markers){
+            // if(this.mapstore.markers){
                 Object.keys(this.mapstore.markers).forEach(key=> {
                     let marker = this.mapstore.markers[key];
                     marker.id = key;
@@ -12,7 +12,7 @@ export default{
                         result[key]= marker;
                     }
                 })
-            }
+            //}
             return result;
         }
     },

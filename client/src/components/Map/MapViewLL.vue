@@ -10,14 +10,12 @@
 
     import {mapGetters, mapActions} from 'vuex';
     import mapMixin from '../../mixins/map/index';
-
     //LEAF
     import { LMap, LTileLayer, LPolygon} from "vue2-leaflet";
     import { latLng, icon } from "leaflet";
 
     import MyMarker from './MyMarker';
     import MyTooltip from './MyTooltip';
-
     import M from '../../class/map/EMarker';
 
     export default {
@@ -89,10 +87,6 @@
 
             resetPos(position) {
                 if (!!position) {
-                    // const lat = position.coords.latitude;
-                    // const lng = position.coords.longitude;
-                    // const center = L.latLng(lat, lng);
-
                     const center = {
                         lat:position.coords.latitude,
                         lng:position.coords.longitude
@@ -100,12 +94,8 @@
 
                     //地図のセンターリセット
                     this.a_mapstore(['center', 'map', center]);
-
-                    //メインユーザー位置をリセット
-                    if (this.mapstore.mainuser && this.mapstore.mainuser.id) {
-                        this.a_mapstore(['center', 'mainuser', center]);
-                        new M({...this.mapstore.mainuser, center: center}).update(this.markersRef); //マーカーなのでFirebase情報も移動
-                    }
+                    //メインユーザー位置をリセット(Firebaseのエントリーを更新）
+                    if (this.mapstore.mainuser && this.mapstore.mainuser.id) new M({...this.mapstore.mainuser, center: center}).update(this.markersRef);
                 }
             }
         }
