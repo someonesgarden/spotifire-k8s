@@ -99,11 +99,12 @@
                     this.mapstore.markerDists.forEach((d,i)=>{
                         let dm=d.dist*1000;
 
-                        if(dm>0 && dm<20){
+                        //console.log(Math.floor(dm)+"メートル");
+
+                        if(dm>0 && dm<30){
                                 let marker = this.mapstore.markers[d.id];
 
-                                let volume = (25 - dm)*0.65;
-
+                                let volume = Math.floor((30 - dm)*100/30);
 
                                 if(marker.spotifytype==='episode'){
 
@@ -118,12 +119,12 @@
                                     if(already_has){
                                         console.log("already_has");
                                         if(!already_has.playing){
-                                            setTimeout(()=> this.a_mp3(['pod',paused_pods[0],'file',marker.mp3]),20);
-                                            setTimeout(()=> this.a_mp3(['pod',paused_pods[0],'volume',volume]),20);
-                                            setTimeout(()=> this.a_mp3(['pod',paused_pods[0],'playing', true]),20);
+                                            setTimeout(()=> this.a_mp3(['pod',already_has.num,'file',marker.mp3]),20);
+                                            setTimeout(()=> this.a_mp3(['pod',already_has.num,'volume',volume]),20);
+                                            setTimeout(()=> this.a_mp3(['pod',already_has.num,'playing', true]),20);
                                         }else{
                                             //すでに再生中は、ボリューが変わる程度
-                                            setTimeout(()=> this.a_mp3(['pod',paused_pods[0],'volume',volume]),20);
+                                            setTimeout(()=> this.a_mp3(['pod',already_has.num,'volume',volume]),20);
                                         }
 
                                     }else if(paused_pods.length>0){
