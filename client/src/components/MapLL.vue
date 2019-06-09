@@ -62,20 +62,17 @@
                     <mu-flex justify-content="center" align-items="center" direction="column" style="width:100%;height:100%;padding:20px;">
                         <mu-flex justify-content="center" align-items="center" direction="column" class="inner" style="background-color:rgba(31, 6, 6, 0.19);height:100%;width:100%;border-radius:6px;padding:15px 22px;">
 
+
                             <div gutter style="width:100%;" v-if="mapstore.emory.project">
-                                <mu-col span="12" sm="12" md="4" lg="3" xl="2" style="float:left;"  v-if="mapstore.emory.projects[mapstore.emory.project]" class="hidden-xs">
-                                    <mu-card style="width: 100%; max-width: 375px; margin: 0 auto;">
-                                        <mu-card-media :title="mapstore.emory.projects[mapstore.emory.project].title" sub-title="">
-                                            <img :src="mapstore.emory.projects[mapstore.emory.project].thumb">
-                                        </mu-card-media>
-                                    </mu-card>
-                                </mu-col>
 
-                                <mu-col span="12" sm="12" md="8" lg="9" xl="10" style="float:left;" v-if="mapstore.emory.projects[mapstore.emory.project]">
-                                    <mu-card style="width: 100%; margin: 0 auto;">
+                                <mu-col class="info_col" span="12" sm="12" md="12" lg="12" xl="12" style="float:left;" v-if="mapstore.emory.projects[mapstore.emory.project]">
+                                    <mu-card style="width: 100%; margin: 0 auto; background-color:rgba(3,3,3,0.36);">
 
-                                        <mu-card-title :title="mapstore.emory.projects[mapstore.emory.project].title"></mu-card-title>
-                                        <mu-card-text>
+                                        <div class="play_card_img">
+                                                <img :src="mapstore.emory.projects[mapstore.emory.project].thumb">
+                                        </div>
+                                        <mu-card-title style="color:white;" :title="mapstore.emory.projects[mapstore.emory.project].title"></mu-card-title>
+                                        <mu-card-text style="color:white;">
                                             {{mapstore.emory.projects[mapstore.emory.project].desc}}
                                         </mu-card-text>
 
@@ -85,13 +82,18 @@
                                     </mu-card>
                                 </mu-col>
 
-                                <mu-col span="12" sm="12" md="8" lg="9" xl="10" style="width:100%;text-align:center;" v-else>
+                                <mu-col span="12" sm="12" md="12" lg="12" xl="12" style="width:100%;text-align:center;" v-else>
                                     <h1 style="margin:4px auto;">プロジェクトを選択してください。</h1>
                                 </mu-col>
                             </div>
 
 
-                            <mu-button color="primary"  class="smallbtn"  @click="backToInfo">メニューへ戻る</mu-button>
+                            <mu-flex justify-content="center" align-items="center" direction="row">
+                                <mu-button color="primary"    class="smallbtn"  @click="playStart" v-if="mapstore.emory.projects[mapstore.emory.project]">プレイ開始</mu-button>
+                                <mu-button color="indigo800"  class="smallbtn"  @click="backToInfo">メニューへ</mu-button>
+                            </mu-flex>
+
+
                         </mu-flex>
 
                     </mu-flex>
@@ -463,6 +465,11 @@
             backToInfo(){
                 this.switchLayer('info');
             },
+
+            playStart(){
+              this.a_mapstore(['set', 'tracking', true]);
+                this.switchLayer('map');
+            },
             editEnd() {
                 this.editing.status = false;
                 this.switchLayer('info');
@@ -561,5 +568,41 @@
         height:60px;
         left:calc(50vw - 30px);
         top:calc(50vh - 60px);
+    }
+
+    .play_card_img{
+
+       width:100%;
+        text-align:center;
+        padding:10px;
+
+        img {
+            border: 6px solid #18a91d;
+            border-radius: 18px;
+            width: 150px;
+            height: 150px;
+            margin: 0 auto;
+
+            @media all and (max-width: 767px) {
+                width: 70px;
+                height: 70px;
+                border-radius: 50%;
+            }
+        }
+    }
+
+    .info_col {
+        .mu-card-title-container{
+            padding:8px;
+        }
+
+        .mu-card-title {
+            color: #0affed;
+        }
+
+        .mu-avatar {
+            width: 25px;
+            height: 25px;
+        }
     }
 </style>

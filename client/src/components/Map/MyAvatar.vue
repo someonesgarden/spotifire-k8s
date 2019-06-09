@@ -27,10 +27,10 @@
             iconImg(){
                 let icontype = (this.m.id === this.mapstore.mainuser.id) ? 'you' : this.m.type;
                 let icon  = this.mapstore.icons[icontype][this.m.title.charCodeAt(0) % this.mapstore.icons[icontype].length];
-                let w = 30;
-                let h = 30;
+                let w = 25;
+                let h = 25;
 
-                if(!this.dist){
+                if(this.dist === 'undefined'){
                     switch(icontype){
                         case 'you':
                             w = 48;
@@ -60,7 +60,11 @@
 
 <style scoped lang="scss">
 
-
+    .mu-avatar{
+        background-color:inherit;
+        width:100%;
+        height:100%;
+    }
 
 
 </style>
