@@ -52,11 +52,14 @@ export default class EMarker{
             // Episodeの場合
             // 検索されたEpisodeリストから選択
             if(this.marker.isEpisode){
-                let episode = store.state.spotify.episodes.items.filter(ep=>ep.id===this.marker.spotifyid)[0];
-                this.marker.thumb       = episode.images[0].url;
-                this.marker.spotifytype = episode.type;
-                this.marker.spotifyname = episode.name;
-                this.marker.mp3         = episode.audio_preview_url; //Episodeの場合、APIで再生できないのでmp3のアドレスも登録する。
+
+                if(store.state.spotify.episodes){
+                    let episode = store.state.spotify.episodes.items.filter(ep=>ep.id===this.marker.spotifyid)[0];
+                    this.marker.thumb       = episode.images[0].url;
+                    this.marker.spotifytype = episode.type;
+                    this.marker.spotifyname = episode.name;
+                    this.marker.mp3         = episode.audio_preview_url; //Episodeの場合、APIで再生できないのでmp3のアドレスも登録する。
+                }
 
                 if(update){
                     //アップデート
@@ -87,14 +90,10 @@ export default class EMarker{
 
                             if (update) {
                                 //アップデート
-                                console.log("update!");
-                                console.log(this.marker);
                                 updates[this.marker.id] = this.marker;
                                 firebaseRef.update(updates);
                             } else {
                                 //新規保存
-                                console.log("uNEW!!");
-                                console.log(this.marker);
                                 let result = firebaseRef.push(this.marker);
                                 console.log(result);
                                 if (this.marker.type === 'mainuser') store.commit('mapstore/setMainuser', {id: result.key});

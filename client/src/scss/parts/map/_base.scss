@@ -90,7 +90,6 @@
     border-radius:0;
 
 
-
     .leaflet-popup-content {
       margin:0;
       width: 100% !important;
@@ -126,30 +125,6 @@
   height:calc(100vh - 63px);
   overflow: hidden;
 
-  //.controlarea{
-  //  width:80px;
-  //  height:100%;
-  //  background-color:rgba(34,12,111,0.8);
-  //  text-align:center;
-  //
-  //  .ui{
-  //    background-color: #13111e;
-  //
-  //    h4.title{
-  //      font-family: 'Allerta Stencil' !important;
-  //      font-weight:bold;
-  //      padding-top:12px;
-  //      padding-bottom:12px;
-  //      color:white;
-  //      font-size:11px;
-  //    }
-  //  }
-  //
-  //  .mu-text-field-input{
-  //    font-size:9px;
-  //  }
-  //}
-
   .maparea{
     height:100%;
     position:relative;
@@ -171,6 +146,24 @@
     margin: 0;
     left: 0;
     top: 0;
+
+    .hidden-xs{
+      @media all and (max-width: 767px) {
+        display: none;
+        visibility: hidden;
+      }
+    }
+
+    .visible-xs{
+
+      display: none;
+      visibility: hidden;
+
+      @media all and (min-width: 768px) {
+        display: inherit;
+        visibility: visible;
+      }
+    }
 
     &.hide{
       opacity:0.0;

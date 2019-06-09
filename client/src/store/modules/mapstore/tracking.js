@@ -1,6 +1,6 @@
 const state = {
     tracking:false,
-    trackDuration:  1000,
+    trackDuration:  2000,
     locations:null
 }
 

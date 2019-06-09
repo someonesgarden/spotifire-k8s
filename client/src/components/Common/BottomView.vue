@@ -12,13 +12,13 @@
                 </mu-select>
             </mu-flex>
 
+            <mu-flex  justify-content="center" align-items="center" style="width:100%;min-height:48px;overflow-x:scroll !important;" v-if="mapstore.mainuser && mapstore.markerDists && $route.name ==='Map'">
 
-            <mu-flex  justify-content="center" align-items="center" style="width:100%;min-height:48px;" v-if="mapstore.mainuser && mapstore.markerDists && $route.name ==='Map'">
-                <div v-for="(mkr,inx) in mapstore.markerDists" @click="bottomAvatarClick(mkr)" class="bottom_avatar">
-                    <my-avatar :id="mkr.id" :dist="mkr.dist" :key="'md'+inx"/>
-                </div>
+                   <div v-for="(mkr,inx) in mapstore.markerDists" @click="bottomAvatarClick(mkr)" class="bottom_avatar" v-if="mkr.dist<0.05">
+                       <my-avatar :id="mkr.id" :dist="mkr.dist" :key="'md'+inx"/>
+                   </div>
+
             </mu-flex>
-
 
             <!-- TRACK PLAYER -->
             <mu-flex justify-content="center" class="player_area" v-if="!!spotify.player.track">

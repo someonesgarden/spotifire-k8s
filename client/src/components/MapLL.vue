@@ -38,9 +38,11 @@
                     <mu-flex class="info_box play" justify-content="center" align-items="center" direction="column" fill @click="switchLayer('play')">
                         <mu-icon value="pets" :size="20"></mu-icon>play.
                     </mu-flex>
-                    <mu-flex class="info_box story" justify-content="center" align-items="center" direction="column" fill @click="switchLayer('net')">
-                        <mu-icon value="network_check" :size="20"></mu-icon>around.
-                    </mu-flex>
+
+<!--                    <mu-flex class="info_box story" justify-content="center" align-items="center" direction="column" fill @click="switchLayer('net')">-->
+<!--                        <mu-icon value="network_check" :size="20"></mu-icon>around.-->
+<!--                    </mu-flex>-->
+
                     <mu-flex class="info_box edit" justify-content="center" align-items="center" direction="column" fill @click="switchLayer('edit')">
                         <mu-icon value="build" :size="20"></mu-icon>edit.
                     </mu-flex>
@@ -60,34 +62,38 @@
                     <mu-flex justify-content="center" align-items="center" direction="column" style="width:100%;height:100%;padding:20px;">
                         <mu-flex justify-content="center" align-items="center" direction="column" class="inner" style="background-color:rgba(31, 6, 6, 0.19);height:100%;width:100%;border-radius:6px;padding:15px 22px;">
 
-                            <div gutter style="width:100%;">
-                                <mu-col span="12" sm="4" md="4" lg="3" xl="2" style="float:left;">
+                            <div gutter style="width:100%;" v-if="mapstore.emory.project">
+                                <mu-col span="12" sm="12" md="4" lg="3" xl="2" style="float:left;"  v-if="mapstore.emory.projects[mapstore.emory.project]" class="hidden-xs">
                                     <mu-card style="width: 100%; max-width: 375px; margin: 0 auto;">
-                                        <mu-card-media title="Image Title" sub-title="Image Sub Title">
-                                            <img src="/static/img/covers/dummy.jpg">
+                                        <mu-card-media :title="mapstore.emory.projects[mapstore.emory.project].title" sub-title="">
+                                            <img :src="mapstore.emory.projects[mapstore.emory.project].thumb">
                                         </mu-card-media>
-
                                     </mu-card>
                                 </mu-col>
 
-                                <mu-col span="12" sm="8" md="8" lg="9" xl="10" style="float:left;">
+                                <mu-col span="12" sm="12" md="8" lg="9" xl="10" style="float:left;" v-if="mapstore.emory.projects[mapstore.emory.project]">
                                     <mu-card style="width: 100%; margin: 0 auto;">
 
-                                        <mu-card-title title="新宿探検マップ"></mu-card-title>
+                                        <mu-card-title :title="mapstore.emory.projects[mapstore.emory.project].title"></mu-card-title>
                                         <mu-card-text>
-                                            新宿エリアに仕掛けられた「耳で楽しむ」物語が『新宿探検マップ』です。地図に表示された５箇所のスポットに近づくと物語が始まります。
+                                            {{mapstore.emory.projects[mapstore.emory.project].desc}}
                                         </mu-card-text>
 
-                                        <mu-card-header style="white-space: inherit;" v-if="mapstore.mainuser">
+                                        <mu-card-header style="white-space: inherit;padding:4px;" v-if="mapstore.mainuser">
                                             <my-avatar :marker="marker" :id="marker.id" v-for="(marker,id) in sortedMarkers" :key="'mv'+id"></my-avatar>
                                         </mu-card-header>
                                     </mu-card>
                                 </mu-col>
 
+                                <mu-col span="12" sm="12" md="8" lg="9" xl="10" style="width:100%;text-align:center;" v-else>
+                                    <h1 style="margin:4px auto;">プロジェクトを選択してください。</h1>
+                                </mu-col>
                             </div>
 
+
+                            <mu-button color="primary"  class="smallbtn"  @click="backToInfo">メニューへ戻る</mu-button>
                         </mu-flex>
-                        <mu-button color="primary"  class="smallbtn"  @click="backToInfo">メニューへ戻る</mu-button>
+
                     </mu-flex>
                 </mu-flex>
             </div>
@@ -147,11 +153,13 @@
                         <mu-form-item prop="desc" :rules="blankRules">
                             <mu-text-field prop="desc" placeholder="メモ（20文字以内）" v-model="newMarker.desc"/>
                         </mu-form-item>
+
                         <mu-form-item prop="isEpisode" :label="newMarker.isEpisode ? 'エピソード' : 'トラック'">
                             <mu-switch v-model="newMarker.isEpisode"></mu-switch>
                         </mu-form-item>
+
                         <mu-form-item prop="spotifyid" :rules="blankRules">
-                            <mu-select prop="spotifyid" color="primary" v-model="newMarker.spotifyid" v-if="newMarker.isEpisode">
+                            <mu-select prop="spotifyid" color="primary" v-model="newMarker.spotifyid" v-if="newMarker.isEpisode && spotify.episodes">
                                 <mu-option  :label="epi.name" :value="epi.id" v-for="(epi,inx) in spotify.episodes.items" :ley="'epi'+inx"></mu-option>
                             </mu-select>
                             <mu-text-field prop="spotifyid" placeholder="Track ID" v-model="newMarker.spotifyid" v-else/>
@@ -403,6 +411,7 @@
                             }
                         });
                         this.a_index(['bottom','open']);
+
                     }else if(val.spotifytype==='episode'){
                         //ポッドキャストepisodeの場合、mp3プレイヤーを開く
                         this.a_index(['bottom','open']);

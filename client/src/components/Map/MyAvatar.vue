@@ -1,6 +1,6 @@
 <template>
     <mu-avatar slot="avatar">
-        <span v-if="dist" class="dist">{{dist |dicimal3}}km</span>
+        <span v-if="dist" class="dist" :class="{over:dist<0.03}">{{dist |dicimal3}}km</span>
         <img :src="iconImg.url" :alt="m.title" :style="{width:'auto',height:iconImg.h+'px'}" v-if="m"/>
     </mu-avatar>
 </template>

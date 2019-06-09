@@ -76,7 +76,7 @@
                     this.trackTimeout = true;
                     this.timeout = setTimeout(this.keepTracking, this.mapstore.trackDuration);
 
-                    if(this.track_max>50){
+                    if(this.track_max>150){
                         this.a_mapstore(['set', 'tracking', false]);
                         this.track_max=0;
                     }else{
@@ -113,7 +113,9 @@
                         if(dm>0 && dm<30){
                                 let marker = this.mapstore.markers[d.id];
 
-                                let volume = Math.floor((30 - dm)*100/30);
+                                //let volume = Math.floor((30 - dm)*100/30);
+                                let volume =  Math.floor(Math.max(0,100-18*Math.sqrt(dm)));
+                                //let volume =  1/(dm+0.001) + Math.max(0,100-18*Math.sqrt(dm));
 
                                 if(marker.spotifytype==='episode'){
 
