@@ -125,6 +125,6 @@ export default {
     margin:2px auto;
     /*background-color: rgba(210, 222, 217, 0.3);*/
     padding:4px 0 2px 0;
-    opacity:0.8;
+    opacity:1;
   }
 </style>
