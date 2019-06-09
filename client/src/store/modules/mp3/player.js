@@ -2,7 +2,7 @@ const state =
     {
         pods: [
             {
-                file: 'https://p.scdn.co/mp3-preview/c0ceabc60f2f2393098959d53aa8bdd249d3819e',
+                file: '',
                 volume: 0,
                 loop: false,
                 innerLoop:false,
@@ -11,7 +11,7 @@ const state =
                 update: new Date()
             },
             {
-                file: 'https://p.scdn.co/mp3-preview/48c133b9714c17b8949767a3bae578c30503c103',
+                file: '',
                 volume: 0,
                 loop: false,
                 innerLoop:false,
@@ -20,7 +20,7 @@ const state =
                 udpate: new Date()
             },
             {
-                file: 'https://p.scdn.co/mp3-preview/cbfbd116e340d2d5df8caf90ba38c15b744390f5',
+                file: '',
                 volume: 0,
                 loop: false,
                 innerLoop:false,

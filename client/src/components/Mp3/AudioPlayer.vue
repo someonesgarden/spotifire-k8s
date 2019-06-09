@@ -1,6 +1,6 @@
 <template>
     <div class="player">
-        <div class="square" :style="{height:Math.floor(pod.volume/2)+'px', visibility:pod.playing ? 'visible' : 'hidden'}"></div>
+        <div class="square" :style="{height:Math.floor(pod.volume)+'px', visibility:pod.playing ? 'visible' : 'hidden'}"></div>
         <div class="player-controls">
             <div>
                 <a v-on:click.prevent="togglePlay" title="Play/Pause" href="#">
@@ -19,23 +19,6 @@
                     <div class="player-time-total">{{ durationTime }}</div>
                 </div>
             </div>
-
-<!--            <div>-->
-<!--                <a v-on:click.prevent="toggleLoop" href="#">-->
-<!--                    <svg width="16px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">-->
-<!--                        <path v-if="!innerLoop" fill="currentColor" d="M1,12V5h3v6h10V8l5,4.5L14,17v-3H3C1.895,14,1,13.104,1,12z"/>-->
-<!--                        <path v-else fill="currentColor" d="M20,7v7c0,1.103-0.896,2-2,2H2c-1.104,0-2-0.897-2-2V7c0-1.104,0.896-2,2-2h7V3l4,3.5L9,10V8H3v5h14V8h-3V5h4C19.104,5,20,5.896,20,7z"/>-->
-<!--                    </svg>-->
-<!--                </a>-->
-<!--            </div>-->
-<!--            <div>-->
-<!--                <a v-on:click.prevent="" v-on:mouseenter="showVolume = true" title="Volume" href="#">-->
-<!--                    <svg width="16px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">-->
-<!--                        <path fill="currentColor" d="M19,13.805C19,14.462,18.462,15,17.805,15H1.533c-0.88,0-0.982-0.371-0.229-0.822l16.323-9.055C18.382,4.67,19,5.019,19,5.9V13.805z"/>-->
-<!--                    </svg>-->
-<!--                    <input v-model="pod.volume" v-show="showVolume" type="range" min="0" max="100" @change="volumeChange"/>-->
-<!--                </a>-->
-<!--            </div>-->
         </div>
         <audio :loop="innerLoop" ref="audiofile" :src="pod.file" preload="auto" style="display: none;"></audio>
     </div>
@@ -86,6 +69,7 @@
             'pod.volume':{
                 handler(newVol){
                     console.log("[AP] VOlute change!");
+                    console.log(newVol);
                     this.showVolume   = true;
                     this.audio.volume = newVol / 100;
                 }
@@ -95,14 +79,6 @@
             ...mapActions(['a_mp3']),
             togglePlay(){
               this.a_mp3(['pod', this.num,'playing', !this.pod.playing]);
-            },
-
-            toggleLoop(){
-                this.innerLoop = !this.innerLoop;
-            },
-
-            volumeChange(val){
-              this.a_mp3(['pod', this.num,'volume', parseInt(val.target.value)]);
             },
 
             load() {
@@ -184,7 +160,7 @@
             }
 
             a {
-                font-size:0.2rem;
+                font-size:0.1rem;
                 color: $player-link-color;
                 display: block;
                 line-height: 0;
@@ -192,7 +168,7 @@
                 text-decoration: none;
 
                 input{
-                    max-width:60px;
+                    max-width:65px;
                 }
             }
         }
@@ -235,9 +211,9 @@
         position:absolute;
         width:12px;
         height:20px;
-        bottom:20px;
+        bottom:18px;
         left:0;
-        background-color: rgba(214, 10, 197, 0.8);
+        background-color: rgba(0, 11, 15, 0.94);
         border-top: thin solid #4a4a4a;
         border-right:thin solid #4a4a4a;
         border-left:thin solid #4a4a4a;

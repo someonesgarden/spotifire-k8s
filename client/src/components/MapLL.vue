@@ -327,7 +327,6 @@
         },
         mounted() {
             this.switchLayer('info');
-
             if(!this.spotify.me){
                 this.a_index(['alert','set',"Spotifyにログインが必要です。"]);
                 this.a_index(['alert','open']);
@@ -411,14 +410,6 @@
                     }else if(val.spotifytype==='episode'){
                         //ポッドキャストepisodeの場合、mp3プレイヤーを開く
                         this.a_index(['bottom','open']);
-
-                        //自分ポイントとの距離
-                        console.log(dist);
-
-                        // this.a_mp3(['pod',0,'playing', false]);
-                        // this.a_mp3(['pod',0,'volume',0]);
-
-                        console.log(val);
                         setTimeout(()=> this.a_mp3(['pod',0,'file',val.mp3]),100);
                         setTimeout(()=> this.a_mp3(['pod',0,'volume',6]),100);
                         setTimeout(()=> this.a_mp3(['pod',0,'playing', true]),100);

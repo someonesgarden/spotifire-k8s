@@ -37,6 +37,10 @@ export default{
             });
         },
 
+        c_deviceSelected:function(val){
+            this.c_transferplayback(val,(res)=>{  })
+        },
+
         c_pause: function () {
             let headers = {Authorization:this.spotify.credential.access_token};
             axios.get('/api/spotify/player/pause',{params:{}, headers: headers})

@@ -82,7 +82,6 @@
                     }else{
                         this.track_max++;
                     }
-
                 }else{
                     this.trackTimeout = false;
                     this.timeout      = null;
@@ -109,12 +108,11 @@
                         let dm=d.dist*1000;
 
                         //console.log(Math.floor(dm)+"メートル");
-
                         if(dm>0 && dm<30){
                                 let marker = this.mapstore.markers[d.id];
 
-                                //let volume = Math.floor((30 - dm)*100/30);
-                                let volume =  Math.floor(Math.max(0,100-18*Math.sqrt(dm)));
+                                let volume = Math.max(0,Math.floor((30 - dm)*100/30));
+                                //let volume =  Math.floor(Math.max(0,100-18*Math.sqrt(dm)));
                                 //let volume =  1/(dm+0.001) + Math.max(0,100-18*Math.sqrt(dm));
 
                                 if(marker.spotifytype==='episode'){
@@ -135,7 +133,9 @@
                                             setTimeout(()=> this.a_mp3(['pod',already_has.num,'playing', true]),20);
                                         }else{
                                             //すでに再生中は、ボリューが変わる程度
-                                            setTimeout(()=> this.a_mp3(['pod',already_has.num,'volume',volume]),20);
+                                            console.log("changevolume:",volume);
+                                            console.log('pod',already_has.num,'volume',volume);
+                                            setTimeout(()=> this.a_mp3(['pod',already_has.num,'volume',volume+Math.floor(Math.random()*8)]),20);
                                         }
 
                                     }else if(paused_pods.length>0){

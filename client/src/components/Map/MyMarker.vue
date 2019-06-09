@@ -51,21 +51,21 @@
                     let h = 30;
                     switch(icontype){
                         case 'you':
-                            w = 58;
-                            h = 58;
+                            w = 34;
+                            h = 34;
                             break;
                         case 'mainuser':
                         case 'user':
-                            w = 45;
-                            h = 45;
-                            break;
-                        case 'spot':
-                            w = 36;
-                            h = 36;
-                            break;
-                        case 'other':
                             w = 30;
                             h = 30;
+                            break;
+                        case 'spot':
+                            w = 22;
+                            h = 22;
+                            break;
+                        case 'other':
+                            w = 22;
+                            h = 22;
                             break;
                     }
                     return {url:icon, w:w, h:h};
