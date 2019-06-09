@@ -231,15 +231,17 @@
     }
 
     .square{
+        z-index: -1;
         position:absolute;
         width:12px;
         height:20px;
-        bottom:23px;
+        bottom:20px;
         left:0;
-        background-color: rgba(0, 201, 125, 0.65);
-        border-top:thin solid #4a4a4a;
+        background-color: rgba(214, 10, 197, 0.8);
+        border-top: thin solid #4a4a4a;
         border-right:thin solid #4a4a4a;
         border-left:thin solid #4a4a4a;
+        border-bottom:thin solid #4a4a4a;
     }
 
 </style>
