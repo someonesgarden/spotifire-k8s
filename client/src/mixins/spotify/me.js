@@ -37,6 +37,11 @@ export default{
                 }).catch(error => {
                 console.log(error);
             });
+        },
+
+        c_clickAction: function (type, val) {
+            this.a_spotify(['set', type + 'ID', val]);
+            this.a_spotify(['update', 'item', type]);
         }
     }
 }

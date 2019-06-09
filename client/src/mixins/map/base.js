@@ -17,6 +17,12 @@ export default{
 
     methods: {
 
+        bottomAvatarClick(mkr){
+            this.a_mapstore(['set','tracking',false]);
+            let marker = this.mapstore.markers[mkr.id];
+            if(marker) this.a_mapstore(['center','map',this.mapstore.markers[mkr.id].center]);
+        },
+
         geoError(error) { console.log(error);},
 
         findMe(){

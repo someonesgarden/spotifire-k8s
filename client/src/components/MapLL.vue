@@ -39,10 +39,6 @@
                         <mu-icon value="pets" :size="20"></mu-icon>play.
                     </mu-flex>
 
-<!--                    <mu-flex class="info_box story" justify-content="center" align-items="center" direction="column" fill @click="switchLayer('net')">-->
-<!--                        <mu-icon value="network_check" :size="20"></mu-icon>around.-->
-<!--                    </mu-flex>-->
-
                     <mu-flex class="info_box edit" justify-content="center" align-items="center" direction="column" fill @click="switchLayer('edit')">
                         <mu-icon value="build" :size="20"></mu-icon>edit.
                     </mu-flex>
@@ -87,12 +83,10 @@
                                 </mu-col>
                             </div>
 
-
                             <mu-flex justify-content="center" align-items="center" direction="row">
                                 <mu-button color="primary"    class="smallbtn"  @click="playStart" v-if="mapstore.emory.projects[mapstore.emory.project]">プレイ開始</mu-button>
                                 <mu-button color="indigo800"  class="smallbtn"  @click="backToInfo">メニューへ</mu-button>
                             </mu-flex>
-
 
                         </mu-flex>
 

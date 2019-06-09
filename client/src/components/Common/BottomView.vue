@@ -28,15 +28,15 @@
                     </mu-avatar>
                     <span class="status">{{spotify.player.playing ? "now playing" : "stopped"}}</span>
                     <div>
-                        <span class="artist" @click="clickAction('artist',spotify.player.track.artists[0].id)"><mu-icon value="mic"></mu-icon>{{spotify.player.track.artists[0].name}}</span>
-                        <span class="track" @click="clickAction('track',spotify.player.track.id)"><mu-icon value="music_note"></mu-icon>{{spotify.player.track.name}}</span>
-                        <span class="album" @click="clickAction('album',spotify.player.track.album.id)"><mu-icon value="album"></mu-icon>{{spotify.player.track.album.name}}</span>
+                        <span class="artist" @click="c_clickAction('artist',spotify.player.track.artists[0].id)"><mu-icon value="mic"></mu-icon>{{spotify.player.track.artists[0].name}}</span>
+                        <span class="track" @click="c_clickAction('track',spotify.player.track.id)"><mu-icon value="music_note"></mu-icon>{{spotify.player.track.name}}</span>
+                        <span class="album" @click="c_clickAction('album',spotify.player.track.album.id)"><mu-icon value="album"></mu-icon>{{spotify.player.track.album.name}}</span>
                     </div>
 
                     <mu-icon value="pause_circle_outline" v-if="spotify.player.playing" @click="a_spotify(['player','stop',null])"></mu-icon>
                     <mu-icon value="play_circle_outline" v-else @click="a_spotify(['player','play',{id:spotify.player.track.id,type:'track'}])"></mu-icon>
 
-                    <mu-icon value="equalizer" @click="Analyse(spotify.player.track.id)"></mu-icon>
+                    <mu-icon value="equalizer" @click="c_Analyse(spotify.player.track.id)"></mu-icon>
                 </mu-chip>
             </mu-flex>
             <!-- / TRACK PLAYER-->
@@ -61,13 +61,7 @@
         },
 
         computed: mapGetters(['spotify','mapstore','mp3']),
-
-
-
         mounted(){
-            // this.a_mp3(['pod',0,'playing', false]);
-            // this.a_mp3(['pod',1,'playing', false]);
-            // this.a_mp3(['pod',2,'playing', false]);
         },
         methods:{
             ...mapActions(['a_spotify','a_mp3']),
@@ -80,25 +74,6 @@
 
             deviceSelected(val){
                 this.c_transferplayback(val,(res)=>{  })
-            },
-
-            Analyse(trackid){
-                if(!!this.spotify.analysing_track && this.spotify.analysing_track===trackid){
-                    this.$router.push('/analysis');
-                }else{
-                    this.c_audioAnalyse(trackid);
-                    this.a_spotify(['set','analysingTrack',trackid]);
-                }
-            },
-            clickAction(type,val){
-                this.a_spotify(['set',type+'ID', val]);
-                this.a_spotify(['update','item',type]);
-            },
-
-            bottomAvatarClick(mkr){
-                this.a_mapstore(['set','tracking',false]);
-                let marker = this.mapstore.markers[mkr.id];
-                if(marker) this.a_mapstore(['center','map',this.mapstore.markers[mkr.id].center]);
             }
         }
     }

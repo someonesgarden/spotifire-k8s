@@ -15,7 +15,13 @@ export default {
             })
         },
 
-
-
+        c_Analyse(trackid){
+            if(!!this.spotify.analysing_track && this.spotify.analysing_track===trackid){
+                this.$router.push('/analysis');
+            }else{
+                this.c_audioAnalyse(trackid);
+                this.a_spotify(['set','analysingTrack',trackid]);
+            }
+        }
     }
 }
