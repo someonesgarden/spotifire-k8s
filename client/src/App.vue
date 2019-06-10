@@ -30,7 +30,7 @@
   import {mapGetters, mapActions} from 'vuex';
   import feedMixin from './mixins/feed/index';
   import spotifyMixin from './mixins/spotify/index';
-  import utilMixin from './mixins/util';
+
 import HeadTop from './components/Common/Header.vue';
 import Player from './components/Spotify/Player/Player.vue';
 import Magazine from './components/Layout/Magazine.vue';
@@ -39,7 +39,7 @@ import BottomView from './components/Common/BottomView';
 
 export default {
   name: 'app',
-  mixins:[feedMixin,spotifyMixin,utilMixin],
+  mixins:[feedMixin,spotifyMixin],
   components: {
     'head-top':HeadTop,
     'player':Player,
@@ -95,36 +95,6 @@ export default {
       ],
       tokenizer:null
     }
-  },
-
-  mounted(){
-
-    this.checkPWA('geolocation');
-    this.checkPWA('gyroscope');
-    this.checkPWA('magnetometer');
-    this.checkPWA('microphone');
-    this.checkPWA('midi');
-    this.checkPWA('notifications');
-    this.checkPWA('camera');
-    this.checkPWA('accelerometer');
-    this.checkPWA('ambient-light-sensor');
-    this.checkPWA('background-sync');
-    this.checkPWA('persistent-storage');
-    this.checkPWA('clipboard-read');
-    this.checkPWA('clipboard-write');
-    this.checkPWA('accessibility-events');
-    this.checkPWA('payment-handler');
-
-    this.checkPWA('serviceWorker');
-    this.checkPWA('bluetooth');
-    this.checkPWA('PushManager');
-
-    this.checkPWA('DeviceOrientationEvent');
-    this.checkPWA('DeviceMotionEvent');
-
-
-    //プッシュ通知はサービスワーカーが使えた上でさらに確認する必要があるのでここでは調べない
-
   },
 
   watch:{

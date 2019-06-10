@@ -45,11 +45,13 @@
     import {mapGetters,mapActions} from 'vuex';
 
     import spotifyMixin from '../mixins/spotify/index';
+    import utilMixin from '../mixins/util';
     import {ruleEmpty} from '../store/rules';
+
 
     export default {
         name: 'mylogin',
-        mixins:[spotifyMixin],
+        mixins:[spotifyMixin,utilMixin],
         data(){
           return{
               emptyRules: [ruleEmpty],
@@ -60,7 +62,33 @@
               }
           }
         },
-        computed:mapGetters(['loggedIn','spotify','pwa']),
+        computed:mapGetters(['pwa','loggedIn','spotify']),
+        created(){
+
+            this.checkPWA('geolocation');
+            this.checkPWA('gyroscope');
+            this.checkPWA('magnetometer');
+            this.checkPWA('microphone');
+            this.checkPWA('midi');
+            this.checkPWA('notifications');
+            this.checkPWA('camera');
+            this.checkPWA('accelerometer');
+            this.checkPWA('ambient-light-sensor');
+            this.checkPWA('background-sync');
+            this.checkPWA('persistent-storage');
+            this.checkPWA('clipboard-read');
+            this.checkPWA('clipboard-write');
+            this.checkPWA('accessibility-events');
+            this.checkPWA('payment-handler');
+
+            this.checkPWA('DeviceOrientationEvent');
+            this.checkPWA('DeviceMotionEvent');
+
+            this.checkPWAExist('serviceWorker');
+            this.checkPWAExist('bluetooth');
+            this.checkPWAExist('PushManager');
+            //プッシュ通知はサービスワーカーが使えた上でさらに確認する必要があるのでここでは調べない
+        },
         methods:{
             ...mapActions(['a_login']),
 

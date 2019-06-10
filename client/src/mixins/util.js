@@ -16,28 +16,33 @@ export default {
         },
 
         checkPWA(type) {
-
-            if(navigator && navigator.permissions){
-                navigator.permissions.query({name: type})
-                    .then((result) => {
-                        if (result.state === 'granted') {
-                            console.log(type + 'は利用可能です。');
-                        } else if (result.state === 'denied') {
-                            console.log(type + 'は利用不可能です。');
-                        } else if (result.state === 'prompt') {
-                            console.log(type + 'の利用には許可が必要です。');
-                        }
-
-                        this.a_index(['pwa', 'set', {key: type, val: result.state}]);
-                    }).catch(er => {
+            let navigator_ = navigator ? navigator : (window.navigator ? window.navigator : null);
+            if(navigator_){
+                if(navigator_.permissions){
+                    navigator_.permissions.query({name: type})
+                        .then((result) => {
+                            if (result.state === 'granted') {
+                                console.log(type + 'は利用可能です。');
+                            } else if (result.state === 'denied') {
+                                console.log(type + 'は利用不可能です。');
+                            } else if (result.state === 'prompt') {
+                                console.log(type + 'の利用には許可が必要です。');
+                            }
+                            this.a_index(['pwa', 'set', {key: type, val: result.state}]);
+                        }).catch(er => {
                         console.log(er);
-                    this.checkPWAExist(type);
-                });
-            }
-            else{
-                this.checkPWAExist(type);
-            }
+                        this.checkPWAExist(type);
+                    });
+                }else{
 
+                    if (type in navigator_) {
+                        console.log(type + 'は利用可能です。');
+                        this.a_index(['pwa','set',{key:type,val:'granted'}]);
+                    }else{
+                        this.checkPWAInWindow(type);
+                    }
+                }
+            }
         },
 
         checkPWAExist(type) {
