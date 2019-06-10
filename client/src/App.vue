@@ -6,6 +6,7 @@
     </mu-container>
 
 
+
     <!-- MP3 EPISODE PLAYER-->
     <div class="mp3_players" v-if="$route.name ==='Map' && !!mp3.pods ">
       <audio-player :key="'pod'+index" :num="index" :pod="pod" v-for="(pod,index) in mp3.pods"></audio-player>
@@ -29,6 +30,7 @@
   import {mapGetters, mapActions} from 'vuex';
   import feedMixin from './mixins/feed/index';
   import spotifyMixin from './mixins/spotify/index';
+  import utilMixin from './mixins/util';
 import HeadTop from './components/Common/Header.vue';
 import Player from './components/Spotify/Player/Player.vue';
 import Magazine from './components/Layout/Magazine.vue';
@@ -37,7 +39,7 @@ import BottomView from './components/Common/BottomView';
 
 export default {
   name: 'app',
-  mixins:[feedMixin,spotifyMixin],
+  mixins:[feedMixin,spotifyMixin,utilMixin],
   components: {
     'head-top':HeadTop,
     'player':Player,
@@ -45,7 +47,7 @@ export default {
     'bottom-view':BottomView,
     'audio-player':AudioPlayer
   },
-  computed:mapGetters(['bottom','alert','mp3']),
+  computed:mapGetters(['bottom','alert','mp3','pwa']),
   methods:{
     ...mapActions(['a_index']),
 
@@ -93,6 +95,31 @@ export default {
       ],
       tokenizer:null
     }
+  },
+
+  mounted(){
+
+    this.checkPWA('geolocation');
+    this.checkPWA('gyroscope');
+    this.checkPWA('magnetometer');
+    this.checkPWA('microphone');
+    this.checkPWA('midi');
+    this.checkPWA('notifications');
+    this.checkPWA('camera');
+    this.checkPWA('accelerometer');
+    this.checkPWA('ambient-light-sensor');
+    this.checkPWA('background-sync');
+    this.checkPWA('persistent-storage');
+    this.checkPWA('clipboard-read');
+    this.checkPWA('clipboard-write');
+    this.checkPWA('accessibility-events');
+    this.checkPWA('payment-handler');
+    this.checkPWAExist('serviceWorker');
+    this.checkPWAExist('bluetooth');
+    this.checkPWAInWindow('PushManager');
+
+    //プッシュ通知はサービスワーカーが使えた上でさらに確認する必要があるのでここでは調べない
+
   },
 
   watch:{

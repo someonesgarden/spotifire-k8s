@@ -5,7 +5,12 @@
             <mu-flex class="flex-wrapper" justify-content="center" align-items="center" direction="column">
 
                 <img class="menu-icon" src="/static/img/spotifire_logo.png">
-                <h1><mu-icon value="vpn_key"></mu-icon>LOGIN</h1>
+
+                <div v-if="pwa" class="pwa">
+                    <p v-for="(status,key) in pwa" :key="'pwa_'+key"><span class="circle" :class="status"></span>{{key}}</p>
+                </div>
+
+                <h3><mu-icon value="vpn_key"></mu-icon>LOGIN</h3>
 
                 <mu-form ref="adminform" :model="admin" class="mu-demo-form" label-position="left" label-width="100">
 
@@ -22,7 +27,6 @@
                             </mu-form-item>
                         </div>
                     </div>
-
 
                     <div class="ui grid">
                         <mu-col span="12" sm="12" md="12" lg="12" xl="12">
@@ -56,7 +60,7 @@
               }
           }
         },
-        computed:mapGetters(['loggedIn','spotify']),
+        computed:mapGetters(['loggedIn','spotify','pwa']),
         methods:{
             ...mapActions(['a_login']),
 
@@ -75,3 +79,40 @@
 
     }
 </script>
+<style lang="scss">
+    .pwa{
+        width:              80%;
+        background-color: rgba(241, 252, 233, 0.63);
+        padding:            8px 8px 8px 0;
+        border-radius:      12px;
+        margin:             8px;
+        p{
+            float:left;
+            margin:1px 2px;
+            font-size:12px;
+            color:#343434;
+
+            span.circle{
+                width:8px;
+                height:8px;
+                border-radius:50%;
+                background-color: #b4b2b1;
+                display:inline-block;
+                margin-right:1px;
+
+                &.granted{
+                    background-color: #00e400;
+                }
+
+                &.prompt{
+                    background-color: #dbba5f;
+                }
+
+                &.denied{
+                    background-color:red;
+                }
+            }
+        }
+    }
+
+</style>

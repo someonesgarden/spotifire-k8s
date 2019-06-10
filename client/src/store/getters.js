@@ -8,6 +8,7 @@ const ws  = modules => modules.ws
 const mp3 = modules => modules.mp3
 const g_three = modules => modules.three
 const alert = state => state.alert
+const pwa   = state => state.pwa
 export {
     rootAction,
     loggedIn,
@@ -18,5 +19,6 @@ export {
     ws,
     mp3,
     g_three,
-    alert
+    alert,
+    pwa
 }

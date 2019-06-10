@@ -117,6 +117,10 @@ export const a_index    =  ({commit}, [type, action, data]) => {
             close:()=> commit('setAlertState',       false),
             set: (data)=> commit('setAlertText',     data),
             action:(data)=> commit('setAlertAction', data)
+        },
+
+        pwa:{
+            set:(data)=> commit('setPwa', data)
         }
     };
     actions[type][action](data)

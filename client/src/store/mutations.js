@@ -11,6 +11,10 @@ const state = {
     rootAction:{
         type:'',
         date:new Date(),
+    },
+
+    pwa:{
+
     }
 }
 
@@ -46,6 +50,10 @@ const  mutations = {
     setRootAction(state,val){
         state.rootAction.type = val;
         state.rootAction.date = new Date();
+    },
+
+    setPwa(state,data){
+        state.pwa[data.key] = data.val;
     }
 }
 
