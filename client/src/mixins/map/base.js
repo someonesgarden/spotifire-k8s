@@ -17,6 +17,7 @@ export default{
 
     methods: {
 
+
         bottomAvatarClick(mkr){
             this.a_mapstore(['set','tracking',false]);
             let marker = this.mapstore.markers[mkr.id];

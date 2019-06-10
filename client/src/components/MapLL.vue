@@ -13,11 +13,11 @@
                         <img src="/static/img/emory/emory_logo_w.png" style="width:180px;height:auto;">
                         <mu-button full-width color="cyan400" @click="trackToggle" v-if="mapstore.tracking">
                             <mu-icon value="portable_wifi_off" :size="15"></mu-icon>
-                            GEOLOCATION : OFF
+                            GEO is [ON] > click to [OFF]
                         </mu-button>
                         <mu-button full-width color="pink500" @click="trackToggle" v-else>
                             <mu-icon value="settings_input_antenna" :size="15"></mu-icon>
-                            GEOLOCATION : ON
+                            GEO is [OFF] > click to [ON]
                         </mu-button>
                     </mu-flex>
                 </mu-flex>
@@ -372,6 +372,7 @@
                 this.a_mapstore(['center', 'map', proj.center]);
                 //setTimeout(() => this.a_mapstore(['center', 'map', proj.center]), 5100);
                 this.distOfProjPoints();
+                this.drawPoly();
             },
             mapClick(val) {
                 if (this.editing.status) {
@@ -386,6 +387,11 @@
                     this.switchLayer('edit');
                     this.newProject = val;
                     if(id) this.newProject.id =id;
+                    console.log("project in edit mode");
+                }else{
+                    console.log("project in play mode");
+                    this.a_mapstore(['center','map',val.center]);
+                    this.onProjectSelected(id);
                 }
             },
             mClick(val,id){

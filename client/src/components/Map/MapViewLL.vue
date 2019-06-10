@@ -79,6 +79,8 @@
                     if(this.track_max>150){
                         this.a_mapstore(['set', 'tracking', false]);
                         this.track_max=0;
+                        this.a_index(['alert','set',"5分経過したためトラッキングを停止します。再度「PLAY」から再生してください"]);
+                        this.a_index(['alert','open']);
                     }else{
                         this.track_max++;
                     }
@@ -102,8 +104,7 @@
 
             geoSuccess(position){
                 this.resetPos(position);
-                this.projectPoly = this.drawPoly();
-
+                this.drawPoly();
                 if(this.mapstore.mainuser){
                     this.distOfProjPoints();
                     this.distMarkerActionUpdate();
