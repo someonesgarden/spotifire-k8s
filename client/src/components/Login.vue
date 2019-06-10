@@ -89,6 +89,8 @@
             this.checkPWAExist('PushManager');
             this.checkPWA('mediaDevices');
             this.checkPWA('getUserMedia');
+            this.checkPWA('webkitGetUserMedia');
+            this.checkPWA('mozGetUserMedia');
             //プッシュ通知はサービスワーカーが使えた上で
             //
             //
