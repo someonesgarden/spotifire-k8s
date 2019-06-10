@@ -87,7 +87,12 @@
             this.checkPWAExist('serviceWorker');
             this.checkPWAExist('bluetooth');
             this.checkPWAExist('PushManager');
-            //プッシュ通知はサービスワーカーが使えた上でさらに確認する必要があるのでここでは調べない
+            this.checkPWA('mediaDevices');
+            this.checkPWA('getUserMedia');
+            //プッシュ通知はサービスワーカーが使えた上で
+            //
+            //
+            // mediaDevicesさらに確認する必要があるのでここでは調べない
         },
         methods:{
             ...mapActions(['a_login']),
