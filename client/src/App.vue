@@ -114,9 +114,14 @@ export default {
     this.checkPWA('clipboard-write');
     this.checkPWA('accessibility-events');
     this.checkPWA('payment-handler');
-    this.checkPWAExist('serviceWorker');
-    this.checkPWAExist('bluetooth');
-    this.checkPWAInWindow('PushManager');
+
+    this.checkPWA('serviceWorker');
+    this.checkPWA('bluetooth');
+    this.checkPWA('PushManager');
+
+    this.checkPWA('DeviceOrientationEvent');
+    this.checkPWA('DeviceMotionEvent');
+
 
     //プッシュ通知はサービスワーカーが使えた上でさらに確認する必要があるのでここでは調べない
 

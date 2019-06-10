@@ -30,9 +30,8 @@ export default {
 
                         this.a_index(['pwa', 'set', {key: type, val: result.state}]);
                     }).catch(er => {
-                    // console.log("type:" + type);
-                    // console.log(er)
-                    this.a_index(['pwa', 'set', {key: type, val: 'error'}]);
+                        console.log(er);
+                    this.checkPWAExist(type);
                 });
             }
             else{
@@ -46,7 +45,6 @@ export default {
                 console.log(type + 'は利用可能です。');
                 this.a_index(['pwa','set',{key:type,val:'granted'}]);
             }else{
-               // this.a_index(['pwa', 'set', {key: type, val: 'error'}]);
                 this.checkPWAInWindow(type);
             }
         },
