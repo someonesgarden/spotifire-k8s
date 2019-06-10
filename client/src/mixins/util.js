@@ -16,33 +16,46 @@ export default {
         },
 
         checkPWA(type) {
-            navigator.permissions.query({name: type})
-                .then((result) => {
-                    if (result.state === 'granted') {
-                        console.log(type + 'は利用可能です。');
-                    } else if (result.state === 'denied') {
-                        console.log(type + 'は利用不可能です。');
-                    } else if (result.state === 'prompt') {
-                        console.log(type + 'の利用には許可が必要です。');
-                    }
 
-                    this.a_index(['pwa', 'set', {key: type, val: result.state}]);
-                }).catch(er => {
-                console.log("type:" + type);
-                console.log(er)
-            });
+            if(navigator && navigator.permissions){
+                navigator.permissions.query({name: type})
+                    .then((result) => {
+                        if (result.state === 'granted') {
+                            console.log(type + 'は利用可能です。');
+                        } else if (result.state === 'denied') {
+                            console.log(type + 'は利用不可能です。');
+                        } else if (result.state === 'prompt') {
+                            console.log(type + 'の利用には許可が必要です。');
+                        }
+
+                        this.a_index(['pwa', 'set', {key: type, val: result.state}]);
+                    }).catch(er => {
+                    // console.log("type:" + type);
+                    // console.log(er)
+                    this.a_index(['pwa', 'set', {key: type, val: 'error'}]);
+                });
+            }
+            else{
+                this.checkPWAExist(type);
+            }
+
         },
 
         checkPWAExist(type) {
             if (type in navigator) {
                 console.log(type + 'は利用可能です。');
                 this.a_index(['pwa','set',{key:type,val:'granted'}]);
+            }else{
+               // this.a_index(['pwa', 'set', {key: type, val: 'error'}]);
+                this.checkPWAInWindow(type);
             }
         },
 
         checkPWAInWindow(type) {
             if (type in window) {
                 this.a_index(['pwa','set',{key:type,val:'granted'}]);
+            }else{
+                this.a_index(['pwa', 'set', {key: type, val: 'error'}]);
             }
         }
 

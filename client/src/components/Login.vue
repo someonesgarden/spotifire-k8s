@@ -6,7 +6,7 @@
 
                 <img class="menu-icon" src="/static/img/spotifire_logo.png">
 
-                <div v-if="pwa" class="pwa">
+                <div class="pwa">
                     <p v-for="(status,key) in pwa" :key="'pwa_'+key"><span class="circle" :class="status"></span>{{key}}</p>
                 </div>
 
@@ -96,7 +96,7 @@
                 width:8px;
                 height:8px;
                 border-radius:50%;
-                background-color: #b4b2b1;
+                background-color: rgba(85, 83, 82, 0.72);
                 display:inline-block;
                 margin-right:1px;
 
