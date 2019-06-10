@@ -85,6 +85,14 @@
                 }else{
                     this.trackTimeout = false;
                     this.timeout      = null;
+                    this.mp3.pods.forEach((p, i) => {
+                        // this.a_mp3(['pod', i, 'file', null]);
+                        // this.a_mp3(['pod', i, 'volume', 0]);
+                        // this.a_mp3(['pod', i, 'playing',false]);
+                        setTimeout(() =>  this.a_mp3(['pod', i, 'file', null]), 20);
+                        setTimeout(() => this.a_mp3(['pod', i, 'volume', 0]), 20);
+                        setTimeout(() => this.a_mp3(['pod', i, 'playing',false]), 20);
+                    });
                 }
             },
 
@@ -102,53 +110,62 @@
                 }
             },
 
-            distMarkerActionUpdate(){
-                if(!!this.mapstore.markerDists){
-                    this.mapstore.markerDists.forEach((d,i)=>{
-                        let dm=d.dist*1000;
+            distMarkerActionUpdate() {
 
-                        //console.log(Math.floor(dm)+"メートル");
-                        if(dm>0 && dm<30){
+                if (!!this.mapstore.markerDists) {
+
+                    if (this.mapstore.markerDists.every(d => d.dist === 0 || d.dist > 0.03)) {
+                        //全てが範囲外なら、プレイヤーをリセット
+                        console.log("reset all");
+                        this.mp3.pods.forEach((p, i) => {
+                            setTimeout(() =>  this.a_mp3(['pod', i, 'file', null]), 20);
+                            setTimeout(() => this.a_mp3(['pod', i, 'volume', 0]), 20);
+                            setTimeout(() => this.a_mp3(['pod', i, 'playing',false]), 20);
+                        });
+
+
+                    } else {
+                        this.mapstore.markerDists.forEach((d, i) => {
+                            let dm = d.dist * 1000;
+                            if (dm > 0 && dm < 30) {
                                 let marker = this.mapstore.markers[d.id];
-
-                                let volume = Math.max(0,Math.floor((30 - dm)*100/30));
+                                let volume = Math.max(0, Math.floor((30 - dm) * 100 / 30));
                                 //let volume =  Math.floor(Math.max(0,100-18*Math.sqrt(dm)));
-                                //let volume =  1/(dm+0.001) + Math.max(0,100-18*Math.sqrt(dm));
 
-                                if(marker.spotifytype==='episode'){
-
+                                if (marker.spotifytype === 'episode') {
                                     let already_has = null;
                                     let paused_pods = [];
 
-                                    this.mp3.pods.forEach((p,i)=>{
-                                        if(p.file===marker.mp3) already_has = {num:i,...p};
-                                        if(!p.playing) paused_pods.push(i);
+                                    this.mp3.pods.forEach((p, i) => {
+                                        if (p.file === marker.mp3) already_has = {num: i, ...p};
+                                        if (!p.playing) paused_pods.push(i);
                                     });
 
-                                    if(already_has){
+                                    if (already_has) {
                                         console.log("already_has");
-                                        if(!already_has.playing){
-                                            setTimeout(()=> this.a_mp3(['pod',already_has.num,'file',marker.mp3]),20);
-                                            setTimeout(()=> this.a_mp3(['pod',already_has.num,'volume',volume]),20);
-                                            setTimeout(()=> this.a_mp3(['pod',already_has.num,'playing', true]),20);
-                                        }else{
+                                        if (!already_has.playing) {
+                                            setTimeout(() => this.a_mp3(['pod', already_has.num, 'file', marker.mp3]), 20);
+                                            setTimeout(() => this.a_mp3(['pod', already_has.num, 'volume', volume]), 20);
+                                            setTimeout(() => this.a_mp3(['pod', already_has.num, 'playing', true]), 20);
+                                        } else {
                                             //すでに再生中は、ボリューが変わる程度
-                                            console.log("changevolume:",volume);
-                                            console.log('pod',already_has.num,'volume',volume);
-                                            setTimeout(()=> this.a_mp3(['pod',already_has.num,'volume',volume+Math.floor(Math.random()*8)]),20);
+                                            console.log("changevolume:", volume);
+                                            console.log('pod', already_has.num, 'volume', volume);
+                                            setTimeout(() => this.a_mp3(['pod', already_has.num, 'volume', volume + Math.floor(Math.random() * 8)]), 20);
                                         }
 
-                                    }else if(paused_pods.length>0){
-                                        setTimeout(()=> this.a_mp3(['pod',paused_pods[0],'file',marker.mp3]),20);
-                                        setTimeout(()=> this.a_mp3(['pod',paused_pods[0],'volume',volume]),20);
-                                        setTimeout(()=> this.a_mp3(['pod',paused_pods[0],'playing', true]),20);
+                                    } else if (paused_pods.length > 0) {
+                                        setTimeout(() => this.a_mp3(['pod', paused_pods[0], 'file', marker.mp3]), 20);
+                                        setTimeout(() => this.a_mp3(['pod', paused_pods[0], 'volume', volume]), 20);
+                                        setTimeout(() => this.a_mp3(['pod', paused_pods[0], 'playing', true]), 20);
 
-                                    }else{
+                                    } else {
                                         console.log("all pods are used...");
                                     }
                                 }
                             }
-                    })
+                        })
+                    }
                 }
             },
 
