@@ -18,6 +18,23 @@ spec:
           ports:
             - containerPort: 5000
           env:
+            - name: GENIUS_ID
+              valueFrom:
+                secretKeyRef:
+                  name: genius-id
+                  key: GENIUS-ID
+            - name: GENIUS_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: genius-secret
+                  key: GENIUS-SECRET
+            - name: GENIUS_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: genius-token
+                  key: GENIUS-TOKEN
+            - name: GENIUS_CALLBACK
+              value: "https://spotifire.tokyo/api/genius/auth/callback"
             - name: SPOTIFY_ID
               valueFrom:
                 secretKeyRef:
