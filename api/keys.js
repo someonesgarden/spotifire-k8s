@@ -18,7 +18,13 @@ const spotifyApi = new SpotifyWebApi({
     redirectUri: process.env.SPOTIFY_CALLBACK
 });
 
+
 module.exports = {
+    geniusClientId: process.env.GENIUS_ID,
+    geniusClientSecret: process.env.GENIUS_SECRET,
+    geniusRedirectUri: process.env.GENIUS_CALLBACK,
+    geniusAccessToken: process.env.GENIUS_TOKEN,
+    geniusScope:["me"], //['me', 'create_annotation', 'manage_annotation', 'vote']
     spotifyClientId: process.env.SPOTIFY_ID,
     spotifyClientSecret: process.env.SPOTIFY_SECRET,
     spotifyRedirectUri: process.env.SPOTIFY_CALLBACK,
@@ -39,5 +45,6 @@ module.exports = {
     mysqlPort:process.env.MYSQL_PORT,
     mysqlDatabase:process.env.MYSQL_DB,
     mysqlUser:process.env.MYSQL_USER,
-    mysqlPassword:process.env.MYSQL_PW
+    mysqlPassword:process.env.MYSQL_PW,
+
 };

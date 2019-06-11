@@ -1,13 +1,10 @@
 <template>
     <div class="card flex_v">
         <div class="inner">
-
             <div class="graph">
                 <feed-graph :feature="generateFeature"></feed-graph>
             </div>
-
             <div class="feed">
-
                 <a @click="clickAction('title',item.title)">
                     <h1>
                         <mu-icon value="format_quote" size="45"></mu-icon>
@@ -31,8 +28,6 @@
                     </div>
                 </div>
             </div>
-
-
         </div>
     </div>
 </template>
@@ -139,7 +134,7 @@
                 let temp3 = temp2.filter((d)=> !this.isSpecialCharas(d));
                 let temp4 = temp3.filter((d)=> !this.isHiragana(d));
                 this.nicelist = temp4.filter((x, i, self)=> self.indexOf(x) === i);
-                console.log(this.nicelist);
+                //console.log(this.nicelist);
             },
 
             makeMarkov(tokens){

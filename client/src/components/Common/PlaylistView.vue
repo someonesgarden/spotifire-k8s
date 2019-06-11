@@ -21,6 +21,8 @@
         <mu-divider></mu-divider>
 
         <mu-container class="range">
+
+            <!--TABS-->
             <mu-row gutter>
                 <mu-col span="4"><div class="grid-cell">
                     <mu-button flat color="primary" v-if="playlist" @click="mode='playlist'" :class="{active:mode==='playlist'}">Playlist</mu-button>
@@ -36,13 +38,18 @@
                 </div></mu-col>
             </mu-row>
             <mu-row gutter>
-                <mu-col span="6"><div class="grid-cell">
+                <mu-col span="4"><div class="grid-cell">
                     <mu-button flat color="primary" v-if="track" @click="mode='track'" :class="{active:mode==='track'}">Track</mu-button>
                     <mu-button flat v-else disabled>Track</mu-button>
                 </div></mu-col>
-                <mu-col span="6"><div class="grid-cell">
-                    <mu-button flat color="primary" v-if="spotify.generated" @click="mode='generated'" :class="{active:mode==='generated'}">Generated</mu-button>
-                    <mu-button flat v-else disabled>Generated</mu-button>
+                <mu-col span="4"><div class="grid-cell">
+                    <mu-button flat color="primary" v-if="genius.song" @click="mode='lyrics'" :class="{active:mode==='lyrics'}">Lyrics</mu-button>
+                    <mu-button flat v-else disabled>Lyrics</mu-button>
+                </div></mu-col>
+
+                <mu-col span="4"><div class="grid-cell">
+                    <mu-button flat color="primary" v-if="spotify.generated" @click="mode='generated'" :class="{active:mode==='generated'}">Generate</mu-button>
+                    <mu-button flat v-else disabled>Generate</mu-button>
                 </div></mu-col>
             </mu-row>
             <mu-row gutter>
@@ -55,6 +62,7 @@
                     <mu-button flat v-else disabled>Podcast(Episode)</mu-button>
                 </div></mu-col>
             </mu-row>
+            <!--/TABS-->
 
             <!--- ARTIST --->
             <mu-list v-if="artist && mode==='artist'">
@@ -157,14 +165,12 @@
                 </mu-list-item>
 
                 <mu-divider></mu-divider>
-
                     <mu-list-item button :ripple="false" class="range" @click="getAlbum(track.album.id)">
                         <mu-list-item-action>
                             <mu-icon value="album"></mu-icon>
                         </mu-list-item-action>
                         <mu-list-item-title>&nbsp;{{track.album.name}}</mu-list-item-title>
                     </mu-list-item>
-
                 <mu-divider></mu-divider>
                 <!--ARTISTS-->
                 <div v-if="track.artists">
@@ -176,6 +182,15 @@
                     </mu-list-item>
                 </div>
                 <!--/ARTISTS-->
+                <!--Lyrics-->
+                <mu-divider></mu-divider>
+                <mu-list-item button :ripple="false" class="range" @click="trackLyrics(track.artists[0].name+' '+track.name)">
+                    <mu-list-item-action>
+                        <mu-icon value="translate" color="orange"></mu-icon>
+                    </mu-list-item-action>
+                    <mu-list-item-title>&nbsp;Lyrics by Genius.com</mu-list-item-title>
+                </mu-list-item>
+                <!--/Lyrics-->
                 <mu-divider></mu-divider>
                 <!--FEATURES-->
                 <div v-if="track.features">
@@ -184,27 +199,17 @@
                         <mu-list-item button :ripple="false" v-for="(feat,key,inx) in track.features" :key="key" class="range feature">
                             <mu-list-item-content>
                                 <mu-list-item-title>{{key}} <span style="color:#0b7da3">{{feat}}</span></mu-list-item-title>
-<!--                                <mu-list-item-sub-title></mu-list-item-sub-title>-->
                             </mu-list-item-content>
                         </mu-list-item>
 
                         <mu-list-item button :ripple="false" class="range feature">
                             <mu-list-item-content>
                                 <mu-list-item-title>popularity  <span style="color:#0b7da3">{{track.popularity}}</span></mu-list-item-title>
-<!--                                <mu-list-item-sub-title></mu-list-item-sub-title>-->
                             </mu-list-item-content>
                         </mu-list-item>
                     </mu-list>
                     <mu-divider></mu-divider>
                 </div>
-
-<!--                <mu-row gutter  v-if="track.id">-->
-<!--                    <mu-col span="12" style="margin-bottom:12px;">-->
-<!--                        <mu-button full-width color="cyan500" @click="getAudioAnalysis">-->
-<!--                            <mu-icon value="blur_on"></mu-icon>&nbsp;Audio Analysis-->
-<!--                        </mu-button>-->
-<!--                    </mu-col>-->
-<!--                </mu-row>-->
                 <!--/FEATUERS-->
             </mu-list>
             <!---/ TRACK --->
@@ -363,9 +368,7 @@
                         <mu-chip color="teal500" class="range">
                             <a :href="episode.audio_preview_url" target="_blank">AudioPreview</a>
                         </mu-chip>
-<!--                        <mu-chip color="purple" class="range" @click="c_play(episode.id,'episode',spotify.devices[0].id)">-->
-<!--                            Play Episode-->
-<!--                        </mu-chip>-->
+
                         <mu-divider></mu-divider>
                         <mu-icon value="access_time" size="10"></mu-icon>&nbsp;{{episode.duration_ms}}<br/>
                         <mu-icon value="label" size="10"></mu-icon>&nbsp;{{episode.language}}<br/>
@@ -375,6 +378,18 @@
             </mu-list>
             <!--- / PODCAST(Episode) --->
 
+            <!--- LYRICS by GENIUS.com -->
+            <mu-list v-if="genius.song && mode==='lyrics'">
+                <h6 class="topid">LYRICS :genius.com ID:{{genius.song.id}}</h6>
+
+                <div style="background-color:#a1a2c2;padding:5px;color:white;">
+                    <h4 style="margin:6px 0;font-weight:bold;">{{genius.song.full_title}}</h4>
+                    <p><mu-icon value="mic"></mu-icon>&nbsp;{{genius.song.primary_artist.name}}</p>
+                </div>
+                <mu-icon value="music_note"></mu-icon>
+                <pre v-html="genius.song.lyrics" style="background-color:#efefef; padding:0 12px;border-radius:6px;"></pre>
+            </mu-list>
+            <!--- / LYRICS --->
         </mu-container>
         <br>
     </div>
@@ -384,6 +399,7 @@
     import axios from 'axios';
     import {mapGetters,mapActions} from 'vuex';
     import spotifyMixin from '../../mixins/spotify/index';
+    import geniusMixin from '../../mixins/genius/index';
     import {ruleEmpty} from '../../store/rules';
 
     import searchResList from '../List/SearchResList';
@@ -391,14 +407,14 @@
     import PlayBtn from './PlayBtn';
     export default {
         name: "PlaylistView",
-        mixins:[spotifyMixin],
+        mixins:[spotifyMixin,geniusMixin],
         components:{
           searchResList,
             Chart,
             PlayBtn
         },
         computed:{
-            ...mapGetters(['spotify'])
+            ...mapGetters(['spotify','genius'])
         },
         created(){
             this.gen = this.spotify.gen
@@ -442,7 +458,7 @@
             }
         },
         methods:{
-            ...mapActions(['a_index','a_spotify']),
+            ...mapActions(['a_index','a_spotify','a_genius']),
 
             showTab(item,state=null){
                 let show = true;
@@ -471,6 +487,13 @@
                    }
                 }
                 return show;
+            },
+
+            trackLyrics(q){
+                this.c_genius_lyrics(q, res=> {
+                    this.a_genius(['set','song',res]);
+                    if(res) this.a_spotify(['update', 'item', 'lyrics']);
+                })
             },
 
             filterSelect(filter){
@@ -523,14 +546,6 @@
                 })
             },
 
-            // getAudioAnalysis(){
-            //      this.c_getAudioAnalysis(this.track.id,(res)=>{
-            //          console.log(res);
-            //          this.a_spotify(['set','analysis',res.data]);
-            //          this.a_index(['root','action','analysis']);
-            //          this.$router.push('/analysis');
-            //      })
-            // },
 
             seriesData (af) {
                 let music_keys = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
@@ -594,13 +609,16 @@
                             this.mode = 'generated';
                             this.$emit('open');
                             break;
+                        case 'lyrics':
+                            this.mode = 'lyrics';
+                            this.$emit('open');
+                            break;
                         case 'episode':
                             this.mode = 'episode';
                             this.episode = this.spotify.episodes.items.filter(epi=>epi.id===this.spotify.episode.id)[0];
                             console.log("episode", this.episode);
                             this.$emit('open');
                             break;
-
                         case 'show':
                             this.mode = 'show';
                             this.show =  this.spotify.shows.items.filter(show=>show.id===this.spotify.show.id)[0];

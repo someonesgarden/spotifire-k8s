@@ -1,6 +1,32 @@
 // ----- GENERAL
 export const a_login    = ({commit},params) => commit('login', params)
 
+export const a_index    =  ({commit}, [type, action, data]) => {
+    const actions = {
+        root:{
+            action:   (data) => commit('setRootAction', data),
+        },
+
+        bottom:{
+            open:   () => commit('setBottomState',  true),
+            close:  () => commit('setBottomState',  false),
+            toggle: () => commit('setBottomState',  'toggle')
+        },
+
+        alert:{
+            open: ()=> commit('setAlertState',       true),
+            close:()=> commit('setAlertState',       false),
+            set: (data)=> commit('setAlertText',     data),
+            action:(data)=> commit('setAlertAction', data)
+        },
+
+        pwa:{
+            set:(data)=> commit('setPwa', data)
+        }
+    };
+    actions[type][action](data)
+};
+
 // --------------- SPOTIFY ----------------
 export const a_spotify  =  ({commit}, [type, action, data]) => {
     const actions = {
@@ -74,6 +100,7 @@ export const a_spotify  =  ({commit}, [type, action, data]) => {
     actions[type][action](data)
 };
 
+// --------------- MAP --------------------
 export const a_mapstore = ({commit},[type, action, data]) => {
     const actions = {
         set: {
@@ -100,32 +127,7 @@ export const a_mapstore = ({commit},[type, action, data]) => {
     actions[type][action](data)
 };
 
-export const a_index    =  ({commit}, [type, action, data]) => {
-    const actions = {
-        root:{
-          action:   (data) => commit('setRootAction', data),
-        },
-
-        bottom:{
-            open:   () => commit('setBottomState',  true),
-            close:  () => commit('setBottomState',  false),
-            toggle: () => commit('setBottomState',  'toggle')
-        },
-
-        alert:{
-            open: ()=> commit('setAlertState',       true),
-            close:()=> commit('setAlertState',       false),
-            set: (data)=> commit('setAlertText',     data),
-            action:(data)=> commit('setAlertAction', data)
-        },
-
-        pwa:{
-            set:(data)=> commit('setPwa', data)
-        }
-    };
-    actions[type][action](data)
-};
-
+// --------------- FEED -------------------
 export const a_feed     =  ({commit}, [type, action, data]) => {
     const actions = {
         set:{
@@ -136,6 +138,7 @@ export const a_feed     =  ({commit}, [type, action, data]) => {
     actions[type][action](data)
 }
 
+// --------------- WEB SOCKET -------------
 export const a_ws       =  ({commit}, [type, action, data]) => {
     const actions = {
         set:{
@@ -158,17 +161,11 @@ export const a_ws       =  ({commit}, [type, action, data]) => {
     actions[type][action](data)
 }
 
-// -------- Three -----------
+// --------------- Three ------------------
 export const a_three    =  ({commit},param) => commit('three/setParam', param)
 
-// ------ MP3 PLAYERS -----
-
-
-// a_mp3(['pod',0,'file','.....'])
-// a_mp3(['pod',0,'playing', true])
+// --------------- MP3 PLAYERS ------------
 export const a_mp3 =  ({commit}, [type, num, action, data]) => {
-
-    console.log("a_mp3", type, num, action, data);
     const actions = {
         pod:{
             file:   (num,data)  => commit('mp3/setPodParam', {num:num, key:'file',    val:data}),
@@ -179,3 +176,13 @@ export const a_mp3 =  ({commit}, [type, num, action, data]) => {
     }
     actions[type][action](num,data)
 }
+
+// --------------- GENIUS -----------------
+export const a_genius = ({commit},[type, action, data]) => {
+    const actions = {
+        set: {
+            song:(data)   => commit('genius/setSong',  data)
+        },
+    }
+    actions[type][action](data)
+};

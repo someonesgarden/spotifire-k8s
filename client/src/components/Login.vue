@@ -10,7 +10,7 @@
                     <p v-for="(status,key) in pwa" :key="'pwa_'+key"><span class="circle" :class="status"></span>{{key}}</p>
                 </div>
 
-                <h3><mu-icon value="vpn_key"></mu-icon>LOGIN</h3>
+                <h3><mu-icon value="vpn_key"></mu-icon></h3>
 
                 <mu-form ref="adminform" :model="admin" class="mu-demo-form" label-position="left" label-width="100">
 

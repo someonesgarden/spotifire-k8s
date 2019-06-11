@@ -9,6 +9,7 @@ import mapstore from './modules/mapstore/index';
 import ws from './modules/ws/index';
 import three from './modules/three/index';
 import mp3 from './modules/mp3/index';
+import genius from './modules/genius/index';
 
 Vue.use(Vuex);
 
@@ -23,7 +24,8 @@ export default new Vuex.Store({
         mapstore,
         ws,
         three,
-        mp3
+        mp3,
+        genius
     }
 });
 

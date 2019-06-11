@@ -7,6 +7,8 @@ const spotifyRouter = require('./routes/spotify/index');
 const twitterRouter = require('./routes/twitter/index');
 const analyzeRouter = require('./routes/analyzer/index');
 const mysqlRouter   = require('./routes/mysql/index');
+const geniusRouter  = require('./routes/genius/index');
+
 const app = express();
 let http = require('http').Server(app);
 
@@ -106,6 +108,7 @@ app.use('/spotify', spotifyRouter);
 app.use('/twitter', twitterRouter);
 app.use('/analyze', analyzeRouter);
 app.use('/mysql',   mysqlRouter);
+app.use('/genius',  geniusRouter);
 
 // app.listen(5000, err => {
 //   console.log('Listening on Port 5000');
