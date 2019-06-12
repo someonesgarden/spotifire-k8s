@@ -3,11 +3,13 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const keys = require('./keys');
-const spotifyRouter = require('./routes/spotify/index');
-const twitterRouter = require('./routes/twitter/index');
-const analyzeRouter = require('./routes/analyzer/index');
-const mysqlRouter   = require('./routes/mysql/index');
-const geniusRouter  = require('./routes/genius/index');
+const spotifyRouter     = require('./routes/spotify/index');
+const twitterRouter     = require('./routes/twitter/index');
+const analyzeRouter     = require('./routes/analyzer/index');
+const mysqlRouter       = require('./routes/mysql/index');
+const geniusRouter      = require('./routes/genius/index');
+const musixRouter       = require('./routes/musixmatch/index');
+const musicbrainzRouter = require('./routes/musicbrainz/index');
 
 const app = express();
 let http = require('http').Server(app);
@@ -104,11 +106,13 @@ app.get('/' , function(req, res){
     res.send('API IS REASDY');
 });
 
-app.use('/spotify', spotifyRouter);
-app.use('/twitter', twitterRouter);
-app.use('/analyze', analyzeRouter);
-app.use('/mysql',   mysqlRouter);
-app.use('/genius',  geniusRouter);
+app.use('/spotify',     spotifyRouter);
+app.use('/twitter',     twitterRouter);
+app.use('/analyze',     analyzeRouter);
+app.use('/mysql',       mysqlRouter);
+app.use('/genius',      geniusRouter);
+app.use('/musixmatch',  musixRouter);
+app.use('/musicbrainz', musicbrainzRouter);
 
 // app.listen(5000, err => {
 //   console.log('Listening on Port 5000');

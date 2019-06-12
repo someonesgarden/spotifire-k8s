@@ -20,6 +20,7 @@ const spotifyApi = new SpotifyWebApi({
 
 
 module.exports = {
+    musixmatchKey:process.env.MUSIXMATCH_KEY,
     geniusClientId: process.env.GENIUS_ID,
     geniusClientSecret: process.env.GENIUS_SECRET,
     geniusRedirectUri: process.env.GENIUS_CALLBACK,

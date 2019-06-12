@@ -140,6 +140,7 @@
             <!--- TRACK --->
             <mu-list v-if="track && mode==='track'">
                 <h6 class="topid">TRACK : {{track.id}}</h6>
+                <h6 class="topid" style="color:#ff005b" v-if="track.external_ids">ISRC : {{track.external_ids.isrc}}</h6>
                 <mu-list-item avatar :ripple="false" button class="range">
                     <mu-list-item-action v-if="track.album" style="position:relative;">
                         <mu-list-item-action class="playbtn2">
@@ -184,11 +185,18 @@
                 <!--/ARTISTS-->
                 <!--Lyrics-->
                 <mu-divider></mu-divider>
-                <mu-list-item button :ripple="false" class="range" @click="trackLyrics(track.artists[0].name+' '+track.name)">
+                <mu-list-item button :ripple="false" class="range" @click="trackLyricsByGenius(track.artists[0].name+' '+track.name)">
                     <mu-list-item-action>
                         <mu-icon value="translate" color="orange"></mu-icon>
                     </mu-list-item-action>
                     <mu-list-item-title>&nbsp;Lyrics by Genius.com</mu-list-item-title>
+                </mu-list-item>
+                <mu-divider></mu-divider>
+                <mu-list-item button :ripple="false" class="range" @click="trackLyricsByMusixMatch(track.external_ids.isrc, track.name)" v-if="track.external_ids">
+                    <mu-list-item-action>
+                        <mu-icon value="translate" color="purple"></mu-icon>
+                    </mu-list-item-action>
+                    <mu-list-item-title>&nbsp;Lyrics by MusicBrainz+MusixMatch</mu-list-item-title>
                 </mu-list-item>
                 <!--/Lyrics-->
                 <mu-divider></mu-divider>
@@ -380,11 +388,11 @@
 
             <!--- LYRICS by GENIUS.com -->
             <mu-list v-if="genius.song && mode==='lyrics'">
-                <h6 class="topid">LYRICS :genius.com ID:{{genius.song.id}}</h6>
+                <h6 class="topid">LYRICS by[{{genius.song.type}}] {{genius.song.type ==='genius' ? 'geniusid' : 'isrc'}}:{{genius.song.id}}</h6>
 
                 <div style="background-color:#a1a2c2;padding:5px;color:white;">
                     <h4 style="margin:6px 0;font-weight:bold;">{{genius.song.full_title}}</h4>
-                    <p><mu-icon value="mic"></mu-icon>&nbsp;{{genius.song.primary_artist.name}}</p>
+                    <p v-if="genius.song.primary_artist"><mu-icon value="mic"></mu-icon>&nbsp;{{genius.song.primary_artist.name}}</p>
                 </div>
                 <mu-icon value="music_note"></mu-icon>
                 <pre v-html="genius.song.lyrics" style="background-color:#efefef; padding:0 12px;border-radius:6px;"></pre>
@@ -400,6 +408,7 @@
     import {mapGetters,mapActions} from 'vuex';
     import spotifyMixin from '../../mixins/spotify/index';
     import geniusMixin from '../../mixins/genius/index';
+    import musixMixin from '../../mixins/musixmatch/index';
     import {ruleEmpty} from '../../store/rules';
 
     import searchResList from '../List/SearchResList';
@@ -407,7 +416,7 @@
     import PlayBtn from './PlayBtn';
     export default {
         name: "PlaylistView",
-        mixins:[spotifyMixin,geniusMixin],
+        mixins:[spotifyMixin,geniusMixin,musixMixin],
         components:{
           searchResList,
             Chart,
@@ -489,10 +498,27 @@
                 return show;
             },
 
-            trackLyrics(q){
+            trackLyricsByGenius(q){
                 this.c_genius_lyrics(q, res=> {
-                    this.a_genius(['set','song',res]);
+                    console.log(res);
+                    this.a_genius(['set','song',{...res, type:'genius'}]);
                     if(res) this.a_spotify(['update', 'item', 'lyrics']);
+                })
+            },
+
+            trackLyricsByMusixMatch(isrc,track_name){
+                this.c_mm_lyrics_isrc(isrc,track_name,res=>{
+                    console.log(res);
+
+                    if(res){
+                        this.a_genius(['set','song',{
+                            full_title:track_name,
+                            lyrics:res.lyrics.lyrics_body,
+                            id:isrc,type:'musixmatch'
+                        }]);
+
+                        this.a_spotify(['update', 'item', 'lyrics']);
+                    }
                 })
             },
 

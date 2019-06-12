@@ -36,7 +36,8 @@ router.post('/search', (req,res)=>{
     const conditions   = data.conditions;
 
     spotifyApi.setAccessToken(access_token);
-    spotifyApi.search(conditions.term, conditions.datatypes, { limit : conditions.limit, offset : conditions.offset }).then(
+    //locale: 'en_US'をoptionにつけると英語？
+    spotifyApi.search(conditions.term, conditions.datatypes, { limit : conditions.limit, offset : conditions.offset}).then(
         function(data) {
             res.send(data.body);
         },

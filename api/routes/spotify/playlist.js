@@ -4,6 +4,7 @@ const keys = require('../../keys');
 const spotifyApi = keys.spotifyApi;
 
 
+// locale: 'en_US'
 router.get('/byid', (req,res)=>{
     const access_token = req.headers.authorization;
     const playlistid   = req.query.playlistid;

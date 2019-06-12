@@ -18,6 +18,11 @@ spec:
           ports:
             - containerPort: 5000
           env:
+            - name: MUSIXMATCH_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: musixmatch-key
+                  key: MUSIXMATCH-KEY
             - name: GENIUS_ID
               valueFrom:
                 secretKeyRef:

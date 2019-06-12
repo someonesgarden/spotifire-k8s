@@ -156,7 +156,7 @@
 
                         <mu-form-item prop="spotifyid" :rules="blankRules">
                             <mu-select prop="spotifyid" color="primary" v-model="newMarker.spotifyid" v-if="newMarker.isEpisode && spotify.episodes">
-                                <mu-option  :label="epi.name" :value="epi.id" v-for="(epi,inx) in spotify.episodes.items" :ley="'epi'+inx"></mu-option>
+                                <mu-option  :label="epi.name" :value="epi.id" v-for="(epi,inx) in spotify.episodes.items" :key="'epi'+inx"></mu-option>
                             </mu-select>
                             <mu-text-field prop="spotifyid" placeholder="Track ID" v-model="newMarker.spotifyid" v-else/>
 
