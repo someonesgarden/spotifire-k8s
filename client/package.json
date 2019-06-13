@@ -10,12 +10,14 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "animate.css": "^3.7.2",
     "animejs": "^3.0.1",
     "axios": "^0.18.0",
     "babel-polyfill": "^6.26.0",
     "chart.js": "^2.8.0",
     "cors": "^2.8.5",
     "css-loader": "^0.28.11",
+    "eagle.js": "^0.6.0",
     "firebase": "^6.1.0",
     "google-maps": "^3.3.0",
     "hard-source-webpack-plugin": "^0.13.1",
@@ -23,6 +25,7 @@
     "muse-ui": "^3.0.2",
     "prettier": "^1.17.1",
     "reset-css": "^4.0.1",
+    "reveal.js": "^3.8.0",
     "rss-parser": "^3.7.0",
     "sass-loader": "^7.1.0",
     "socket.io-client": "^2.2.0",
