@@ -4,33 +4,31 @@
 
             <mu-flex class="flex-wrapper" justify-content="center" align-items="center" direction="column">
 
-                <h3 style="font-weight:bold;color:#0de254;">deviceorientation!</h3>
-                <hr>
-                <div class="ui grid">
-                    <div class="sixteen wide column" style="text-align:center;">
-                        <br>
-                        <p>Geomagnetic sensor</p><br>
-                        Alpha: {{sensor.alpha | dicimal3}}<br/>
-                        Beta: {{sensor.beta | dicimal3}}<br/>
-                        Gamma: {{sensor.gamma | dicimal3}}
+                <h3 style="font-weight:bold;color:#0de254;">deviceorientation</h3>
+                <br><br><br>
+
+                <div class="ui grid home">
+                    <div class="five wide column" style="text-align:center;">
+                        <img id="compass_h" ref="compass_h" src="/static/img/spotify_logo.png" style="width:65px;height:65px;border-radius:50%;"/><br/>
+                        Angle(h)<br/>{{sensor.angleH | dicimal2}}
+                        <hr>
+                        (x,y,z)<br/>{{sensor.hx | dicimal2}}<br/>{{sensor.hy | dicimal2}}<br/>{{sensor.hz | dicimal2}}
+                    </div>
+
+                    <div class="six wide column" style="text-align:center;">
+                        <img id="compass" ref="compass" src="/static/img/compass.jpg" style="width:65px;height:65px;border-radius:50%;"/><br/>
+                        Alpha<br/>{{sensor.alpha | dicimal2}}<br/>
+                        Beta<br/>{{sensor.beta | dicimal2}}<br/>
+                        Gamma<br/>{{sensor.gamma | dicimal2}}
+                    </div>
+
+                    <div class="five wide column" style="text-align:center;">
+                        <img id="compass_v" ref="compass_v" src="/static/img/spotify_logo.png" style="width:65px;height:65px;border-radius:50%;"/><br/>
+                        Angle(v)<br/>{{sensor.angleV | dicimal3}}
+                        <hr>
+                        (x,y,z)<br/>{{sensor.vx | dicimal2}}<br/>{{sensor.vy | dicimal2}}<br/>{{sensor.vz | dicimal2}}
                     </div>
                 </div>
-
-                <div class="ui grid">
-                    <div class="eight wide column" style="text-align:center;">
-                        <img id="compass_h" ref="compass_h" src="/static/img/spotify_logo.png" style="width:100px;height:100px;border-radius:50%;"/><br/>
-                        Angle(h):{{sensor.angleH | dicimal3}}<br/>
-                        (x,y,z):({{sensor.hx}},{{sensor.hy}},{{sensor.hz}})
-                    </div>
-
-                    <div class="eight wide column" style="text-align:center;">
-                        <img id="compass_v" ref="compass_v" src="/static/img/spotify_logo.png" style="width:100px;height:100px;border-radius:50%;"/><br/>
-                        Angle(v):{{sensor.angleV | dicimal3}}<br/>
-                        (x,y,z):({{sensor.vx}},{{sensor.vy}},{{sensor.vz}})
-                    </div>
-                </div>
-
-
             </mu-flex>
 
         </div>
@@ -50,18 +48,18 @@
                 orienting: window.DeviceOrientationEvent,
                 rotating: window.DeviceMotionEvent,
                 sensor:{
-                    angleH:0,
-                    hx:0,
-                    hy:0,
-                    hz:0,
-                    angleV:0,
-                    vx:0,
-                    vy:0,
-                    vz:0,
-                    absolute:0,
-                    alpha:0,
-                    beta:0,
-                    gamma:0
+                    angleH:0.000000000000000,
+                    hx:0.000000000000000,
+                    hy:0.000000000000000,
+                    hz:0.000000000000000,
+                    angleV:0.000000000000000,
+                    vx:0.000000000000000,
+                    vy:0.000000000000000,
+                    vz:0.000000000000000,
+                    absolute:0.000000000000000,
+                    alpha:0.000000000000000,
+                    beta:0.000000000000000,
+                    gamma:0.000000000000000
                 }
             }
         },
@@ -95,6 +93,8 @@
                 this.sensor.alpha = e.alpha;
                 this.sensor.beta = e.beta;
                 this.sensor.gamma = e.gamma;
+
+                this.$refs.compass.style.transform = "rotate(" + (e.beta) + "deg)";
 
                 let ro = -(window.orientation || 0) * Math.PI / 180;
                 let ry =  (e.gamma || 0) * Math.PI / 180;
@@ -164,6 +164,10 @@
 </script>
 
 <style scoped lang="scss">
+
+    .home{
+        font-size:0.6rem;
+    }
 
     img#compass_v, img#compass_h{
         margin:0 auto;

@@ -5,6 +5,7 @@ import moment from 'moment'
 Vue.filter('trimspaces', txt=> txt.trim());
 
 
+Vue.filter('dicimal2', fnum=> Math.round(fnum*10)/10);
 Vue.filter('dicimal3', fnum=> Math.round(fnum*100)/100);
 
 Vue.filter('slice5', str => str.length  > 5 ? str.slice(0,5)+'.' : str);

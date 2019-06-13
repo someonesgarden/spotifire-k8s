@@ -5,10 +5,10 @@
                 <mu-icon value="border_left"></mu-icon>
             </mu-button>
 
-            <mu-menu  open-on-hover cover placement="left-start">
+            <mu-menu  open-on-hover cover placement="left-start" :open.sync="open">
                 <mu-button flat>
                     <img class="menu-icon" src="/static/img/spotifire_logo.png" style="width:110px; height:auto;"></mu-button>
-                <mu-list slot="content">
+                <mu-list slot="content" @mouseup="toggleMenu">
                     <mu-list-item button to="/">
                         <mu-list-item-title>device</mu-list-item-title>
                     </mu-list-item>
