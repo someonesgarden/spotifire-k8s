@@ -9,7 +9,10 @@
                 <div class="ui grid">
                     <div class="sixteen wide column" style="text-align:center;">
                         <br>
-                        <p>Geomagnetic sensor</p><br>(Alpha,Beta,Gamma):({{sensor.alpha}},{{sensor.beta}},{{sensor.gamma}})
+                        <p>Geomagnetic sensor</p><br>
+                        Alpha: {{sensor.alpha | dicimal3}}<br/>
+                        Beta: {{sensor.beta | dicimal3}}<br/>
+                        Gamma: {{sensor.gamma | dicimal3}}
                     </div>
                 </div>
 
@@ -47,11 +50,11 @@
                 orienting: window.DeviceOrientationEvent,
                 rotating: window.DeviceMotionEvent,
                 sensor:{
-                    angleH:0.13123123123123,
+                    angleH:0,
                     hx:0,
                     hy:0,
                     hz:0,
-                    angleV:0.23423423423423423,
+                    angleV:0,
                     vx:0,
                     vy:0,
                     vz:0,
