@@ -17,6 +17,7 @@
 
                     <div class="six wide column" style="text-align:center;">
                         <img id="compass" ref="compass" src="/static/img/compass.jpg" style="width:65px;height:65px;border-radius:50%;"/><br/>
+                        Absolute<br/>{{sensor.absolute | dicimal2}}<br/>
                         Alpha<br/>{{sensor.alpha | dicimal2}}<br/>
                         Beta<br/>{{sensor.beta | dicimal2}}<br/>
                         Gamma<br/>{{sensor.gamma | dicimal2}}
@@ -94,7 +95,7 @@
                 this.sensor.beta = e.beta;
                 this.sensor.gamma = e.gamma;
 
-                this.$refs.compass.style.transform = "rotate(" + (e.beta) + "deg)";
+                this.$refs.compass.style.transform = "rotate(" + (e.alpha) + "deg)";
 
                 let ro = -(window.orientation || 0) * Math.PI / 180;
                 let ry =  (e.gamma || 0) * Math.PI / 180;
