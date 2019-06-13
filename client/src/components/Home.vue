@@ -103,8 +103,6 @@
                 this.sensor.beta = e.beta;
                 this.sensor.gamma = e.gamma;
 
-                this.$refs.compass.style.transform = "rotate(" + (e.alpha) + "deg)";
-
                 let ro = -(window.orientation || 0) * Math.PI / 180;
                 let ry =  (e.gamma || 0) * Math.PI / 180;
                 let rx =  (e.beta  || 0) * Math.PI / 180;
@@ -145,6 +143,7 @@
                 let angleH = Math.atan2(-axisY.x,axisY.y) * (180.0 / Math.PI);
                 if(axisZ.z < 0) angleH = -angleH;
 
+                this.$refs.compass.style.transform = "rotate(" +  (angleH) + "deg)";
                 this.$refs.compass_h.style.transform = "rotate(" + (angleH) + "deg)";
 
 
