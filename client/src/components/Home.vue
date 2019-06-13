@@ -1,12 +1,10 @@
 <template>
     <mu-container class="flex_v">
         <div>
-
             <mu-flex class="flex-wrapper" justify-content="center" align-items="center" direction="column">
-
-                <h3 style="font-weight:bold;color:#0de254;">deviceorientation</h3>
-                <br><br><br>
-
+                <h3 style="font-weight:bold;color:#00b46d;">deviceorientation</h3>
+                <br>
+                <p v-if="compassNeedsCalibration">compassNeedsCalibration</p>
                 <div class="ui grid home">
                     <div class="five wide column" style="text-align:center;">
                         <img id="compass_h" ref="compass_h" src="/static/img/spotify_logo.png" style="width:65px;height:65px;border-radius:50%;"/><br/>
@@ -17,7 +15,7 @@
 
                     <div class="six wide column" style="text-align:center;">
                         <img id="compass" ref="compass" src="/static/img/compass.jpg" style="width:65px;height:65px;border-radius:50%;"/><br/>
-                        Absolute<br/>{{sensor.absolute | dicimal2}}<br/>
+                        Absolute<br/>{{sensor.absolute}}<br/>
                         Alpha<br/>{{sensor.alpha | dicimal2}}<br/>
                         Beta<br/>{{sensor.beta | dicimal2}}<br/>
                         Gamma<br/>{{sensor.gamma | dicimal2}}
@@ -46,6 +44,7 @@
 
         data(){
             return{
+                compassNeedsCalibration:false,
                 orienting: window.DeviceOrientationEvent,
                 rotating: window.DeviceMotionEvent,
                 sensor:{
@@ -80,14 +79,23 @@
                 // else {
                 //     document.addEventListener('mousemove', this.move)
                 // }
+
+                window.addEventListener("compassneedscalibration", this.compassNeedsCalibration, true);
             })
         },
 
         beforeDestroy() {
             window.removeEventListener("deviceorientation",  this.deviceOrientation, false);
+            window.removeEventListener("compassneedscalibration", this.compassNeedsCalibration, true);
         },
 
         methods:{
+
+
+            compassNeedsCalibration(e){
+                this.compassNeedsCalibration = true;
+            },
+
             deviceOrientation(e){
 
                 this.sensor.absolute = e.absolute;
