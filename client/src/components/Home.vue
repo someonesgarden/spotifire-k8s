@@ -39,6 +39,8 @@
 
         data(){
             return{
+                orienting: window.DeviceOrientationEvent,
+                rotating: window.DeviceMotionEvent,
                 sensor:{
                     angleH:0,
                     hx:0,
@@ -56,26 +58,26 @@
             }
         },
 
-        created(){
-            this.$nextTick(()=>{
-                window.addEventListener("deviceorientation", this.deviceOrientation, true);
-                window.addEventListener("deviceorientation", this.deviceOrientation.call(this), true);
-            })
-            window.addEventListener("deviceorientation", this.deviceOrientation, true);
-            window.addEventListener("deviceorientation", this.deviceOrientation.call(this), true);
-        },
 
         mounted () {
-            this.$nextTick(()=>{
-                window.addEventListener("deviceorientation", this.deviceOrientation, true);
-                window.addEventListener("deviceorientation", this.deviceOrientation.call(this), true);
+
+            this.$nextTick(() => {
+                window.addEventListener('deviceorientation', this.deviceOrientation, false);
+
+                // if (this.orienting) {
+                //
+                // }
+                // else if (this.rotating) {
+                //     window.addEventListener('devicemove', this.rotate, false)
+                // }
+                // else {
+                //     document.addEventListener('mousemove', this.move)
+                // }
             })
-            window.addEventListener("deviceorientation", this.deviceOrientation, true);
-            window.addEventListener("deviceorientation", this.deviceOrientation.call(this), true);
         },
 
         beforeDestroy() {
-            window.removeEventListener("deviceorientation",  this.deviceOrientation, true);
+            window.removeEventListener("deviceorientation",  this.deviceOrientation, false);
         },
 
         methods:{
@@ -126,7 +128,7 @@
                 let angleH = Math.atan2(-axisY.x,axisY.y) * (180.0 / Math.PI);
                 if(axisZ.z < 0) angleH = -angleH;
 
-                this.$ref.compass_h.style.transform = "rotate(" + (angleH) + "deg)";
+                this.$refs.compass_h.style.transform = "rotate(" + (angleH) + "deg)";
 
 
                 this.sensor.angleH = angleH;
@@ -139,7 +141,7 @@
                 // ------------------------------------------------------------
                 let angleV = Math.atan2(axisZ.x,-axisZ.y) * (180.0 / Math.PI);
 
-                this.$ref.compass_v.style.transform = "perspective(300px) rotateX(65deg) rotateZ(" + (angleV).toFixed(10) + "deg)";
+                this.$refs.compass_v.style.transform = "perspective(300px) rotateX(65deg) rotateZ(" + (angleV).toFixed(10) + "deg)";
                 this.sensor.angleV = angleV;
                 this.sensor.vx = (-axisZ.x).toFixed(4);
                 this.sensor.vy = (-axisZ.y).toFixed(4);
