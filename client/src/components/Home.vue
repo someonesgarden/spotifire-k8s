@@ -159,20 +159,20 @@
                 this.sensor.gamma = e.gamma;
 
 
-                switch (window.orientation) {
-                    case 0:
-                        alert("肖像模式 0,screen-width: " + screen.width + "; screen-height:" + screen.height+e.absolute+','+e.alpha);
-                        break;
-                    case -90:
-                        alert("左旋 -90,screen-width: " + screen.width + "; screen-height:" + screen.height+e.absolute+','+e.alpha);
-                        break;
-                    case 90:
-                        alert("右旋 90,screen-width: " + screen.width + "; screen-height:" + screen.height+e.absolute+','+e.alpha);
-                        break;
-                    case 180:
-                        alert("风景模式 180,screen-width: " + screen.width + "; screen-height:" + screen.height+e.absolute+','+e.alpha);
-                        break;
-                }
+                // switch (window.orientation) {
+                //     case 0:
+                //         alert("肖像模式 0,screen-width: " + screen.width + "; screen-height:" + screen.height+e.absolute+','+e.alpha);
+                //         break;
+                //     case -90:
+                //         alert("左旋 -90,screen-width: " + screen.width + "; screen-height:" + screen.height+e.absolute+','+e.alpha);
+                //         break;
+                //     case 90:
+                //         alert("右旋 90,screen-width: " + screen.width + "; screen-height:" + screen.height+e.absolute+','+e.alpha);
+                //         break;
+                //     case 180:
+                //         alert("风景模式 180,screen-width: " + screen.width + "; screen-height:" + screen.height+e.absolute+','+e.alpha);
+                //         break;
+                // }
 
                 let ro = -(window.orientation || 0) * Math.PI / 180;
                 let ry =  (e.gamma || 0) * Math.PI / 180;
