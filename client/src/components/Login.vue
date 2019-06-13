@@ -4,38 +4,36 @@
 
             <mu-flex class="flex-wrapper" justify-content="center" align-items="center" direction="column">
 
-                <img class="menu-icon" src="/static/img/spotifire_logo.png">
+                <img class="menu-icon" src="/static/img/emory_logo1.png" style="width:180px;height:auto;">
 
-                <div class="pwa">
-                    <p v-for="(status,key) in pwa" :key="'pwa_'+key"><span class="circle" :class="status"></span>{{key}}</p>
-                </div>
+                <mu-form ref="adminform" :model="admin" class="mu-demo-form" label-position="top" label-width="100">
 
-                <h3><mu-icon value="vpn_key"></mu-icon></h3>
-
-                <mu-form ref="adminform" :model="admin" class="mu-demo-form" label-position="left" label-width="100">
-
-                    <div class="ui grid">
-                        <div class="sixteen wide mobile eight wide tablet eight wide computer column">
-                            <mu-form-item :rules="emptyRules" prop="id" label="admin ID" class="range">
-                                <mu-text-field prop="id" v-model="admin.id"></mu-text-field>
+                    <div class="ui grid" style="margin-left:0;margin-right:0;margin-bottom:0;">
+                        <div class="eight wide mobile eight wide tablet eight wide computer column" style="padding-bottom:0;">
+                            <mu-form-item :rules="emptyRules" prop="id" label="id" class="range" style="padding-bottom:0;margin-bottom:0;">
+                                <mu-text-field prop="id" v-model="admin.id" style="text-align:center;"></mu-text-field>
                             </mu-form-item>
                         </div>
 
-                        <div class="sixteen wide mobile eight wide tablet eight wide computer column">
-                            <mu-form-item :rules="emptyRules" prop="pass" label="password" class="range">
-                                <mu-text-field  type="password" prop="pass"  v-model="admin.pass"  label="Password" :action-icon="visibility ? 'visibility_off' : 'visibility'" :action-click="() => (visibility = !visibility)" :type="visibility ? 'text' : 'password'"></mu-text-field>
+                        <div class="eight wide mobile eight wide tablet eight wide computer column" style="padding-bottom:0;">
+                            <mu-form-item :rules="emptyRules" prop="pass" label="password" class="range" style="padding-bottom:0;margin-bottom:0;">
+                                <mu-text-field  type="password" prop="pass" v-model="admin.pass"  :action-icon="visibility ? 'visibility_off' : 'visibility'" :action-click="() => (visibility = !visibility)" :type="visibility ? 'text' : 'password'" style="text-align:center;"></mu-text-field>
                             </mu-form-item>
                         </div>
                     </div>
 
-                    <div class="ui grid">
+                    <div class="ui grid" style="margin:0;">
                         <mu-col span="12" sm="12" md="12" lg="12" xl="12">
                             <div class="grid-cell">
-                                <mu-button color="primary" class="smallbtn" full-width @click="loginAction">LOGIN</mu-button>
+                                <mu-button color="blueGrey900" class="smallbtn" full-width @click="loginAction">ログイン</mu-button>
                             </div>
                         </mu-col>
                     </div>
                 </mu-form>
+
+                <div class="pwa">
+                    <p v-for="(status,key) in pwa" :key="'pwa_'+key"><span class="circle" :class="status"></span>{{key}}</p>
+                </div>
             </mu-flex>
 
         </div>
@@ -107,7 +105,6 @@
                         this.a_login(this.admin);
                         if(this.loggedIn) this.$router.push('/map');
                     }
-
                 });
             }
         },
@@ -116,15 +113,15 @@
 </script>
 <style lang="scss">
     .pwa{
-        width:              80%;
-        background-color: rgba(241, 252, 233, 0.63);
-        padding:            8px 8px 8px 0;
-        border-radius:      12px;
-        margin:             8px;
+        width:              96%;
+        /*background-color: rgba(252, 243, 225, 0.37);*/
+        padding:            2px;
+        border-radius:      4px;
+        margin:             8px auto 0 auto;
         p{
             float:left;
-            margin:1px 2px;
-            font-size:12px;
+            margin:1px 1px;
+            font-size:7px;
             color:#343434;
 
             span.circle{
