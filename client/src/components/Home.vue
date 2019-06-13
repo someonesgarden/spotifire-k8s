@@ -6,18 +6,23 @@
 
                 <h3 style="font-weight:bold;color:#0de254;">deviceorientation!</h3>
                 <hr>
+                <div class="ui grid">
+                    <div class="sixteen wide column" style="text-align:center;">
+                        <br>
+                        <p>Geomagnetic sensor</p><br>(Alpha,Beta,Gamma):({{sensor.alpha}},{{sensor.beta}},{{sensor.gamma}})
+                    </div>
+                </div>
 
                 <div class="ui grid">
-
                     <div class="eight wide column" style="text-align:center;">
                         <img id="compass_h" ref="compass_h" src="/static/img/spotify_logo.png" style="width:100px;height:100px;border-radius:50%;"/><br/>
-                        Angle(h):{{sensor.angleH}}<br/>
+                        Angle(h):{{sensor.angleH | dicimal3}}<br/>
                         (x,y,z):({{sensor.hx}},{{sensor.hy}},{{sensor.hz}})
                     </div>
 
                     <div class="eight wide column" style="text-align:center;">
                         <img id="compass_v" ref="compass_v" src="/static/img/spotify_logo.png" style="width:100px;height:100px;border-radius:50%;"/><br/>
-                        Angle(v):{{sensor.angleV}}<br/>
+                        Angle(v):{{sensor.angleV | dicimal3}}<br/>
                         (x,y,z):({{sensor.vx}},{{sensor.vy}},{{sensor.vz}})
                     </div>
                 </div>
@@ -42,11 +47,11 @@
                 orienting: window.DeviceOrientationEvent,
                 rotating: window.DeviceMotionEvent,
                 sensor:{
-                    angleH:0,
+                    angleH:0.13123123123123,
                     hx:0,
                     hy:0,
                     hz:0,
-                    angleV:0,
+                    angleV:0.23423423423423423,
                     vx:0,
                     vy:0,
                     vz:0,
@@ -157,11 +162,8 @@
 
 <style scoped lang="scss">
 
-    /*img#compass_h{*/
-    /*    transform: rotateX(165deg) rotateZ(10deg);*/
-    /*}*/
+    img#compass_v, img#compass_h{
+        margin:0 auto;
+    }
 
-    /*img#compass_v{*/
-    /*    transform: perspective(300px) rotateX(65deg) rotateZ(20deg);*/
-    /*}*/
 </style>

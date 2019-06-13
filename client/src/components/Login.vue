@@ -105,7 +105,7 @@
                     if(valid){
                         if(!this.spotify.credential.expires_in) this.c_getCredential();
                         this.a_login(this.admin);
-                        if(this.loggedIn) this.$router.push('/');
+                        if(this.loggedIn) this.$router.push('/map');
                     }
 
                 });
