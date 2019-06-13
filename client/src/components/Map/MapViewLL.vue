@@ -103,6 +103,7 @@
             },
 
             geoSuccess(position){
+                console.log(position);
                 this.resetPos(position);
                 this.drawPoly();
                 if(this.mapstore.mainuser){

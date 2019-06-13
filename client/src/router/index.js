@@ -15,7 +15,7 @@ import Lyrics from '../components/Lyrics.vue';
 
 let routes =  [
   { path:'/login',   name: 'Login',  component: Login},
-  { path: '/',       name: 'Home',    component: Home,      meta: { requiresAuth: true }},
+  { path: '/',       name: 'Home',    component: Home,    meta: { requiresAuth: true }},
   { path: '/news',   name: 'News',   component: News,     meta: { requiresAuth: true }},
   { path: '/lyrics', name: 'Lyrics', component: Lyrics,   meta: { requiresAuth: true }},
   { path:'/map',     name: 'Map',    component: Map,      meta: { requiresAuth: true }},

@@ -15,7 +15,7 @@
 
                     <div class="six wide column" style="text-align:center;">
                         <img id="compass" ref="compass" src="/static/img/compass.jpg" style="width:65px;height:65px;border-radius:50%;"/><br/>
-                        Heading<br/>{{sensor.heading}}<br/>
+                        <span v-if="sensor.heading">Heading<br/>{{sensor.heading}}<br/></span>
                         Alpha<br/>{{sensor.alpha | dicimal2}}<br/>
                         Beta<br/>{{sensor.beta | dicimal2}}<br/>
                         Gamma<br/>{{sensor.gamma | dicimal2}}
@@ -56,7 +56,7 @@
                     vx:0.000000000000000,
                     vy:0.000000000000000,
                     vz:0.000000000000000,
-                    heading:"",
+                    heading:null,
                     alpha:0.000000000000000,
                     beta:0.000000000000000,
                     gamma:0.000000000000000
@@ -96,7 +96,7 @@
             },
 
             deviceOrientation(e){
-                if (navigator.geolocation) navigator.geolocation.getCurrentPosition(position =>  this.sensor.heading = position.coords.heading || "No geo_heading");
+                if (navigator.geolocation) navigator.geolocation.getCurrentPosition(position =>  this.sensor.heading = position.coords.heading);
 
                 this.sensor.alpha = e.alpha;
                 this.sensor.beta = e.beta;
