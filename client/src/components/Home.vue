@@ -4,7 +4,7 @@
 
             <mu-flex class="flex-wrapper" justify-content="center" align-items="center" direction="column">
 
-                <h3 style="font-weight:bold;color:#0de254;">deviceorientation</h3>
+                <h3 style="font-weight:bold;color:#0de254;">deviceorientation!</h3>
                 <hr>
 
                 <div class="ui grid">
@@ -56,8 +56,22 @@
             }
         },
 
-        mounted () {
+        created(){
+            this.$nextTick(()=>{
+                window.addEventListener("deviceorientation", this.deviceOrientation, true);
+                window.addEventListener("deviceorientation", this.deviceOrientation.call(this), true);
+            })
             window.addEventListener("deviceorientation", this.deviceOrientation, true);
+            window.addEventListener("deviceorientation", this.deviceOrientation.call(this), true);
+        },
+
+        mounted () {
+            this.$nextTick(()=>{
+                window.addEventListener("deviceorientation", this.deviceOrientation, true);
+                window.addEventListener("deviceorientation", this.deviceOrientation.call(this), true);
+            })
+            window.addEventListener("deviceorientation", this.deviceOrientation, true);
+            window.addEventListener("deviceorientation", this.deviceOrientation.call(this), true);
         },
 
         beforeDestroy() {

@@ -10,7 +10,7 @@
                     <img class="menu-icon" src="/static/img/spotifire_logo.png" style="width:110px; height:auto;"></mu-button>
                 <mu-list slot="content">
                     <mu-list-item button to="/">
-                        <mu-list-item-title>/</mu-list-item-title>
+                        <mu-list-item-title>device</mu-list-item-title>
                     </mu-list-item>
                     <mu-list-item button to="/map">
                         <mu-list-item-title><mu-icon value="location_on" :size="12"></mu-icon>&nbsp;map</mu-list-item-title>
