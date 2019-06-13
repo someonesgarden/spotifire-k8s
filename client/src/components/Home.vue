@@ -4,7 +4,7 @@
             <mu-flex class="flex-wrapper" justify-content="center" align-items="center" direction="column">
                 <h3 style="font-weight:bold;color:#00b46d;">deviceorientation</h3>
                 <br>
-                <p v-if="compassNeedsCalibration">compassNeedsCalibration</p>
+                <p v-if="compass_calib">compassNeedsCalibration</p>
                 <div class="ui grid home">
                     <div class="five wide column" style="text-align:center;">
                         <img id="compass_h" ref="compass_h" src="/static/img/spotify_logo.png" style="width:65px;height:65px;border-radius:50%;"/><br/>
@@ -50,7 +50,7 @@
                     y:0,
                     z:0
                 },
-                compassNeedsCalibration:false,
+                compass_calib:false,
                 orienting: window.DeviceOrientationEvent,
                 rotating: window.DeviceMotionEvent,
                 sensor:{
@@ -111,7 +111,7 @@
         methods:{
 
             compassNeedsCalibration(e){
-                this.compassNeedsCalibration = true;
+                this.compass_calib = true;
             },
 
             deviceOrientation(e){

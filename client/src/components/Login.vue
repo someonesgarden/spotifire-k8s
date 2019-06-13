@@ -126,8 +126,8 @@
             color:#343434;
 
             span.circle{
-                width:8px;
-                height:8px;
+                width:6px;
+                height:6px;
                 border-radius:50%;
                 background-color: rgba(85, 83, 82, 0.72);
                 display:inline-block;
