@@ -331,6 +331,17 @@
                 this.a_index(['alert','set',"Spotifyにログインが必要です。"]);
                 this.a_index(['alert','open']);
                 this.a_index(['alert','action','login']);
+            }else{
+                if(!this.spotify.me.bookmark_num) {
+                    this.a_index(['alert', 'set', "Spotifyユーザーデータを調べています"]);
+                    this.a_index(['alert', 'open']);
+                }
+
+                //ユーザーのbookmarkデータがなくてもとりあえず初期化する
+                this.createOrFindMainuser(this.spotify.me.id);
+                //FireBaseのイベントリスナー
+                this.markersRef.on('value', (snapshot)=> this.a_mapstore(['set','markers',snapshot.val()]));
+                this.projsRef.on('value',   (snapshot)=> this.a_mapstore(['emory','setprojects',snapshot.val()]));
             }
         },
 

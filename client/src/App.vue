@@ -57,7 +57,6 @@ export default {
       if (this.alert.action === 'login') {
         if(!this.spotify.credential.expires_in) this.c_getCredential();
       }
-
     }
   },
 

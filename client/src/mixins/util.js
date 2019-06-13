@@ -55,15 +55,12 @@ export default {
         },
 
         checkPWAInWindow(type) {
-            if (type in window) {
+            if (Boolean(type in window)) {
                 this.a_index(['pwa','set',{key:type,val:'granted'}]);
             }else{
                 this.a_index(['pwa', 'set', {key: type, val: 'error'}]);
             }
         }
-
-
-
 
     }
 }

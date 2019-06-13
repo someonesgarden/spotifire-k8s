@@ -80,10 +80,6 @@
             this.checkPWA('clipboard-write');
             this.checkPWA('accessibility-events');
             this.checkPWA('payment-handler');
-
-            this.checkPWA('DeviceOrientationEvent');
-            this.checkPWA('DeviceMotionEvent');
-
             this.checkPWAExist('serviceWorker');
             this.checkPWAExist('bluetooth');
             this.checkPWAExist('PushManager');
@@ -91,11 +87,15 @@
             this.checkPWA('getUserMedia');
             this.checkPWA('webkitGetUserMedia');
             this.checkPWA('mozGetUserMedia');
+            this.checkPWA('DeviceOrientationEvent');
+            this.checkPWA('DeviceMotionEvent');
+
             //プッシュ通知はサービスワーカーが使えた上で
             //
             //
             // mediaDevicesさらに確認する必要があるのでここでは調べない
         },
+
         methods:{
             ...mapActions(['a_login']),
 
@@ -105,7 +105,7 @@
                     if(valid){
                         if(!this.spotify.credential.expires_in) this.c_getCredential();
                         this.a_login(this.admin);
-                        if(this.loggedIn) this.$router.push('/map');
+                        if(this.loggedIn) this.$router.push('/');
                     }
 
                 });
