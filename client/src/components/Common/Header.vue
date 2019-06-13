@@ -18,13 +18,6 @@
                     <mu-list-item button to="/news">
                         <mu-list-item-title><mu-icon value="filter_list" :size="12"></mu-icon>&nbsp;news</mu-list-item-title>
                     </mu-list-item>
-                    <mu-list-item button to="/lyrics">
-                        <mu-list-item-title><mu-icon value="filter_list" :size="12"></mu-icon>&nbsp;lyrics</mu-list-item-title>
-                    </mu-list-item>
-
-                    <mu-list-item button to="/anime2">
-                        <mu-list-item-title> <mu-icon value="dialpad" :size="12"></mu-icon>&nbsp;anime2</mu-list-item-title>
-                    </mu-list-item>
                 </mu-list>
             </mu-menu>
 

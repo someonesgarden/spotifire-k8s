@@ -87,6 +87,7 @@
             this.checkPWA('mozGetUserMedia');
             this.checkPWA('DeviceOrientationEvent');
             this.checkPWA('DeviceMotionEvent');
+            this.checkPWAInFunction('Gyroscope');
 
             //プッシュ通知はサービスワーカーが使えた上で
             //

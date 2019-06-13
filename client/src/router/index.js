@@ -8,19 +8,13 @@ import Home from '../components/Home.vue';
 import Map from '../components/MapLL.vue';
 import News from '../components/News.vue';
 import Login from '../components/Login.vue';
-import Anime from '../components/Anime.vue';
-import Anime2 from '../components/Anime2.vue';
 import Analysis from '../components/Analysis.vue';
-import Lyrics from '../components/Lyrics.vue';
 
 let routes =  [
   { path:'/login',   name: 'Login',  component: Login},
   { path: '/',       name: 'Home',    component: Home,    meta: { requiresAuth: true }},
   { path: '/news',   name: 'News',   component: News,     meta: { requiresAuth: true }},
-  { path: '/lyrics', name: 'Lyrics', component: Lyrics,   meta: { requiresAuth: true }},
   { path:'/map',     name: 'Map',    component: Map,      meta: { requiresAuth: true }},
-  { path:'/anime',   name: 'Anime',  component: Anime,    meta: { requiresAuth: true }},
-  { path:'/anime2',  name: 'Anime2', component: Anime2,   meta: { requiresAuth: true }},
   { path:'/analysis',name: 'Analysis',component: Analysis,meta: { requiresAuth: true }},
 ];
 

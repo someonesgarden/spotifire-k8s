@@ -15,10 +15,10 @@
 
                     <div class="six wide column" style="text-align:center;">
                         <img id="compass" ref="compass" src="/static/img/compass.jpg" style="width:65px;height:65px;border-radius:50%;"/><br/>
-                        <span v-if="sensor.heading">Heading<br/>{{sensor.heading}}<br/></span>
-                        Alpha<br/>{{sensor.alpha | dicimal2}}<br/>
-                        Beta<br/>{{sensor.beta | dicimal2}}<br/>
-                        Gamma<br/>{{sensor.gamma | dicimal2}}
+                        <span v-if="gyro.sensor">Gyro<br/></span>
+                        x<br/>{{gyro.x | dicimal2}}<br/>
+                        y<br/>{{gyro.y | dicimal2}}<br/>
+                        z<br/>{{gyro.z | dicimal2}}
                     </div>
 
                     <div class="five wide column" style="text-align:center;">
@@ -44,6 +44,12 @@
 
         data(){
             return{
+                gyro:{
+                    sensor:null,
+                    x:0,
+                    y:0,
+                    z:0
+                },
                 compassNeedsCalibration:false,
                 orienting: window.DeviceOrientationEvent,
                 rotating: window.DeviceMotionEvent,
@@ -69,6 +75,7 @@
 
             this.$nextTick(() => {
                 window.addEventListener('deviceorientation', this.deviceOrientation, false);
+                window.addEventListener("compassneedscalibration", this.compassNeedsCalibration, true);
 
                 // if (this.orienting) {
                 //
@@ -80,13 +87,25 @@
                 //     document.addEventListener('mousemove', this.move)
                 // }
 
-                window.addEventListener("compassneedscalibration", this.compassNeedsCalibration, true);
+                if (typeof Gyroscope === "function") {
+                    this.gyro.sensor = new Gyroscope();
+
+                    this.gyro.sensor.addEventListener('reading', () => {
+                        console.log(this.gyro.x);
+                        console.log(this.gyro.y);
+                        console.log(this.gyro.z);
+                    });
+
+                    this.gyro.sensor.start();
+                }
+
             })
         },
 
         beforeDestroy() {
             window.removeEventListener("deviceorientation",  this.deviceOrientation, false);
             window.removeEventListener("compassneedscalibration", this.compassNeedsCalibration, true);
+            this.gyro.sensor.stop();
         },
 
         methods:{

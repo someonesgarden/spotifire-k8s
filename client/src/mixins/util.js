@@ -60,6 +60,14 @@ export default {
             }else{
                 this.a_index(['pwa', 'set', {key: type, val: 'error'}]);
             }
+        },
+
+        checkPWAInFunction(type) {
+            if (typeof type === "function") {
+                this.a_index(['pwa','set',{key:type,val:'granted'}]);
+            }else{
+                this.a_index(['pwa', 'set', {key: type, val: 'error'}]);
+            }
         }
 
     }
