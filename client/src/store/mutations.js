@@ -8,15 +8,6 @@ const state = {
         text:""
     },
 
-    modals:{
-        how:{
-            open:false
-        },
-        story:{
-            open:false
-        },
-    },
-
     rootAction:{
         type:'',
         date:new Date(),
@@ -28,16 +19,6 @@ const state = {
 }
 
 const  mutations = {
-
-    setModal(state,dat){
-        if(dat.val==='toggle'){
-            state.modals[dat.key].open = !state.modals[dat.key].open;
-        }else{
-            Object.keys(state.modals).forEach(key=>state.modals[key].open=false);
-            state.modals[dat.key].open = dat.val;
-        }
-    },
-
 
     login(state, params) {
         let id = !!params.id ? params.id : '';

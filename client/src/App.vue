@@ -25,8 +25,8 @@
     <!-- /COMMON DIALOG-->
 
     <!-- HOW MODAL-->
-    <mu-dialog transition="slide-bottom" fullscreen :open.sync="modals.how.open"  class="howModal">
-      <mu-appbar color="blueGrey900" title="how.to.">
+    <mu-dialog transition="slide-bottom" fullscreen :open.sync="modal.modals.how.open"  class="howModal">
+      <mu-appbar color="blueGrey900" title="how to play">
         <mu-button slot="left" icon @click="a_index(['howModal','set',false])">
           <mu-icon value="chevron_left"></mu-icon>
         </mu-button>
@@ -35,15 +35,20 @@
         </mu-button>
       </mu-appbar>
         <mu-flex class="body flex-wrapper" justify-content="center" align-items="center" direction="column">
-         <h1>HOW TO</h1>
-          <p> this is how to. this is how to.this is how to. this is how to.this is how to. this is how to.this is how to. this is how to.this is how to. this is how to.this is how to. this is how to.this is how to. this is how to.this is how to. this is how to.this is how to. this is how to.this is how to. this is how to.this is how to. this is how to.this is how to. this is how to.this is how to. this is how to.this is how to. this is how to.this is how to. this is how to.this is how to.
-            this is how to.this is how to. this is how to.this is how to. this is how to.this is how to. this is how to.this is how to. this is how to.</p>
+
+          <carousel ref="how" navigation-prev-label="〈" navigation-next-label="〉"
+                  :per-page="1" :navigation-enabled="true">
+            <slide class="slide" v-for="(item,index) in modal.modals.how.items" :key="'howslide'+index">
+              <how-slide @moveTo="$refs.how.goToPage(index<modal.modals.how.items.length-1 ? index+1:0)" :slide="item" :end="index===modal.modals.how.items.length-1"></how-slide>
+            </slide>
+
+          </carousel>
         </mu-flex>
     </mu-dialog>
     <!--/HOW MODAL-->
 
     <!-- STORY MODAL-->
-    <mu-dialog transition="slide-bottom" fullscreen :open.sync="modals.story.open"  class="storyModal">
+    <mu-dialog transition="slide-bottom" fullscreen :open.sync="modal.modals.story.open"  class="storyModal">
       <mu-appbar color="teal900" title="story.">
         <mu-button slot="left" icon @click="a_index(['storyModal','set',false])">
           <mu-icon value="chevron_left"></mu-icon>
@@ -53,9 +58,14 @@
         </mu-button>
       </mu-appbar>
       <mu-flex class="body flex-wrapper" justify-content="center" align-items="center" direction="column">
-        <h1>STORY</h1>
-        <p> this is how to. this is how to.this is how to. this is how to.this is how to. this is how to.this is how to. this is how to.this is how to. this is how to.this is how to. this is how to.this is how to. this is how to.this is how to. this is how to.this is how to. this is how to.this is how to. this is how to.this is how to. this is how to.this is how to. this is how to.this is how to. this is how to.this is how to. this is how to.this is how to. this is how to.this is how to.
-          this is how to.this is how to. this is how to.this is how to. this is how to.this is how to. this is how to.this is how to. this is how to.</p>
+
+        <carousel ref="how" navigation-prev-label="〈" navigation-next-label="〉"
+                  :per-page="1" :navigation-enabled="true">
+          <slide class="slide" v-for="(item,index) in modal.modals.how.items" :key="'howslide'+index">
+            <how-slide @moveTo="$refs.how.goToPage(index<modal.modals.how.items.length-1 ? index+1:0)" :slide="item" :end="index===modal.modals.how.items.length-1"></how-slide>
+          </slide>
+        </carousel>
+
       </mu-flex>
     </mu-dialog>
     <!--/STORY MODAL-->
@@ -73,18 +83,20 @@
   import Magazine from './components/Layout/Magazine.vue';
   import BottomView from './components/Common/BottomView';
   import AudioPlayer from './components/Mp3/AudioPlayer';
+  import HowSlide from './components/Slide/HowSlide.vue';
 
 export default {
   name: 'app',
   mixins:[feedMixin,spotifyMixin],
-  components: {
-    'head-top':HeadTop,
-    'player':Player,
-      'magazine':Magazine,
-    'bottom-view':BottomView,
-    'audio-player':AudioPlayer
-  },
-  computed:mapGetters(['bottom','alert','mp3','pwa','modals']),
+    components: {
+        HeadTop,
+        Player,
+        Magazine,
+        BottomView,
+        AudioPlayer,
+        HowSlide
+    },
+  computed:mapGetters(['bottom','alert','mp3','pwa','modal']),
   methods:{
     ...mapActions(['a_index']),
 
@@ -170,20 +182,6 @@ export default {
     /*background-color: rgba(210, 222, 217, 0.3);*/
     padding:4px 0 2px 0;
     opacity:1;
-  }
-
-  .howModal, .storyModal{
-    height:100%;
-
-    .mu-dialog-body{
-      height:calc(100% - 70px);
-    }
-
-    .body{
-      padding:5px 20px;
-      background-color: #effcff;
-      height:100%;
-    }
   }
 
 </style>

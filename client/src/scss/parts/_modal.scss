@@ -1,0 +1,92 @@
+.howModal, .storyModal{
+  height:100%;
+
+  .VueCarousel-slide{
+    padding:1rem 6rem;
+    text-align:center;
+
+    @media (max-width: 767px) {
+      padding:1rem 0;
+    }
+  }
+
+  .VueCarousel-navigation-next {
+    font-size: 2rem;
+    margin-right:0.5rem;
+
+    @media (max-width: 767px) {
+      margin-right:-0.5rem;
+    }
+  }
+
+  // < ボタン
+  .VueCarousel-navigation-prev {
+    font-size: 2rem;
+    margin-left:0.5rem;
+
+    @media (max-width: 767px) {
+      margin-left:-0.5rem;
+    }
+  }
+
+  // 最初と最後のスライドにつくclass
+  .VueCarousel-navigation--disabled {
+    display: none;
+    visibility: hidden;
+  }
+
+  .mu-dialog-body{
+    height:calc(100% - 56px);
+  }
+
+  .body{
+    margin-top: 0;
+    padding:1rem 3rem;
+    color:$white;
+    height:100%;
+  }
+
+  .slide{
+
+    img.circle{
+      width:80px;
+      height:80px;
+      border-radius:50%;
+      border:2px solid white;
+      margin:0 auto;
+    }
+
+
+    h1,h2,h3,h4,p{
+      word-break:break-all;
+    }
+    h1{
+      position:relative;
+      overflow: visible;
+    }
+
+    p{
+      line-height:2rem;
+    }
+
+    .spinner{
+      z-index:-1;
+      position:absolute;
+      left: calc(50% - 30px);
+    }
+
+
+  }
+}
+
+.howModal {
+  .body {
+    background-color: #07c46d;
+  }
+}
+
+.storyModal {
+  .body {
+    background-color: #c42d72;
+  }
+}

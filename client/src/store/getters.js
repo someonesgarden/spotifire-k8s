@@ -10,7 +10,7 @@ const ws        = modules => modules.ws
 const mp3       = modules => modules.mp3
 const g_three   = modules => modules.three
 const genius    = modules => modules.genius
-const modals    = modules => modules.modals
+const modal     = modules => modules.modal
 
 export {
     rootAction,
@@ -25,5 +25,5 @@ export {
     alert,
     pwa,
     genius,
-    modals
+    modal
 }

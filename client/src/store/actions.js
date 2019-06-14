@@ -25,11 +25,11 @@ export const a_index    =  ({commit}, [type, action, data]) => {
         },
 
         howModal:{
-            set:(data)=> commit('setModal', {key:'how',val:data})
+            set:(data)=> commit('modal/setModal', {key:'how',val:data})
         },
 
         storyModal:{
-            set:(data)=> commit('setModal', {key:'story',val:data})
+            set:(data)=> commit('modal/setModal', {key:'story',val:data})
         }
     };
     actions[type][action](data)
