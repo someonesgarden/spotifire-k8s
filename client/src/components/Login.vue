@@ -4,20 +4,20 @@
 
             <mu-flex class="flex-wrapper" justify-content="center" align-items="center" direction="column">
 
-                <img class="menu-icon" src="/static/img/emory_logo1.png" style="width:180px;height:auto;">
+                <img class="menu-icon" src="/static/img/emory_logo1.png" style="width:180px;height:auto;margin-bottom:10px;">
 
                 <mu-form ref="adminform" :model="admin" class="mu-demo-form" label-position="top" label-width="100">
 
                     <div class="ui grid" style="margin-left:0;margin-right:0;margin-bottom:0;">
                         <div class="eight wide mobile eight wide tablet eight wide computer column" style="padding-bottom:0;">
-                            <mu-form-item :rules="emptyRules" prop="id" label="id" class="range" style="padding-bottom:0;margin-bottom:0;">
-                                <mu-text-field prop="id" v-model="admin.id" style="text-align:center;"></mu-text-field>
+                            <mu-form-item :rules="emptyRules" prop="id" class="range" style="padding-bottom:0;margin-bottom:0;">
+                                <mu-text-field prop="id" placeholder="ID" v-model="admin.id" style="text-align:center;"></mu-text-field>
                             </mu-form-item>
                         </div>
 
                         <div class="eight wide mobile eight wide tablet eight wide computer column" style="padding-bottom:0;">
-                            <mu-form-item :rules="emptyRules" prop="pass" label="password" class="range" style="padding-bottom:0;margin-bottom:0;">
-                                <mu-text-field  type="password" prop="pass" v-model="admin.pass"  :action-icon="visibility ? 'visibility_off' : 'visibility'" :action-click="() => (visibility = !visibility)" :type="visibility ? 'text' : 'password'" style="text-align:center;"></mu-text-field>
+                            <mu-form-item :rules="emptyRules" prop="pass" class="range" style="padding-bottom:0;margin-bottom:0;">
+                                <mu-text-field  type="password" placeholder="PASSWORD" prop="pass" v-model="admin.pass"  :action-icon="visibility ? 'visibility_off' : 'visibility'" :action-click="() => (visibility = !visibility)" :type="visibility ? 'text' : 'password'" style="text-align:center;"></mu-text-field>
                             </mu-form-item>
                         </div>
                     </div>

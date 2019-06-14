@@ -1,53 +1,37 @@
 <template>
     <mu-container class="flex_v">
-        <div class="slide_area">
-            <div class="reveal">
-                <div class="slides">
-                    <section>
-                        <mu-flex class="flex-wrapper" justify-content="center" align-items="center" direction="column">
-                            <h3 style="font-weight:bold;color:#00b46d;">deviceorientation</h3>
-                            <br>
-                            <p v-if="compass_calib">compassNeedsCalibration</p>
-                            <div class="ui grid home">
-                                <div class="five wide column" style="text-align:center;">
-                                    <img id="compass_h" ref="compass_h" src="/static/img/spotify_logo.png" style="width:65px;height:65px;border-radius:50%;"/><br/>
-                                    Angle(h)<br/>{{sensor.angleH | dicimal2}}
-                                    <hr>
-                                    (x,y,z)<br/>{{sensor.hx | dicimal2}}<br/>{{sensor.hy | dicimal2}}<br/>{{sensor.hz | dicimal2}}
-                                </div>
+        <mu-flex class="flex-wrapper" justify-content="center" align-items="center" direction="column">
+            <h3 style="font-weight:bold;color:#00b46d;">deviceorientation</h3>
+            <br>
+            <p v-if="compass_calib">compassNeedsCalibration</p>
+            <div class="ui grid home">
+                <div class="five wide column" style="text-align:center;">
+                    <img id="compass_h" ref="compass_h" src="/static/img/spotify_logo.png" style="width:65px;height:65px;border-radius:50%;"/><br/>
+                    Angle(h)<br/>{{sensor.angleH | dicimal2}}
+                    <hr>
+                    (x,y,z)<br/>{{sensor.hx | dicimal2}}<br/>{{sensor.hy | dicimal2}}<br/>{{sensor.hz | dicimal2}}
+                </div>
 
-                                <div class="six wide column" style="text-align:center;">
-                                    <img id="compass" ref="compass" src="/static/img/compass.jpg" style="width:65px;height:65px;border-radius:50%;"/><br/>
-                                    <span v-if="gyro.sensor">Gyro<br/></span>
-                                    x<br/>{{gyro.x | dicimal2}}<br/>
-                                    y<br/>{{gyro.y | dicimal2}}<br/>
-                                    z<br/>{{gyro.z | dicimal2}}
-                                </div>
+                <div class="six wide column" style="text-align:center;">
+                    <img id="compass" ref="compass" src="/static/img/compass.jpg" style="width:65px;height:65px;border-radius:50%;"/><br/>
+                    <span v-if="gyro.sensor">Gyro<br/></span>
+                    x<br/>{{gyro.x | dicimal2}}<br/>
+                    y<br/>{{gyro.y | dicimal2}}<br/>
+                    z<br/>{{gyro.z | dicimal2}}
+                </div>
 
-                                <div class="five wide column" style="text-align:center;">
-                                    <img id="compass_v" ref="compass_v" src="/static/img/spotify_logo.png" style="width:65px;height:65px;border-radius:50%;"/><br/>
-                                    Angle(v)<br/>{{sensor.angleV | dicimal3}}
-                                    <hr>
-                                    (x,y,z)<br/>{{sensor.vx | dicimal2}}<br/>{{sensor.vy | dicimal2}}<br/>{{sensor.vz | dicimal2}}
-                                </div>
-                            </div>
-                        </mu-flex>
-                    </section>
-                    <section>
-                        <section>解説１</section>
-                        <section>解説２</section>
-                    </section>
+                <div class="five wide column" style="text-align:center;">
+                    <img id="compass_v" ref="compass_v" src="/static/img/spotify_logo.png" style="width:65px;height:65px;border-radius:50%;"/><br/>
+                    Angle(v)<br/>{{sensor.angleV | dicimal3}}
+                    <hr>
+                    (x,y,z)<br/>{{sensor.vx | dicimal2}}<br/>{{sensor.vy | dicimal2}}<br/>{{sensor.vz | dicimal2}}
                 </div>
             </div>
-
-
-        </div>
+        </mu-flex>
     </mu-container>
 </template>
 <script>
     import {mapActions,mapGetters} from 'vuex';
-
-    import Reveal from 'reveal.js/js/reveal';
 
     export default {
         name: 'home',
@@ -83,10 +67,7 @@
             }
         },
 
-
         mounted () {
-
-            Reveal.initialize();
 
             this.$nextTick(() => {
                 window.addEventListener('deviceorientation', this.deviceOrientation, false);
@@ -120,7 +101,7 @@
         beforeDestroy() {
             window.removeEventListener("deviceorientation",  this.deviceOrientation, false);
             window.removeEventListener("compassneedscalibration", this.compassNeedsCalibration, true);
-            this.gyro.sensor.stop();
+            if(this.gyro.sensor) this.gyro.sensor.stop();
         },
 
         methods:{
@@ -196,33 +177,15 @@
                 this.sensor.vy = (-axisZ.y).toFixed(4);
                 this.sensor.vz = (-axisZ.z).toFixed(4);
             }
-        },
-
-        watch: {
-
         }
     }
 </script>
 
 <style scoped lang="scss">
-    @import url('../../node_modules/reveal.js/css/reveal.css');
-    @import url('../../node_modules/reveal.js/css/theme/white.css');
-
-    .slide_area{
-        width:100vw;
-        height:100vh;
-
-        .reveal{
-            .controls{
-                .controls-arrow{
-                    color:#323232;
-                }
-            }
-        }
-    }
-
     .home{
-        font-size:0.6rem;
+        /*font-size:0.6rem;*/
+        width:100%;
+        height:70vh;
     }
 
     img#compass_v, img#compass_h{

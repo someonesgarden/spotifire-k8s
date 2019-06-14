@@ -38,10 +38,6 @@ Vue.use(VueMasonry);
 import VueCarousel from 'vue-carousel';
 Vue.use(VueCarousel);
 
-// import Eagle from 'eagle.js';
-// //import 'animate.css'
-// Vue.use(Eagle);
-
 import './filters';
 
 import firebase from "firebase"

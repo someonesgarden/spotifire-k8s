@@ -22,6 +22,14 @@ export const a_index    =  ({commit}, [type, action, data]) => {
 
         pwa:{
             set:(data)=> commit('setPwa', data)
+        },
+
+        howModal:{
+            set:(data)=> commit('setModal', {key:'how',val:data})
+        },
+
+        storyModal:{
+            set:(data)=> commit('setModal', {key:'story',val:data})
         }
     };
     actions[type][action](data)
