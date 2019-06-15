@@ -1,16 +1,17 @@
 <template>
     <div>
-        <h1>センサーチェック</h1>
-        <p>端末に内蔵された加速度センサと地磁気センサと緯度経度を測定するジオロケーション機能を活用しています。</p>
+        <img src="/static/img/design/circle4.jpg" class="circle">
+        <h2>センサーチェック</h2>
+        <p>内蔵された加速度＆方角センサとジオロケーションを活用しています。</p>
 
         <div class="ui grid home">
             <div class="eight wide column" style="text-align:center;">
-                <img id="compass_h" ref="compass_h" src="/static/img/spotify_logo.png" :style="angleHClass"/><br/>
+                <img id="compass_h" ref="compass_h" src="/static/img/compass.jpg" :style="angleHClass"/><br/>
                 [水平角度]<br/>{{sensor.angleH | dicimal3}}
             </div>
 
             <div class="eight wide column" style="text-align:center;">
-                <img id="compass_v" ref="compass_v" src="/static/img/spotify_logo.png" :style="angleVClass"/><br/>
+                <img id="compass_v" ref="compass_v" src="/static/img/compass.jpg" :style="angleVClass"/><br/>
                 [垂直角度]<br/>{{sensor.angleV | dicimal3}}
             </div>
         </div>
@@ -22,7 +23,6 @@
 
 <script>
     import {mapActions} from 'vuex';
-    //import PWASensors from '../../class/PWASensors';
 
     export default {
         name: "SensorCheckSlide",
@@ -60,16 +60,8 @@
         },
 
         mounted(){
-           // this.pwasensors = new PWASensors({});
             window.addEventListener('deviceorientation', this.deviceOrientation, false);
         },
-
-        // beforeDestroy(){
-        //   if(!!this.pwasensors){
-        //       this.pwasensors.stopAll();
-        //       this.pwasensors = null;
-        //   }
-        // },
 
         methods:{
             ...mapActions(['a_index']),

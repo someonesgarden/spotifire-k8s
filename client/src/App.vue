@@ -42,7 +42,7 @@
               <how-slide @moveTo="$refs.how.goToPage(index+1)" :slide="item" :end="index===modal.modals.how.items.length-1 && device.platform!=='SP'"/>
             </slide>
 
-            <slide v-if="device.platform==='SP'">
+            <slide class="slide" v-if="device.platform==='SP'">
               <sensor-check-slide></sensor-check-slide>
             </slide>
 
