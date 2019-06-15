@@ -3,6 +3,8 @@ const rootAction= state => state.rootAction
 const bottom    = state => state.bottom
 const alert     = state => state.alert
 const pwa       = state => state.pwa
+const device    = state => state.device
+
 const spotify   = modules => modules.spotify
 const feed      = modules => modules.feed
 const mapstore  = modules => modules.mapstore
@@ -11,6 +13,7 @@ const mp3       = modules => modules.mp3
 const g_three   = modules => modules.three
 const genius    = modules => modules.genius
 const modal     = modules => modules.modal
+
 
 export {
     rootAction,
@@ -25,5 +28,6 @@ export {
     alert,
     pwa,
     genius,
-    modal
+    modal,
+    device
 }

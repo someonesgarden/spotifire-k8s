@@ -15,7 +15,7 @@
             </div>
         </div>
 
-        <mu-button color="blueGrey900" full-width @click="a_index(['howModal','set',false])">戻る</mu-button>
+        <mu-button color="teal600" full-width @click="a_index(['howModal','set',false])">戻る</mu-button>
     </div>
 
 </template>

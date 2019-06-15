@@ -1,6 +1,7 @@
 export default class Sensors{
 
     constructor(params, elem=null) {
+        console.log("Sensors:constructor");
         this.use = {
             orientation: params.orientation ? params.orientation : true,
             rotate: params.rotate ? params.rotate : false,

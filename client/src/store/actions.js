@@ -3,6 +3,9 @@ export const a_login    = ({commit},params) => commit('login', params)
 
 export const a_index    =  ({commit}, [type, action, data]) => {
     const actions = {
+        platform:{
+            check:   () => commit('setPlatform'),
+        },
         root:{
             action:   (data) => commit('setRootAction', data),
         },

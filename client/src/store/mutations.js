@@ -1,24 +1,79 @@
+import isMobile from 'ismobilejs'
+
 const state = {
+    device:{
+        platform: 'unknown',
+        browser: 'unknown',
+        userAgent: 'unknown'
+    },
     loggedIn: false,
     bottom: {
         open: false
     },
-    alert:{
-        open:false,
-        text:""
+    alert: {
+        open: false,
+        text: ""
     },
-
     rootAction:{
         type:'',
         date:new Date(),
     },
-
     pwa:{
-
     }
-}
+};
 
 const  mutations = {
+
+    setPlatform(state) {
+        console.log("setPlatform");
+        let wakegi      = window.wakegi,
+            Browser     = wakegi.Browser;
+            state.device.browser   = 'unknown';
+
+        if (isMobile.phone) {
+            state.device.platform = 'SP';
+        }
+        else if (isMobile.tablet) {
+            state.device.platform = 'TB';
+        }
+        else {
+            state.device.platform = 'PC';
+        }
+
+        if (Browser.Chrome.is()) {
+            state.device.browser = 'chrome'
+        }
+        else if (Browser.Safari.is()) {
+            state.device.browser = 'safari'
+        }
+        else if (Browser.Firefox.is()) {
+            state.device.browser = 'firefox';
+        }
+        else {
+            state.device.browser = 'other';
+        }
+
+        let w = window.parent.screen.width;
+        let h = window.parent.screen.height;
+
+        if (state.device.platform === 'SP') {
+            if (w < 370 && h < 650) {
+                state.device.userAgent = 'oldiphone';
+            } else if (w === 375 && h === 667) {
+                state.device.userAgent = 'iphone678';
+            } else if (w === 414 && h === 736) {
+                state.device.userAgent = 'iphone678plus';
+            } else if (w === 375 && h === 812) {
+                state.device.userAgent = 'iphonex';
+            } else {
+                state.device.userAgent = 'higher';
+            }
+        } else {
+            state.device.userAgent = 'widescreen';
+        }
+
+        console.log(this.device);
+    },
 
     login(state, params) {
         let id = !!params.id ? params.id : '';

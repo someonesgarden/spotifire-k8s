@@ -42,17 +42,16 @@
     <noscript>
       This is your fallback content in case JavaScript fails to load.
     </noscript>
-
     <script>
       //プレイヤーは共通して利用する
       window.player = null;
     </script>
-
     <script src="https://sdk.scdn.co/spotify-player.js"></script>
     <script>
       window.onSpotifyWebPlaybackSDKReady = () => {};
     </script>
 
+    <script src="/static/vendor/wakegi.js"></script>
     <div id="app"></div>
     <!-- Todo: only include in production -->
     <%= htmlWebpackPlugin.options.serviceWorkerLoader %>

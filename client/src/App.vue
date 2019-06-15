@@ -39,10 +39,10 @@
           <carousel ref="how" navigation-prev-label="〈" navigation-next-label="〉"
                   :per-page="1" :navigation-enabled="true">
             <slide class="slide" v-for="(item,index) in modal.modals.how.items" :key="'howslide'+index">
-              <how-slide @moveTo="$refs.how.goToPage(index+1)" :slide="item"></how-slide>
+              <how-slide @moveTo="$refs.how.goToPage(index+1)" :slide="item" :end="index===modal.modals.how.items.length-1 && device.platform!=='SP'"/>
             </slide>
 
-            <slide>
+            <slide v-if="device.platform==='SP'">
               <sensor-check-slide></sensor-check-slide>
             </slide>
 
@@ -102,10 +102,16 @@ export default {
         HowSlide,
         SensorCheckSlide
     },
-  computed:mapGetters(['bottom','alert','mp3','pwa','modal']),
+  computed:mapGetters(['bottom','alert','mp3','pwa','modal','device']),
+
+
+    mounted(){
+      console.log(this.device);
+      this.a_index(['platform','check']);
+      console.log(this.device);
+    },
 
   data:function(){
-
     return{
       infos:[
        {
@@ -141,34 +147,15 @@ export default {
     }
   },
 
-  mounted(){
-    this.$nextTick(() => {
-
-    })
-  },
-
-  beforeDestroy() {
-  },
-
   methods:{
     ...mapActions(['a_index']),
 
     dialogClick(){
       this.a_index(['alert','close']);
-
       if (this.alert.action === 'login') {
         if(!this.spotify.credential.expires_in) this.c_getCredential();
       }
     }
-
-  },
-
-  watch:{
-   '$route':{
-     handler(route){
-
-     }
-   }
   }
 }
 </script>

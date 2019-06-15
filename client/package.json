@@ -20,6 +20,7 @@
     "firebase": "^6.1.0",
     "google-maps": "^3.3.0",
     "hard-source-webpack-plugin": "^0.13.1",
+    "ismobilejs": "^0.5.2",
     "leaflet": "^1.5.1",
     "muse-ui": "^3.0.2",
     "prettier": "^1.17.1",
