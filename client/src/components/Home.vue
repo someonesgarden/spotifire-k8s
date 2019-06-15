@@ -2,10 +2,7 @@
     <mu-container class="flex_v">
 
         <div class="home_inner">
-                <img class="menu-icon" src="/static/img/emory_logo1.png"/>
-
-
-
+                <img class="emory_logo" src="/static/img/emory_logo1.png"/>
 
             <div class="ui grid" style="padding:0;margin:0 0 10px 0;">
                 <div class="sixteen wide column" style="padding:0;margin:0;">
@@ -34,11 +31,12 @@
                         <mu-button color="teal500" class="smallbtn" full-width @click="goMap(true)">ENTER</mu-button>
                     </mu-col>
                 </div>
-            <br>
             <p>
                 ログインしない場合「ゲスト」としてプレイできますがSpotifyのプレイリストは使用できず他ユーザーから見えません。<br/>
             </p>
-            <a href="https://www.spotify.com/jp/" target="_blank">Spotifyにサインアップ</a>
+
+            <a href="https://www.spotify.com/jp/" target="_blank">
+                <img class="spotify_logo" src="/static/img/listen_on_spotify.jpg"/></a>
 
         </div>
     </mu-container>
@@ -86,27 +84,27 @@
         padding: 20px 12px;
         margin: 8px;
 
-        img {
+        img.emory_logo {
             height: auto;
             max-width: 250px;
             margin: 10px auto;
         }
 
+        img.spotify_logo{
+            height:25px;
+            border-radius:4px;
+            display:inline;
+        }
+
         p {
-            line-height: 1.4rem;
+            line-height: 1.2rem;
             /*background-color: white;*/
             padding: 12px;
             border-radius: 8px;
         }
 
         a {
-            margin-top: 12px;
-            color: #00cdac;
-            font-weight: bold;
-            font-size: 0.9rem;
-            background-color: #ffffff;
-            padding: 8px;
-            border-radius: 4px;
+
         }
     }
 </style>
