@@ -43,7 +43,7 @@ export default class PWASensors{
         this.sensor.angleH = 2.0;
         this.sensor.angleV = 4.0;
 
-        if(this.use.orientation) window.addEventListener('deviceorientation', this.deviceOrientation, false);
+        window.addEventListener('deviceorientation', this.deviceOrientation, false);
         // if(this.use.calibration)    window.addEventListener("compassneedscalibration", this.compassNeedsCalibration, true);
         // if(this.use.rotate)         window.addEventListener('devicemove', this.rotateChange, false);
         // if(this.use.mousemove)      document.addEventListener('mousemove', this.moveChange);
@@ -60,7 +60,7 @@ export default class PWASensors{
 
     stopAll(){
         console.log("Stop All Sensors");
-        if(this.use.orientation)    window.removeEventListener('deviceorientation', this.deviceOrientation, false);
+        window.removeEventListener('deviceorientation', this.deviceOrientation, false);
         // if(this.use.calibration)    window.removeEventListener("compassneedscalibration", this.compassNeedsCalibration, true);
         // if(this.use.rotate)         window.removeEventListener('devicemove', this.rotateChange, false);
         // if(this.use.mousemove)      document.removeEventListener('mousemove', this.moveChange);

@@ -1,7 +1,7 @@
 <template>
     <div>
         <h1>センサーチェック</h1>
-        <p>端末に内蔵された加速度センサと地磁気センサと、緯度経度を測定するジオロケーション機能を活用しています。</p>
+        <p>端末に内蔵された加速度センサと地磁気センサと緯度経度を測定するジオロケーション機能を活用しています。</p>
 
         <div class="ui grid home" v-if="pwasensors">
             <div class="eight wide column" style="text-align:center;">
@@ -45,12 +45,12 @@
             this.pwasensors = new PWASensors({});
         },
 
-        beforeDestroy(){
-          if(!!this.pwasensors){
-              this.pwasensors.stopAll();
-              this.pwasensors = null;
-          }
-        },
+        // beforeDestroy(){
+        //   if(!!this.pwasensors){
+        //       this.pwasensors.stopAll();
+        //       this.pwasensors = null;
+        //   }
+        // },
 
         methods:mapActions(['a_index'])
     }
