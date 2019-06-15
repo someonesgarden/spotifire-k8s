@@ -22,7 +22,7 @@
 
 <script>
     import {mapGetters, mapActions} from 'vuex';
-    import Sensors from '../../class/Sensors';
+    import Sensors from '../../class/Sensors.js';
 
     export default {
         name: "SensorCheckSlide",
