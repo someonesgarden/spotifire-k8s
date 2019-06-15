@@ -21,11 +21,11 @@ export default class PWASensors{
         this.compass_calib = false;
 
         this.sensor = {
-            angleH: 0.000000000000000,
+            angleH: 1.000000000000000,
             hx: 0.000000000000000,
             hy: 0.000000000000000,
             hz: 0.000000000000000,
-            angleV: 0.000000000000000,
+            angleV: 2.000000000000000,
             vx: 0.000000000000000,
             vy: 0.000000000000000,
             vz: 0.000000000000000,
