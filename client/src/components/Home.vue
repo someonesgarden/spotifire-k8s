@@ -1,23 +1,24 @@
 <template>
     <mu-container class="flex_v">
-        <div>
 
-            <mu-flex class="flex-wrapper" justify-content="center" align-items="center" direction="column" style="width:200px;">
+        <div class="home_inner">
+                <img class="menu-icon" src="/static/img/emory_logo1.png"/>
 
-                <img class="menu-icon" src="/static/img/emory_logo1.png" style="width:180px;height:auto;margin-bottom:10px;">
-
-                <p style="color:white;font-weight:bold;">
-                    Spotifyにログインしない場合、ゲストモードになります。ゲストモードでは機能が制限されます。<br/>
-                    <a href="https://www.spotify.com/jp/" target="_blank" style="color:#007a65;font-weight:bold;">Spotifyにサインアップ</a>
+                <p>
+                    ログインしない場合ゲストモードになります（機能が制限されます）<br/>
                 </p>
 
 
                 <div v-if="!spotify.me.id">
                 <mu-col span="12" sm="12" md="12" lg="12" xl="12">
-                    <mu-button color="teal500" class="smallbtn" full-width @click="goMap(true)">Spotifyにログイン</mu-button>
+                    <mu-button color="teal500" class="smallbtn" full-width @click="goMap(true)">
+                        <mu-icon value="check_circle"></mu-icon>&nbsp;Spotifyにログイン
+                    </mu-button>
                 </mu-col>
                 <mu-col span="12" sm="12" md="12" lg="12" xl="12">
-                    <mu-button color="orange700" class="smallbtn" full-width @click="goMap(false)">ログインせずに使用</mu-button>
+                    <mu-button color="orange700" class="smallbtn" full-width @click="goMap(false)">
+                        <mu-icon value="check_circle"></mu-icon>&nbsp;ログインせず使用
+                    </mu-button>
                 </mu-col>
                 </div>
                 <div v-else>
@@ -25,7 +26,8 @@
                         <mu-button color="teal500" class="smallbtn" full-width @click="goMap(true)">ENTER</mu-button>
                     </mu-col>
                 </div>
-            </mu-flex>
+            <br>
+            <a href="https://www.spotify.com/jp/" target="_blank">Spotifyにサインアップ</a>
 
         </div>
     </mu-container>
@@ -66,4 +68,31 @@
     }
 </script>
 <style lang="scss">
+    .home_inner {
+        text-align: center;
+        border-radius: 5px;
+        background-color: rgba(255, 255, 255, 0.38);
+        padding: 20px 12px;
+        margin: 8px;
+
+        img {
+            height: auto;
+            max-width: 230px;
+            margin: 10px auto;
+        }
+
+        p {
+            line-height: 1.8rem;
+        }
+
+        a {
+            margin-top: 12px;
+            color: #00cdac;
+            font-weight: bold;
+            font-size: 0.9rem;
+            background-color: #ffffff;
+            padding: 8px;
+            border-radius: 4px;
+        }
+    }
 </style>
