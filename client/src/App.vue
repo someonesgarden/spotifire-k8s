@@ -26,7 +26,7 @@
 
     <!-- HOW MODAL-->
     <mu-dialog transition="slide-bottom" fullscreen :open.sync="modal.modals.how.open"  class="howModal">
-      <mu-appbar color="blueGrey900" title="how to play">
+      <mu-appbar color="blueGrey900" title="What's Emory?">
         <mu-button slot="left" icon @click="a_index(['howModal','set',false])">
           <mu-icon value="chevron_left"></mu-icon>
         </mu-button>
