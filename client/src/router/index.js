@@ -12,8 +12,7 @@ import Analysis from '../components/Analysis.vue';
 
 let routes =  [
   { path:'/login',   name: 'Login',  component: Login},
-  { path: '/',       name: 'Top',    component: Home,    meta: { requiresAuth: true }},
-  { path: '/home',   name: 'Home',   component: Home,    meta: { requiresAuth: true }},
+  { path: '/',       name: 'Home',    component: Home,    meta: { requiresAuth: true }},
   { path: '/news',   name: 'News',   component: News,     meta: { requiresAuth: true }},
   { path:'/map',     name: 'Map',    component: Map,      meta: { requiresAuth: true }},
   { path:'/analysis',name: 'Analysis',component: Analysis,meta: { requiresAuth: true }},

@@ -9,23 +9,27 @@
                 <mu-button flat>
                     <img class="menu-icon" src="/static/img/spotifire_logo.png" style="width:110px; height:auto;"></mu-button>
                 <mu-list slot="content" @mouseup="toggleMenu">
-                    <mu-list-item button  @click="a_index(['howModal','set',true])">
-                        <mu-list-item-title><mu-icon value="info" :size="15"></mu-icon>&nbsp;使い方</mu-list-item-title>
-                    </mu-list-item>
+
 <!--                    <mu-list-item button  @click="a_index(['storyModal','set',true])">-->
 <!--                        <mu-list-item-title><mu-icon value="info" :size="15"></mu-icon>&nbsp;ストーリー</mu-list-item-title>-->
 <!--                    </mu-list-item>-->
-                    <mu-divider></mu-divider>
-                    <mu-list-item button to="/login">
+
+                    <mu-list-item button to="/">
                         <mu-list-item-title><mu-icon value="home" :size="15"></mu-icon>&nbsp;トップ</mu-list-item-title>
                     </mu-list-item>
-                    <mu-list-item button to="/map">
-                        <mu-list-item-title><mu-icon value="location_on" :size="15"></mu-icon>&nbsp;MAP</mu-list-item-title>
-                    </mu-list-item>
+
+<!--                    <mu-list-item button to="/map">-->
+<!--                        <mu-list-item-title><mu-icon value="location_on" :size="15"></mu-icon>&nbsp;MAP</mu-list-item-title>-->
+<!--                    </mu-list-item>-->
 
 <!--                    <mu-list-item button to="/news">-->
 <!--                        <mu-list-item-title><mu-icon value="filter_list" :size="12"></mu-icon>&nbsp;news</mu-list-item-title>-->
 <!--                    </mu-list-item>-->
+
+                    <mu-divider></mu-divider>
+                    <mu-list-item button  @click="a_index(['howModal','set',true])">
+                        <mu-list-item-title><mu-icon value="info" :size="15"></mu-icon>&nbsp;使い方</mu-list-item-title>
+                    </mu-list-item>
 
                 </mu-list>
             </mu-menu>

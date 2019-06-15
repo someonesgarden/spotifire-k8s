@@ -75,10 +75,15 @@
   }
 
 
+  background-size:cover;
+  background-position:center center;
+
   &.Login{
     background-image:url('/static/img/emory_bg1.jpg');
-    background-size:cover;
-    background-position:center center;
+  }
+
+  &.Home{
+    background-image:url('/static/img/emory_bg2.jpg');
   }
 
   // headings
