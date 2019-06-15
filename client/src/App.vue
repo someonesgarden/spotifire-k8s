@@ -42,9 +42,9 @@
               <how-slide @moveTo="$refs.how.goToPage(index+1)" :slide="item" :end="index===modal.modals.how.items.length-1 && device.platform!=='SP'"/>
             </slide>
 
-<!--            <slide v-if="device.platform==='SP'">-->
-<!--              <sensor-check-slide></sensor-check-slide>-->
-<!--            </slide>-->
+            <slide v-if="device.platform==='SP'">
+              <sensor-check-slide></sensor-check-slide>
+            </slide>
 
           </carousel>
         </mu-flex>
@@ -88,7 +88,7 @@
   import BottomView from './components/Common/BottomView';
   import AudioPlayer from './components/Mp3/AudioPlayer';
   import HowSlide from './components/Slide/HowSlide.vue';
-  //import SensorCheckSlide from './components/Slide/SensorCheckSlide.vue';
+  import SensorCheckSlide from './components/Slide/SensorCheckSlide.vue';
 
 export default {
   name: 'app',
@@ -100,50 +100,28 @@ export default {
         BottomView,
         AudioPlayer,
         HowSlide,
-       // SensorCheckSlide
+        SensorCheckSlide
     },
   computed:mapGetters(['bottom','alert','mp3','pwa','modal','device']),
 
-
     mounted(){
-      console.log(this.device);
       this.a_index(['platform','check']);
-      console.log(this.device);
     },
 
-  data:function(){
-    return{
-      infos:[
-       {
-      title:'令和の名言',
-              subtitle:'令和の名言!!!!',
-              description:'「それはこれから人生の混沌の中で見つけ出していきます」',
-              btn1label:'ステーション',
-              bg:'/static/img/bg1.jpg',
-              btncolor:'#1e7019',
-              id:'no1'
-    },
-
+  data: function () {
+    return {
+      infos: [
         {
-          title:'昨日のできごとから。',
-          subtitle:'昨日のできごとから。',
-          description:'「それはこれから人生の混沌の中で見つけ出していきます」',
-          btn1label:'ステーション',
-          bg:'/static/img/bg2.jpg',
-          btncolor:'#c81645',
-          id:'no1'
-        },
-        {
-          title:'昨日のできごとから。',
-          subtitle:'昨日のできごとから。',
-          description:'「それはこれから人生の混沌の中で見つけ出していきます」',
-          btn1label:'ステーション',
-          bg:'/static/img/bg3.jpg',
-          btncolor:'#c8a800',
-          id:'no1'
-        },
+          title: '令和の名言',
+          subtitle: '令和の名言!!!!',
+          description: '「それはこれから人生の混沌の中で見つけ出していきます」',
+          btn1label: 'ステーション',
+          bg: '/static/img/bg1.jpg',
+          btncolor: '#1e7019',
+          id: 'no1'
+        }
       ],
-      tokenizer:null
+      tokenizer: null
     }
   },
 

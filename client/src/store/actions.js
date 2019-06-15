@@ -24,7 +24,10 @@ export const a_index    =  ({commit}, [type, action, data]) => {
         },
 
         pwa:{
-            set:(data)=> commit('setPwa', data)
+            set:(data)=> commit('pwa/setPwa', data),
+            create:()=> commit('pwa/createPWASensors'),
+            start:()=> commit('pwa/startPWASensors'),
+            stop:()=> commit('pwa/stopPWASensors')
         },
 
         howModal:{

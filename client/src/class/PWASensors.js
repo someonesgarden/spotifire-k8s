@@ -1,6 +1,6 @@
-export default class Sensors{
+export default class PWASensors{
 
-    constructor(params, elem=null) {
+    constructor(params) {
         console.log("Sensors:constructor");
         this.use = {
             orientation: params.orientation ? params.orientation : true,
@@ -34,10 +34,12 @@ export default class Sensors{
             beta: 0.000000000000000,
             gamma: 0.000000000000000
         };
-        this.init();
+
+       // this.init();
     }
 
     init(){
+        console.log("Init Sensors");
         if(this.use.orientation)    window.addEventListener('deviceorientation', this.deviceOrientation, false);
         if(this.use.calibration)    window.addEventListener("compassneedscalibration", this.compassNeedsCalibration, true);
         if(this.use.rotate)         window.addEventListener('devicemove', this.rotateChange, false);
@@ -51,6 +53,15 @@ export default class Sensors{
             });
             this.gyro.sensor.start();
         }
+    }
+
+    stopAll(){
+        console.log("Stop All Sensors");
+        if(this.use.orientation)    window.removeEventListener('deviceorientation', this.deviceOrientation, false);
+        if(this.use.calibration)    window.removeEventListener("compassneedscalibration", this.compassNeedsCalibration, true);
+        if(this.use.rotate)         window.removeEventListener('devicemove', this.rotateChange, false);
+        if(this.use.mousemove)      document.removeEventListener('mousemove', this.moveChange);
+        if(this.gyro.sensor)        this.gyro.sensor.stop();
     }
 
     destroy(){

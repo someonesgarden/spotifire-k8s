@@ -2,7 +2,6 @@ const loggedIn  = state => state.loggedIn
 const rootAction= state => state.rootAction
 const bottom    = state => state.bottom
 const alert     = state => state.alert
-const pwa       = state => state.pwa
 const device    = state => state.device
 
 const spotify   = modules => modules.spotify
@@ -13,6 +12,7 @@ const mp3       = modules => modules.mp3
 const g_three   = modules => modules.three
 const genius    = modules => modules.genius
 const modal     = modules => modules.modal
+const pwa       = modules => modules.pwa
 
 
 export {

@@ -11,6 +11,7 @@ import three from './modules/three/index';
 import mp3 from './modules/mp3/index';
 import genius from './modules/genius/index';
 import modal from './modules/modal/index';
+import pwa from './modules/pwa/index';
 
 Vue.use(Vuex);
 
@@ -27,7 +28,8 @@ export default new Vuex.Store({
         three,
         mp3,
         genius,
-        modal
+        modal,
+        pwa
     }
 });
 
