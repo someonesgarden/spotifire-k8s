@@ -49,7 +49,7 @@
               <div class="ui grid home">
                 <div class="eight wide column" style="text-align:center;">
                   <img id="compass_h" ref="compass_h" src="/static/img/spotify_logo.png" style="width:65px;height:65px;border-radius:50%;"/><br/>
-                  [水平角度]<br/>{{sensor.angleH | dicimal2}}
+                  [水平角度]<br/>{{sensor.angleH | dicimal3}}
                 </div>
 
                 <div class="eight wide column" style="text-align:center;">
@@ -118,6 +118,7 @@ export default {
   computed:mapGetters(['bottom','alert','mp3','pwa','modal']),
 
   data:function(){
+
     return{
       gyro:{
         sensor:null,
@@ -125,6 +126,7 @@ export default {
         y:0,
         z:0
       },
+
       compass_calib:false,
       orienting: window.DeviceOrientationEvent,
       rotating: window.DeviceMotionEvent,
@@ -229,7 +231,7 @@ export default {
 
 
     deviceOrientation(e){
-      if (navigator.geolocation) navigator.geolocation.getCurrentPosition(position =>  this.sensor.heading = position.coords.heading);
+      //if (navigator.geolocation) navigator.geolocation.getCurrentPosition(position =>  this.sensor.heading = position.coords.heading);
 
       this.sensor.alpha = e.alpha;
       this.sensor.beta = e.beta;
@@ -275,9 +277,8 @@ export default {
       let angleH = Math.atan2(-axisY.x,axisY.y) * (180.0 / Math.PI);
       if(axisZ.z < 0) angleH = -angleH;
 
-      this.$refs.compass.style.transform = "rotate(" +  (angleH) + "deg)";
-      this.$refs.compass_h.style.transform = "rotate(" + (angleH) + "deg)";
-
+      if(this.$refs.compass) this.$refs.compass.style.transform = "rotate(" +  (angleH) + "deg)";
+      if(this.$refs.compass_v) this.$refs.compass_h.style.transform = "rotate(" + (angleH) + "deg)";
 
       this.sensor.angleH = angleH;
       this.sensor.hx = (axisY.x).toFixed(4);
@@ -289,7 +290,7 @@ export default {
       // ------------------------------------------------------------
       let angleV = Math.atan2(axisZ.x,-axisZ.y) * (180.0 / Math.PI);
 
-      this.$refs.compass_v.style.transform = "perspective(300px) rotateX(65deg) rotateZ(" + (angleV).toFixed(10) + "deg)";
+      if(this.$refs.compass_v) this.$refs.compass_v.style.transform = "perspective(300px) rotateX(65deg) rotateZ(" + (angleV).toFixed(10) + "deg)";
       this.sensor.angleV = angleV;
       this.sensor.vx = (-axisZ.x).toFixed(4);
       this.sensor.vy = (-axisZ.y).toFixed(4);
