@@ -35,7 +35,7 @@ export default class PWASensors{
             gamma: 0.000000000000000
         };
 
-       // this.init();
+        this.init();
     }
 
     init(){

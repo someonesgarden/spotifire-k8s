@@ -43,7 +43,7 @@
             </slide>
 
             <slide v-if="device.platform==='SP'">
-              <sensor-check-slide :pwasensors="pwasensors"></sensor-check-slide>
+              <sensor-check-slide></sensor-check-slide>
             </slide>
 
           </carousel>
@@ -89,7 +89,7 @@
   import AudioPlayer from './components/Mp3/AudioPlayer';
   import HowSlide from './components/Slide/HowSlide.vue';
   import SensorCheckSlide from './components/Slide/SensorCheckSlide.vue';
-  import PWASensors from './class/PWASensors';
+  //import PWASensors from './class/PWASensors';
 
 export default {
   name: 'app',
@@ -107,12 +107,12 @@ export default {
 
     mounted(){
       this.a_index(['platform','check']);
-      this.pwasensors = new PWASensors({});
-      this.pwasensors.init();
+      // this.pwasensors = new PWASensors({});
+      // this.pwasensors.init();
     },
 
   beforeDestroy(){
-    if(!!this.pwasensors) this.pwasensors.stopAll();
+   // if(!!this.pwasensors) this.pwasensors.stopAll();
   },
 
   data:function(){

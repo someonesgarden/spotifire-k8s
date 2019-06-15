@@ -22,11 +22,16 @@
 
 <script>
     import {mapActions} from 'vuex';
+    import PWASensors from '../../class/PWASensors';
 
     export default {
         name: "SensorCheckSlide",
-        props:['pwasensors'],
-
+        //props:['pwasensors'],
+        data(){
+          return{
+              pwasensors:null
+          }
+        },
         computed:{
             angleHClass(){
                 return this.pwasensors ? {transform:"rotate(" +  (this.pwasensors.sensor.angleH) + "deg)"} : '';
@@ -34,6 +39,16 @@
             angleVClass(){
                 return this.pwasensors ? {transform:"perspective(300px) rotateX(65deg) rotateZ(" + (this.pwasensors.sensor.angleV).toFixed(10) + "deg)"} : '';
             }
+        },
+        mounted(){
+            this.pwasensors = new PWASensors({});
+        },
+
+        beforeDestroy(){
+          if(!!this.pwasensors){
+              this.pwasensors.stopAll();
+              this.pwasensors = null;
+          }
         },
 
         methods:mapActions(['a_index'])
