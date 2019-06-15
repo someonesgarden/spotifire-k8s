@@ -4,23 +4,24 @@ export default class PWASensors{
         console.log("Sensors:constructor");
         this.use = {
             orientation: params.orientation ? params.orientation : true,
-            rotate: params.rotate ? params.rotate : false,
-            compass:params.compass ? params.compass : false,
-            gyro:false,
             calibration:false,
-            mousemove:false
+            // gyro:false,
+            // mousemove:false,
+            // compass:params.compass ? params.compass : false,
+            // rotate: params.rotate ? params.rotate : false,
         };
 
-        this.gyro = {
-            sensor: null,
-            x: 0,
-            y: 0,
-            z: 0
-        };
+        // this.gyro = {
+        //     sensor: null,
+        //     x: 0,
+        //     y: 0,
+        //     z: 0
+        // };
 
         this.compass_calib = false;
 
         this.sensor = {
+            heading: null,
             angleH: 1.000000000000000,
             hx: 0.000000000000000,
             hy: 0.000000000000000,
@@ -29,57 +30,55 @@ export default class PWASensors{
             vx: 0.000000000000000,
             vy: 0.000000000000000,
             vz: 0.000000000000000,
-            heading: null,
             alpha: 0.000000000000000,
             beta: 0.000000000000000,
             gamma: 0.000000000000000
         };
-
         this.init();
     }
 
     init(){
         console.log("Init Sensors");
-        if(this.use.orientation)    window.addEventListener('deviceorientation', this.deviceOrientation, false);
-        if(this.use.calibration)    window.addEventListener("compassneedscalibration", this.compassNeedsCalibration, true);
-        if(this.use.rotate)         window.addEventListener('devicemove', this.rotateChange, false);
-        if(this.use.mousemove)      document.addEventListener('mousemove', this.moveChange);
-        if(this.use.gyro){
-            this.gyro.sensor = new Gyroscope();
-            this.gyro.sensor.addEventListener('reading', () => {
-                console.log(this.gyro.x);
-                console.log(this.gyro.y);
-                console.log(this.gyro.z);
-            });
-            this.gyro.sensor.start();
-        }
+
+        this.sensor.angleH = 2.0;
+        this.sensor.angleV = 4.0;
+
+        if(this.use.orientation) window.addEventListener('deviceorientation', this.deviceOrientation, false);
+        // if(this.use.calibration)    window.addEventListener("compassneedscalibration", this.compassNeedsCalibration, true);
+        // if(this.use.rotate)         window.addEventListener('devicemove', this.rotateChange, false);
+        // if(this.use.mousemove)      document.addEventListener('mousemove', this.moveChange);
+        // if(this.use.gyro){
+        //     this.gyro.sensor = new Gyroscope();
+        //     this.gyro.sensor.addEventListener('reading', () => {
+        //         console.log(this.gyro.x);
+        //         console.log(this.gyro.y);
+        //         console.log(this.gyro.z);
+        //     });
+        //     this.gyro.sensor.start();
+        // }
     }
 
     stopAll(){
         console.log("Stop All Sensors");
         if(this.use.orientation)    window.removeEventListener('deviceorientation', this.deviceOrientation, false);
-        if(this.use.calibration)    window.removeEventListener("compassneedscalibration", this.compassNeedsCalibration, true);
-        if(this.use.rotate)         window.removeEventListener('devicemove', this.rotateChange, false);
-        if(this.use.mousemove)      document.removeEventListener('mousemove', this.moveChange);
-        if(this.gyro.sensor)        this.gyro.sensor.stop();
+        // if(this.use.calibration)    window.removeEventListener("compassneedscalibration", this.compassNeedsCalibration, true);
+        // if(this.use.rotate)         window.removeEventListener('devicemove', this.rotateChange, false);
+        // if(this.use.mousemove)      document.removeEventListener('mousemove', this.moveChange);
+        // if(this.gyro.sensor)        this.gyro.sensor.stop();
     }
 
-    destroy(){
-        // window.removeEventListener("compassneedscalibration", this.compassNeedsCalibration, true);
-        // if(this.gyro.sensor) this.gyro.sensor.stop();
-    }
 
-    compassNeedsCalibration(e){
-        this.compass_calib = true;
-    }
+    // compassNeedsCalibration(e){
+    //     this.compass_calib = true;
+    // }
 
-    rotateChange(e){
-
-    }
-
-    moveChange(e){
-
-    }
+    // rotateChange(e){
+    //
+    // }
+    //
+    // moveChange(e){
+    //
+    // }
 
     deviceOrientation(e){
         //if (navigator.geolocation) navigator.geolocation.getCurrentPosition(position =>  this.sensor.heading = position.coords.heading);
@@ -141,6 +140,5 @@ export default class PWASensors{
         this.sensor.vy = (-axisZ.y).toFixed(4);
         this.sensor.vz = (-axisZ.z).toFixed(4);
     }
-
 }
 

@@ -26,12 +26,12 @@
 
     export default {
         name: "SensorCheckSlide",
-        //props:['pwasensors'],
         data(){
           return{
               pwasensors:null
           }
         },
+
         computed:{
             angleHClass(){
                 return this.pwasensors ? {transform:"rotate(" +  (this.pwasensors.sensor.angleH) + "deg)"} : '';
@@ -40,6 +40,7 @@
                 return this.pwasensors ? {transform:"perspective(300px) rotateX(65deg) rotateZ(" + (this.pwasensors.sensor.angleV).toFixed(10) + "deg)"} : '';
             }
         },
+
         mounted(){
             this.pwasensors = new PWASensors({});
         },
