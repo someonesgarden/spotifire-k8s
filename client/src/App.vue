@@ -42,9 +42,9 @@
               <how-slide @moveTo="$refs.how.goToPage(index+1)" :slide="item" :end="index===modal.modals.how.items.length-1 && device.platform!=='SP'"/>
             </slide>
 
-            <slide v-if="device.platform==='SP'">
-              <sensor-check-slide></sensor-check-slide>
-            </slide>
+<!--            <slide v-if="device.platform==='SP'">-->
+<!--              <sensor-check-slide></sensor-check-slide>-->
+<!--            </slide>-->
 
           </carousel>
         </mu-flex>
@@ -88,7 +88,7 @@
   import BottomView from './components/Common/BottomView';
   import AudioPlayer from './components/Mp3/AudioPlayer';
   import HowSlide from './components/Slide/HowSlide.vue';
-  import SensorCheckSlide from './components/Slide/SensorCheckSlide.vue';
+  //import SensorCheckSlide from './components/Slide/SensorCheckSlide.vue';
 
 export default {
   name: 'app',
@@ -100,7 +100,7 @@ export default {
         BottomView,
         AudioPlayer,
         HowSlide,
-        SensorCheckSlide
+       // SensorCheckSlide
     },
   computed:mapGetters(['bottom','alert','mp3','pwa','modal','device']),
 
