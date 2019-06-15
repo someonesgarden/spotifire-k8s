@@ -1,5 +1,3 @@
-import PWASensors from '../../../class/PWASensors';
-
 const state = {
 
 }
