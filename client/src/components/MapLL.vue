@@ -626,32 +626,24 @@
         top:calc(50vh - 60px);
     }
 
-    .play_card_img{
+    .play_card_img {
 
-       width:100%;
-        text-align:center;
-        /*padding:10px;*/
+        width: 100%;
+        max-width: 280px !important;
+        text-align: center;
+        padding: 10px;
+        margin: 0 auto;
 
         img {
-            /*border: 2px solid #fff;*/
-            /*border-radius: 8px;*/
-            /*width: 150px;*/
-            /*height: 150px;*/
+            width: 100%;
+            height: auto;
             margin: 0 auto;
-
-            @media all and (max-width: 767px) {
-                max-width: 220px;
-                width:100%;
-                height: auto;
-                /*border-radius:8px;*/
-                /*border-radius: 50%;*/
-            }
         }
     }
 
     .info_col {
-        .mu-card-title-container{
-            padding:8px;
+        .mu-card-title-container {
+            padding: 8px;
         }
 
         .mu-card-title{
