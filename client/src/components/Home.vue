@@ -49,29 +49,15 @@
     export default {
         name: 'home',
         mixins:[spotifyMixin,utilMixin],
-        data(){
-            return{
-                visibility:false,
-            }
-        },
         computed:mapGetters(['pwa','loggedIn','spotify']),
-        created(){
-
-        },
-
         methods:{
             ...mapActions(['a_index']),
-
             goMap(login){
                 if(this.loggedIn){
-                    if(login){
-                        if(!this.spotify.credential.expires_in) this.c_getCredential();
-                    }
+                    if(login && !this.spotify.credential.expires_in) this.c_getCredential();
                     this.$router.push('/map');
                 }
-
             }
-
         },
 
     }
@@ -86,8 +72,8 @@
 
         img.emory_logo {
             height: auto;
-            max-width: 250px;
-            margin: 10px auto;
+            max-width: 220px;
+            margin: 8px auto;
         }
 
         img.spotify_logo{
@@ -103,8 +89,5 @@
             border-radius: 8px;
         }
 
-        a {
-
-        }
     }
 </style>

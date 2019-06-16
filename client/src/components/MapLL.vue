@@ -10,16 +10,44 @@
 
                 <mu-flex class="info_menu" justify-content="center" align-items="center">
                     <mu-flex class="info_box how" justify-content="center" align-items="center" direction="column" fill>
-                        <img src="/static/img/emory/emory_logo_w.png" style="width:180px;height:auto;">
-                        <mu-button full-width color="cyan400" @click="trackToggle" v-if="mapstore.tracking">
-                            <mu-icon value="portable_wifi_off" :size="15"></mu-icon>
-                            GEO is [ON] > click to [OFF]
-                        </mu-button>
-                        <mu-button full-width color="pink500" @click="trackToggle" v-else>
-                            <mu-icon value="settings_input_antenna" :size="15"></mu-icon>
-                            GEO is [OFF] > click to [ON]
-                        </mu-button>
+                        <img src="/static/img/emory_logo1.png" style="width:180px;height:auto;">
+
+                        <div class="geo_status">
+                            <mu-button full-width color="cyan400" @click="trackToggle" v-if="mapstore.tracking">
+                                <mu-icon value="portable_wifi_off" :size="15"></mu-icon>&nbsp;ON
+                            </mu-button>
+                            <mu-button full-width color="pink700" @click="trackToggle" v-else>
+                                <mu-icon value="settings_input_antenna" :size="15"></mu-icon>&nbsp;OFF
+                            </mu-button>
+                        </div>
+
+                        <div class="map_toggle">
+                            <mu-button full-width color="purple800" @click="switchLayer('map')">
+                                <mu-icon value="map" :size="15"></mu-icon>&nbsp;MAP
+                            </mu-button>
+                        </div>
                     </mu-flex>
+                </mu-flex>
+
+                <mu-flex class="info_menu" justify-content="center" align-items="center">
+
+
+                    <div class="usercard  login" v-if="spotify.credential.expires_in">
+                        <mu-avatar slot="avatar">
+                            <img src="/static/img/markers/m_mainuser_1.png">
+                        </mu-avatar>
+                        <div class="title">{{spotify.me.id}}</div>
+                        <div class="subtitle">Spotifyにログイン中</div>
+                    </div>
+                    <div class="usercard" v-else>
+                        <mu-avatar slot="avatar">
+                            <img src="/static/img/markers/m_mainuser_1.png">
+                        </mu-avatar>
+                        <div class="title">GUEST USER</div>
+                        <div class="subtitle">ログインしていません。</div>
+                        <div class="key_btn" @click="c_getCredential"><mu-icon value="vpn_key" :size="18"></mu-icon></div>
+                    </div>
+
                 </mu-flex>
 
                 <mu-flex class="info_menu" justify-content="center" align-items="center">
@@ -44,11 +72,6 @@
                     </mu-flex>
                 </mu-flex>
 
-                <mu-flex class="info_menu" justify-content="center" align-items="center">
-                    <mu-flex class="info_box map" justify-content="center" align-items="center" direction="column" fill @click="switchLayer('map')">
-                        <span><mu-icon value="map" :size="14"></mu-icon>&nbsp;map</span>
-                    </mu-flex>
-                </mu-flex>
             </mu-flex>
             <!--/  INFO_OVERLAY(MENU)-->
 
@@ -293,18 +316,18 @@
             'spotify.me':{
 
                 handler(newMe){
-                    console.log("[watch] me handler");
-                    if(!!newMe){
+                    if(!!newMe.id){
                         if(!this.spotify.me.bookmark_num) {
-                            this.a_index(['alert', 'set', "Spotifyユーザーデータを調べています"]);
+                            this.a_index(['alert', 'set', "ユーザー"+newMe.id+"を調べています"]);
                             this.a_index(['alert', 'open']);
+                            this.a_index(['alert','action',null]);
                         }
 
                         //ユーザーのbookmarkデータがなくてもとりあえず初期化する
                         this.createOrFindMainuser(this.spotify.me.id);
                         //FireBaseのイベントリスナー
-                        this.markersRef.on('value', (snapshot)=> this.a_mapstore(['set','markers',snapshot.val()]));
-                        this.projsRef.on('value',   (snapshot)=> this.a_mapstore(['emory','setprojects',snapshot.val()]));
+                        // this.markersRef.on('value', (snapshot)=> this.a_mapstore(['set','markers',snapshot.val()]));
+                        // this.projsRef.on('value',   (snapshot)=> this.a_mapstore(['emory','setprojects',snapshot.val()]));
 
                     }
                 },deep:true
@@ -326,23 +349,29 @@
             this.projsRef   = firebase.database().ref('projects');
         },
         mounted() {
-            this.switchLayer('info');
-            if(!this.spotify.me){
-                this.a_index(['alert','set',"Spotifyにログインが必要です。"]);
-                this.a_index(['alert','open']);
-                this.a_index(['alert','action','login']);
-            }else{
-                if(!this.spotify.me.bookmark_num) {
-                    this.a_index(['alert', 'set', "Spotifyユーザーデータを調べています"]);
-                    this.a_index(['alert', 'open']);
-                }
 
-                //ユーザーのbookmarkデータがなくてもとりあえず初期化する
-                this.createOrFindMainuser(this.spotify.me.id);
-                //FireBaseのイベントリスナー
-                this.markersRef.on('value', (snapshot)=> this.a_mapstore(['set','markers',snapshot.val()]));
-                this.projsRef.on('value',   (snapshot)=> this.a_mapstore(['emory','setprojects',snapshot.val()]));
-            }
+            this.switchLayer('info');
+
+            // if(!this.spotify.me.id){
+            //     this.a_index(['alert','set',"Spotifyにログインが必要です。"]);
+            //     this.a_index(['alert','open']);
+            //     this.a_index(['alert','action','login']);
+            // }else{
+            //     if(!this.spotify.me.bookmark_num) {
+            //         this.a_index(['alert', 'set', "Spotifyユーザーデータを調べています"]);
+            //         this.a_index(['alert', 'open']);
+            //         this.a_index(['alert','action',null]);
+            //     }
+            //
+            //     //ユーザーのbookmarkデータがなくてもとりあえず初期化する
+            //     this.createOrFindMainuser(this.spotify.me.id);
+            //
+            // }
+
+            //全マーカーの設定（リスナー）
+            this.markersRef.on('value', (snapshot)=> this.a_mapstore(['set','markers',snapshot.val()]));
+            //全エリアの設定（リスナー）
+            this.projsRef.on('value',   (snapshot)=> this.a_mapstore(['emory','setprojects',snapshot.val()]));
         },
 
         beforeDestroy() {
@@ -607,4 +636,21 @@
             height: 25px;
         }
     }
+
+    .info_box{
+        position:relative;
+
+        .geo_status{
+            position:absolute;
+            left:0;
+            top:0;
+        }
+
+        .map_toggle{
+            position:absolute;
+            right:0;
+            bottom:0;
+        }
+    }
+
 </style>

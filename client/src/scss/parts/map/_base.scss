@@ -216,6 +216,49 @@
         margin: 0 5px;
         background-color: rgba(255, 102, 133, 0.01);
         min-width: 330px;
+
+        .usercard{
+          width:100%;
+          padding:10px;
+          margin:5px;
+          background-color: #e85610;
+          border-radius:4px;
+          position:relative;
+
+          .key_btn{
+            padding:6px;
+            position:absolute;
+            top:0;
+            right:0;
+          }
+
+          &.login{
+            background-color: #006d45;
+          }
+
+          .mu-avatar{
+            float:left;
+            margin:0 10px 5px 0;
+            background-color:inherit;
+          }
+
+          .title{
+            font-size: 15px;
+          }
+          .subtitle{
+            font-size: 14px;
+            color:#fff;
+          }
+
+          .header-title {
+            display: inline-block;
+            vertical-align: top;
+            white-space: normal;
+            padding-right: 90px;
+            background-color:red;
+            color: white;
+          }
+        }
       }
 
       .info_box {
@@ -234,7 +277,9 @@
         }
 
         &.how {
-          background-color: rgba(105, 53, 105, 0.84);
+          //background-color: rgba(105, 53, 105, 0.84);
+         //  background-color: rgba(247, 197, 247, 0.15);
+          background-color:rgba(255, 255, 255, 0.07);
         }
 
         &.story {
