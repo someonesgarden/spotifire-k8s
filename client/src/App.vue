@@ -53,18 +53,16 @@
 
     <!-- STORY MODAL-->
     <mu-dialog transition="slide-bottom" fullscreen :open.sync="modal.modals.story.open"  class="storyModal">
-      <mu-appbar color="teal900" title="story.">
+      <mu-appbar style="background-color:inherit;">
         <mu-button slot="left" icon @click="a_index(['storyModal','set',false])">
           <mu-icon value="chevron_left"></mu-icon>
         </mu-button>
-        <mu-button slot="right" flat  @click="a_index(['storyModal','set',false])">
-          <mu-icon value="done_all"></mu-icon>
-        </mu-button>
+
       </mu-appbar>
       <mu-flex class="body flex-wrapper" justify-content="center" align-items="center" direction="column">
 
         <carousel ref="story" navigation-prev-label="〈" navigation-next-label="〉"
-                  :per-page="1" :navigation-enabled="true">
+                  :per-page="1">
           <slide class="slide" v-for="(item,index) in modal.modals.story.items" :key="'howslide'+index">
             <story-slide @moveTo="$refs.story.goToPage(index<modal.modals.story.items.length-1 ? index+1:0)" :slide="item" :end="index===modal.modals.story.items.length-1"></story-slide>
           </slide>
