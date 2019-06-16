@@ -2,7 +2,10 @@ import store from '../../store/index';
 import axios from 'axios';
 
 const marker0 = {
-        center: null,
+        center: {
+            lat:34.722677,
+            lng: 135.492364
+        },
         title: "",
         type: "spot",
         spotifyid: null,
@@ -29,18 +32,41 @@ export default class EMarker{
     }
 
     update(firebaseRef){
-        let updates = {};
+
         this.init();
         if(this.marker.id) {
-            updates[this.marker.id] = this.marker;
-            firebaseRef.update(updates);
+
+            if(this.marker.id==="GUEST"){
+                //ゲストの場合
+                console.log("GUEST update!!!");
+                console.log(this.marker);
+
+                this.marker.center = store.state.mapstore.map.center;
+                this.marker.title ="GUEST";
+                this.marker.thumb = "/static/img/markers/m_dummy.png";
+                store.commit('mapstore/setMainuser',this.marker);
+
+            }else{
+                //それ以外はFirebaseをアップデード
+                let updates = {};
+                updates[this.marker.id] = this.marker;
+                firebaseRef.update(updates);
+            }
+
         }
     }
 
-    updateOrNew(firebaseRef){
+    guestUpdate(){
+            this.marker.center = store.state.mapstore.map.center;
+            this.marker.title ="GUEST";
+            this.marker.thumb = "/static/img/markers/m_dummy.png";
+            return this.marker;
+    }
+
+    firebaseUpdate(firebaseRef){
+
         let update = true;
         let updates = {};
-        this.init();
 
         if(this.marker.id){
             if(!firebaseRef.child(this.marker.id)) update = false;
@@ -114,9 +140,20 @@ export default class EMarker{
         return this.marker;
     }
 
+
+    updateOrNew(firebaseRef){
+        this.init();
+        if(this.marker.id==="GUEST"){
+            this.guestUpdate();
+        }else{
+            this.firebaseUpdate(firebaseRef);
+        }
+    }
+
     initMainuser(){
         console.log("[EMarker] initMainUser");
         if(store.state.spotify.me){
+
             this.marker.title       = store.state.spotify.me.display_name;
             this.marker.userid      = store.state.spotify.me.id;
             if(store.state.spotify.bookmarks){

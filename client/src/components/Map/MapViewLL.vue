@@ -2,6 +2,9 @@
         <l-map ref="map" :zoom="mapstore.map.zoom" :center="mapstore.map.center" @click="(val)=> $emit('mapClick',val)">
             <l-tile-layer :url="mapstore.map.url" :attribution="mapstore.map.attribution"></l-tile-layer>
             <my-marker v-if="mapstore.markers && mapstore.mainuser" v-for="(marker,id) in sortedMarkers" :marker="marker" :key="'marker'+id" :id="id" @mClick="$emit('mClick',marker,id)"></my-marker>
+
+            <my-marker v-if="mapstore.mainuser && mapstore.mainuser.id==='GUEST'" :marker="mapstore.mainuser"></my-marker>
+
             <my-tooltip v-if="mapstore.emory.projects" v-for="(project,id) in mapstore.emory.projects" :title="project.title" :center="project.center" :key="'proj'+id" @pClick="$emit('pClick',project,id)"></my-tooltip>
             <l-polygon :lat-lngs="mapstore.map.poly" color="#1DEA6E"  v-if="mapstore.map.poly"/>
         </l-map>
@@ -38,11 +41,10 @@
             };
         },
         computed: mapGetters([
+            'ws',
             'mp3',
             'mapstore',
-            'ws',
             'spotify']),
-
         watch: {
             'mapstore.tracking': {
                 handler: function () {
@@ -189,5 +191,4 @@
 </script>
 <style lang="scss">
     @import "~leaflet/dist/leaflet.css";
-
 </style>

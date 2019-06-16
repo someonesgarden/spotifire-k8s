@@ -8,6 +8,10 @@ const state = {
     },
     me:{
         id:null,
+        center: {
+            lat:34.722677,
+            lng: 135.492364
+        },
         update:new Date()
     },
     bookmarks:null,

@@ -13,31 +13,29 @@
             </div>
 
             <div class="ui grid" style="padding:0;margin:0;" v-if="!spotify.me.id">
-
-                    <div class="sixteen wide mobile eight wide tablet eight wide computer column" style="padding:0;margin:0;">
-                        <mu-button color="teal500" class="smallbtn" full-width @click="goMap(true)">
-                            <mu-icon value="check_circle"></mu-icon>&nbsp;Spotifyにログイン
-                        </mu-button>
-                    </div>
-                    <div class="sixteen wide mobile eight wide tablet eight wide computer column" style="padding:0;margin:0;">
-                        <mu-button color="orange700" class="smallbtn" full-width @click="goMap(false)">
-                            <mu-icon value="exit_to_app"></mu-icon>&nbsp;ログインせず使用
-                        </mu-button>
-                    </div>
+                <div class="sixteen wide mobile eight wide tablet eight wide computer column"
+                     style="padding:0;margin:0;">
+                    <mu-button color="teal500" class="smallbtn" full-width @click="goMap(true)">
+                        <mu-icon value="check_circle"></mu-icon>&nbsp;Spotifyにログイン
+                    </mu-button>
                 </div>
-
-                <div v-else>
-                    <mu-col span="12" sm="12" md="12" lg="12" xl="12">
-                        <mu-button color="teal500" class="smallbtn" full-width @click="goMap(true)">ENTER</mu-button>
-                    </mu-col>
+                <div class="sixteen wide mobile eight wide tablet eight wide computer column"
+                     style="padding:0;margin:0;">
+                    <mu-button color="orange700" class="smallbtn" full-width @click="goMap(false)">
+                        <mu-icon value="exit_to_app"></mu-icon>&nbsp;ログインせず使用
+                    </mu-button>
                 </div>
+            </div>
+            <div class="sixteen wide mobile eight wide tablet eight wide computer column" style="padding:0;margin:0;" v-else>
+                <mu-button color="teal500" class="smallbtn" full-width @click="goMap(true)">ENTER</mu-button>
+            </div>
             <p>
                 ログインしない場合「ゲスト」としてプレイできますがSpotifyのプレイリストは使用できず他ユーザーから見えません。<br/>
             </p>
 
             <a href="https://www.spotify.com/jp/" target="_blank">
-                <img class="spotify_logo" src="/static/img/listen_on_spotify.jpg"/></a>
-
+                <img class="spotify_logo" src="/static/img/listen_on_spotify.jpg"/>
+            </a>
         </div>
     </mu-container>
 </template>
@@ -54,7 +52,11 @@
             ...mapActions(['a_index']),
             goMap(login){
                 if(this.loggedIn){
-                    if(login && !this.spotify.credential.expires_in) this.c_getCredential();
+                    if(login && !this.spotify.credential.expires_in){
+                        this.c_getCredential();
+                    }else{
+                        this.a_spotify(['set','me',{id:'GUEST'}]);
+                    }
                     this.$router.push('/map');
                 }
             }

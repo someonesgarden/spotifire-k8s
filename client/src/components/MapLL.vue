@@ -31,7 +31,6 @@
 
                 <mu-flex class="info_menu" justify-content="center" align-items="center">
 
-
                     <div class="usercard  login" v-if="spotify.credential.expires_in">
                         <mu-avatar slot="avatar">
                             <img src="/static/img/markers/m_mainuser_1.png">
@@ -66,7 +65,6 @@
                     <mu-flex class="info_box play" justify-content="center" align-items="center" direction="column" fill @click="switchLayer('play')">
                         <mu-icon value="pets" :size="20"></mu-icon>play.
                     </mu-flex>
-
                     <mu-flex class="info_box edit" justify-content="center" align-items="center" direction="column" fill @click="switchLayer('edit')">
                         <mu-icon value="build" :size="20"></mu-icon>edit.
                     </mu-flex>
@@ -352,21 +350,32 @@
 
             this.switchLayer('info');
 
-            // if(!this.spotify.me.id){
-            //     this.a_index(['alert','set',"Spotifyにログインが必要です。"]);
-            //     this.a_index(['alert','open']);
-            //     this.a_index(['alert','action','login']);
-            // }else{
-            //     if(!this.spotify.me.bookmark_num) {
-            //         this.a_index(['alert', 'set', "Spotifyユーザーデータを調べています"]);
-            //         this.a_index(['alert', 'open']);
-            //         this.a_index(['alert','action',null]);
-            //     }
-            //
-            //     //ユーザーのbookmarkデータがなくてもとりあえず初期化する
-            //     this.createOrFindMainuser(this.spotify.me.id);
-            //
-            // }
+            //IDがある場合
+            if(this.spotify.me.id){
+
+
+                //ログインなしのゲスト
+                if(this.spotify.me.id==='GUEST'){
+                    //ゲストでもマーカーを作成しなくてはいけない！
+                    this.createOrFindMainuser(this.spotify.me.id);
+
+                }else{
+                    if(!this.spotify.me.bookmark_num) {
+                        this.a_index(['alert', 'set', "Spotifyユーザーデータを調べています"]);
+                        this.a_index(['alert', 'open']);
+                        this.a_index(['alert','action',null]);
+                    }
+
+                    //ログイン時のマーカー作成
+                    this.createOrFindMainuser(this.spotify.me.id);
+                }
+            }else{
+                //IDがない場合
+                this.a_index(['alert','set',"Spotifyにログインが必要です。"]);
+                this.a_index(['alert','open']);
+                this.a_index(['alert','action','login']);
+            }
+
 
             //全マーカーの設定（リスナー）
             this.markersRef.on('value', (snapshot)=> this.a_mapstore(['set','markers',snapshot.val()]));
@@ -388,18 +397,35 @@
                 'a_ws']),
 
             createOrFindMainuser(meid){
-                //メインユーザーを検索してなければ作成
-                this.markersRef.orderByChild('userid').startAt(meid).endAt(meid).once('value', ss=>{
-                    if(ss.val()) {
-                        console.log("FOUND");
-                        let key = Object.keys(ss.val())[0];
-                        let val = Object.values(ss.val())[0];
-                        this.a_mapstore(['set', 'mainuser', {...val, id: key}]);
-                    } else{
-                        //ローカルにユーザーデータがない場合だけ作成される
-                        if(!this.mapstore.mainuser) new M({type:'mainuser'}).updateOrNew(this.markersRef);
-                    }
-                })
+
+                if(meid==='GUEST'){
+                    //ゲストの場合はFirebaseに問いかけず、そのままマーカーを作成する！
+                    this.a_mapstore(['set', 'mainuser',
+                        {
+                            center: {
+                                lat:34.722677,
+                                lng: 135.492364
+                            },
+                            type:'mainuser',
+                            project:'mainuser',
+                            title:'GUEST',
+                            id: 'GUEST'
+                        }]);
+
+                }else{
+                    //メインユーザーを検索してなければ作成
+                    this.markersRef.orderByChild('userid').startAt(meid).endAt(meid).once('value', ss=>{
+                        if(ss.val()) {
+                            console.log("FOUND");
+                            let key = Object.keys(ss.val())[0];
+                            let val = Object.values(ss.val())[0];
+                            this.a_mapstore(['set', 'mainuser', {...val, id: key}]);
+                        } else{
+                            //ローカルにユーザーデータがない場合だけ作成される
+                            if(!this.mapstore.mainuser) new M({type:'mainuser'}).updateOrNew(this.markersRef);
+                        }
+                    })
+                }
             },
 
             onProjectSelected(key) {
