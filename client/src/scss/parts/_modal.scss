@@ -86,7 +86,28 @@
 }
 
 .storyModal {
-  .body {
-    background-color: #c42d72;
+  .mu-dialog{
+    background-color:inherit;
+    background-image:url('/static/img/story_circle_bg.png');
+    background-size:cover;
+    background-position:center center;
+
+    .body {
+      .slide_inner{
+        h1{
+          margin-top:22vh;
+        }
+
+        img.circle{
+          float:left;
+          margin-bottom:12px;
+          margin-right:12px;
+        }
+
+      }
+    }
+
   }
+
+
 }

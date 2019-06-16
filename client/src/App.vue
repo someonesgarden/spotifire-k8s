@@ -66,7 +66,7 @@
         <carousel ref="story" navigation-prev-label="〈" navigation-next-label="〉"
                   :per-page="1" :navigation-enabled="true">
           <slide class="slide" v-for="(item,index) in modal.modals.story.items" :key="'howslide'+index">
-            <how-slide @moveTo="$refs.story.goToPage(index<modal.modals.story.items.length-1 ? index+1:0)" :slide="item" :end="index===modal.modals.story.items.length-1"></how-slide>
+            <story-slide @moveTo="$refs.story.goToPage(index<modal.modals.story.items.length-1 ? index+1:0)" :slide="item" :end="index===modal.modals.story.items.length-1"></story-slide>
           </slide>
         </carousel>
 
@@ -88,6 +88,7 @@
   import BottomView from './components/Common/BottomView';
   import AudioPlayer from './components/Mp3/AudioPlayer';
   import HowSlide from './components/Slide/HowSlide.vue';
+  import StorySlide from './components/Slide/StorySlide.vue';
   import SensorCheckSlide from './components/Slide/SensorCheckSlide.vue';
   //import PWASensors from './class/PWASensors';
 
@@ -101,6 +102,7 @@ export default {
         BottomView,
         AudioPlayer,
         HowSlide,
+        StorySlide,
         SensorCheckSlide
     },
   computed:mapGetters(['bottom','alert','mp3','pwa','modal','device']),

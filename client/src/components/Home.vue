@@ -27,7 +27,8 @@
                 </div>
             </div>
             <div class="sixteen wide mobile eight wide tablet eight wide computer column" style="padding:0;margin:0;" v-else>
-                <mu-button color="teal500" class="smallbtn" full-width @click="goMap(true)">ENTER</mu-button>
+                <mu-button color="teal500" class="smallbtn" full-width @click="goMap(spotify.me.id!=='GUEST')">ENTER</mu-button>
+
             </div>
             <p>
                 ログインしない場合「ゲスト」としてプレイできますがSpotifyのプレイリストは使用できず他ユーザーから見えません。<br/>

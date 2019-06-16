@@ -66,15 +66,13 @@ export default{
 
             if(this.mapstore.mainuser){
                 //自分と現在のプロジェクトのpointの距離を測る
+                let mainuser = this.mapstore.mainuser.id==="GUEST" ? this.mapstore.mainuser : this.mapstore.markers[this.mapstore.mainuser.id];
 
-                let mainuser = this.mapstore.markers[this.mapstore.mainuser.id];
+               // let mainuser = this.mapstore.markers[this.mapstore.mainuser.id];
 
                 if(this.sortedMarkers && mainuser){
                     let dists = Object.keys(this.sortedMarkers).map(k=> {
-                        return {
-                            id:k,
-                            dist:this.distKmofCenters(mainuser.center, this.sortedMarkers[k].center)
-                        }
+                        return {id:k, dist:this.distKmofCenters(mainuser.center, this.sortedMarkers[k].center)}
                     });
                     dists.sort((a, b)=> a.dist > b.dist ? 1 : -1);
                     this.a_mapstore(['set','markerdists',dists]);

@@ -33,7 +33,7 @@
 
                     <div class="usercard  login" v-if="spotify.credential.expires_in">
                         <mu-avatar slot="avatar">
-                            <img src="/static/img/markers/m_mainuser_1.png">
+                            <img :src="avatar_thumb">
                         </mu-avatar>
                         <div class="title">{{spotify.me.id}}</div>
                         <div class="subtitle">Spotifyにログイン中</div>
@@ -270,7 +270,6 @@
             return {
                 //SOCKET.IO(not in use)
                 socket:     null,
-
                 //MODE
                 mode:       'info',
                 editing: {
@@ -312,21 +311,16 @@
         },
         watch:{
             'spotify.me':{
-
                 handler(newMe){
                     if(!!newMe.id){
-                        if(!this.spotify.me.bookmark_num) {
+                        if(!this.spotify.me.bookmark_num && newMe.id!=='GUEST') {
                             this.a_index(['alert', 'set', "ユーザー"+newMe.id+"を調べています"]);
                             this.a_index(['alert', 'open']);
                             this.a_index(['alert','action',null]);
                         }
 
-                        //ユーザーのbookmarkデータがなくてもとりあえず初期化する
+                        //ユーザーのbookmarkデータがなくてもとりあえず初期化
                         this.createOrFindMainuser(this.spotify.me.id);
-                        //FireBaseのイベントリスナー
-                        // this.markersRef.on('value', (snapshot)=> this.a_mapstore(['set','markers',snapshot.val()]));
-                        // this.projsRef.on('value',   (snapshot)=> this.a_mapstore(['emory','setprojects',snapshot.val()]));
-
                     }
                 },deep:true
             },
@@ -341,7 +335,14 @@
                 }
             }
         },
-        computed:mapGetters(['spotify', 'mapstore', 'ws']),
+        computed:{
+            ...mapGetters(['spotify', 'mapstore', 'ws']),
+
+            avatar_thumb(){
+                console.log("avatar_thumb!");
+                return this.spotify.bookmarks ? this.spotify.bookmarks[0].album.images[0].url : '/static/img/markers/m_mainuser_1.png'
+            }
+        },
         created() {
             this.markersRef = firebase.database().ref('markers');
             this.projsRef   = firebase.database().ref('projects');
@@ -353,22 +354,17 @@
             //IDがある場合
             if(this.spotify.me.id){
 
-
-                //ログインなしのゲスト
-                if(this.spotify.me.id==='GUEST'){
-                    //ゲストでもマーカーを作成しなくてはいけない！
-                    this.createOrFindMainuser(this.spotify.me.id);
-
-                }else{
-                    if(!this.spotify.me.bookmark_num) {
+                //ログイン済みでブックマークデータがない場合
+                if(this.spotify.me.id!=='GUEST' && !this.spotify.me.bookmark_num) {
                         this.a_index(['alert', 'set', "Spotifyユーザーデータを調べています"]);
                         this.a_index(['alert', 'open']);
                         this.a_index(['alert','action',null]);
-                    }
-
-                    //ログイン時のマーカー作成
-                    this.createOrFindMainuser(this.spotify.me.id);
                 }
+
+
+                //マーカー作成
+                this.createOrFindMainuser(this.spotify.me.id);
+
             }else{
                 //IDがない場合
                 this.a_index(['alert','set',"Spotifyにログインが必要です。"]);
@@ -524,8 +520,9 @@
             },
 
             playStart(){
-              this.a_mapstore(['set', 'tracking', true]);
+                this.a_mapstore(['set', 'tracking', true]);
                 this.switchLayer('map');
+                this.a_index(['storyModal','set',true]);
             },
             editEnd() {
                 this.editing.status = false;
@@ -567,12 +564,14 @@
                 this.mode = mode;
                 switch (mode) {
                     case 'info':
+                        this.a_mapstore(['set', 'tracking', false]);
                         info_overlay.style.visibility = 'visible';
                         info_overlay.style.zIndex = 401;
                         play_overlay.style.zIndex = -1;
                         net_overlay.style.zIndex = -1;
                         edit_overlay.style.zIndex = -1;
                         break;
+
                     case 'play':
                         info_overlay.style.visibility = 'hidden';
                         play_overlay.style.zIndex = 401;

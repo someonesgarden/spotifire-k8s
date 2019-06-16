@@ -105,6 +105,7 @@
             },
 
             geoSuccess(position){
+                console.log("getSuccess");
                 console.log(position);
                 this.resetPos(position);
                 this.drawPoly();
