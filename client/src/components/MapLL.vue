@@ -32,16 +32,16 @@
                 <mu-flex class="info_menu" justify-content="center" align-items="center">
 
                     <div class="usercard  login" v-if="spotify.credential.expires_in">
-                        <mu-avatar slot="avatar">
+                        <mu-avatar slot="avatar" style="border:2px solid white;">
                             <img :src="avatar_thumb">
                         </mu-avatar>
                         <div class="title">{{spotify.me.id}}</div>
                         <div class="subtitle">Spotifyにログイン中</div>
                     </div>
                     <div class="usercard" v-else>
-                        <mu-avatar slot="avatar">
-                            <img src="/static/img/markers/m_mainuser_1.png">
-                        </mu-avatar>
+<!--                        <mu-avatar slot="avatar">-->
+<!--                            <img src="/static/img/markers/m_mainuser_1.png">-->
+<!--                        </mu-avatar>-->
                         <div class="title">GUEST USER</div>
                         <div class="subtitle">ログインしていません。</div>
                         <div class="key_btn" @click="c_getCredential"><mu-icon value="vpn_key" :size="18"></mu-icon></div>
@@ -79,19 +79,19 @@
                     <mu-flex justify-content="center" align-items="center" direction="column" style="width:100%;height:100%;padding:20px;">
                         <mu-flex justify-content="center" align-items="center" direction="column" class="inner" style="background-color:rgba(31, 6, 6, 0.19);height:100%;width:100%;border-radius:6px;padding:15px 22px;">
 
-
                             <div gutter style="width:100%;" v-if="mapstore.emory.project">
 
                                 <mu-col class="info_col" span="12" sm="12" md="12" lg="12" xl="12" style="float:left;" v-if="mapstore.emory.projects[mapstore.emory.project]">
                                     <mu-card style="width: 100%; margin: 0 auto; background-color:rgba(3,3,3,0.36);">
 
                                         <div class="play_card_img">
+
+                                            <mu-card-media
+                                                    :title="mapstore.emory.projects[mapstore.emory.project].title"
+                                                    :sub-title="mapstore.emory.projects[mapstore.emory.project].desc">
                                                 <img :src="mapstore.emory.projects[mapstore.emory.project].thumb">
+                                            </mu-card-media>
                                         </div>
-                                        <mu-card-title style="color:white;" :title="mapstore.emory.projects[mapstore.emory.project].title"></mu-card-title>
-                                        <mu-card-text style="color:white;">
-                                            {{mapstore.emory.projects[mapstore.emory.project].desc}}
-                                        </mu-card-text>
 
                                         <mu-card-header style="white-space: inherit;padding:4px;" v-if="mapstore.mainuser">
                                             <my-avatar :marker="marker" :id="marker.id" v-for="(marker,id) in sortedMarkers" :key="'mv'+id"></my-avatar>
@@ -630,19 +630,21 @@
 
        width:100%;
         text-align:center;
-        padding:10px;
+        /*padding:10px;*/
 
         img {
-            border: 6px solid #18a91d;
-            border-radius: 18px;
-            width: 150px;
-            height: 150px;
+            /*border: 2px solid #fff;*/
+            /*border-radius: 8px;*/
+            /*width: 150px;*/
+            /*height: 150px;*/
             margin: 0 auto;
 
             @media all and (max-width: 767px) {
-                width: 70px;
-                height: 70px;
-                border-radius: 50%;
+                max-width: 220px;
+                width:100%;
+                height: auto;
+                /*border-radius:8px;*/
+                /*border-radius: 50%;*/
             }
         }
     }
@@ -652,13 +654,21 @@
             padding:8px;
         }
 
-        .mu-card-title {
-            color: #0affed;
+        .mu-card-title{
+            font-size:20px;
+            color: #fff;
         }
+
+        .mu-card-sub-title{
+            color: #fff;
+        }
+
+
 
         .mu-avatar {
             width: 25px;
             height: 25px;
+            margin-right:2px;
         }
     }
 
