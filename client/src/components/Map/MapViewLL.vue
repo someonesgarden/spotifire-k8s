@@ -1,5 +1,11 @@
 <template>
-        <l-map ref="map" :zoom="mapstore.map.zoom" :center="mapstore.map.center" @click="(val)=> $emit('mapClick',val)">
+        <l-map ref="map"
+               :zoom="mapstore.map.zoom"
+               :center="mapstore.map.center"
+               :max-zoom="18"
+               :max-native-zoom="18"
+               :min-zoom="0"
+               @click="(val)=> $emit('mapClick',val)">
             <l-tile-layer :url="mapstore.map.url" :attribution="mapstore.map.attribution"></l-tile-layer>
             <my-marker v-if="mapstore.markers && mapstore.mainuser" v-for="(marker,id) in sortedMarkers" :marker="marker" :key="'marker'+id" :id="id" @mClick="$emit('mClick',marker,id)"></my-marker>
 

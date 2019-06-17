@@ -216,6 +216,10 @@
                         </mu-form-item>
                         <mu-form-item prop="spotifyid" :rules="blankRules">
                             <mu-text-field prop="spotifyid" placeholder="Spotify ID" v-model="newProject.spotifyid"/>
+                            <mu-select prop="spotifyid" color="primary" v-model="newProject.spotifyid" v-if="spotify.playlists">
+                                <mu-option  :label="pro.name" :value="pro.id" v-for="(pro,inx) in spotify.playlists.items" :key="'pro'+inx"></mu-option>
+                            </mu-select>
+
                         </mu-form-item>
 
                         <mu-flex justify-content="center" align-items="center" direction="row">

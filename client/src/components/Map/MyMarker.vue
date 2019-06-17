@@ -50,25 +50,25 @@
                 icontype     = this.marker.id === 'GUEST' ? 'you' : icontype;
 
                 let icon  = this.mapstore.icons[icontype][this.marker.title.charCodeAt(0) % this.mapstore.icons[icontype].length];
-                    let w = 30;
-                    let h = 30;
+                    let w = 20;
+                    let h = 20;
                     switch(icontype){
                         case 'you':
-                            w = 34;
-                            h = 34;
+                            w = 22;
+                            h = 22;
                             break;
                         case 'mainuser':
                         case 'user':
-                            w = 30;
-                            h = 30;
+                            w = 20;
+                            h = 20;
                             break;
                         case 'spot':
-                            w = 22;
-                            h = 22;
+                            w = 18;
+                            h = 18;
                             break;
                         case 'other':
-                            w = 22;
-                            h = 22;
+                            w = 18;
+                            h = 18;
                             break;
                     }
                     return {url:icon, w:w, h:h};

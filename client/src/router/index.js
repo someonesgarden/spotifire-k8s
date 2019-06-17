@@ -11,11 +11,11 @@ import Login from '../components/Login.vue';
 import Analysis from '../components/Analysis.vue';
 
 let routes =  [
-  { path:'/login',   name: 'Login',  component: Login},
-  { path: '/',       name: 'Home',    component: Home,    meta: { requiresAuth: true }},
-  { path: '/news',   name: 'News',   component: News,     meta: { requiresAuth: true }},
-  { path:'/map',     name: 'Map',    component: Map,      meta: { requiresAuth: true }},
-  { path:'/analysis',name: 'Analysis',component: Analysis,meta: { requiresAuth: true }},
+  { path:'/login',   name: 'Login',   component: Login},
+  { path:'/news',    name: 'News',    component: News,     meta: { requiresAuth: true }},
+  { path:'/map',     name: 'Map',     component: Map,      meta: { requiresAuth: true }},
+  { path:'/analysis',name: 'Analysis',component: Analysis, meta: { requiresAuth: true }},
+  { path:'/',        name: 'Home',    component: Home,     meta: { requiresAuth: true }},
 ];
 
 

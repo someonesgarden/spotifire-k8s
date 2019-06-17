@@ -1,10 +1,18 @@
 const state = {
     map:{
-        url:'https://{s}.tile.osm.org/{z}/{x}/{y}.png',
+        url:'//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+        //url:'https://{s}.tile.osm.org/{z}/{x}/{y}.png',
+        //url:'https://tile.mierune.co.jp/mierune_mono/{z}/{x}/{y}.png',
+        //url:'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+        //url:'http://cyberjapandata.gsi.go.jp/xyz/ort/{z}/{x}/{y}.jpg',
+        //url:'https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png',
+        //url:'http://{s}.tile.stamen.com/{variant}/{z}/{x}/{y}.png',
         attribution:'&copy; sg',
-        zoom:           20,
+        zoom:           18,
+        maxZoom: 18,
+        maxNativeZoom:18,
         center: {
-            lat:34.722677,
+            lat: 34.722677,
             lng: 135.492364
         },
         poly:null,
