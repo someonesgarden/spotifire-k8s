@@ -49,6 +49,7 @@
                 search:{
                     term:""
                 },
+                center:null,
                 track_max:0,
                 trackTimeout: false,
                 timeout: null,
@@ -67,6 +68,7 @@
                         this.keepTracking();
                     }else{
                         this.timeout = null;
+                        this.center = null; //計算用のcenter
                     }
                 }
             },
@@ -291,10 +293,20 @@
 
             resetPos(position) {
                 if (!!position) {
-                    const center = {
-                        lat:position.coords.latitude,
-                        lng:position.coords.longitude
-                    };
+                    let center = {lat:position.coords.latitude, lng:position.coords.longitude};
+                    if(!this.center) this.center = center;
+
+                    let dist_delta = this.distKmOfTwo(this.center.lat,this.center.lng,center.lat,center.lng);
+
+                    if(dist_delta>0.05){
+                        //50メートル以上は明らかに誤差
+                        center = this.center;
+                    }else if(dist_delta>0.02){
+                        //20メートル以上は中間地点
+                        center =  {lat:(this.center.lat+center.lat)/2, lng:(this.center.lng+center.lng)/2};
+                    }
+
+                    this.center = center;
 
                     //地図のセンターリセット
                     this.a_mapstore(['center', 'map', center]);
