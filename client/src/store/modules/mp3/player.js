@@ -28,15 +28,15 @@ const state =
                 autoPlay:false,
                 update: new Date()
             },
-            {
-                file: '',
-                volume: 0,
-                loop: false,
-                innerLoop:false,
-                playing:false,
-                autoPlay:false,
-                update: new Date()
-            }
+            // {
+            //     file: '',
+            //     volume: 0,
+            //     loop: false,
+            //     innerLoop:false,
+            //     playing:false,
+            //     autoPlay:false,
+            //     update: new Date()
+            // }
         ]
     }
 
