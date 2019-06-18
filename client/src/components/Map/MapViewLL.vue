@@ -163,7 +163,11 @@
                             let dm = d.dist * 1000;
                             if (dm > 0 && dm < limit) {
                                 let marker = this.mapstore.markers[d.id];
-                                let volume = Math.max(0, Math.floor((limit - dm) * 100 / limit));
+
+                                //let volume = Math.max(0, Math.floor((limit - dm) * 100 / limit));
+
+                                //let volume = Math.min(1,Math.sqrt((limit - dm)/limit))*100;
+                                let volume = Math.min(1,1/Math.sqrt((limit-dm)))*100;
                                 //let volume =  Math.floor(Math.max(0,100-18*Math.sqrt(dm)));
 
                                 if (marker.spotifytype === 'episode') {
@@ -298,19 +302,21 @@
 
                     let dist_delta = this.distKmOfTwo(this.center.lat,this.center.lng,center.lat,center.lng);
 
-                    if(dist_delta>0.03){
-                        //50メートル以上は明らかに誤差
+                    if(dist_delta>0.02){
+                        //20メートル以上は明らかに誤差なので、移動させない
                         center = this.center;
-                    }else if(dist_delta>0.01){
-                        //20メートル以上は中間地点
-                        center =  {lat:(2*this.center.lat+center.lat)/3, lng:(2*this.center.lng+center.lng)/3};
+                    }else{
+
+                        //10メートル以上は中間地点(バッファ側に重みを置く）
+                        if(dist_delta>0.01) center =  {lat:(2*this.center.lat+center.lat)/3, lng:(2*this.center.lng+center.lng)/3};
+
+                        //地図のセンターリセット
+                        this.a_mapstore(['center', 'map', center]);
+                        //メインユーザー位置をリセット(Firebaseのエントリーを更新）
+                        if (this.mapstore.mainuser && this.mapstore.mainuser.id) new M({...this.mapstore.mainuser, center: center}).update(this.markersRef);
                     }
 
-                    //地図のセンターリセット
-                    this.a_mapstore(['center', 'map', center]);
-                    //メインユーザー位置をリセット(Firebaseのエントリーを更新）
-                    if (this.mapstore.mainuser && this.mapstore.mainuser.id) new M({...this.mapstore.mainuser, center: center}).update(this.markersRef);
-
+                    //バッファ値を更新
                     this.center = center;
                 }
             }
