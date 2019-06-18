@@ -164,11 +164,12 @@
                             if (dm > 0 && dm < limit) {
                                 let marker = this.mapstore.markers[d.id];
 
-                                //let volume = Math.max(0, Math.floor((limit - dm) * 100 / limit));
+                                //let volume = Math.min(1, (limit - dm) / limit)*100;
 
                                 //let volume = Math.min(1,Math.sqrt((limit - dm)/limit))*100;
-                                let volume = Math.min(1,1/Math.sqrt((limit-dm)))*100;
+                                //let volume = Math.min(1,1/Math.sqrt((limit-dm)))*100;
                                 //let volume =  Math.floor(Math.max(0,100-18*Math.sqrt(dm)));
+                                let volume =  100*((limit - dm)/limit)^2;
 
                                 if (marker.spotifytype === 'episode') {
                                     let already_has = null;
