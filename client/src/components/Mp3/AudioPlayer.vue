@@ -63,12 +63,13 @@
                     console.log("[AudioPlayer] pod.playing"+this.num, newPlaying);
                     if (newPlaying) { return this.audio.play(); }
                     this.audio.pause();
+                    this.a_mp3(['pod', this.num,'playing', false]);
                 }
             },
 
             'pod.volume':{
                 handler(newVol){
-                    console.log("[AP] VOlute change!");
+                    console.log("[AP("+this.num+")] Volume change!");
                     console.log(newVol);
                     this.showVolume   = true;
                     this.audio.volume = newVol / 100;

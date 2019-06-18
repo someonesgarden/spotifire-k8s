@@ -135,6 +135,82 @@
 
             distMarkerActionUpdate() {
 
+                if (!!this.mapstore.markerDists) {
+                    let limit = parseInt(this.mapstore.emory.triggerDist);
+
+
+                    if (this.mapstore.markerDists.every(d => d.dist === 0 || d.dist > limit/1000)) {
+                        //全てが範囲外なら、プレイヤーをリセット
+                        console.log("reset all");
+                        this.mp3.pods.forEach((p, i) => {
+                            setTimeout(() =>  this.a_mp3(['pod', i, 'file', null]), 20);
+                            setTimeout(() => this.a_mp3(['pod', i, 'volume', 0]), 20);
+                            setTimeout(() => this.a_mp3(['pod', i, 'playing',false]), 20);
+                        });
+
+
+                    } else {
+                        this.mapstore.markerDists.forEach((d, i) => {
+
+                            let dm = d.dist * 1000;
+                            if (dm > 0 && dm < limit) {
+                                let marker = this.mapstore.markers[d.id];
+                                let volume = Math.max(0, Math.floor((limit - dm) * 100 / limit));
+                                //let volume =  Math.floor(Math.max(0,100-18*Math.sqrt(dm)));
+
+                                if (marker.spotifytype === 'episode') {
+                                    let already_has = null;
+                                    let paused_pods = [];
+
+                                    this.mp3.pods.forEach((p, i) => {
+                                        if (p.file === marker.mp3){
+                                            already_has = {num: i, ...p};
+                                        }
+
+                                        if (!p.playing){
+                                            this.a_mp3(['pod', i, 'file', '']);
+                                            this.a_mp3(['pod', i, 'volume', 0]);
+                                            this.a_mp3(['pod', i, 'playing', false]);
+                                            paused_pods.push(i);
+                                        }
+                                    });
+
+                                    if (already_has) {
+                                        console.log("already_has");
+                                        if (!already_has.playing) {
+                                            setTimeout(() => this.a_mp3(['pod', already_has.num, 'file', marker.mp3]), 10);
+                                            setTimeout(() => this.a_mp3(['pod', already_has.num, 'volume', volume + Math.floor(Math.random() * 2)]), 10);
+
+                                            //this.a_mp3(['pod', already_has.num, 'playing', false]);
+                                            setTimeout(() => this.a_mp3(['pod', already_has.num, 'playing', true+Math.floor(Math.random() * 3)]), 20);
+                                        } else {
+                                            //すでに再生中は、ボリューが変わる程度
+
+                                            //setTimeout(() => this.a_mp3(['pod', already_has.num, 'playing', true]), 10);
+                                            console.log("changevolume:", volume);
+                                            console.log('pod', already_has.num, 'volume', volume);
+                                            //this.a_mp3(['pod', already_has.num, 'volume', volume + Math.floor(Math.random() * 2)]);
+                                            setTimeout(() => this.a_mp3(['pod', already_has.num, 'volume', volume + Math.floor(Math.random() * 2)]), 20);
+                                        }
+
+                                    } else if (paused_pods.length > 0) {
+                                        setTimeout(() => this.a_mp3(['pod', paused_pods[0], 'file', marker.mp3]), 10);
+                                        setTimeout(() => this.a_mp3(['pod', paused_pods[0], 'volume', volume]), 10);
+                                        setTimeout(() => this.a_mp3(['pod', paused_pods[0], 'playing', true]), 20);
+
+                                    } else {
+                                        console.log("all pods are used...");
+                                    }
+                                }
+                            }
+                        })
+                    }
+                }
+            },
+
+
+            distMarkerActionUpdate_old() {
+
                 console.log("this.mapstore.triggerDist=",this.mapstore.emory.triggerDist);
 
                 if (!!this.mapstore.markerDists) {
@@ -165,26 +241,36 @@
                                     let paused_pods = [];
 
                                     this.mp3.pods.forEach((p, i) => {
-                                        if (p.file === marker.mp3) already_has = {num: i, ...p};
-                                        if (!p.playing) paused_pods.push(i);
+                                        if (p.file === marker.mp3){
+                                            already_has = {num: i, ...p};
+                                        }
+
+                                        if (!p.playing || p.volume===0){
+                                            this.a_mp3(['pod', i, 'file', '']);
+                                            this.a_mp3(['pod', i, 'volume', 0]);
+                                            this.a_mp3(['pod', i, 'playing', false]);
+                                            paused_pods.push(i);
+                                        }
                                     });
 
                                     if (already_has) {
                                         console.log("already_has");
                                         if (!already_has.playing) {
                                             setTimeout(() => this.a_mp3(['pod', already_has.num, 'file', marker.mp3]), 20);
-                                            setTimeout(() => this.a_mp3(['pod', already_has.num, 'volume', volume]), 20);
+                                            setTimeout(() => this.a_mp3(['pod', already_has.num, 'volume', volume]), 10);
                                             setTimeout(() => this.a_mp3(['pod', already_has.num, 'playing', true]), 20);
                                         } else {
                                             //すでに再生中は、ボリューが変わる程度
+                                            //setTimeout(() => this.a_mp3(['pod', already_has.num, 'playing', true]), 20);
                                             console.log("changevolume:", volume);
                                             console.log('pod', already_has.num, 'volume', volume);
-                                            setTimeout(() => this.a_mp3(['pod', already_has.num, 'volume', volume + Math.floor(Math.random() * 8)]), 20);
+                                            this.a_mp3(['pod', already_has.num, 'volume', volume + Math.floor(Math.random() * 5)]);
+                                            setTimeout(() => this.a_mp3(['pod', already_has.num, 'volume', volume + Math.floor(Math.random() * 5)]), 10);
                                         }
 
                                     } else if (paused_pods.length > 0) {
                                         setTimeout(() => this.a_mp3(['pod', paused_pods[0], 'file', marker.mp3]), 20);
-                                        setTimeout(() => this.a_mp3(['pod', paused_pods[0], 'volume', volume]), 20);
+                                        setTimeout(() => this.a_mp3(['pod', paused_pods[0], 'volume', volume]), 10);
                                         setTimeout(() => this.a_mp3(['pod', paused_pods[0], 'playing', true]), 20);
 
                                     } else {
