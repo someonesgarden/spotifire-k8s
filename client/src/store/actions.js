@@ -132,7 +132,8 @@ export const a_mapstore = ({commit},[type, action, data]) => {
 
         emory:{
             setprojects:(data)   => commit('mapstore/setEmoryProjects',data),
-            setproject:(data)   => commit('mapstore/setEmoryProject',data)
+            setproject:(data)   => commit('mapstore/setEmoryProject',data),
+            setTriggerDist:(data)=> commit('mapstore/setTriggerDist',data)
         }
     }
     actions[type][action](data)

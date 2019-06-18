@@ -7,6 +7,7 @@ const state = {
                 zoom:19
             }
         },
+        triggerDist:20,
         all:'-LgQfo9-XfQHou8ixUre',
         project: "プロジェクトを選択してください"
     }
@@ -14,6 +15,10 @@ const state = {
 }
 
 const mutations = {
+    setTriggerDist(state,val){
+        state.emory.triggerDist = val;
+    },
+
     setEmoryProjects(state,val){
         state.emory.projects = val;
     },

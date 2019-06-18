@@ -102,6 +102,14 @@
                                 <mu-col span="12" sm="12" md="12" lg="12" xl="12" style="width:100%;text-align:center;" v-else>
                                     <h1 style="margin:4px auto;">プロジェクトを選択してください。</h1>
                                 </mu-col>
+                                <mu-col span="12" sm="12" md="12" lg="12" xl="12" style="width:100%;text-align:center;">
+                                    <mu-select label="有効範囲" prop="triggerDist" :value="mapstore.emory.triggerDist" @change="(val)=>a_mapstore(['emory','setTriggerDist',val])">
+                                        <mu-option  label="8m" :value="8"></mu-option>
+                                        <mu-option  label="10m" :value="10"></mu-option>
+                                        <mu-option  label="20m" :value="20"></mu-option>
+                                        <mu-option  label="30m" :value="30"></mu-option>
+                                    </mu-select>
+                                </mu-col>
                             </div>
 
                             <mu-flex justify-content="center" align-items="center" direction="row">
@@ -272,6 +280,9 @@
         },
         data() {
             return {
+                //google GeoCoder
+                geocoder: {},
+
                 //SOCKET.IO(not in use)
                 socket:     null,
                 //MODE
@@ -352,8 +363,10 @@
             this.projsRef   = firebase.database().ref('projects');
         },
         mounted() {
-
             this.switchLayer('info');
+
+            // Geocoder
+            //this.geocoder = new google.maps.Geocoder();
 
             //IDがある場合
             if(this.spotify.me.id){

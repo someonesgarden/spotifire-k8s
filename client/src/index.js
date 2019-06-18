@@ -45,15 +45,31 @@ import firebase from "firebase"
 Vue.config.productionTip = false
 
 // Initialize Firebase
+// let config = {
+//   apiKey: process.env.FIREBASE_APIKEY,
+//   authDomain: process.env.FIREBASE_AUTHDOMAIN,
+//   databaseURL: "https://emory-76722.firebaseio.com",
+//   projectId: "emory-76722",
+//   storageBucket: "emory-76722.appspot.com",
+//   messagingSenderId: process.env.FIREBASE_SENDERID,
+//   appId:process.env.FIREBASE_APPID,
+// };
+
 let config = {
-  apiKey: process.env.FIREBASE_APIKEY,
-  authDomain: process.env.FIREBASE_AUTHDOMAIN,
+  apiKey: "",
+  authDomain: "",
   databaseURL: "https://emory-76722.firebaseio.com",
   projectId: "emory-76722",
   storageBucket: "emory-76722.appspot.com",
-  messagingSenderId: process.env.FIREBASE_SENDERID,
-  appId:process.env.FIREBASE_APPID,
+  messagingSenderId: "",
+  appId:"",
 };
+
+console.log("process");
+console.log(process);
+console.log("process.env");
+console.log(process.env);
+
 firebase.initializeApp(config);
 
 

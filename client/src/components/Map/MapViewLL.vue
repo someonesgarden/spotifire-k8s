@@ -1,19 +1,24 @@
 <template>
-        <l-map ref="map"
-               :zoom="mapstore.map.zoom"
-               :center="mapstore.map.center"
-               :max-zoom="18"
-               :max-native-zoom="18"
-               :min-zoom="0"
-               @click="(val)=> $emit('mapClick',val)">
-            <l-tile-layer :url="mapstore.map.url" :attribution="mapstore.map.attribution"></l-tile-layer>
-            <my-marker v-if="mapstore.markers && mapstore.mainuser" v-for="(marker,id) in sortedMarkers" :marker="marker" :key="'marker'+id" :id="id" @mClick="$emit('mClick',marker,id)"></my-marker>
+        <div class="mapview">
+<!--            <div class="search" ref="search" @change="searchAddress">-->
+<!--                <mu-text-field v-model="search.term" placeholder="address.." class="searchform"></mu-text-field>-->
+<!--            </div>-->
+            <l-map ref="map"
+                   :zoom="mapstore.map.zoom"
+                   :center="mapstore.map.center"
+                   :max-zoom="18"
+                   :max-native-zoom="18"
+                   :min-zoom="0"
+                   @click="(val)=> $emit('mapClick',val)">
+                <l-tile-layer :url="mapstore.map.url" :attribution="mapstore.map.attribution"></l-tile-layer>
+                <my-marker v-if="mapstore.markers && mapstore.mainuser" v-for="(marker,id) in sortedMarkers" :marker="marker" :key="'marker'+id" :id="id" @mClick="$emit('mClick',marker,id)"></my-marker>
 
-            <my-marker v-if="mapstore.mainuser && mapstore.mainuser.id==='GUEST'" :marker="mapstore.mainuser"></my-marker>
+                <my-marker v-if="mapstore.mainuser && mapstore.mainuser.id==='GUEST'" :marker="mapstore.mainuser"></my-marker>
 
-            <my-tooltip v-if="mapstore.emory.projects" v-for="(project,id) in mapstore.emory.projects" :title="project.title" :center="project.center" :key="'proj'+id" @pClick="$emit('pClick',project,id)"></my-tooltip>
-            <l-polygon :lat-lngs="mapstore.map.poly" color="#1DEA6E"  v-if="mapstore.map.poly"/>
-        </l-map>
+                <my-tooltip v-if="mapstore.emory.projects" v-for="(project,id) in mapstore.emory.projects" :title="project.title" :center="project.center" :key="'proj'+id" @pClick="$emit('pClick',project,id)"></my-tooltip>
+                <l-polygon :lat-lngs="mapstore.map.poly" color="#1DEA6E"  v-if="mapstore.map.poly"/>
+            </l-map>
+        </div>
 </template>
 <script>
 
@@ -40,6 +45,9 @@
         },
         data() {
             return {
+                search:{
+                    term:""
+                },
                 track_max:0,
                 trackTimeout: false,
                 timeout: null,
@@ -73,6 +81,10 @@
 
         methods: {
             ...mapActions(['a_mapstore','a_ws','a_mp3','a_index']),
+
+            searchAddress(){
+              console.log(this.search.term);
+            },
 
             setView(center,zoom){
                 this.$refs.map.mapObject.setView(center,zoom);
@@ -123,6 +135,8 @@
 
             distMarkerActionUpdate() {
 
+                console.log("this.mapstore.triggerDist=",this.mapstore.emory.triggerDist);
+
                 if (!!this.mapstore.markerDists) {
 
                     if (this.mapstore.markerDists.every(d => d.dist === 0 || d.dist > 0.03)) {
@@ -137,10 +151,12 @@
 
                     } else {
                         this.mapstore.markerDists.forEach((d, i) => {
+                            let limit = parseInt(this.mapstore.emory.triggerDist);
+
                             let dm = d.dist * 1000;
-                            if (dm > 0 && dm < 30) {
+                            if (dm > 0 && dm < limit) {
                                 let marker = this.mapstore.markers[d.id];
-                                let volume = Math.max(0, Math.floor((30 - dm) * 100 / 30));
+                                let volume = Math.max(0, Math.floor((limit - dm) * 100 / limit));
                                 //let volume =  Math.floor(Math.max(0,100-18*Math.sqrt(dm)));
 
                                 if (marker.spotifytype === 'episode') {
@@ -198,4 +214,27 @@
 </script>
 <style lang="scss">
     @import "~leaflet/dist/leaflet.css";
+
+    .mapview{
+        width:100%;
+        height:100%;
+
+        .search{
+            width:100%;
+            height:40px;
+            z-index:502;
+            padding:0 62px;
+            position:absolute;
+            top:0;
+            left:0;
+            background-color: rgba(255, 225, 255, 0.30);
+            text-align:center;
+            .searchform{
+                margin:3px auto;
+                width:100%;
+            }
+
+        }
+
+    }
 </style>
