@@ -62,8 +62,31 @@
                 handler(newPlaying){
                     console.log("[AudioPlayer] pod.playing"+this.num, newPlaying);
                     if (newPlaying) { return this.audio.play(); }
+
+                    // let targetVol = 0.1;
+                    // //フェードアウト
+                    // let fadeout_intv= setInterval(()=>{
+                    //     console.log("fadeout!",this.audio.volume);
+                    //     this.audio.volume -= (this.audio.volume - targetVol)*0.2;
+                    //     if(this.audio.volume <= targetVol) {
+                    //         this.audio.volume = 0.0;
+                    //         this.audio.pause();
+                    //         this.a_mp3(['pod', this.num,'playing', false]);
+                    //         clearInterval(fadeout_intv);
+                    //     }
+                    // },300);
+
+                    // this.audio.volume = this.audio.volume/2;
+                    // setTimeout(()=> this.audio.volume = this.audio.volume/4, 200);
+                    // setTimeout(()=>{
+                    //     console.log("fade to stop");
+                    //     this.audio.pause();
+                    //     this.a_mp3(['pod', this.num,'playing', false]);
+                    // },300);
+
                     this.audio.pause();
                     this.a_mp3(['pod', this.num,'playing', false]);
+
                 }
             },
 
