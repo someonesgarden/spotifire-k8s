@@ -96,10 +96,10 @@
                     this.trackTimeout = true;
                     this.timeout = setTimeout(this.keepTracking, this.mapstore.trackDuration);
 
-                    if(this.track_max>150){
+                    if(this.track_max>450){
                         this.a_mapstore(['set', 'tracking', false]);
                         this.track_max=0;
-                        this.a_index(['alert','set',"5分経過したためトラッキングを停止します。再度「PLAY」から再生してください"]);
+                        this.a_index(['alert','set',"15分経過したためトラッキングを停止します。再度「PLAY」から再生してください"]);
                         this.a_index(['alert','open']);
                     }else{
                         this.track_max++;
@@ -139,7 +139,9 @@
 
                 if (!!this.mapstore.markerDists) {
 
-                    if (this.mapstore.markerDists.every(d => d.dist === 0 || d.dist > 0.03)) {
+                    let limit = parseInt(this.mapstore.emory.triggerDist);
+
+                    if (this.mapstore.markerDists.every(d => d.dist === 0 || d.dist > limit/1000)) {
                         //全てが範囲外なら、プレイヤーをリセット
                         console.log("reset all");
                         this.mp3.pods.forEach((p, i) => {
@@ -151,7 +153,6 @@
 
                     } else {
                         this.mapstore.markerDists.forEach((d, i) => {
-                            let limit = parseInt(this.mapstore.emory.triggerDist);
 
                             let dm = d.dist * 1000;
                             if (dm > 0 && dm < limit) {
