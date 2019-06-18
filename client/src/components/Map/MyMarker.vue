@@ -44,8 +44,6 @@
             ...mapGetters(['mapstore']),
 
             iconImg(){
-                console.log("iconImg",this.marker.id, this.mapstore.mainuser.id);
-
                 let icontype = (this.marker.id === this.mapstore.mainuser.id) ? 'you' : this.marker.type;
                 icontype     = this.marker.id === 'GUEST' ? 'you' : icontype;
 

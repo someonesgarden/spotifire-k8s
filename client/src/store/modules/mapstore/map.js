@@ -18,7 +18,7 @@ const state = {
         poly:null,
         update:new Date()
     },
-    geocodingOptions : {enableHighAccuracy: true, timeout : 5000, maximumAge: 0},
+    geocodingOptions : {enableHighAccuracy: true, timeout : 3000, maximumAge: 0},
     geocodingOptions2:{enableHighAccuracy: true, timeout: 6000, maximumAge: 600000}
 }
 

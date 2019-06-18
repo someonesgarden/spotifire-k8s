@@ -45,6 +45,7 @@
         },
         data() {
             return {
+                watchID:null,
                 search:{
                     term:""
                 },
@@ -119,7 +120,10 @@
             },
 
             geolocation() {
-                if(!!navigator.geolocation) navigator.geolocation.getCurrentPosition(this.geoSuccess,this.geoError,this.mapstore.map.geocodingOptions);
+                if(!!navigator.geolocation){
+                    this.watchID = navigator.geolocation.watchPosition(this.geoSuccess,this.geoError,this.mapstore.map.geocodingOptions);
+                }
+                //if(!!navigator.geolocation) navigator.geolocation.getCurrentPosition(this.geoSuccess,this.geoError,this.mapstore.map.geocodingOptions);
             },
 
             geoSuccess(position){
@@ -131,6 +135,8 @@
                     this.distOfProjPoints();
                     this.distMarkerActionUpdate();
                 }
+
+                navigator.geolocation.clearWatch(this.watchID);
             },
 
             distMarkerActionUpdate() {

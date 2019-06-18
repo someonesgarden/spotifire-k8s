@@ -69,10 +69,11 @@
 
             'pod.volume':{
                 handler(newVol){
-                    console.log("[AP("+this.num+")] Volume change!");
-                    console.log(newVol);
-                    this.showVolume   = true;
-                    this.audio.volume = newVol / 100;
+                        console.log("[AP("+this.num+")] Volume change!");
+
+                        this.showVolume   = true;
+                        this.audio.volume = Math.min(newVol / 100,1);
+                    console.log( Math.min(newVol / 100,1));
                 }
             }
         },
