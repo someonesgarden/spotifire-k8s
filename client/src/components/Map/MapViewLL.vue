@@ -298,20 +298,20 @@
 
                     let dist_delta = this.distKmOfTwo(this.center.lat,this.center.lng,center.lat,center.lng);
 
-                    if(dist_delta>0.05){
+                    if(dist_delta>0.03){
                         //50メートル以上は明らかに誤差
                         center = this.center;
-                    }else if(dist_delta>0.02){
+                    }else if(dist_delta>0.01){
                         //20メートル以上は中間地点
-                        center =  {lat:(this.center.lat+center.lat)/2, lng:(this.center.lng+center.lng)/2};
+                        center =  {lat:(2*this.center.lat+center.lat)/3, lng:(2*this.center.lng+center.lng)/3};
                     }
-
-                    this.center = center;
 
                     //地図のセンターリセット
                     this.a_mapstore(['center', 'map', center]);
                     //メインユーザー位置をリセット(Firebaseのエントリーを更新）
                     if (this.mapstore.mainuser && this.mapstore.mainuser.id) new M({...this.mapstore.mainuser, center: center}).update(this.markersRef);
+
+                    this.center = center;
                 }
             }
         }
