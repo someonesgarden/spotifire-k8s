@@ -76,16 +76,15 @@
             <!-- PLAY OVERLAY-->
             <div class="play_overlay overlay" ref="play_overlay" :class="{hide:!mapstore.mainuser}">
                 <mu-flex class="info_box"　justify-content="center" align-items="center" direction="column" style="height:100%;">
-                    <mu-flex justify-content="center" align-items="center" direction="column" style="width:100%;height:100%;padding:20px;">
-                        <mu-flex justify-content="center" align-items="center" direction="column" class="inner" style="background-color:rgba(31, 6, 6, 0.19);height:100%;width:100%;border-radius:6px;padding:15px 22px;">
+                    <mu-flex justify-content="center" align-items="center" direction="column" style="width:100%;height:100%;padding:8px;">
+                        <mu-flex justify-content="center" align-items="center" direction="column" class="inner" style="background-color:rgba(35,230,169,0.9);height:100%;width:100%;border-radius:6px;padding:6px;">
 
-                            <div gutter style="width:100%;" v-if="mapstore.emory.project">
+                            <div gutter style="width:100%;margin-top:-16px;" v-if="mapstore.emory.project">
 
                                 <mu-col class="info_col" span="12" sm="12" md="12" lg="12" xl="12" style="float:left;" v-if="mapstore.emory.projects[mapstore.emory.project]">
-                                    <mu-card style="width: 100%; margin: 0 auto; background-color:rgba(3,3,3,0.36);">
+                                    <mu-card raised style="width: 100%; margin: 0 auto;background-color:rgb(41, 41, 93);">
 
                                         <div class="play_card_img">
-
                                             <mu-card-media
                                                     :title="mapstore.emory.projects[mapstore.emory.project].title"
                                                     :sub-title="mapstore.emory.projects[mapstore.emory.project].desc">
@@ -100,10 +99,10 @@
                                 </mu-col>
 
                                 <mu-col span="12" sm="12" md="12" lg="12" xl="12" style="width:100%;text-align:center;" v-else>
-                                    <h1 style="margin:4px auto;">プロジェクトを選択してください。</h1>
+                                    <h1 style="margin:4px auto;color:black;">プロジェクトを選択してください。</h1>
                                 </mu-col>
                                 <mu-col span="12" sm="12" md="12" lg="12" xl="12" style="width:100%;text-align:center;">
-                                    <mu-select label="有効範囲" prop="triggerDist" :value="mapstore.emory.triggerDist" @change="(val)=>a_mapstore(['emory','setTriggerDist',val])">
+                                    <mu-select label="有効範囲" prop="triggerDist" :value="mapstore.emory.triggerDist" @change="(val)=>a_mapstore(['emory','setTriggerDist',val])" style="margin-bottom:0;padding-bottom:0;">
                                         <mu-option  label="8m" :value="8"></mu-option>
                                         <mu-option  label="10m" :value="10"></mu-option>
                                         <mu-option  label="20m" :value="20"></mu-option>
@@ -648,9 +647,9 @@
     .play_card_img {
 
         width: 100%;
-        max-width: 280px !important;
+        max-width: 210px !important;
         text-align: center;
-        padding: 10px;
+        padding: 5px;
         margin: 0 auto;
 
         img {
@@ -662,12 +661,13 @@
 
     .info_col {
         .mu-card-title-container {
-            padding: 8px;
+            padding: 6px;
         }
 
         .mu-card-title{
             font-size:20px;
             color: #fff;
+            line-height:26px;
         }
 
         .mu-card-sub-title{

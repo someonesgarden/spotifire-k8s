@@ -6,7 +6,7 @@
     </mu-container>
 
     <!-- MP3 EPISODE PLAYER-->
-    <div class="mp3_players" v-if="$route.name ==='Map' && !!mp3.pods ">
+    <div class="mp3_players" v-if="$route.name ==='Map' && !!mp3.pods">
       <audio-player :key="'pod'+index" :num="index" :pod="pod" v-for="(pod,index) in mp3.pods"></audio-player>
     </div>
     <!--/ MP3 EPISODE PLAYER-->

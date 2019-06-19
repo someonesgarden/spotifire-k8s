@@ -2,7 +2,7 @@ const state = {
     emory: {
         projects: {
             all: {
-                title: '赤坂見附',
+                title: '読み込み中です...',
                 center: {lat:35.67104,lng:139.734547},
                 zoom:19
             }
