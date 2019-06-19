@@ -482,7 +482,6 @@
                 }else{
                     //自分とpointの距離を測る
                     let mainuser = this.mapstore.markers[this.mapstore.mainuser.id];
-                    let dist = this.distKmofCenters(mainuser.center, val.center);
 
                     if(val.spotifytype==='track'){
                         this.c_getTrack(val.spotifyid,(res)=>{
@@ -495,10 +494,11 @@
 
                     }else if(val.spotifytype==='episode'){
                         //ポッドキャストepisodeの場合、mp3プレイヤーを開く
-                        this.a_index(['bottom','open']);
+                        //this.a_index(['bottom','open']);
+                        this.a_mp3(['pod', 0, 'playing',false]);
                         setTimeout(()=> this.a_mp3(['pod',0,'file',val.mp3]),100);
-                        setTimeout(()=> this.a_mp3(['pod',0,'volume',6]),100);
-                        setTimeout(()=> this.a_mp3(['pod',0,'playing', true]),100);
+                        setTimeout(()=> this.a_mp3(['pod',0,'volume',75]),100);
+                        setTimeout(()=> this.a_mp3(['pod',0,'playing', true+Math.floor(Math.random() * 3)]),100);
                     }
                 }
             },
@@ -592,7 +592,7 @@
 
                     case 'play':
                         info_overlay.style.visibility = 'hidden';
-                        play_overlay.style.zIndex = 401;
+                        play_overlay.style.zIndex = 1001;
                         net_overlay.style.zIndex = -1;
                         edit_overlay.style.zIndex = -1;
                         break;
@@ -647,7 +647,7 @@
     .play_card_img {
 
         width: 100%;
-        max-width: 210px !important;
+        max-width: 200px !important;
         text-align: center;
         padding: 5px;
         margin: 0 auto;

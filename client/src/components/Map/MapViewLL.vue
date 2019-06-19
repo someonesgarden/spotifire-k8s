@@ -191,11 +191,11 @@
                                     if (already_has) {
                                         console.log("already_has");
                                         if (!already_has.playing) {
-                                            setTimeout(() => this.a_mp3(['pod', already_has.num, 'file', marker.mp3]), 10);
-                                            setTimeout(() => this.a_mp3(['pod', already_has.num, 'volume', volume + Math.floor(Math.random() * 2)]), 10);
+                                            setTimeout(() => this.a_mp3(['pod', already_has.num, 'file', marker.mp3]), 100);
+                                            setTimeout(() => this.a_mp3(['pod', already_has.num, 'volume', volume + Math.floor(Math.random() * 2)]), 100);
 
                                             //this.a_mp3(['pod', already_has.num, 'playing', false]);
-                                            setTimeout(() => this.a_mp3(['pod', already_has.num, 'playing', true+Math.floor(Math.random() * 3)]), 20);
+                                            setTimeout(() => this.a_mp3(['pod', already_has.num, 'playing', true+Math.floor(Math.random() * 3)]), 200);
                                         } else {
                                             //すでに再生中は、ボリューが変わる程度
 
@@ -203,13 +203,14 @@
                                             console.log("changevolume:", volume);
                                             console.log('pod', already_has.num, 'volume', volume);
                                             //this.a_mp3(['pod', already_has.num, 'volume', volume + Math.floor(Math.random() * 2)]);
-                                            setTimeout(() => this.a_mp3(['pod', already_has.num, 'volume', volume + Math.floor(Math.random() * 2)]), 20);
+                                            setTimeout(() => this.a_mp3(['pod', already_has.num, 'volume', volume + Math.floor(Math.random() * 2)]), 100);
                                         }
 
                                     } else if (paused_pods.length > 0) {
-                                        setTimeout(() => this.a_mp3(['pod', paused_pods[0], 'file', marker.mp3]), 10);
-                                        setTimeout(() => this.a_mp3(['pod', paused_pods[0], 'volume', volume]), 10);
-                                        setTimeout(() => this.a_mp3(['pod', paused_pods[0], 'playing', true]), 20);
+
+                                        setTimeout(() => this.a_mp3(['pod', paused_pods[0], 'file', marker.mp3]), 100);
+                                        setTimeout(() => this.a_mp3(['pod', paused_pods[0], 'volume', volume]), 100);
+                                        setTimeout(() => this.a_mp3(['pod', paused_pods[0], 'playing', true+Math.floor(Math.random() * 3)]), 200);
 
                                     } else {
                                         console.log("all pods are used...");
