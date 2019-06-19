@@ -21,6 +21,8 @@
                             </mu-button>
                         </div>
 
+                        <mu-icon value="build" :size="20" color="black" style="position:absolute;top:10px;right:10px;" @click="switchLayer('edit')"></mu-icon>
+
                         <div class="map_toggle">
                             <mu-button full-width color="purple800" @click="switchLayer('map')">
                                 <mu-icon value="map" :size="15"></mu-icon>&nbsp;MAP
@@ -65,8 +67,8 @@
                     <mu-flex class="info_box play" justify-content="center" align-items="center" direction="column" fill @click="switchLayer('play')">
                         <mu-icon value="pets" :size="20"></mu-icon>play.
                     </mu-flex>
-                    <mu-flex class="info_box edit" justify-content="center" align-items="center" direction="column" fill @click="switchLayer('edit')">
-                        <mu-icon value="build" :size="20"></mu-icon>edit.
+                    <mu-flex class="info_box area" justify-content="center" align-items="center" direction="column" fill @click="$router.push('/maparea')">
+<!--                        <mu-icon value="build" :size="20"></mu-icon>edit.-->
                     </mu-flex>
                 </mu-flex>
 

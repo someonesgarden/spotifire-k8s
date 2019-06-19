@@ -290,6 +290,12 @@
           background-color: rgba(54, 10, 125, 0.56);
         }
 
+        &.area{
+          background-image:url('/static/img/emory/area_banner1.jpg');
+          background-size:cover;
+          background-position:center center;
+        }
+
         &.play {
           background-color: rgba(3, 50, 109, 0.55);
         }
