@@ -129,6 +129,7 @@
 
                        this.zoom = this.project.zoom;
                        this.minZoom = this.project.zoom;
+                       if(this.project.imgurl) this.imgurl = this.project.imgurl;
 
                    }
                });
@@ -152,7 +153,8 @@
                         ...this.project,
                         zoom: this.zoom,
                         LBBound: this.LBBound,
-                        RTBound: this.RTBound
+                        RTBound: this.RTBound,
+                        imgurl:this.imgurl
                     };
                     this.projsRef.update(updates);
                 }
