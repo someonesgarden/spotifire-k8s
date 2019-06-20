@@ -10,11 +10,13 @@ import News from '../components/News.vue';
 import Login from '../components/Login.vue';
 import Analysis from '../components/Analysis.vue';
 import MapArea from '../components/MapAreaPage.vue';
+import MapAdmin from '../components/MapAdmin.vue';
 
 let routes =  [
   { path:'/login',   name: 'Login',   component: Login},
   { path:'/news',    name: 'News',    component: News,     meta: { requiresAuth: true }},
   { path:'/map',     name: 'Map',     component: Map,      meta: { requiresAuth: true }},
+  { path:'/mapadmin',name: 'MapAdmin',component: MapAdmin, meta: { requiresAuth: true }},
   { path:'/maparea', name: 'MapArea', component: MapArea,  meta: { requiresAuth: true }},
   { path:'/analysis',name: 'Analysis',component: Analysis, meta: { requiresAuth: true }},
   { path:'/',        name: 'Home',    component: Home,     meta: { requiresAuth: true }},

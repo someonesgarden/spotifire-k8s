@@ -9,10 +9,10 @@
                 <bounce-loader class="bounce-loader" v-if="mapstore.tracking"></bounce-loader>
 
                 <mu-flex class="info_menu" justify-content="center" align-items="center">
-                    <mu-flex class="info_box how" justify-content="center" align-items="center" direction="column" fill>
-                        <img src="/static/img/emory_logo1.png" style="width:180px;height:auto;">
+                    <mu-flex class="info_box how" justify-content="center" align-items="center" direction="column" fill style="background-color:rgba(20,30,23,0.69);">
+                        <img src="/static/img/emory_logo1_admin.png" style="width:180px;height:auto;">
 
-                        <mu-icon value="build" :size="20" color="white" style="position:absolute;bottom:10px;left:10px;" @click="goMap(false,'/mapadmin')"></mu-icon>
+                        <mu-icon value="play_circle_outline" :size="20" color="white" style="position:absolute;bottom:10px;left:10px;" @click="goMap(false,'/map')"></mu-icon>
 
                         <div class="geo_status">
                             <mu-button full-width color="cyan400" @click="trackToggle" v-if="mapstore.tracking">
@@ -64,11 +64,11 @@
                 </mu-flex>
 
                 <mu-flex class="info_menu" justify-content="center" align-items="center" v-if="mapstore.emory.project">
-                    <mu-flex class="info_box play" justify-content="center" align-items="center" direction="column" fill @click="switchLayer('play')">
-                        <mu-icon value="pets" :size="20"></mu-icon>play.
+                    <mu-flex class="info_box play" justify-content="center" align-items="center" direction="column" fill  @click="switchLayer('edit')">
+                        <mu-icon value="build" :size="20"></mu-icon>marker.
                     </mu-flex>
-                    <mu-flex class="info_box area" justify-content="center" align-items="center" direction="column" fill @click="$router.push('/maparea')">
-<!--                        <mu-icon value="build" :size="20"></mu-icon>edit.-->
+                    <mu-flex class="info_box edit" justify-content="center" align-items="center" direction="column" fill @click="$router.push('/maparea')">
+                        <mu-icon value="build" :size="20"></mu-icon>area.
                     </mu-flex>
                 </mu-flex>
 
@@ -127,40 +127,95 @@
             </div>
             <!--/ PLAY OVERLAY-->
 
-            <!-- NET OVERLAY -->
-            <div class="net_overlay overlay" ref="net_overlay"  :class="{hide:!mapstore.mainuser}">
-
-                <mu-flex class="info_box"　justify-content="center" align-items="center" direction="column" style="height:100%;">
-
+            <!--EDIT OVERLAY-->
+            <div class="edit_overlay overlay" ref="edit_overlay"  :class="{hide:!mapstore.mainuser}">
+                <mu-flex class="info_box" justify-content="center" align-items="center" direction="column" style="height:100%;">
                     <h1>
-                        <mu-icon value="network_check" :size="20"></mu-icon>
-                        socket.io.
+                        <mu-icon value="build" :size="20"></mu-icon>
+                        edit.
+                        <span v-if="editing.type==='marker'"> - マーカー編集  </span>
+                        <span v-else> - プロジェクト編集 </span>
                     </h1>
-                    <h2>WebSocketを経由してリアルタイムにつながったユーザーを確認します。</h2>
+                    <h2 v-if="!newMarker.center">「編集」で表示される地図をクリックすると座標選択できます。</h2>
+                    <h2 v-else>このポイントを保存する場合は「保存」を押してください。</h2>
+                    <br>
 
-                    <mu-list style="width:inherit;">
-                        <map-user-item :user="user" v-for="(user,key,index) in ws.users" :key="'user'+key+index"/>
-                    </mu-list>
+                    <mu-form :model="newMarker" ref="newmarkerform" :label-position="'top'" label-width="100" v-if="newMarker.center && editing.type==='marker'" class="range edit_form">
+                        <img :src="newMarker.thumb" v-if="newMarker.thumb">
+                        <mu-form-item prop="title" :rules="blankRules">
+                            <mu-text-field prop="title" placeholder="マーカーのタイトル" v-model="newMarker.title"/>
+                        </mu-form-item>
+                        <mu-form-item prop="desc" :rules="blankRules">
+                            <mu-text-field prop="desc" placeholder="メモ（20文字以内）" v-model="newMarker.desc"/>
+                        </mu-form-item>
+
+                        <mu-form-item prop="isEpisode" :label="newMarker.isEpisode ? 'エピソード' : 'トラック'">
+                            <mu-switch v-model="newMarker.isEpisode"></mu-switch>
+                        </mu-form-item>
+
+                        <mu-form-item prop="spotifyid" :rules="blankRules">
+                            <mu-select prop="spotifyid" color="primary" v-model="newMarker.spotifyid" v-if="newMarker.isEpisode && spotify.episodes">
+                                <mu-option  :label="epi.name" :value="epi.id" v-for="(epi,inx) in spotify.episodes.items" :key="'epi'+inx"></mu-option>
+                            </mu-select>
+                            <mu-text-field prop="spotifyid" placeholder="Track ID" v-model="newMarker.spotifyid" v-else/>
+
+                        </mu-form-item>
+                        <mu-form-item prop="type">
+                            <mu-select prop="type" color="primary" v-model="newMarker.type">
+                                <mu-option  label="スポット"  value="spot"></mu-option>
+                                <mu-option  label="人"       value="person"></mu-option>
+                                <mu-option  label="その他"    value="other"></mu-option>
+                            </mu-select>
+                        </mu-form-item>
+                        <mu-form-item prop="project" label="プロジェクトを選択" :rules="blankRules">
+                            <mu-select  prop="project" :value="newMarker.project ? newMarker.project : 'プロジェクトを選んでください'" @change="(val)=>newMarker.project=val">
+                                <mu-option v-for="(p,key,inx) in mapstore.emory.projects" :key="'proj'+key" :label="p.title" :value="key"></mu-option>
+                            </mu-select>
+                        </mu-form-item>
+
+                        <mu-form-item prop="radio" label="公開">
+                            <mu-radio v-model="newMarker.public" value="open" label="公開"></mu-radio>
+                            <mu-radio v-model="newMarker.public" value="close" label="非公開"></mu-radio>
+                        </mu-form-item>
+
+                        <mu-flex justify-content="center" align-items="center" direction="row">
+                            <mu-button color="red"      class="smallbtn" @click="delFirebase(markersRef,newMarker.id)" v-if="newMarker.id"><mu-icon value="delete_forever" :size="20"></mu-icon>&nbsp;削除</mu-button>
+                            <mu-button color="info"     class="smallbtn" @click="saveNewMarker"     v-if="newMarker.center"><mu-icon value="save" :size="20"></mu-icon>&nbsp;保存</mu-button>
+                        </mu-flex>
+                    </mu-form>
+
+                    <mu-form :model="newProject" ref="newprojectform" :label-position="'top'" label-width="100" v-if="newProject.center && editing.type==='project'" class="range edit_form">
+                        <img :src="newProject.thumb" v-if="newProject.thumb">
+                        <mu-form-item prop="title" :rules="blankRules">
+                            <mu-text-field prop="title" placeholder="プロジェクトのタイトル" v-model="newProject.title"/>
+                        </mu-form-item>
+                        <mu-form-item prop="desc" :rules="blankRules">
+                            <mu-text-field prop="desc" placeholder="プロジェクトの概要(100文字程度）" multi-line :rows="2" v-model="newProject.desc"/>
+                        </mu-form-item>
+                        <mu-form-item prop="spotifyid" :rules="blankRules">
+                            <mu-text-field prop="spotifyid" placeholder="Spotify ID" v-model="newProject.spotifyid"/>
+                            <mu-select prop="spotifyid" color="primary" v-model="newProject.spotifyid" v-if="spotify.playlists">
+                                <mu-option  :label="pro.name" :value="pro.id" v-for="(pro,inx) in spotify.playlists.items" :key="'pro'+inx"></mu-option>
+                            </mu-select>
+
+                        </mu-form-item>
+
+                        <mu-flex justify-content="center" align-items="center" direction="row">
+                            <mu-button color="red"      class="smallbtn" @click="delFirebase(projsRef,newProject.id)" v-if="newProject.id"><mu-icon value="delete_forever" :size="20"></mu-icon>&nbsp;削除</mu-button>
+                            <mu-button color="info" class="smallbtn" @click="saveNewProject" v-if="newProject.center"><mu-icon value="save" :size="20"></mu-icon>&nbsp;保存</mu-button>
+                        </mu-flex>
+                    </mu-form>
 
                     <mu-flex justify-content="center" align-items="center" direction="row">
-
-                        <mu-button color="indigo500" @click="connectToSocket" v-if="!ws.you.connected">
-                            <mu-icon value="device_hub" :size="15"></mu-icon>
-                            CONNECT
-                        </mu-button>
-                        <mu-button  color="red500" @click="socketDisconnect" v-else>
-                            <mu-icon value="settings_input_composite" :size="15"></mu-icon>
-                            DISCONNECT
-                        </mu-button>
-
-                        <mu-button color="primary"  class="smallbtn" @click="backToInfo">終了</mu-button>
+                        <mu-button color="indigo400" class="smallbtn" @click="editProject">プロジェクト編集</mu-button>
+                        <mu-button color="indigo600" class="smallbtn" @click="editMarker">マーカー編集</mu-button>
+                        <mu-button color="indigo800" class="smallbtn" @click="editEnd">終了</mu-button>
                     </mu-flex>
 
+                    <div ref="selectedPoint" class="selectedPoint" :class="{'project':editing.type==='project'}"></div>
                 </mu-flex>
             </div>
-            <!--/NET OVERLAY -->
-
-
+            <!--/EDIT OVERLAY-->
         </mu-flex>
 
     </mu-flex>
@@ -171,9 +226,8 @@
     import {mapGetters, mapActions} from 'vuex';
     import spotifyMixin from '../mixins/spotify/index';
     import mapMixin from '../mixins/map/index';
-    import wsMixin from '../mixins/ws/index';
     import utilMixin from '../mixins/util';
-
+    import wsMixin from '../mixins/ws/index';
     import {ruleEmpty} from '../store/rules';
     import firebase from 'firebase';
     import MapView from './Map/MapViewLL';
@@ -183,7 +237,7 @@
     import M from '../class/map/EMarker';
     import P from '../class/map/EProject';
     export default {
-        name: 'mymapLL',
+        name: 'MapAdmin',
         mixins: [
             spotifyMixin,
             mapMixin,
@@ -494,7 +548,7 @@
             switchLayer(mode) {
                 let info_overlay = this.$refs.info_overlay;
                 let play_overlay = this.$refs.play_overlay;
-                let net_overlay = this.$refs.net_overlay;
+                let edit_overlay = this.$refs.edit_overlay;
                 this.mode = mode;
                 switch (mode) {
                     case 'info':
@@ -502,27 +556,26 @@
                         info_overlay.style.visibility = 'visible';
                         info_overlay.style.zIndex = 401;
                         play_overlay.style.zIndex = -1;
-                        net_overlay.style.zIndex = -1;
-
+                        edit_overlay.style.zIndex = -1;
                         break;
 
                     case 'play':
                         info_overlay.style.visibility = 'hidden';
                         play_overlay.style.zIndex = 1001;
-                        net_overlay.style.zIndex = -1;
-
+                        edit_overlay.style.zIndex = -1;
                         break;
-                    case 'net':
+                    case 'edit':
+                        this.editing.status = true;
                         info_overlay.style.visibility = 'hidden';
+                        info_overlay.style.zIndex = -1;
                         play_overlay.style.zIndex = -1;
-                        net_overlay.style.zIndex = 401;
-
+                        edit_overlay.style.zIndex = 401;
                         break;
                     case 'map':
                         info_overlay.style.visibility = 'hidden';
                         info_overlay.style.zIndex = -1;
                         play_overlay.style.zIndex = -1;
-                        net_overlay.style.zIndex = -1;
+                        edit_overlay.style.zIndex = -1;
                         break;
                 }
             },

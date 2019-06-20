@@ -2,7 +2,9 @@
     <mu-container class="flex_v">
 
         <div class="home_inner">
-                <img class="emory_logo" src="/static/img/emory_logo1.png"/>
+
+            <mu-icon value="build" :size="20" color="black" style="position:absolute;top:10px;left:10px;" @click="goMap(false,'/mapadmin')"></mu-icon>
+            <img class="emory_logo" src="/static/img/emory_logo1.png"/>
 
             <div class="ui grid" style="padding:0;margin:0 0 10px 0;">
                 <div class="sixteen wide column" style="padding:0;margin:0;">
@@ -51,22 +53,23 @@
         computed:mapGetters(['pwa','loggedIn','spotify']),
         methods:{
             ...mapActions(['a_index']),
-            goMap(login){
-                if(this.loggedIn){
-                    if(login && !this.spotify.credential.expires_in){
-                        this.c_getCredential();
-                    }else{
-                        this.a_spotify(['set','me',{id:'GUEST'}]);
-                    }
-                    this.$router.push('/map');
-                }
-            }
+            // goMap(login,to='/map'){
+            //     if(this.loggedIn){
+            //         if(login && !this.spotify.credential.expires_in){
+            //             this.c_getCredential();
+            //         }else{
+            //             this.a_spotify(['set','me',{id:'GUEST'}]);
+            //         }
+            //         this.$router.push(to);
+            //     }
+            // }
         },
 
     }
 </script>
 <style lang="scss">
     .home_inner {
+        position:relative;
         text-align: center;
         border-radius: 5px;
         background-color: rgba(255, 255, 255, 0.38);

@@ -9,7 +9,7 @@ const state = {
         },
         triggerDist:30,
         all:'-LgQfo9-XfQHou8ixUre',
-        project: "プロジェクトを選択してください"
+        project: null
     }
 
 }

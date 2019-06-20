@@ -1,5 +1,16 @@
 export default {
     methods: {
+        goMap(login,to='/map'){
+            if(this.loggedIn){
+                if(login && !this.spotify.credential.expires_in){
+                    this.c_getCredential();
+                }else{
+                    this.a_spotify(['set','me',{id:'GUEST'}]);
+                }
+                this.$router.push(to);
+            }
+        },
+
         isNumber(val) {
             let pattern = /^[-]?([1-9]\d*|0)(\.\d+)?$/;
             return pattern.test(val);

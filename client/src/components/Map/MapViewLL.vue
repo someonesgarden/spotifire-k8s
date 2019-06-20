@@ -74,7 +74,7 @@
             },
             'mapstore.map.center': {
                 handler: function (newCenter) {
-                    this.setView(newCenter, this.mapstore.map.zoom);
+                    if(newCenter) this.setView(newCenter, this.mapstore.map.zoom);
                 }
             }
         },
