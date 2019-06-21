@@ -286,18 +286,25 @@
           background-color: rgba(2, 72, 18, 0.56);
         }
 
-        &.edit {
+        &.marker_edit {
+          background-color: rgba(3, 50, 109, 0.55);
+        }
+
+        &.area_edit {
           background-color: rgba(54, 10, 125, 0.56);
         }
 
         &.area{
-          background-image:url('/static/img/emory/area_banner1.jpg');
+          background-image:url('/static/img/emory/area_mode.jpg');
           background-size:cover;
           background-position:center center;
         }
 
         &.play {
-          background-color: rgba(3, 50, 109, 0.55);
+          //background-color: rgba(3, 50, 109, 0.55);
+          background-image:url('/static/img/emory/map_mode.jpg');
+          background-size:cover;
+          background-position:center center;
         }
 
         &.map {

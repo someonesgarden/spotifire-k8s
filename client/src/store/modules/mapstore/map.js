@@ -1,5 +1,6 @@
 const state = {
     map:{
+        projectBoundary:false, //trueの場合、projectで設定された範囲に縛られるので現在位置はエリア外だと反映されない
         url:'//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
         //url:'https://{s}.tile.osm.org/{z}/{x}/{y}.png',
         //url:'https://tile.mierune.co.jp/mierune_mono/{z}/{x}/{y}.png',
@@ -35,6 +36,15 @@ const mutations = {
 
     setMapPoly(state,data){
         state.map.poly = data;
+    },
+
+    setMapProjBoundary(state,data){
+        if(data==='toggle'){
+            state.map.projectBoundary = !state.map.projectBoundary;
+        }else{
+            state.map.projectBoundary = data;
+        }
+
     }
 
 }

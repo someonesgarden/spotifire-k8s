@@ -28,6 +28,17 @@
                                 <mu-icon value="map" :size="15"></mu-icon>&nbsp;MAP
                             </mu-button>
                         </div>
+
+                        <div class="mode_toggle" v-if="mapstore.emory.project">
+                            <mu-button full-width color="blue700" @click="switchLayer('toggle_project')" v-if="mapstore.map.projectBoundary">
+                                <mu-icon value="swap_calls" :size="15"></mu-icon>&nbsp;img
+                            </mu-button>
+                            <mu-button full-width color="blue700" @click="switchLayer('toggle_project')" v-else>
+                                <mu-icon value="swap_calls" :size="15"></mu-icon>&nbsp;map
+                            </mu-button>
+                        </div>
+
+
                     </mu-flex>
                 </mu-flex>
 
@@ -64,10 +75,10 @@
                 </mu-flex>
 
                 <mu-flex class="info_menu" justify-content="center" align-items="center" v-if="mapstore.emory.project">
-                    <mu-flex class="info_box play" justify-content="center" align-items="center" direction="column" fill @click="switchLayer('play')">
-                        <mu-icon value="pets" :size="20"></mu-icon>play.
+                    <mu-flex class="info_box play" justify-content="center" align-items="center" direction="column" fill @click="switchLayer('play_map')">
+<!--                        <mu-icon value="pets" :size="20"></mu-icon>play.-->
                     </mu-flex>
-                    <mu-flex class="info_box area" justify-content="center" align-items="center" direction="column" fill @click="$router.push('/maparea')">
+                    <mu-flex class="info_box area" justify-content="center" align-items="center" direction="column" fill @click="switchLayer('play_imagemap')">
 <!--                        <mu-icon value="build" :size="20"></mu-icon>edit.-->
                     </mu-flex>
                 </mu-flex>
@@ -127,38 +138,38 @@
             </div>
             <!--/ PLAY OVERLAY-->
 
-            <!-- NET OVERLAY -->
-            <div class="net_overlay overlay" ref="net_overlay"  :class="{hide:!mapstore.mainuser}">
+<!--            &lt;!&ndash; NET OVERLAY &ndash;&gt;-->
+<!--            <div class="net_overlay overlay" ref="net_overlay"  :class="{hide:!mapstore.mainuser}">-->
 
-                <mu-flex class="info_box"　justify-content="center" align-items="center" direction="column" style="height:100%;">
+<!--                <mu-flex class="info_box"　justify-content="center" align-items="center" direction="column" style="height:100%;">-->
 
-                    <h1>
-                        <mu-icon value="network_check" :size="20"></mu-icon>
-                        socket.io.
-                    </h1>
-                    <h2>WebSocketを経由してリアルタイムにつながったユーザーを確認します。</h2>
+<!--                    <h1>-->
+<!--                        <mu-icon value="network_check" :size="20"></mu-icon>-->
+<!--                        socket.io.-->
+<!--                    </h1>-->
+<!--                    <h2>WebSocketを経由してリアルタイムにつながったユーザーを確認します。</h2>-->
 
-                    <mu-list style="width:inherit;">
-                        <map-user-item :user="user" v-for="(user,key,index) in ws.users" :key="'user'+key+index"/>
-                    </mu-list>
+<!--                    <mu-list style="width:inherit;">-->
+<!--                        <map-user-item :user="user" v-for="(user,key,index) in ws.users" :key="'user'+key+index"/>-->
+<!--                    </mu-list>-->
 
-                    <mu-flex justify-content="center" align-items="center" direction="row">
+<!--                    <mu-flex justify-content="center" align-items="center" direction="row">-->
 
-                        <mu-button color="indigo500" @click="connectToSocket" v-if="!ws.you.connected">
-                            <mu-icon value="device_hub" :size="15"></mu-icon>
-                            CONNECT
-                        </mu-button>
-                        <mu-button  color="red500" @click="socketDisconnect" v-else>
-                            <mu-icon value="settings_input_composite" :size="15"></mu-icon>
-                            DISCONNECT
-                        </mu-button>
+<!--                        <mu-button color="indigo500" @click="connectToSocket" v-if="!ws.you.connected">-->
+<!--                            <mu-icon value="device_hub" :size="15"></mu-icon>-->
+<!--                            CONNECT-->
+<!--                        </mu-button>-->
+<!--                        <mu-button  color="red500" @click="socketDisconnect" v-else>-->
+<!--                            <mu-icon value="settings_input_composite" :size="15"></mu-icon>-->
+<!--                            DISCONNECT-->
+<!--                        </mu-button>-->
 
-                        <mu-button color="primary"  class="smallbtn" @click="backToInfo">終了</mu-button>
-                    </mu-flex>
+<!--                        <mu-button color="primary"  class="smallbtn" @click="backToInfo">終了</mu-button>-->
+<!--                    </mu-flex>-->
 
-                </mu-flex>
-            </div>
-            <!--/NET OVERLAY -->
+<!--                </mu-flex>-->
+<!--            </div>-->
+<!--            &lt;!&ndash;/NET OVERLAY &ndash;&gt;-->
 
 
         </mu-flex>
@@ -333,10 +344,7 @@
                     //ゲストの場合はFirebaseに問いかけず、そのままマーカーを作成する！
                     this.a_mapstore(['set', 'mainuser',
                         {
-                            center: {
-                                lat:34.722677,
-                                lng: 135.492364
-                            },
+                            center: {lat:34.722677, lng: 135.492364},
                             type:'mainuser',
                             project:'mainuser',
                             title:'GUEST',
@@ -494,7 +502,7 @@
             switchLayer(mode) {
                 let info_overlay = this.$refs.info_overlay;
                 let play_overlay = this.$refs.play_overlay;
-                let net_overlay = this.$refs.net_overlay;
+                //let net_overlay = this.$refs.net_overlay;
                 this.mode = mode;
                 switch (mode) {
                     case 'info':
@@ -502,27 +510,37 @@
                         info_overlay.style.visibility = 'visible';
                         info_overlay.style.zIndex = 401;
                         play_overlay.style.zIndex = -1;
-                        net_overlay.style.zIndex = -1;
+                       // net_overlay.style.zIndex = -1;
 
                         break;
 
-                    case 'play':
+                    case 'play_map':
                         info_overlay.style.visibility = 'hidden';
                         play_overlay.style.zIndex = 1001;
-                        net_overlay.style.zIndex = -1;
-
+                        //net_overlay.style.zIndex = -1;
                         break;
-                    case 'net':
+
+                    case 'play_imagemap':
+                        this.a_mapstore(['set','projBoundary',true]);
                         info_overlay.style.visibility = 'hidden';
-                        play_overlay.style.zIndex = -1;
-                        net_overlay.style.zIndex = 401;
+                        play_overlay.style.zIndex = 1001;
+                        //net_overlay.style.zIndex = -1;
 
                         break;
+                    // case 'net':
+                    //     info_overlay.style.visibility = 'hidden';
+                    //     play_overlay.style.zIndex = -1;
+                    //     net_overlay.style.zIndex = 401;
+                    //     break;
                     case 'map':
                         info_overlay.style.visibility = 'hidden';
                         info_overlay.style.zIndex = -1;
                         play_overlay.style.zIndex = -1;
-                        net_overlay.style.zIndex = -1;
+                       // net_overlay.style.zIndex = -1;
+                        break;
+
+                    case 'toggle_project':
+                        this.a_mapstore(['set','projBoundary','toggle']);
                         break;
                 }
             },
@@ -603,6 +621,12 @@
             position:absolute;
             right:0;
             bottom:0;
+        }
+
+        .mode_toggle{
+            position:absolute;
+            right:0;
+            top:0;
         }
     }
 

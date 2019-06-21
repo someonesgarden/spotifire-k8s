@@ -5,7 +5,7 @@
             <div class="ui grid area_info" style="padding:10px;margin:0;width:100%;text-align:center;z-index:420;position:absolute;bottom:0px;background-color:#db1678;color:white;">
 
                 <mu-flex justify-content="center" class="sixteen wide mobile four wide tablet four wide computer column" style="padding:0;margin:0;font-weight:bold;color:#00a800;">
-                    <mu-icon value="keyboard_arrow_left" :size="22" color="white" style="margin:0 10px 0 5px;" @click="$router.push('/mapadmin')"></mu-icon>
+                    <mu-icon value="keyboard_arrow_left" :size="22" color="white" style="margin:0 10px 0 5px;" @click="$router.go(-1)"></mu-icon>
                     <span>{{mapstore.emory.projects[project_id].title}}</span><mu-switch v-model="isChecker"></mu-switch>
                 </mu-flex>
 
@@ -34,7 +34,15 @@
                     :max-bounds="[LBBound, RTBound]"
             >
             <l-tile-layer    :url="tileurl" :attribution="attribution" />
-            <l-image-overlay :url="isChecker ? checker : imgurl" :bounds="[LBBound, RTBound]" />
+            <l-image-overlay
+                    :url="isChecker ? checker : imgurl" :bounds="[LBBound, RTBound]"
+                    :opacity="0.9"
+                    :zoomAnimation="false"
+                    :fadeAnimation="false"
+                    :markerZoomAnimation="false"
+                    :inertia="false"
+                    :bounceAtZoomLimits="false"
+                 />
 
             <l-marker :lat-lng="LBBound" :draggable="true" @dragend="dragEndFunc('LB',$event)" @dragstart="dragStartFunc('LB',$event)">
                 <l-icon

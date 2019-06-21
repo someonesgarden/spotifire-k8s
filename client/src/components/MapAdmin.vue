@@ -28,6 +28,16 @@
                                 <mu-icon value="map" :size="15"></mu-icon>&nbsp;MAP
                             </mu-button>
                         </div>
+
+                        <div class="mode_toggle" v-if="mapstore.emory.project">
+                            <mu-button full-width color="blue700" @click="switchLayer('toggle_project')" v-if="mapstore.map.projectBoundary">
+                                <mu-icon value="swap_calls" :size="15"></mu-icon>&nbsp;img
+                            </mu-button>
+                            <mu-button full-width color="blue700" @click="switchLayer('toggle_project')" v-else>
+                                <mu-icon value="swap_calls" :size="15"></mu-icon>&nbsp;map
+                            </mu-button>
+                        </div>
+
                     </mu-flex>
                 </mu-flex>
 
@@ -64,10 +74,10 @@
                 </mu-flex>
 
                 <mu-flex class="info_menu" justify-content="center" align-items="center" v-if="mapstore.emory.project">
-                    <mu-flex class="info_box play" justify-content="center" align-items="center" direction="column" fill  @click="switchLayer('edit')">
+                    <mu-flex class="info_box marker_edit" justify-content="center" align-items="center" direction="column" fill  @click="switchLayer('edit')">
                         <mu-icon value="build" :size="20"></mu-icon>marker.
                     </mu-flex>
-                    <mu-flex class="info_box edit" justify-content="center" align-items="center" direction="column" fill @click="$router.push('/maparea')">
+                    <mu-flex class="info_box area_edit" justify-content="center" align-items="center" direction="column" fill @click="$router.push('/maparea')">
                         <mu-icon value="build" :size="20"></mu-icon>area.
                     </mu-flex>
                 </mu-flex>
@@ -576,6 +586,9 @@
                         info_overlay.style.zIndex = -1;
                         play_overlay.style.zIndex = -1;
                         edit_overlay.style.zIndex = -1;
+                        break;
+                    case 'toggle_project':
+                        this.a_mapstore(['set','projBoundary','toggle']);
                         break;
                 }
             },
