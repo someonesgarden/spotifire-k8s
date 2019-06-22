@@ -13,9 +13,9 @@
 
                     <mu-text-field v-model="imgurl" style="text-align:center;width:100%;"></mu-text-field>
 
-<!--                    <span><img src="/static/img/markers/RTmarker.png" style="width:12px;height:12px;display:inline;margin-right:5px;"/>-->
+<!--                    <span><img src="/static/img/markers/m_RTmarker.png" style="width:12px;height:12px;display:inline;margin-right:5px;"/>-->
 <!--                        {{RTBound[0] | dicimal4}},{{RTBound[1] | dicimal4}}</span>-->
-<!--                    <span><img src="/static/img/markers/LBmarker.png" style="width:12px;height:12px;display:inline;margin-right:5px;"/>-->
+<!--                    <span><img src="/static/img/markers/m_LBmarker.png" style="width:12px;height:12px;display:inline;margin-right:5px;"/>-->
 <!--                        {{LBBound[0] | dicimal4}},{{LBBound[1] | dicimal4}}</span>-->
                 </div>
                 <div class="sixteen wide mobile three wide tablet three wide computer column" style="padding:0;margin:0;">
@@ -48,10 +48,10 @@
                 <l-icon
                         :icon-size="[30,30]"
                         :icon-anchor="[15,15]"
-                        :icon-url="'/static/img/markers/LBmarker.png'"
+                        :icon-url="'/static/img/markers/m_LBmarker.png'"
                         :shadow-size="[30,30]"
                         :shadow-anchow="[15,15]"
-                        shadow-url='/static/img/markers/marker-shadow.png'
+                        shadow-url='/static/img/marker-shadow.png'
                         class-name="marker_base">
                 </l-icon>
             </l-marker>
@@ -60,10 +60,10 @@
                 <l-icon
                         :icon-size="[30,30]"
                         :icon-anchor="[15,15]"
-                        :icon-url="'/static/img/markers/RTmarker.png'"
+                        :icon-url="'/static/img/markers/m_RTmarker.png'"
                         :shadow-size="[30,30]"
                         :shadow-anchow="[15,15]"
-                        shadow-url='/static/img/markers/marker-shadow.png'
+                        shadow-url='/static/img/marker-shadow.png'
                         class-name="marker_base">
                 </l-icon>
             </l-marker>
@@ -183,7 +183,7 @@
         /*background-image: none !important;*/
     }
     .leaflet-fake-icon-shadow {
-        background-image: url('/static/img/markers/marker-shadow.png') !important;
+        background-image: url('/static/img/marker-shadow.png') !important;
     }
 
     .range{

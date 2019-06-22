@@ -13,6 +13,7 @@ const marker0 = {
         desc: "",
         public: 'open',
         thumb: null,
+        markertype:'pod', //pod or mp3
         w: 35,
         h: 35,
         icon: '/static/img/markers/m_dummy.png'

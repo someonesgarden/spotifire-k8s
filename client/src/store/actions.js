@@ -132,6 +132,8 @@ export const a_mapstore = ({commit},[type, action, data]) => {
         },
 
         emory:{
+            setPlay:(data)   => commit('mapstore/setEmoryPlay',data),
+            initPlay:(data)  => commit('mapstore/setEmoryPlay',{key:'init',val:data}),
             setprojects:(data)   => commit('mapstore/setEmoryProjects',data),
             setproject:(data)   => commit('mapstore/setEmoryProject',data),
             setTriggerDist:(data)=> commit('mapstore/setTriggerDist',data)

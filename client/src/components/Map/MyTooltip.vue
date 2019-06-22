@@ -3,10 +3,10 @@
         <l-icon
                 :icon-size="[80,80]"
                 :icon-anchor="[40,40]"
-                :icon-url="'/static/img/markers/p_area1.png'"
+                :icon-url="'/static/img/markers/m_area1.png'"
                 :shadow-size="[0,0]"
                 :shadow-anchow="[0,0]"
-                shadow-url='/static/img/markers/marker-shadow.png'
+                shadow-url='/static/img/marker-shadow.png'
                 class-name="marker_base">
         </l-icon>
         <l-tooltip :options="{ permanent: true, interactive: true, direction:'top'}">

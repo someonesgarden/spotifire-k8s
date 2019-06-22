@@ -10,6 +10,11 @@
                    :min-zoom="project.zoom"
                    :bounds="[project.LBBound, project.RTBound]"
                    :max-bounds="[project.LBBound, project.RTBound]"
+                   :zoomAnimation="false"
+                   :fadeAnimation="false"
+                   :markerZoomAnimation="false"
+                   :inertia="false"
+                   :bounceAtZoomLimits="false"
                    @click="(val)=> $emit('mapClick',val)">
                 <l-tile-layer :url="mapstore.map.url" :attribution="mapstore.map.attribution"></l-tile-layer>
 
@@ -112,7 +117,6 @@
             }
         },
         mounted() {
-            setTimeout(() => this.geolocation(), 2000);
             if(this.mapstore.emory.project) this.project = this.mapstore.emory.projects[this.mapstore.emory.project];
         },
 
@@ -155,9 +159,14 @@
                 }
             },
 
+            //一回だけはこちら！
+            geoCurrentPosition(){
+                if(!!navigator.geolocation) navigator.geolocation.getCurrentPosition(this.geoSuccess,this.geoError,this.mapstore.map.geocodingOptions);
+            },
+
+
             geolocation() {
                 if(!!navigator.geolocation) this.watchID = navigator.geolocation.watchPosition(this.geoSuccess,this.geoError,this.mapstore.map.geocodingOptions);
-                //if(!!navigator.geolocation) navigator.geolocation.getCurrentPosition(this.geoSuccess,this.geoError,this.mapstore.map.geocodingOptions);
             },
 
             geoSuccess(position){

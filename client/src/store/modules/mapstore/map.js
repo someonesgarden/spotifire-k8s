@@ -13,8 +13,8 @@ const state = {
         maxZoom: 18,
         maxNativeZoom:18,
         center: {
-            lat: 34.722677,
-            lng: 135.492364
+            lat: 34.722677123,
+            lng: 135.492364123
         },
         poly:null,
         update:new Date()

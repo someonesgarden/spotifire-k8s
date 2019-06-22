@@ -1,5 +1,8 @@
 const state = {
     emory: {
+        play:{
+          init:false
+        },
         projects: {
             all: {
                 title: '読み込み中です...',
@@ -15,6 +18,11 @@ const state = {
 }
 
 const mutations = {
+
+    setEmoryPlay(state,dat){
+      state.emory.play[dat.key] = dat.val;
+    },
+
     setTriggerDist(state,val){
         state.emory.triggerDist = val;
     },

@@ -15,11 +15,8 @@
                         <mu-icon value="build" :size="20" color="white" style="position:absolute;bottom:10px;left:10px;" @click="goMap(false,'/mapadmin')"></mu-icon>
 
                         <div class="geo_status">
-                            <mu-button full-width color="cyan400" @click="trackToggle" v-if="mapstore.tracking">
-                                <mu-icon value="portable_wifi_off" :size="15"></mu-icon>&nbsp;ON
-                            </mu-button>
-                            <mu-button full-width color="pink700" @click="trackToggle" v-else>
-                                <mu-icon value="settings_input_antenna" :size="15"></mu-icon>&nbsp;OFF
+                            <mu-button full-width color="pink700" @click="trackOnce">
+                                <mu-icon value="settings_input_antenna" :size="15"></mu-icon>&nbsp;now
                             </mu-button>
                         </div>
 
@@ -76,10 +73,8 @@
 
                 <mu-flex class="info_menu" justify-content="center" align-items="center" v-if="mapstore.emory.project">
                     <mu-flex class="info_box play" justify-content="center" align-items="center" direction="column" fill @click="switchLayer('play_map')">
-<!--                        <mu-icon value="pets" :size="20"></mu-icon>play.-->
                     </mu-flex>
                     <mu-flex class="info_box area" justify-content="center" align-items="center" direction="column" fill @click="switchLayer('play_imagemap')">
-<!--                        <mu-icon value="build" :size="20"></mu-icon>edit.-->
                     </mu-flex>
                 </mu-flex>
 
@@ -194,7 +189,7 @@
     import M from '../class/map/EMarker';
     import P from '../class/map/EProject';
     export default {
-        name: 'mymapLL',
+        name: 'mapPlay',
         mixins: [
             spotifyMixin,
             mapMixin,
@@ -216,10 +211,7 @@
                 socket:     null,
                 //MODE
                 mode:       'info',
-                editing: {
-                    status:     false,
-                    type:       'marker'
-                },
+
                 userisready: false,
 
                 //MAIN USER
@@ -294,8 +286,11 @@
         mounted() {
             this.switchLayer('info');
 
-            // Geocoder
-            //this.geocoder = new google.maps.Geocoder();
+            //最初の一回だけ、現在位置へジャンプする
+            if(!this.mapstore.emory.play.init){
+                setTimeout(() => this.trackOnce, 1000);
+                this.a_mapstore(['emory','initPlay',true]);
+            }
 
             //IDがある場合
             if(this.spotify.me.id){
@@ -306,7 +301,6 @@
                         this.a_index(['alert', 'open']);
                         this.a_index(['alert','action',null]);
                 }
-
 
                 //マーカー作成
                 this.createOrFindMainuser(this.spotify.me.id);
@@ -337,6 +331,10 @@
                 'a_spotify',
                 'a_mapstore',
                 'a_ws']),
+
+            trackOnce(){
+                this.$refs.emorymap.geoCurrentPosition();
+            },
 
             createOrFindMainuser(meid){
 
@@ -380,51 +378,32 @@
                 this.drawPoly();
             },
             mapClick(val) {
-                if (this.editing.status) {
-                    this.setNewCenter(val.latlng,val.containerPoint);
-                    this.switchLayer('edit');
-                } else {
-                    this.switchLayer('info');
-                }
+                this.switchLayer('info');
             },
             pClick(val,id){
-                if (this.editing.status){
-                    this.switchLayer('edit');
-                    this.newProject = val;
-                    if(id) this.newProject.id =id;
-                    console.log("project in edit mode");
-                }else{
-                    console.log("project in play mode");
-                    this.a_mapstore(['center','map',val.center]);
-                    this.onProjectSelected(id);
-                }
+                this.a_mapstore(['center','map',val.center]);
+                this.onProjectSelected(id);
             },
             mClick(val,id){
-                if (this.editing.status){
-                    this.switchLayer('edit');
-                    this.newMarker = val;
-                    if(id) this.newMarker.id =id;
-                }else{
-                    //自分とpointの距離を測る
-                    let mainuser = this.mapstore.markers[this.mapstore.mainuser.id];
+                //自分とpointの距離を測る
+                let mainuser = this.mapstore.markers[this.mapstore.mainuser.id];
 
-                    if(val.spotifytype==='track'){
-                        this.c_getTrack(val.spotifyid,(res)=>{
-                            if(!!res.data){
-                                this.a_spotify(['player','track',res.data]);
-                                this.a_spotify(['player','play',{id:val.spotifyid,type:'track'}]);
-                            }
-                        });
-                        this.a_index(['bottom','open']);
+                if(val.spotifytype==='track'){
+                    this.c_getTrack(val.spotifyid,(res)=>{
+                        if(!!res.data){
+                            this.a_spotify(['player','track',res.data]);
+                            this.a_spotify(['player','play',{id:val.spotifyid,type:'track'}]);
+                        }
+                    });
+                    this.a_index(['bottom','open']);
 
-                    }else if(val.spotifytype==='episode'){
-                        //ポッドキャストepisodeの場合、mp3プレイヤーを開く
-                        //this.a_index(['bottom','open']);
-                        this.a_mp3(['pod', 0, 'playing',false]);
-                        setTimeout(()=> this.a_mp3(['pod',0,'file',val.mp3]),100);
-                        setTimeout(()=> this.a_mp3(['pod',0,'volume',75]),100);
-                        setTimeout(()=> this.a_mp3(['pod',0,'playing', true+Math.floor(Math.random() * 3)]),100);
-                    }
+                }else if(val.spotifytype==='episode'){
+                    //ポッドキャストepisodeの場合、mp3プレイヤーを開く
+                    //this.a_index(['bottom','open']);
+                    this.a_mp3(['pod', 0, 'playing',false]);
+                    setTimeout(()=> this.a_mp3(['pod',0,'file',val.mp3]),100);
+                    setTimeout(()=> this.a_mp3(['pod',0,'volume',75]),100);
+                    setTimeout(()=> this.a_mp3(['pod',0,'playing', true+Math.floor(Math.random() * 3)]),100);
                 }
             },
             connectToSocket() {
@@ -445,19 +424,8 @@
                 this.$refs.selectedPoint.style.top = mouseXY.y-10+'px';
                 this.$refs.selectedPoint.style.left = mouseXY.x-10+'px';
             },
-            editProject(){
-                this.editing.type='project';
-                this.cancelEditMode();
-            },
-            editMarker(){
-                this.editing.type='marker';
-                this.cancelEditMode();
-            },
-            cancelEditMode() {
-                this.newMarker = new M({}).marker;
-                this.newProject = new P({}).project;
-                this.switchLayer('map');
-            },
+
+
             backToInfo(){
                 this.switchLayer('info');
             },
@@ -467,38 +435,7 @@
                 this.switchLayer('map');
                 this.a_index(['storyModal','set',true]);
             },
-            editEnd() {
-                this.editing.status = false;
-                this.switchLayer('info');
-                this.newMarker = new M({}).marker;
-                this.mode = "info";
-                this.$refs.selectedPoint.style.top = -300+'px';
-            },
-            delFirebase(ref,id){
-                ref.child(id).remove();
-                this.cancelEditMode();
-            },
-            saveNewMarker() {
-                this.$refs.newmarkerform.validate().then(valid => {
-                    if (valid) {
-                        if (!this.newMarker.center) { return; }
-                        new M(this.newMarker).updateOrNew(this.markersRef);
-                        this.newMarker = new M({}).marker;  // フォームの初期化
-                        this.cancelEditMode();
-                    }
-                });
-            },
-            saveNewProject(){
-                this.$refs.newprojectform.validate().then(valid => {
-                    if (valid) {
-                        if (!this.newProject.center) { return; }
-                        this.newProject.zoom = 20;
-                        new P(this.newProject).updateOrNew(this.projsRef);
-                        this.newProject = new P({}).project; // フォームの初期化
-                        this.cancelEditMode();
-                    }
-                });
-            },
+
             switchLayer(mode) {
                 let info_overlay = this.$refs.info_overlay;
                 let play_overlay = this.$refs.play_overlay;
@@ -515,6 +452,7 @@
                         break;
 
                     case 'play_map':
+                        this.a_mapstore(['set','projBoundary',false]);
                         info_overlay.style.visibility = 'hidden';
                         play_overlay.style.zIndex = 1001;
                         //net_overlay.style.zIndex = -1;
@@ -598,9 +536,6 @@
         .mu-card-sub-title{
             color: #fff;
         }
-
-
-
         .mu-avatar {
             width: 25px;
             height: 25px;

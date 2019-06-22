@@ -15,13 +15,19 @@
                         <mu-icon value="play_circle_outline" :size="20" color="white" style="position:absolute;bottom:10px;left:10px;" @click="goMap(false,'/map')"></mu-icon>
 
                         <div class="geo_status">
-                            <mu-button full-width color="cyan400" @click="trackToggle" v-if="mapstore.tracking">
-                                <mu-icon value="portable_wifi_off" :size="15"></mu-icon>&nbsp;ON
-                            </mu-button>
-                            <mu-button full-width color="pink700" @click="trackToggle" v-else>
-                                <mu-icon value="settings_input_antenna" :size="15"></mu-icon>&nbsp;OFF
+                            <mu-button full-width color="pink700" @click="trackOnce">
+                                <mu-icon value="settings_input_antenna" :size="15"></mu-icon>&nbsp;now
                             </mu-button>
                         </div>
+
+<!--                        <div class="geo_status">-->
+<!--                            <mu-button full-width color="cyan400" @click="trackToggle" v-if="mapstore.tracking">-->
+<!--                                <mu-icon value="portable_wifi_off" :size="15"></mu-icon>&nbsp;ON-->
+<!--                            </mu-button>-->
+<!--                            <mu-button full-width color="pink700" @click="trackToggle" v-else>-->
+<!--                                <mu-icon value="settings_input_antenna" :size="15"></mu-icon>&nbsp;OFF-->
+<!--                            </mu-button>-->
+<!--                        </div>-->
 
                         <div class="map_toggle">
                             <mu-button full-width color="purple800" @click="switchLayer('map')">
@@ -85,58 +91,6 @@
             </mu-flex>
             <!--/  INFO_OVERLAY(MENU)-->
 
-            <!-- PLAY OVERLAY-->
-            <div class="play_overlay overlay" ref="play_overlay" :class="{hide:!mapstore.mainuser}">
-                <mu-flex class="info_box"　justify-content="center" align-items="center" direction="column" style="height:100%;">
-                    <mu-flex justify-content="center" align-items="center" direction="column" style="width:100%;height:100%;padding:8px;">
-                        <mu-flex justify-content="center" align-items="center" direction="column" class="inner" style="background-color:rgba(35,230,169,0.9);height:100%;width:100%;border-radius:6px;padding:6px;">
-
-                            <div gutter style="width:100%;margin-top:-16px;" v-if="mapstore.emory.project">
-
-                                <mu-col class="info_col" span="12" sm="12" md="12" lg="12" xl="12" style="float:left;" v-if="mapstore.emory.projects[mapstore.emory.project]">
-                                    <mu-card raised style="width: 100%; margin: 0 auto;background-color:rgb(41, 41, 93);">
-
-                                        <div class="play_card_img">
-                                            <mu-card-media
-                                                    :title="mapstore.emory.projects[mapstore.emory.project].title"
-                                                    :sub-title="mapstore.emory.projects[mapstore.emory.project].desc">
-                                                <img :src="mapstore.emory.projects[mapstore.emory.project].thumb">
-                                            </mu-card-media>
-                                        </div>
-
-                                        <mu-card-header style="white-space: inherit;padding:4px;" v-if="mapstore.mainuser">
-                                            <my-avatar :marker="marker" :id="marker.id" v-for="(marker,id) in sortedMarkers" :key="'mv'+id"></my-avatar>
-                                        </mu-card-header>
-                                    </mu-card>
-                                </mu-col>
-
-                                <mu-col span="12" sm="12" md="12" lg="12" xl="12" style="width:100%;text-align:center;" v-else>
-                                    <h1 style="margin:4px auto;color:black;">プロジェクトを選択してください。</h1>
-                                </mu-col>
-                                <mu-col span="12" sm="12" md="12" lg="12" xl="12" style="width:100%;text-align:center;">
-                                    <mu-select label="有効範囲" prop="triggerDist" :value="mapstore.emory.triggerDist" @change="(val)=>a_mapstore(['emory','setTriggerDist',val])" style="margin-bottom:0;padding-bottom:0;">
-                                        <mu-option  label="8m" :value="8"></mu-option>
-                                        <mu-option  label="10m" :value="10"></mu-option>
-                                        <mu-option  label="20m" :value="20"></mu-option>
-                                        <mu-option  label="30m" :value="30"></mu-option>
-                                        <mu-option  label="50m" :value="50"></mu-option>
-                                        <mu-option  label="80m" :value="80"></mu-option>
-                                    </mu-select>
-                                </mu-col>
-                            </div>
-
-                            <mu-flex justify-content="center" align-items="center" direction="row">
-                                <mu-button color="primary"    class="smallbtn"  @click="playStart" v-if="mapstore.emory.projects[mapstore.emory.project]">プレイ開始</mu-button>
-                                <mu-button color="indigo800"  class="smallbtn"  @click="backToInfo">メニューへ</mu-button>
-                            </mu-flex>
-
-                        </mu-flex>
-
-                    </mu-flex>
-                </mu-flex>
-            </div>
-            <!--/ PLAY OVERLAY-->
-
             <!--EDIT OVERLAY-->
             <div class="edit_overlay overlay" ref="edit_overlay"  :class="{hide:!mapstore.mainuser}">
                 <mu-flex class="info_box" justify-content="center" align-items="center" direction="column" style="height:100%;">
@@ -175,11 +129,6 @@
                                 <mu-option  label="スポット"  value="spot"></mu-option>
                                 <mu-option  label="人"       value="person"></mu-option>
                                 <mu-option  label="その他"    value="other"></mu-option>
-                            </mu-select>
-                        </mu-form-item>
-                        <mu-form-item prop="project" label="プロジェクトを選択" :rules="blankRules">
-                            <mu-select  prop="project" :value="newMarker.project ? newMarker.project : 'プロジェクトを選んでください'" @change="(val)=>newMarker.project=val">
-                                <mu-option v-for="(p,key,inx) in mapstore.emory.projects" :key="'proj'+key" :label="p.title" :value="key"></mu-option>
                             </mu-select>
                         </mu-form-item>
 
@@ -347,12 +296,11 @@
         mounted() {
             this.switchLayer('info');
 
-            // Geocoder
-            //this.geocoder = new google.maps.Geocoder();
+            if(this.mapstore.emory.project) this.newMarker.project = this.mapstore.emory.project;
+
 
             //IDがある場合
             if(this.spotify.me.id){
-
                 //ログイン済みでブックマークデータがない場合
                 if(this.spotify.me.id!=='GUEST' && !this.spotify.me.bookmark_num) {
                         this.a_index(['alert', 'set', "Spotifyユーザーデータを調べています"]);
@@ -390,6 +338,10 @@
                 'a_spotify',
                 'a_mapstore',
                 'a_ws']),
+
+            trackOnce(){
+                this.$refs.emorymap.geoCurrentPosition();
+            },
 
             createOrFindMainuser(meid){
 
@@ -437,7 +389,7 @@
             },
             mapClick(val) {
                 if (this.editing.status) {
-                    this.setNewCenter(val.latlng,val.containerPoint);
+                    if(val.containerPoint && val.containerPoint.x > 0) this.setNewCenter(val.latlng,val.containerPoint);
                     this.switchLayer('edit');
                 } else {
                     this.switchLayer('info');
@@ -518,11 +470,6 @@
                 this.switchLayer('info');
             },
 
-            playStart(){
-                this.a_mapstore(['set', 'tracking', true]);
-                this.switchLayer('map');
-                this.a_index(['storyModal','set',true]);
-            },
             editEnd() {
                 this.editing.status = false;
                 this.switchLayer('info');
@@ -537,27 +484,34 @@
             saveNewMarker() {
                 this.$refs.newmarkerform.validate().then(valid => {
                     if (valid) {
-                        if (!this.newMarker.center) { return; }
-                        new M(this.newMarker).updateOrNew(this.markersRef);
-                        this.newMarker = new M({}).marker;  // フォームの初期化
-                        this.cancelEditMode();
+                        if (this.newMarker.center) {
+                            if (this.newMarker.center.lat !== 34.722677123) { //初期値「大阪のある場所」じゃなければ
+                                this.newMarker.project = this.mapstore.emory.project;
+                                new M(this.newMarker).updateOrNew(this.markersRef);
+                                this.newMarker = new M({}).marker;  // フォームの初期化
+                                this.cancelEditMode();
+                            }
+                        }
                     }
                 });
             },
             saveNewProject(){
                 this.$refs.newprojectform.validate().then(valid => {
                     if (valid) {
-                        if (!this.newProject.center) { return; }
-                        this.newProject.zoom = 20;
-                        new P(this.newProject).updateOrNew(this.projsRef);
-                        this.newProject = new P({}).project; // フォームの初期化
-                        this.cancelEditMode();
+                        if (this.newProject.center) {
+                            if (this.newProject.center.lat !== 34.722677123) { //初期値「大阪のある場所」じゃなければ
+                                this.newProject.zoom = 20;
+                                new P(this.newProject).updateOrNew(this.projsRef);
+                                this.newProject = new P({}).project; // フォームの初期化
+                                this.cancelEditMode();
+                            }
+                        }
+
                     }
                 });
             },
             switchLayer(mode) {
                 let info_overlay = this.$refs.info_overlay;
-                let play_overlay = this.$refs.play_overlay;
                 let edit_overlay = this.$refs.edit_overlay;
                 this.mode = mode;
                 switch (mode) {
@@ -565,26 +519,18 @@
                         this.a_mapstore(['set', 'tracking', false]);
                         info_overlay.style.visibility = 'visible';
                         info_overlay.style.zIndex = 401;
-                        play_overlay.style.zIndex = -1;
                         edit_overlay.style.zIndex = -1;
                         break;
 
-                    case 'play':
-                        info_overlay.style.visibility = 'hidden';
-                        play_overlay.style.zIndex = 1001;
-                        edit_overlay.style.zIndex = -1;
-                        break;
                     case 'edit':
                         this.editing.status = true;
                         info_overlay.style.visibility = 'hidden';
                         info_overlay.style.zIndex = -1;
-                        play_overlay.style.zIndex = -1;
                         edit_overlay.style.zIndex = 401;
                         break;
                     case 'map':
                         info_overlay.style.visibility = 'hidden';
                         info_overlay.style.zIndex = -1;
-                        play_overlay.style.zIndex = -1;
                         edit_overlay.style.zIndex = -1;
                         break;
                     case 'toggle_project':
