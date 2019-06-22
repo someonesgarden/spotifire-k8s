@@ -12,13 +12,16 @@
                     <mu-flex class="info_box how" justify-content="center" align-items="center" direction="column" fill style="background-color:rgba(20,30,23,0.69);">
                         <img src="/static/img/emory_logo1_admin.png" style="width:180px;height:auto;">
 
-                        <mu-icon value="play_circle_outline" :size="20" color="white" style="position:absolute;bottom:10px;left:10px;" @click="goMap(false,'/map')"></mu-icon>
+                        <mu-icon value="play_circle_outline" :size="22" color="white" style="position:absolute;bottom:10px;left:10px;" @click="goMap(false,'/map')"></mu-icon>
 
-                        <div class="geo_status">
-                            <mu-button full-width color="pink700" @click="trackOnce">
-                                <mu-icon value="settings_input_antenna" :size="15"></mu-icon>&nbsp;now
-                            </mu-button>
-                        </div>
+                        <mu-icon value="settings_input_antenna" :size="22" color="white" style="position:absolute;top:10px;left:10px;" @click="trackOnce"></mu-icon>
+
+
+<!--                        <div class="geo_status">-->
+<!--                            <mu-button full-width color="pink700" @click="trackOnce">-->
+<!--                                <mu-icon value="settings_input_antenna" :size="15"></mu-icon>&nbsp;now-->
+<!--                            </mu-button>-->
+<!--                        </div>-->
 
 <!--                        <div class="geo_status">-->
 <!--                            <mu-button full-width color="cyan400" @click="trackToggle" v-if="mapstore.tracking">-->

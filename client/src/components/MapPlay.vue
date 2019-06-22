@@ -12,13 +12,15 @@
                     <mu-flex class="info_box how" justify-content="center" align-items="center" direction="column" fill>
                         <img src="/static/img/emory_logo1.png" style="width:180px;height:auto;">
 
-                        <mu-icon value="build" :size="20" color="white" style="position:absolute;bottom:10px;left:10px;" @click="goMap(false,'/mapadmin')"></mu-icon>
+                        <mu-icon value="build" :size="22" color="black" style="position:absolute;bottom:10px;left:10px;" @click="goMap(false,'/mapadmin')"></mu-icon>
 
-                        <div class="geo_status">
-                            <mu-button full-width color="pink700" @click="trackOnce">
-                                <mu-icon value="settings_input_antenna" :size="15"></mu-icon>&nbsp;now
-                            </mu-button>
-                        </div>
+                        <mu-icon value="settings_input_antenna" :size="22" color="black" style="position:absolute;top:10px;left:10px;" @click="trackOnce"></mu-icon>
+
+                        <!--                        <div class="geo_status">-->
+<!--                            <mu-button full-width color="pink700" @click="trackOnce">-->
+<!--                                <mu-icon value="settings_input_antenna" :size="15"></mu-icon>&nbsp;now-->
+<!--                            </mu-button>-->
+<!--                        </div>-->
 
                         <div class="map_toggle">
                             <mu-button full-width color="purple800" @click="switchLayer('map')">
@@ -288,8 +290,12 @@
 
             //最初の一回だけ、現在位置へジャンプする
             if(!this.mapstore.emory.play.init){
-                setTimeout(() => this.trackOnce, 1000);
-                this.a_mapstore(['emory','initPlay',true]);
+                this.$nextTick(()=>{
+                    this.trackOnce();
+                    this.a_mapstore(['emory','initPlay', true]);
+                });
+
+                //setTimeout(() => this.trackOnce(), 2000);
             }
 
             //IDがある場合
