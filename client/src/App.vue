@@ -61,8 +61,7 @@
       </mu-appbar>
       <mu-flex class="body flex-wrapper" justify-content="center" align-items="center" direction="column">
 
-        <carousel ref="story" navigation-prev-label="〈" navigation-next-label="〉"
-                  :per-page="1">
+        <carousel ref="story" navigation-prev-label="〈" navigation-next-label="〉" :per-page="1">
           <slide class="slide" v-for="(item,index) in modal.modals.story.items" :key="'howslide'+index">
             <story-slide @moveTo="$refs.story.goToPage(index<modal.modals.story.items.length-1 ? index+1:0)" :slide="item" :end="index===modal.modals.story.items.length-1"></story-slide>
           </slide>
@@ -142,6 +141,11 @@ export default {
       if (this.alert.action === 'login') {
         if(!this.spotify.credential.expires_in) this.c_getCredential();
       }
+    },
+
+    storyModalAction(page=0){
+      $refs.story.goToPage(page);
+      let data = modal.modals.story.items[0];
     }
   }
 }
@@ -168,6 +172,10 @@ export default {
     /*background-color: rgba(210, 222, 217, 0.3);*/
     padding:4px 0 2px 0;
     opacity:1;
+  }
+
+  .widget_player{
+    background-color:#191414;
   }
 
 </style>

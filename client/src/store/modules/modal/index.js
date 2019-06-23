@@ -24,21 +24,6 @@ const state = {
                     thumb: '/static/img/design/circle1.jpg',
                     title: '物語の始まり',
                     content: 'マップにマークされたスポットに近くと、音声が流れアクションが起きます。そんな感じでの説明文章のダミーです。'
-                },
-                {
-                    thumb: '/static/img/design/circle2.jpg',
-                    title: 'その②街角での出会い',
-                    content: '物語のサンプルです。物語のサンプルです。物語のサンプルです。物語のサンプルです。物語のサンプルです。物語のサンプルです。'
-                },
-                {
-                    thumb: '/static/img/design/circle3.jpg',
-                    title: 'その③',
-                    content: '物語のサンプルです。物語のサンプルです。物語のサンプルです。物語のサンプルです。物語のサンプルです。物語のサンプルです。'
-                },
-                {
-                    thumb: '/static/img/design/circle3.jpg',
-                    title: 'その④',
-                    content: '物語のサンプルです。物語のサンプルです。物語のサンプルです。物語のサンプルです。物語のサンプルです。物語のサンプルです。'
                 }
             ]
         }
