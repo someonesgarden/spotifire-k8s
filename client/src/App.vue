@@ -176,7 +176,6 @@ export default {
 
   .widget_player{
     background-color:inherit;
-    height:230px;
     overflow: hidden;
   }
 

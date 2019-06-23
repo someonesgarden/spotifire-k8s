@@ -8,7 +8,7 @@
             <p v-html="slide.content"></p>
         </div>
 
-        <widget-player :type="slide.spotifytype" :id="slide.spotifyid" :h="230"></widget-player>
+        <widget-player :type="slide.spotifytype" :id="slide.spotifyid"></widget-player>
         <mu-button full-width color="greenA400" @click="a_index(['storyModal','set',false])">
             <mu-icon value="keyboard_arrow_down"></mu-icon>
         </mu-button>
