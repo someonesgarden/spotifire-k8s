@@ -135,9 +135,24 @@
                             </div>
                         </div>
 
-                        <mu-form-item prop="title" :rules="blankRules">
-                            <mu-text-field prop="title" placeholder="マーカーのタイトル" v-model="newMarker.title"/>
-                        </mu-form-item>
+
+                        <div class="ui grid" style="margin-left:0;margin-right:0;margin-bottom:10px;">
+                            <div class="three wide mobile three wide tablet three wide computer column"
+                                 style="padding:10px 0 0 0;margin-top:5px;">
+                                <mu-form-item prop="loop">
+                                    <mu-checkbox label="loop" v-model="newMarker.loop"></mu-checkbox>
+                                </mu-form-item>
+                            </div>
+
+                            <div class="thirteen wide mobile thirteen wide tablet thirteen wide computer column"
+                                 style="padding:10px 0 0 0;">
+                                <mu-form-item prop="title" :rules="blankRules">
+                                    <mu-text-field prop="title" placeholder="マーカーのタイトル" v-model="newMarker.title"/>
+                                </mu-form-item>
+                            </div>
+                        </div>
+
+
                         <mu-form-item prop="desc" :rules="blankRules">
                             <mu-text-field prop="desc" placeholder="メモ（20文字以内）" v-model="newMarker.desc"/>
                         </mu-form-item>
@@ -175,10 +190,9 @@
                             </div>
                         </div>
 
-
                         <mu-flex justify-content="center" align-items="center" direction="row">
-                            <mu-button color="red"      class="smallbtn" @click="delFirebase(markersRef,newMarker.id)" v-if="newMarker.id"><mu-icon value="delete_forever" :size="20"></mu-icon>&nbsp;削除</mu-button>
-                            <mu-button color="info"     class="smallbtn" @click="saveNewMarker"     v-if="newMarker.center"><mu-icon value="save" :size="20"></mu-icon>&nbsp;保存</mu-button>
+                            <mu-button color="red"      class="smallbtn" @click="delMarkerAlert=true" v-if="newMarker.id"><mu-icon value="delete_forever" :size="20"></mu-icon>&nbsp;削除</mu-button>
+                            <mu-button color="info"     class="smallbtn" @click="saveNewMarker"  v-if="newMarker.center"><mu-icon value="save" :size="20"></mu-icon>&nbsp;保存</mu-button>
                         </mu-flex>
                     </mu-form>
 
@@ -199,7 +213,7 @@
                         </mu-form-item>
 
                         <mu-flex justify-content="center" align-items="center" direction="row">
-                            <mu-button color="red"      class="smallbtn" @click="delFirebase(projsRef,newProject.id)" v-if="newProject.id"><mu-icon value="delete_forever" :size="20"></mu-icon>&nbsp;削除</mu-button>
+                            <mu-button color="red"      class="smallbtn" @click="delProjAlert=true" v-if="newProject.id"><mu-icon value="delete_forever" :size="20"></mu-icon>&nbsp;削除</mu-button>
                             <mu-button color="info" class="smallbtn" @click="saveNewProject" v-if="newProject.center"><mu-icon value="save" :size="20"></mu-icon>&nbsp;保存</mu-button>
                         </mu-flex>
                     </mu-form>
@@ -211,6 +225,19 @@
                     </mu-flex>
 
                     <div ref="selectedPoint" class="selectedPoint" :class="{'project':editing.type==='project'}"></div>
+
+                    <mu-dialog title="マーカーを削除する" width="600" max-width="80%" :esc-press-close="false" :overlay-close="false" :open="delMarkerAlert">
+                        <p>決定をクリックすると削除されます。この処理は取り消せません。<br/>削除しない場合は「キャンセル」を押してください。</p>
+                        <mu-button slot="actions" flat color="primary" @click="delMarkerAlert=false">キャンセル</mu-button>
+                        <mu-button slot="actions" flat color="primary" @click="delFirebase(markersRef,newMarker.id)">決定</mu-button>
+                    </mu-dialog>
+
+                    <mu-dialog title="プロジェクトを削除する" width="600" max-width="80%" :esc-press-close="false" :overlay-close="false" :open="delProjAlert">
+                        <p>決定をクリックすると削除されます。この処理は取り消せません。<br/>削除しない場合は「キャンセル」を押してください。</p>
+                        <mu-button slot="actions" flat color="primary" @click="delProjAlert=false">キャンセル</mu-button>
+                        <mu-button slot="actions" flat color="primary" @click="delFirebase(projsRef,newProject.id)">決定</mu-button>
+                    </mu-dialog>
+
                 </mu-flex>
             </div>
             <!--/EDIT OVERLAY-->
@@ -250,6 +277,10 @@
         },
         data() {
             return {
+                //Alert
+                delMarkerAlert:false,
+                delProjAlert:false,
+
                 //google GeoCoder
                 geocoder: {},
 
@@ -285,7 +316,8 @@
                     thumb:      null,
                     project:    null,
                     w:      35,
-                    h:      35
+                    h:      35,
+                    loop:   false
                 },
                 newProject:{
                     center:     null,
@@ -443,42 +475,11 @@
             },
 
             tClick(val,id){
-
                 console.log("tclick");
-
                 this.switchLayer('edit');
                 this.newMarker = val;
                 if(id) this.newMarker.id =id;
-
-
-
-                // if (val.markertype === 'mp3') {
-                //     //mp3プレイヤーを開く
-                //     this.a_mp3(['pod', 0, 'playing',false]);
-                //     setTimeout(()=> this.a_mp3(['pod',0,'file',val.mp3]),100);
-                //     setTimeout(()=> this.a_mp3(['pod',0,'volume',75]),100);
-                //     setTimeout(()=> this.a_mp3(['pod',0,'playing', true+Math.floor(Math.random() * 3)]),100);
-                //
-                // } else if (val.markertype === 'pod') {
-                //
-                //     //ポッドキャストepisodeの場合、Widgetを開く！（今はダミーでmp3プレイヤー）
-                //     this.a_mp3(['pod', 0, 'playing',false]);
-                //     setTimeout(()=> this.a_mp3(['pod',0,'file',val.mp3]),100);
-                //     setTimeout(()=> this.a_mp3(['pod',0,'volume',75]),100);
-                //     setTimeout(()=> this.a_mp3(['pod',0,'playing', true+Math.floor(Math.random() * 3)]),100);
-                //
-                // } else if (val.markertype === 'track') {
-                //     //Spotifyプレイヤーを開く（これもすべてWidgetにする！）
-                //     this.c_getTrack(val.spotifyid,(res)=>{
-                //         if(!!res.data){
-                //             this.a_spotify(['player','track',res.data]);
-                //             this.a_spotify(['player','play',{id:val.spotifyid,type:'track'}]);
-                //         }
-                //     });
-                //     this.a_index(['bottom','open']);
-                // }
             },
-
 
             connectToSocket() {
                 if (this.spotify.me && this.spotify.me.id) {
@@ -525,6 +526,8 @@
             delFirebase(ref,id){
                 ref.child(id).remove();
                 this.cancelEditMode();
+                this.delMarkerAlert = false;
+                this.delProjAlert = false;
             },
             saveNewMarker() {
                 this.$refs.newmarkerform.validate().then(valid => {

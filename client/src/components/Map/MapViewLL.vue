@@ -226,9 +226,15 @@
                                 //let volume =  Math.floor(Math.max(0,100-18*Math.sqrt(dm)));
                                 let volume =  100*((limit - dm)/limit)^2;
 
+
+                                //各マーカーが持っているトリガー距離を確認
                                 if(marker.triggerDist>=dm){
 
-                                    if (marker.spotifytype === 'episode') {
+                                    //最初の一回か、「Loop」に設定されている場合は再生する
+                                    if(!this.mapstore.emory.play[marker.id] || this.mapstore.emory.play[marker.id]==='loop'){
+
+                                        //typeに合わせた起動
+                                        if (marker.spotifytype === 'episode') {
                                         let already_has = null;
                                         let paused_pods = [];
 
@@ -273,6 +279,11 @@
                                             console.log("all pods are used...");
                                         }
                                     }
+
+                                        //再生したマーカーの履歴を残す
+                                        this.a_mapstore(['emory','setPlay',{key:marker.id,val:marker.loop ? 'loop':'once'}]);
+                                    }
+
                                 }
 
 

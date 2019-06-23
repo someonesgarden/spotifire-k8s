@@ -56,7 +56,7 @@
                         w = 24;
                         h = 24;
                     }else if(!!this.marker.markertype && !!this.marker.triggerDist){
-                        icon  ="/static/img/markers/m_"+this.marker.markertype+"_"+this.marker.triggerDist+".png";
+                        icon  ="/static/img/markers/m_"+this.marker.markertype+"_"+this.marker.triggerDist+(this.marker.loop ? 'loop' : '')+".png";
                     }
                     return {url:icon, w:w, h:h};
             }
