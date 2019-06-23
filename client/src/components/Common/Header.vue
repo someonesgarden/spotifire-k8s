@@ -27,7 +27,7 @@
 <!--                    </mu-list-item>-->
 
                     <mu-divider></mu-divider>
-                    <mu-list-item button  @click="a_index(['howModal','set',true])">
+                    <mu-list-item button  @click="a_index(['howModal','toggle',true])">
                         <mu-list-item-title><mu-icon value="info" :size="15"></mu-icon>&nbsp;使い方</mu-list-item-title>
                     </mu-list-item>
 

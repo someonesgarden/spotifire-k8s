@@ -392,7 +392,7 @@
                 this.onProjectSelected(id);
             },
             mClick(val,id){
-
+                this.a_mapstore(['set', 'tracking', false]);
                 this.callPlayerFromMap(val);
 
             },
@@ -423,7 +423,7 @@
             playStart(){
                 this.a_mapstore(['set', 'tracking', true]);
                 this.switchLayer('map');
-                this.a_index(['storyModal','set',true]);
+                this.a_index(['storyModal','toggle',true]);
             },
 
             switchLayer(mode) {

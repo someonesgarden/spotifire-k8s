@@ -110,10 +110,14 @@
             'mapstore.tracking': {
                 handler: function () {
                     if (this.mapstore.tracking){
+                        console.log("watch:tracking:START");
+                        this.resetAllPods(); //全てのmp3プレイヤーを初期化
                         this.keepTracking();
                     }else{
+                        console.log("watch:tracking:STOP");
                         this.timeout = null;
                         this.center = null; //計算用のcenter
+                        this.resetAllPods(); //全てのmp3プレイヤーを初期化
                     }
                 }
             },
@@ -233,52 +237,66 @@
                                     //最初の一回か、「Loop」に設定されている場合は再生する
                                     if(!this.mapstore.emory.play[marker.id] || this.mapstore.emory.play[marker.id]==='loop'){
 
-                                        //typeに合わせた起動
-                                        if (marker.spotifytype === 'episode') {
-                                        let already_has = null;
-                                        let paused_pods = [];
+                                        //mp3の場合、３つのmp3プレイヤーを起動する
+                                        if (marker.markertype === 'mp3') {
+                                            let already_has = null;
+                                            let paused_pods = [];
 
-                                        this.mp3.pods.forEach((p, i) => {
-                                            if (p.file === marker.mp3){
-                                                already_has = {num: i, ...p};
-                                            }
+                                            this.mp3.pods.forEach((p, i) => {
+                                                if (p.file === marker.mp3) {
+                                                    already_has = {num: i, ...p};
+                                                }
 
-                                            if (!p.playing){
-                                                this.a_mp3(['pod', i, 'file', '']);
-                                                this.a_mp3(['pod', i, 'volume', 0]);
-                                                this.a_mp3(['pod', i, 'playing', false]);
-                                                paused_pods.push(i);
-                                            }
-                                        });
+                                                if (!p.playing) {
+                                                    this.a_mp3(['pod', i, 'file', '']);
+                                                    this.a_mp3(['pod', i, 'volume', 0]);
+                                                    this.a_mp3(['pod', i, 'playing', false]);
+                                                    paused_pods.push(i);
+                                                }
+                                            });
 
-                                        if (already_has) {
-                                            console.log("already_has");
-                                            if (!already_has.playing) {
-                                                setTimeout(() => this.a_mp3(['pod', already_has.num, 'file', marker.mp3]), 100);
-                                                setTimeout(() => this.a_mp3(['pod', already_has.num, 'volume', volume + Math.floor(Math.random() * 2)]), 100);
+                                            if (already_has) {
+                                                console.log("already_has");
+                                                if (!already_has.playing) {
+                                                    setTimeout(() => this.a_mp3(['pod', already_has.num, 'file', marker.mp3]), 100);
+                                                    setTimeout(() => this.a_mp3(['pod', already_has.num, 'volume', volume + Math.floor(Math.random() * 2)]), 100);
 
-                                                //this.a_mp3(['pod', already_has.num, 'playing', false]);
-                                                setTimeout(() => this.a_mp3(['pod', already_has.num, 'playing', true+Math.floor(Math.random() * 3)]), 200);
+                                                    //this.a_mp3(['pod', already_has.num, 'playing', false]);
+                                                    setTimeout(() => this.a_mp3(['pod', already_has.num, 'playing', true + Math.floor(Math.random() * 3)]), 200);
+                                                } else {
+                                                    //すでに再生中は、ボリューが変わる程度
+
+                                                    //setTimeout(() => this.a_mp3(['pod', already_has.num, 'playing', true]), 10);
+                                                    console.log("changevolume:", volume);
+                                                    console.log('pod', already_has.num, 'volume', volume);
+                                                    //this.a_mp3(['pod', already_has.num, 'volume', volume + Math.floor(Math.random() * 2)]);
+                                                    setTimeout(() => this.a_mp3(['pod', already_has.num, 'volume', volume + Math.floor(Math.random() * 2)]), 100);
+                                                }
+
+                                            } else if (paused_pods.length > 0) {
+
+                                                setTimeout(() => this.a_mp3(['pod', paused_pods[0], 'file', marker.mp3]), 100);
+                                                setTimeout(() => this.a_mp3(['pod', paused_pods[0], 'volume', volume]), 100);
+                                                setTimeout(() => this.a_mp3(['pod', paused_pods[0], 'playing', true + Math.floor(Math.random() * 3)]), 200);
+
                                             } else {
-                                                //すでに再生中は、ボリューが変わる程度
-
-                                                //setTimeout(() => this.a_mp3(['pod', already_has.num, 'playing', true]), 10);
-                                                console.log("changevolume:", volume);
-                                                console.log('pod', already_has.num, 'volume', volume);
-                                                //this.a_mp3(['pod', already_has.num, 'volume', volume + Math.floor(Math.random() * 2)]);
-                                                setTimeout(() => this.a_mp3(['pod', already_has.num, 'volume', volume + Math.floor(Math.random() * 2)]), 100);
+                                                console.log("all pods are used...");
                                             }
 
-                                        } else if (paused_pods.length > 0) {
+                                        }else if(marker.markertype === 'pod'){
 
-                                            setTimeout(() => this.a_mp3(['pod', paused_pods[0], 'file', marker.mp3]), 100);
-                                            setTimeout(() => this.a_mp3(['pod', paused_pods[0], 'volume', volume]), 100);
-                                            setTimeout(() => this.a_mp3(['pod', paused_pods[0], 'playing', true+Math.floor(Math.random() * 3)]), 200);
+                                            //Podcastの場合、StoryModalを開く。
+                                            //すでに開いているときは、、みたいな処理を書く必要あり！
+                                            this.a_index(['storyModal','set',{
+                                                open:true,
+                                                thumb: marker.thumb,
+                                                title: marker.title,
+                                                content: marker.desc,
+                                                spotifyid:marker.spotifyid,
+                                                spotifytype:marker.spotifytype
+                                            }]);
 
-                                        } else {
-                                            console.log("all pods are used...");
                                         }
-                                    }
 
                                         //再生したマーカーの履歴を残す
                                         this.a_mapstore(['emory','setPlay',{key:marker.id,val:marker.loop ? 'loop':'once'}]);
@@ -304,11 +322,13 @@
 
                     if (this.mapstore.markerDists.every(d => d.dist === 0 || d.dist > limit/1000)) {
                         //全てが範囲外なら、プレイヤーをリセット
-                        this.mp3.pods.forEach((p, i) => {
-                            setTimeout(() =>  this.a_mp3(['pod', i, 'file', null]), 20);
-                            setTimeout(() => this.a_mp3(['pod', i, 'volume', 0]), 20);
-                            setTimeout(() => this.a_mp3(['pod', i, 'playing',false]), 20);
-                        });
+                        this.resetAllPods();
+                        //
+                        // this.mp3.pods.forEach((p, i) => {
+                        //     setTimeout(() =>  this.a_mp3(['pod', i, 'file', null]), 20);
+                        //     setTimeout(() => this.a_mp3(['pod', i, 'volume', 0]), 20);
+                        //     setTimeout(() => this.a_mp3(['pod', i, 'playing',false]), 20);
+                        // });
 
                     } else {
                         this.mapstore.markerDists.forEach((d, i) => {

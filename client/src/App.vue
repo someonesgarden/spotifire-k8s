@@ -27,10 +27,10 @@
     <!-- HOW MODAL-->
     <mu-dialog transition="slide-bottom" fullscreen :open.sync="modal.modals.how.open"  class="howModal">
       <mu-appbar color="blueGrey900" title="What's Emory?">
-        <mu-button slot="left" icon @click="a_index(['howModal','set',false])">
+        <mu-button slot="left" icon @click="a_index(['howModal','toggle',false])">
           <mu-icon value="chevron_left"></mu-icon>
         </mu-button>
-        <mu-button slot="right" flat  @click="a_index(['howModal','set',false])">
+        <mu-button slot="right" flat  @click="a_index(['howModal','toggle',false])">
           <mu-icon value="done_all"></mu-icon>
         </mu-button>
       </mu-appbar>
@@ -54,19 +54,16 @@
     <!-- STORY MODAL-->
     <mu-dialog transition="slide-bottom" fullscreen :open.sync="modal.modals.story.open"  class="storyModal">
       <mu-appbar style="background-color:inherit;">
-        <mu-button slot="left" icon @click="a_index(['storyModal','set',false])">
+        <mu-button slot="left" icon @click="a_index(['storyModal','toggle',false])">
           <mu-icon value="chevron_left"></mu-icon>
         </mu-button>
-
       </mu-appbar>
       <mu-flex class="body flex-wrapper" justify-content="center" align-items="center" direction="column">
-
-        <carousel ref="story" navigation-prev-label="〈" navigation-next-label="〉" :per-page="1">
-          <slide class="slide" v-for="(item,index) in modal.modals.story.items" :key="'howslide'+index">
-            <story-slide @moveTo="$refs.story.goToPage(index<modal.modals.story.items.length-1 ? index+1:0)" :slide="item" :end="index===modal.modals.story.items.length-1"></story-slide>
+        <carousel ref="story" :per-page="1">
+          <slide class="slide">
+            <story-slide></story-slide>
           </slide>
         </carousel>
-
       </mu-flex>
     </mu-dialog>
     <!--/STORY MODAL-->
@@ -116,20 +113,17 @@ export default {
 
   data:function(){
     return {
-      pwasensors: null,
+      pwasensors: null
+    }
+  },
 
-      infos: [
-        {
-          title: '令和の名言',
-          subtitle: '令和の名言!!!!',
-          description: '「それはこれから人生の混沌の中で見つけ出していきます」',
-          btn1label: 'ステーション',
-          bg: '/static/img/bg1.jpg',
-          btncolor: '#1e7019',
-          id: 'no1'
-        }
-      ],
-      tokenizer: null
+  watch:{
+    'modal.modals.story':{
+      handler(newStory){
+        console.log("modal.modals.story changed");
+        console.log(newStory);
+      },
+      deep:true
     }
   },
 

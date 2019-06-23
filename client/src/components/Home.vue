@@ -8,7 +8,7 @@
 
             <div class="ui grid" style="padding:0;margin:0 0 10px 0;">
                 <div class="sixteen wide column" style="padding:0;margin:0;">
-                    <mu-button color="amber600" class="smallbtn" full-width   @click="a_index(['howModal','set',true])">
+                    <mu-button color="amber600" class="smallbtn" full-width   @click="a_index(['howModal','toggle',true])">
                         <mu-icon value="help_outline"></mu-icon>&nbsp;Emoryについて
                     </mu-button>
                 </div>

@@ -1,36 +1,57 @@
 <template>
-    <div class="slide_inner">
+    <div class="slide_inner" v-if="modal.modals.story">
         <div style="float:none;clear:both;width:100%;margin-bottom:10px;">
             <mu-flex justify-content="center" direction="row" align-items="center" style="width:100%;">
-                <img :src="slide.thumb" class="circle"><h1>{{slide.title}}</h1>
+                <img :src="modal.modals.story.thumb" class="circle">
+                <h1>{{modal.modals.story.title}}</h1>
             </mu-flex>
-
-            <p v-html="slide.content"></p>
+            <p v-html="modal.modals.story.content"></p>
         </div>
+        <mu-paper  class="widget_player" :z-depth="5" :style="{height:height+'px'}">
+            <iframe :src="url" :width="width" :height="height" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+        </mu-paper>
 
-        <widget-player :type="slide.spotifytype" :id="slide.spotifyid"></widget-player>
-        <mu-button full-width color="greenA400" @click="a_index(['storyModal','set',false])">
+        <mu-button full-width color="greenA400" @click="a_index(['storyModal','toggle',false])">
             <mu-icon value="keyboard_arrow_down"></mu-icon>
         </mu-button>
     </div>
-
 </template>
 
 <script>
-    import {mapActions} from 'vuex';
-    import WidgetPlayer from '../Spotify/Player/WidgetPlayer';
+    import {mapActions,mapGetters} from 'vuex';
     export default {
         name: "StorySlide",
-        props:['slide','end'],
-        components:{
-            WidgetPlayer
+        data(){
+            return{
+                url:"https://open.spotify.com/embed/album/1DFixLWuPkv3KT3TnV35m3",
+                width:"100%",
+                height:"80"
+            }
         },
-        methods:mapActions(['a_index'])
+        computed:mapGetters(['modal']),
+        mounted(){
+            console.log("StorySlide:mounted");
+            this.a_mapstore(['set', 'tracking', false]);
+
+            if(this.modal.modals.story.spotifytype && this.modal.modals.story.spotifyid){
+                this.url = "https://open.spotify.com/embed/"+this.modal.modals.story.spotifytype+"/"+this.modal.modals.story.spotifyid;
+            }
+
+            if(this.modal.modals.story.spotifytype==='episode'){
+                this.height = 230;
+            }else if(this.modal.modals.story.spotifytype==='track'){
+                this.height = 80;
+            }
+        },
+
+        beforeDestroy(){
+          console.log("StorySlide:beforeDestroy");
+            this.a_mapstore(['set', 'tracking', true]);
+        },
+
+        methods:mapActions(['a_index','a_mapstore'])
     }
 </script>
 
 <style scoped lang="scss">
-
-
-
 </style>

@@ -4,7 +4,7 @@
         <h1><dot-loader class="spinner"></dot-loader>{{slide.title}}</h1>
         <p v-html="slide.content"></p>
         <mu-button color="blueGrey900" full-width @click="$emit('moveTo')" v-if="!end">次へ</mu-button>
-        <mu-button color="teal600" full-width @click="a_index(['howModal','set',false])" v-else>戻る</mu-button>
+        <mu-button color="teal600" full-width @click="a_index(['howModal','toggle',false])" v-else>戻る</mu-button>
     </div>
 
 </template>

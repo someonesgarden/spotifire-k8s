@@ -15,26 +15,17 @@ const state = {
                     title: 'Emoryの仕組み',
                     content: '最新のブラウザに内蔵された緯度経度や角度センサーなどを利用してユーザーの位置を把握。バイノーラル録音による立体的な音響演出により、いつもの町歩きに未体験の驚きを提供します。'
                 }
-            ]
+            ],
+            update:new Date()
         },
         story:{
             open:false,
-            items: [
-                {
-                    thumb: '/static/img/design/circle1.jpg',
-                    title: '物語の始まり',
-                    content: 'このエピソードを聞いてヒントを見つけよう！',
-                    spotifyid:'62i1Q2wHMXyg3jcDo0M7r6',
-                    spotifytype:'episode'
-                },
-                {
-                    thumb: '/static/img/design/circle2.jpg',
-                    title: 'スポット２',
-                    content: 'この曲を聴いて答えを探そう！',
-                    spotifyid:'7a3LbQFgp7NCuNcGlTgSsN',
-                    spotifytype:'track'
-                }
-            ]
+            thumb: '/static/img/design/circle1.jpg',
+            title: '物語の始まり',
+            content: 'このエピソードを聞いてヒントを見つけよう！',
+            spotifyid:'62i1Q2wHMXyg3jcDo0M7r6',
+            spotifytype:'episode',
+            update: new Date()
         }
     }
 }
@@ -48,7 +39,14 @@ const mutations = {
             Object.keys(state.modals).forEach(key=>state.modals[key].open=false);
             state.modals[dat.key].open = dat.val;
         }
+
+        state.modals[dat.key].update = new Date();
     },
+
+    setStory(state,data){
+        state.modals.story = data;
+        state.modals.story.update = new Date();
+    }
 }
 
 export default {
