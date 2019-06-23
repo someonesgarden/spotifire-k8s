@@ -1,11 +1,15 @@
 <template>
     <div class="slide_inner">
+        <div style="float:none;clear:both;width:100%;margin-bottom:10px;">
+            <mu-flex justify-content="center" direction="row" align-items="center" style="width:100%;">
+                <img :src="slide.thumb" class="circle"><h1>{{slide.title}}</h1>
+            </mu-flex>
 
-        <h1>{{slide.title}}</h1>
-        <img :src="slide.thumb" class="circle">
-        <p v-html="slide.content"></p>
-        <widget-player :type="'episode'" :id="'62i1Q2wHMXyg3jcDo0M7r6'" :h="230"></widget-player>
-        <mu-button full-width color="brown200" @click="a_index(['storyModal','set',false])">
+            <p v-html="slide.content"></p>
+        </div>
+
+        <widget-player :type="slide.spotifytype" :id="slide.spotifyid" :h="230"></widget-player>
+        <mu-button full-width color="greenA400" @click="a_index(['storyModal','set',false])">
             <mu-icon value="keyboard_arrow_down"></mu-icon>
         </mu-button>
     </div>

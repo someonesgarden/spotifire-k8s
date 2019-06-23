@@ -23,7 +23,16 @@ const state = {
                 {
                     thumb: '/static/img/design/circle1.jpg',
                     title: '物語の始まり',
-                    content: 'マップにマークされたスポットに近くと、音声が流れアクションが起きます。そんな感じでの説明文章のダミーです。'
+                    content: 'このエピソードを聞いてヒントを見つけよう！',
+                    spotifyid:'62i1Q2wHMXyg3jcDo0M7r6',
+                    spotifytype:'episode'
+                },
+                {
+                    thumb: '/static/img/design/circle2.jpg',
+                    title: 'スポット２',
+                    content: 'この曲を聴いて答えを探そう！',
+                    spotifyid:'7a3LbQFgp7NCuNcGlTgSsN',
+                    spotifytype:'track'
                 }
             ]
         }

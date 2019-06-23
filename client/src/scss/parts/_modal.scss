@@ -49,11 +49,11 @@
   .slide{
 
     img.circle{
-      width:80px;
-      height:80px;
+      width:48px;
+      height:48px;
       border-radius:50%;
       border:2px solid white;
-      margin:0 auto;
+      //margin:0 auto;
     }
 
 
@@ -95,16 +95,19 @@
     .body {
       .VueCarousel{
         width:90%;
+
       }
       .slide_inner{
         h1{
           //margin-top:22vh;
+          margin:0 0 0 10px;
+          padding:0;
         }
 
         img.circle{
-          float:left;
-          margin-bottom:12px;
-          margin-right:12px;
+          width:48px;
+          height:48px;
+          border-radius:50%;
         }
 
       }
