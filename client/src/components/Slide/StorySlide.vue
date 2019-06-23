@@ -4,8 +4,8 @@
         <h1>{{slide.title}}</h1>
         <img :src="slide.thumb" class="circle">
         <p v-html="slide.content"></p>
-        <widget-player></widget-player>
-        <mu-button full-width color="black" @click="a_index(['storyModal','set',false])">
+        <widget-player :type="'episode'" :id="'62i1Q2wHMXyg3jcDo0M7r6'" :h="230"></widget-player>
+        <mu-button full-width color="brown200" @click="a_index(['storyModal','set',false])">
             <mu-icon value="keyboard_arrow_down"></mu-icon>
         </mu-button>
     </div>

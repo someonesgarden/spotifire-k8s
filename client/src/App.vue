@@ -175,7 +175,8 @@ export default {
   }
 
   .widget_player{
-    background-color:#191414;
+    background-color:inherit;
+    height:232px;
   }
 
 </style>

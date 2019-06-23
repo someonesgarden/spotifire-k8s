@@ -7,7 +7,7 @@
 <script>
     export default {
         name: "WidgetPlayer",
-        props:['w','h','u'],
+        props:['w','h','type','id'],
         data(){
           return{
               url:"https://open.spotify.com/embed/album/1DFixLWuPkv3KT3TnV35m3",
@@ -16,7 +16,7 @@
             }
         },
         mounted(){
-            if(this.u) this.url = this.u;
+            if(this.type && this.id) this.url = "https://open.spotify.com/embed/"+this.type+"/"+this.id;
             if(this.w) this.width = this.w;
             if(this.h) this.height = this.h;
         }
