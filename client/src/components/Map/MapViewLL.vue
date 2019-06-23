@@ -27,9 +27,17 @@
                         :inertia="false"
                         :bounceAtZoomLimits="false"></l-image-overlay>
 
-                <my-marker v-if="mapstore.markers && mapstore.mainuser" v-for="(marker,id) in sortedMarkers" :marker="marker" :key="'marker'+id" :id="id" @mClick="$emit('mClick',marker,id)"></my-marker>
+                <my-marker v-if="mapstore.markers && mapstore.mainuser" v-for="(marker,id) in sortedMarkers"
+                           :marker="marker"
+                           :key="'marker'+id"
+                           :id="id"
+                           @mClick="$emit('mClick',marker,id)" @tClick="$emit('tClick',marker,id)"></my-marker>
                 <my-marker v-if="mapstore.mainuser && mapstore.mainuser.id==='GUEST'" :marker="mapstore.mainuser"></my-marker>
-                <my-tooltip v-if="mapstore.emory.projects" v-for="(project,id) in mapstore.emory.projects" :title="project.title" :center="project.center" :key="'proj'+id" @pClick="$emit('pClick',project,id)"></my-tooltip>
+                <my-tooltip v-if="mapstore.emory.projects" v-for="(project,id) in mapstore.emory.projects"
+                            :title="project.title"
+                            :center="project.center"
+                            :key="'proj'+id"
+                            @pClick="$emit('pClick',project,id)"></my-tooltip>
                 <l-polygon :lat-lngs="mapstore.map.poly" color="#1DEA6E"  v-if="mapstore.map.poly"/>
             </l-map>
             <l-map v-else ref="map"
@@ -40,9 +48,17 @@
                    :min-zoom="0"
                    @click="(val)=> $emit('mapClick',val)">
                 <l-tile-layer :url="mapstore.map.url" :attribution="mapstore.map.attribution"></l-tile-layer>
-                <my-marker v-if="mapstore.markers && mapstore.mainuser" v-for="(marker,id) in sortedMarkers" :marker="marker" :key="'marker'+id" :id="id" @mClick="$emit('mClick',marker,id)"></my-marker>
+                <my-marker v-if="mapstore.markers && mapstore.mainuser" v-for="(marker,id) in sortedMarkers"
+                           :marker="marker"
+                           :key="'marker'+id"
+                           :id="id"
+                           @mClick="$emit('mClick',marker,id)" @tClick="$emit('tClick',marker,id)"></my-marker>
                 <my-marker v-if="mapstore.mainuser && mapstore.mainuser.id==='GUEST'" :marker="mapstore.mainuser"></my-marker>
-                <my-tooltip v-if="mapstore.emory.projects" v-for="(project,id) in mapstore.emory.projects" :title="project.title" :center="project.center" :key="'proj'+id" @pClick="$emit('pClick',project,id)"></my-tooltip>
+                <my-tooltip v-if="mapstore.emory.projects" v-for="(project,id) in mapstore.emory.projects"
+                            :title="project.title"
+                            :center="project.center"
+                            :key="'proj'+id"
+                            @pClick="$emit('pClick',project,id)"></my-tooltip>
                 <l-polygon :lat-lngs="mapstore.map.poly" color="#1DEA6E"  v-if="mapstore.map.poly"/>
             </l-map>
         </div>
@@ -210,51 +226,56 @@
                                 //let volume =  Math.floor(Math.max(0,100-18*Math.sqrt(dm)));
                                 let volume =  100*((limit - dm)/limit)^2;
 
-                                if (marker.spotifytype === 'episode') {
-                                    let already_has = null;
-                                    let paused_pods = [];
+                                if(marker.triggerDist>=dm){
 
-                                    this.mp3.pods.forEach((p, i) => {
-                                        if (p.file === marker.mp3){
-                                            already_has = {num: i, ...p};
-                                        }
+                                    if (marker.spotifytype === 'episode') {
+                                        let already_has = null;
+                                        let paused_pods = [];
 
-                                        if (!p.playing){
-                                            this.a_mp3(['pod', i, 'file', '']);
-                                            this.a_mp3(['pod', i, 'volume', 0]);
-                                            this.a_mp3(['pod', i, 'playing', false]);
-                                            paused_pods.push(i);
-                                        }
-                                    });
+                                        this.mp3.pods.forEach((p, i) => {
+                                            if (p.file === marker.mp3){
+                                                already_has = {num: i, ...p};
+                                            }
 
-                                    if (already_has) {
-                                        console.log("already_has");
-                                        if (!already_has.playing) {
-                                            setTimeout(() => this.a_mp3(['pod', already_has.num, 'file', marker.mp3]), 100);
-                                            setTimeout(() => this.a_mp3(['pod', already_has.num, 'volume', volume + Math.floor(Math.random() * 2)]), 100);
+                                            if (!p.playing){
+                                                this.a_mp3(['pod', i, 'file', '']);
+                                                this.a_mp3(['pod', i, 'volume', 0]);
+                                                this.a_mp3(['pod', i, 'playing', false]);
+                                                paused_pods.push(i);
+                                            }
+                                        });
 
-                                            //this.a_mp3(['pod', already_has.num, 'playing', false]);
-                                            setTimeout(() => this.a_mp3(['pod', already_has.num, 'playing', true+Math.floor(Math.random() * 3)]), 200);
+                                        if (already_has) {
+                                            console.log("already_has");
+                                            if (!already_has.playing) {
+                                                setTimeout(() => this.a_mp3(['pod', already_has.num, 'file', marker.mp3]), 100);
+                                                setTimeout(() => this.a_mp3(['pod', already_has.num, 'volume', volume + Math.floor(Math.random() * 2)]), 100);
+
+                                                //this.a_mp3(['pod', already_has.num, 'playing', false]);
+                                                setTimeout(() => this.a_mp3(['pod', already_has.num, 'playing', true+Math.floor(Math.random() * 3)]), 200);
+                                            } else {
+                                                //すでに再生中は、ボリューが変わる程度
+
+                                                //setTimeout(() => this.a_mp3(['pod', already_has.num, 'playing', true]), 10);
+                                                console.log("changevolume:", volume);
+                                                console.log('pod', already_has.num, 'volume', volume);
+                                                //this.a_mp3(['pod', already_has.num, 'volume', volume + Math.floor(Math.random() * 2)]);
+                                                setTimeout(() => this.a_mp3(['pod', already_has.num, 'volume', volume + Math.floor(Math.random() * 2)]), 100);
+                                            }
+
+                                        } else if (paused_pods.length > 0) {
+
+                                            setTimeout(() => this.a_mp3(['pod', paused_pods[0], 'file', marker.mp3]), 100);
+                                            setTimeout(() => this.a_mp3(['pod', paused_pods[0], 'volume', volume]), 100);
+                                            setTimeout(() => this.a_mp3(['pod', paused_pods[0], 'playing', true+Math.floor(Math.random() * 3)]), 200);
+
                                         } else {
-                                            //すでに再生中は、ボリューが変わる程度
-
-                                            //setTimeout(() => this.a_mp3(['pod', already_has.num, 'playing', true]), 10);
-                                            console.log("changevolume:", volume);
-                                            console.log('pod', already_has.num, 'volume', volume);
-                                            //this.a_mp3(['pod', already_has.num, 'volume', volume + Math.floor(Math.random() * 2)]);
-                                            setTimeout(() => this.a_mp3(['pod', already_has.num, 'volume', volume + Math.floor(Math.random() * 2)]), 100);
+                                            console.log("all pods are used...");
                                         }
-
-                                    } else if (paused_pods.length > 0) {
-
-                                        setTimeout(() => this.a_mp3(['pod', paused_pods[0], 'file', marker.mp3]), 100);
-                                        setTimeout(() => this.a_mp3(['pod', paused_pods[0], 'volume', volume]), 100);
-                                        setTimeout(() => this.a_mp3(['pod', paused_pods[0], 'playing', true+Math.floor(Math.random() * 3)]), 200);
-
-                                    } else {
-                                        console.log("all pods are used...");
                                     }
                                 }
+
+
                             }
                         })
                     }

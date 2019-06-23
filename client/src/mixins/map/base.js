@@ -17,6 +17,34 @@ export default{
 
     methods: {
 
+        callPlayerFromMap(val){
+            if (val.markertype === 'mp3') {
+                //mp3プレイヤーを開く
+                this.a_mp3(['pod', 0, 'playing',false]);
+                setTimeout(()=> this.a_mp3(['pod',0,'file',val.mp3]),100);
+                setTimeout(()=> this.a_mp3(['pod',0,'volume',75]),100);
+                setTimeout(()=> this.a_mp3(['pod',0,'playing', true+Math.floor(Math.random() * 3)]),100);
+
+            } else if (val.markertype === 'pod') {
+
+                //ポッドキャストepisodeの場合、Widgetを開く！（今はダミーでmp3プレイヤー）
+                this.a_mp3(['pod', 0, 'playing',false]);
+                setTimeout(()=> this.a_mp3(['pod',0,'file',val.mp3]),100);
+                setTimeout(()=> this.a_mp3(['pod',0,'volume',75]),100);
+                setTimeout(()=> this.a_mp3(['pod',0,'playing', true+Math.floor(Math.random() * 3)]),100);
+
+            } else if (val.markertype === 'track') {
+                //Spotifyプレイヤーを開く（これもすべてWidgetにする！）
+                this.c_getTrack(val.spotifyid,(res)=>{
+                    if(!!res.data){
+                        this.a_spotify(['player','track',res.data]);
+                        this.a_spotify(['player','play',{id:val.spotifyid,type:'track'}]);
+                    }
+                });
+                this.a_index(['bottom','open']);
+            }
+        },
+
 
         bottomAvatarClick(mkr){
             this.a_mapstore(['set','tracking',false]);

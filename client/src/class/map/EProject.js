@@ -22,15 +22,18 @@ export default class EProject{
     }
 
     updateOrNew(firebaseRef){
-        let update = true;
+
         let updates = {};
         this.init();
 
-        if(this.project.id){
-            if(!firebaseRef.child(this.project.id)) update = false;
-        }else{
-            update = false;
-        }
+        let update = this.project.id && firebaseRef.child(this.project.id);
+
+        // let update = true;
+        // if(this.project.id){
+        //     if(!firebaseRef.child(this.project.id)) update = false;
+        // }else{
+        //     update = false;
+        // }
 
         if(this.project.spotifyid){
             this.checkSpotify(res=>{
@@ -57,7 +60,7 @@ export default class EProject{
                     }
 
                 }else{
-                    store.commit('setAlertText',"利用にはSpotifyログインします。p");
+                    store.commit('setAlertText',"利用にはSpotifyログインします。");
                     store.commit('setAlertState',true);
                     store.commit('setAlertAction',"login");
                 }

@@ -1,7 +1,7 @@
 <template>
     <mu-flex class="mapflex" align-items="center">
         <mu-flex justify-content="center" class="maparea" fill>
-            <map-view id="map" ref="emorymap" :markersRef="markersRef" @switchLayer="switchLayer" @mapClick="mapClick" @mClick="mClick" @pClick="pClick"/>
+            <map-view id="map" ref="emorymap" :markersRef="markersRef" @switchLayer="switchLayer" @mapClick="mapClick" @mClick="mClick" @tClick="mClick" @pClick="pClick"/>
 
             <!-- INFO_OVERLAY(MENU) -->
             <mu-flex justify-content="center" direction="column" align-items="center" class="info_overlay overlay" ref="info_overlay">
@@ -226,6 +226,7 @@
                 //FORM
                 blankRules: [ruleEmpty],
                 newMarker: {
+                    markertype: 'mp3',
                     isEpisode:  false,
                     center:     null,
                     title:      "",
@@ -391,26 +392,9 @@
                 this.onProjectSelected(id);
             },
             mClick(val,id){
-                //自分とpointの距離を測る
-                let mainuser = this.mapstore.markers[this.mapstore.mainuser.id];
 
-                if(val.spotifytype==='track'){
-                    this.c_getTrack(val.spotifyid,(res)=>{
-                        if(!!res.data){
-                            this.a_spotify(['player','track',res.data]);
-                            this.a_spotify(['player','play',{id:val.spotifyid,type:'track'}]);
-                        }
-                    });
-                    this.a_index(['bottom','open']);
+                this.callPlayerFromMap(val);
 
-                }else if(val.spotifytype==='episode'){
-                    //ポッドキャストepisodeの場合、mp3プレイヤーを開く
-                    //this.a_index(['bottom','open']);
-                    this.a_mp3(['pod', 0, 'playing',false]);
-                    setTimeout(()=> this.a_mp3(['pod',0,'file',val.mp3]),100);
-                    setTimeout(()=> this.a_mp3(['pod',0,'volume',75]),100);
-                    setTimeout(()=> this.a_mp3(['pod',0,'playing', true+Math.floor(Math.random() * 3)]),100);
-                }
             },
             connectToSocket() {
                 if (this.spotify.me && this.spotify.me.id) {

@@ -11,8 +11,8 @@ const marker0 = {
         spotifyid: null,
         userid:null,
         desc: "",
-        public: 'open',
-        thumb: null,
+        public: true,
+        thumb: '/static/img/emory/marker_thumb_dummy.jpg',
         markertype:'pod', //pod or mp3
         w: 35,
         h: 35,
@@ -64,80 +64,104 @@ export default class EMarker{
             return this.marker;
     }
 
-    firebaseUpdate(firebaseRef){
+    mp3(update,firebaseRef){
+        console.log("EMarker:mp3");
 
-        let update = true;
-        let updates = {};
+        this.marker.thumb = '/static/img/emory/marker_thumb_dummy.jpg';
 
-        if(this.marker.id){
-            if(!firebaseRef.child(this.marker.id)) update = false;
+        if(update){
+            //アップデート
+            let updates = {};
+            updates[this.marker.id] = this.marker;
+            firebaseRef.update(updates);
         }else{
-            update = false;
+            //新規保存
+            let result =  firebaseRef.push(this.marker);
+            if(this.marker.type==='mainuser') store.commit('mapstore/setMainuser',{id:result.key});
+        }
+    }
+
+    podcast(update,firebaseRef){
+
+        //Podcast APIがないので、サーチ結果から探るしかない
+        if(store.state.spotify.episodes){
+            let episode = store.state.spotify.episodes.items.filter(ep=>ep.id===this.marker.spotifyid)[0];
+            if(episode){
+                this.marker.thumb       = episode.images[0].url;
+                this.marker.spotifytype = episode.type;
+                this.marker.spotifyname = episode.name;
+                this.marker.mp3         = episode.audio_preview_url; //Episodeの場合、APIで再生できないのでmp3のアドレスも登録する。
+            }
         }
 
-        if(this.marker.spotifyid){
-            // Episodeの場合
-            // 検索されたEpisodeリストから選択
-            if(this.marker.isEpisode){
+        if(update){
+            //アップデート
+            let updates = {};
+            updates[this.marker.id] = this.marker;
+            firebaseRef.update(updates);
+        }else{
+            //新規保存
+            let result =  firebaseRef.push(this.marker);
+            if(this.marker.type==='mainuser') store.commit('mapstore/setMainuser',{id:result.key});
+        }
+    }
 
-                if(store.state.spotify.episodes){
-                    let episode = store.state.spotify.episodes.items.filter(ep=>ep.id===this.marker.spotifyid)[0];
-                    this.marker.thumb       = episode.images[0].url;
-                    this.marker.spotifytype = episode.type;
-                    this.marker.spotifyname = episode.name;
-                    this.marker.mp3         = episode.audio_preview_url; //Episodeの場合、APIで再生できないのでmp3のアドレスも登録する。
+    spotifyitem(update, firebaseRef) {
+
+        this.checkSpotify(res => {
+            if (res.data !== "") {
+                if (res.data.body.type === 'track') {
+                    this.marker.thumb = res.data.body.album.images[0].url;
+                    this.marker.spotifytype = 'track';
+                    this.marker.spotifyname = res.data.body.name;
+                } else if (res.data.body.type === 'playlist' || res.data.body.type === 'album' || res.data.body.type === 'artist') {
+                    this.marker.thumb = res.data.body.images[0].url;
+                    this.marker.spotifytype = res.data.body.type;
+                    this.marker.spotifyname = res.data.body.name;
+                } else {
+                    console.log(res.data.body);
                 }
 
-                if(update){
+                if (update) {
                     //アップデート
+                    let updates = {};
                     updates[this.marker.id] = this.marker;
                     firebaseRef.update(updates);
-                }else{
+                } else {
                     //新規保存
-                    let result =  firebaseRef.push(this.marker);
-                    if(this.marker.type==='mainuser') store.commit('mapstore/setMainuser',{id:result.key});
+                    let result = firebaseRef.push(this.marker);
+                    if (this.marker.type === 'mainuser') store.commit('mapstore/setMainuser', {id: result.key});
                 }
 
-            }else {
-                // Trackの場合
-                if (!this.marker.thumb) {
-                    this.checkSpotify(res => {
-                        if (res.data !== "") {
-                            if (res.data.body.type === 'track') {
-                                this.marker.thumb = res.data.body.album.images[0].url;
-                                this.marker.spotifytype = 'track';
-                                this.marker.spotifyname = res.data.body.name;
-                            } else if (res.data.body.type === 'playlist' || res.data.body.type === 'album' || res.data.body.type === 'artist') {
-                                this.marker.thumb = res.data.body.images[0].url;
-                                this.marker.spotifytype = res.data.body.type;
-                                this.marker.spotifyname = res.data.body.name;
-                            } else {
-                                console.log(res.data.body);
-                            }
-
-                            if (update) {
-                                //アップデート
-                                updates[this.marker.id] = this.marker;
-                                firebaseRef.update(updates);
-                            } else {
-                                //新規保存
-                                let result = firebaseRef.push(this.marker);
-                                console.log(result);
-                                if (this.marker.type === 'mainuser') store.commit('mapstore/setMainuser', {id: result.key});
-                            }
-
-                        } else {
-                            store.commit('setAlertText', "利用にはSpotifyログインします。m");
-                            store.commit('setAlertState', true);
-                            store.commit('setAlertAction', "login");
-                        }
-                    });
-                }
+            } else {
+                store.commit('setAlertText', "利用にはSpotifyログインします。");
+                store.commit('setAlertState', true);
+                store.commit('setAlertAction', "login");
             }
-        }else{
-            store.commit('setAlertText',"Spotify IDが入力されていません。");
-            store.commit('setAlertState',true);
+        });
+    }
+
+    firebaseUpdate(firebaseRef){
+        let update = this.marker.id && firebaseRef.child(this.marker.id);
+
+        // MP3の場合
+        if (this.marker.markertype === 'mp3') {
+            this.mp3(update,firebaseRef);
+        } else if (this.marker.spotifyid) {
+            // Episodeの場合
+            if (this.marker.markertype === 'pod') {
+                //if (!this.marker.mp3)
+                    this.podcast(update,firebaseRef);
+            // その他のSpotifyのアイテムの場合
+            } else if (this.marker.markertype === 'track') {
+                //if (!this.marker.mp3)
+                    this.spotifyitem(update, firebaseRef);
+            }
+        } else {
+            store.commit('setAlertText', "Spotify IDが入力されていません。");
+            store.commit('setAlertState', true);
         }
+
         return this.marker;
     }
 

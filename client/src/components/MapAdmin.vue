@@ -1,7 +1,7 @@
 <template>
     <mu-flex class="mapflex" align-items="center">
         <mu-flex justify-content="center" class="maparea" fill>
-            <map-view id="map" ref="emorymap" :markersRef="markersRef" @switchLayer="switchLayer" @mapClick="mapClick" @mClick="mClick" @pClick="pClick"/>
+            <map-view id="map" ref="emorymap" :markersRef="markersRef" @switchLayer="switchLayer" @mapClick="mapClick" @mClick="mClick" @tClick="tClick" @pClick="pClick"/>
 
             <!-- INFO_OVERLAY(MENU) -->
             <mu-flex justify-content="center" direction="column" align-items="center" class="info_overlay overlay" ref="info_overlay">
@@ -13,24 +13,7 @@
                         <img src="/static/img/emory_logo1_admin.png" style="width:180px;height:auto;">
 
                         <mu-icon value="play_circle_outline" :size="22" color="white" style="position:absolute;bottom:10px;left:10px;" @click="goMap(false,'/map')"></mu-icon>
-
                         <mu-icon value="settings_input_antenna" :size="22" color="white" style="position:absolute;top:10px;left:10px;" @click="trackOnce"></mu-icon>
-
-
-<!--                        <div class="geo_status">-->
-<!--                            <mu-button full-width color="pink700" @click="trackOnce">-->
-<!--                                <mu-icon value="settings_input_antenna" :size="15"></mu-icon>&nbsp;now-->
-<!--                            </mu-button>-->
-<!--                        </div>-->
-
-<!--                        <div class="geo_status">-->
-<!--                            <mu-button full-width color="cyan400" @click="trackToggle" v-if="mapstore.tracking">-->
-<!--                                <mu-icon value="portable_wifi_off" :size="15"></mu-icon>&nbsp;ON-->
-<!--                            </mu-button>-->
-<!--                            <mu-button full-width color="pink700" @click="trackToggle" v-else>-->
-<!--                                <mu-icon value="settings_input_antenna" :size="15"></mu-icon>&nbsp;OFF-->
-<!--                            </mu-button>-->
-<!--                        </div>-->
 
                         <div class="map_toggle">
                             <mu-button full-width color="purple800" @click="switchLayer('map')">
@@ -107,8 +90,51 @@
                     <h2 v-else>このポイントを保存する場合は「保存」を押してください。</h2>
                     <br>
 
-                    <mu-form :model="newMarker" ref="newmarkerform" :label-position="'top'" label-width="100" v-if="newMarker.center && editing.type==='marker'" class="range edit_form">
+                    <mu-form :model="newMarker" ref="newmarkerform" label-width="100" v-if="newMarker.center && editing.type==='marker'" class="range edit_form">
                         <img :src="newMarker.thumb" v-if="newMarker.thumb">
+
+
+                        <div class="ui grid" style="margin-left:0;margin-right:0;margin-bottom:0;">
+                            <div class="five wide mobile fix wide tablet fix wide computer column"  style="padding:10px 0 0 0;">
+
+                                <mu-form-item prop="markertype" :rules="blankRules">
+                                    <mu-select prop="markertype" color="primary" v-model="newMarker.markertype">
+                                        <mu-option  label="podcast" value="pod"></mu-option>
+                                        <mu-option  label="mp3"     value="mp3"></mu-option>
+                                        <mu-option  label="track" value="track"></mu-option>
+                                    </mu-select>
+                                </mu-form-item>
+                            </div>
+
+                            <div class="four wide mobile four wide tablet four wide computer column" style="padding:10px 0 0 0;">
+
+                                <mu-form-item prop="triggerDist" :rules="blankRules">
+                                    <mu-select prop="triggerDist" color="primary" v-model="newMarker.triggerDist">
+                                        <mu-option  label="5m"      value="5"></mu-option>
+                                        <mu-option  label="10m"     value="10"></mu-option>
+                                        <mu-option  label="15m"     value="15"></mu-option>
+                                        <mu-option  label="20m"     value="20"></mu-option>
+                                        <mu-option  label="25m"     value="25"></mu-option>
+                                        <mu-option  label="30m"     value="30"></mu-option>
+                                        <mu-option  label="35m"     value="35"></mu-option>
+                                        <mu-option  label="40m"     value="40"></mu-option>
+                                        <mu-option  label="45m"     value="45"></mu-option>
+                                        <mu-option  label="50m"     value="50"></mu-option>
+                                    </mu-select>
+                                </mu-form-item>
+                            </div>
+
+                            <div class="seven wide mobile seven wide tablet seven wide computer column"  style="padding:10px 0 0 0;">
+                                <mu-form-item prop="type" :rules="blankRules">
+                                    <mu-select prop="type" color="primary" v-model="newMarker.type">
+                                        <mu-option  label="スポット"  value="spot"></mu-option>
+                                        <mu-option  label="人"       value="person"></mu-option>
+                                        <mu-option  label="その他"    value="other"></mu-option>
+                                    </mu-select>
+                                </mu-form-item>
+                            </div>
+                        </div>
+
                         <mu-form-item prop="title" :rules="blankRules">
                             <mu-text-field prop="title" placeholder="マーカーのタイトル" v-model="newMarker.title"/>
                         </mu-form-item>
@@ -116,29 +142,39 @@
                             <mu-text-field prop="desc" placeholder="メモ（20文字以内）" v-model="newMarker.desc"/>
                         </mu-form-item>
 
-                        <mu-form-item prop="isEpisode" :label="newMarker.isEpisode ? 'エピソード' : 'トラック'">
-                            <mu-switch v-model="newMarker.isEpisode"></mu-switch>
-                        </mu-form-item>
+                        <div class="ui grid" style="margin-left:0;margin-right:0;margin-bottom:10px;">
 
-                        <mu-form-item prop="spotifyid" :rules="blankRules">
-                            <mu-select prop="spotifyid" color="primary" v-model="newMarker.spotifyid" v-if="newMarker.isEpisode && spotify.episodes">
-                                <mu-option  :label="epi.name" :value="epi.id" v-for="(epi,inx) in spotify.episodes.items" :key="'epi'+inx"></mu-option>
-                            </mu-select>
-                            <mu-text-field prop="spotifyid" placeholder="Track ID" v-model="newMarker.spotifyid" v-else/>
+                            <div class="three wide mobile three wide tablet three wide computer column" style="padding:10px 0 0 0;margin-top:5px;">
+                                <mu-form-item prop="public">
+                                    <mu-checkbox :label="newMarker.public ? '公開' : '非公開'" v-model="newMarker.public"></mu-checkbox>
+                                </mu-form-item>
+                            </div>
 
-                        </mu-form-item>
-                        <mu-form-item prop="type">
-                            <mu-select prop="type" color="primary" v-model="newMarker.type">
-                                <mu-option  label="スポット"  value="spot"></mu-option>
-                                <mu-option  label="人"       value="person"></mu-option>
-                                <mu-option  label="その他"    value="other"></mu-option>
-                            </mu-select>
-                        </mu-form-item>
+                            <div class="thirteen wide mobile thirteen wide tablet thirteen wide computer column"  style="padding:10px 0 0 0;" v-if="newMarker.markertype==='pod'">
+                                <mu-form-item prop="spotifyid" :rules="blankRules">
+                                    <mu-select prop="spotifyid" color="primary" v-model="newMarker.spotifyid" v-if="spotify.episodes">
+                                        <mu-option  :label="epi.name" :value="epi.id" v-for="(epi,inx) in spotify.episodes.items" :key="'epi'+inx"></mu-option>
+                                    </mu-select>
+                                    <mu-text-field prop="spotifyid" placeholder="Episode ID" v-model="newMarker.spotifyid"/>
+                                </mu-form-item>
+                            </div>
 
-                        <mu-form-item prop="radio" label="公開">
-                            <mu-radio v-model="newMarker.public" value="open" label="公開"></mu-radio>
-                            <mu-radio v-model="newMarker.public" value="close" label="非公開"></mu-radio>
-                        </mu-form-item>
+                            <div class="thirteen wide mobile thirteen wide tablet thirteen wide computer column"  style="padding:10px 0 0 0;" v-else-if="newMarker.markertype==='mp3'">
+                                <mu-form-item prop="mp3" :rules="blankRules">
+                                    <mu-text-field prop="mp3" placeholder="mp3 URL(https)" v-model="newMarker.mp3"/>
+                                </mu-form-item>
+                            </div>
+
+                            <div class="thirteen wide mobile thirteen wide tablet thirteen wide computer column"  style="padding:10px 0 0 0;" v-else>
+                                <mu-form-item prop="spotifyid" :rules="blankRules">
+                                    <mu-text-field prop="spotifyid" placeholder="Spotify ID" v-model="newMarker.spotifyid"/>
+                                    <mu-select prop="spotifyid" color="primary" v-model="newMarker.spotifyid" v-if="spotify.tracks">
+                                        <mu-option  :label="track.name" :value="track.id" v-for="(track,inx) in spotify.tracks.items" :key="'track'+inx"></mu-option>
+                                    </mu-select>
+                                </mu-form-item>
+                            </div>
+                        </div>
+
 
                         <mu-flex justify-content="center" align-items="center" direction="row">
                             <mu-button color="red"      class="smallbtn" @click="delFirebase(markersRef,newMarker.id)" v-if="newMarker.id"><mu-icon value="delete_forever" :size="20"></mu-icon>&nbsp;削除</mu-button>
@@ -237,13 +273,15 @@
                 //FORM
                 blankRules: [ruleEmpty],
                 newMarker: {
+                    mp3:'',
+                    markertype: 'mp3',
                     isEpisode:  false,
                     center:     null,
                     title:      "",
                     desc:       "",
                     type:       'other',
                     spotifyid:  "",
-                    public:     'open',
+                    public:     true,
                     thumb:      null,
                     project:    null,
                     w:      35,
@@ -391,53 +429,57 @@
                 this.drawPoly();
             },
             mapClick(val) {
-                if (this.editing.status) {
-                    if(val.containerPoint && val.containerPoint.x > 0) this.setNewCenter(val.latlng,val.containerPoint);
-                    this.switchLayer('edit');
-                } else {
-                    this.switchLayer('info');
-                }
+                if(val.containerPoint && val.containerPoint.x > 0) this.setNewCenter(val.latlng,val.containerPoint);
+                this.switchLayer('edit');
             },
             pClick(val,id){
-                if (this.editing.status){
-                    this.switchLayer('edit');
-                    this.newProject = val;
-                    if(id) this.newProject.id =id;
-                    console.log("project in edit mode");
-                }else{
-                    console.log("project in play mode");
-                    this.a_mapstore(['center','map',val.center]);
-                    this.onProjectSelected(id);
-                }
+                this.switchLayer('edit');
+                this.newProject = val;
+                if(id) this.newProject.id =id;
             },
             mClick(val,id){
-                if (this.editing.status){
-                    this.switchLayer('edit');
-                    this.newMarker = val;
-                    if(id) this.newMarker.id =id;
-                }else{
-                    //自分とpointの距離を測る
-                    let mainuser = this.mapstore.markers[this.mapstore.mainuser.id];
-
-                    if(val.spotifytype==='track'){
-                        this.c_getTrack(val.spotifyid,(res)=>{
-                            if(!!res.data){
-                                this.a_spotify(['player','track',res.data]);
-                                this.a_spotify(['player','play',{id:val.spotifyid,type:'track'}]);
-                            }
-                        });
-                        this.a_index(['bottom','open']);
-
-                    }else if(val.spotifytype==='episode'){
-                        //ポッドキャストepisodeの場合、mp3プレイヤーを開く
-                        //this.a_index(['bottom','open']);
-                        this.a_mp3(['pod', 0, 'playing',false]);
-                        setTimeout(()=> this.a_mp3(['pod',0,'file',val.mp3]),100);
-                        setTimeout(()=> this.a_mp3(['pod',0,'volume',75]),100);
-                        setTimeout(()=> this.a_mp3(['pod',0,'playing', true+Math.floor(Math.random() * 3)]),100);
-                    }
-                }
+                console.log("mclick");
+                this.callPlayerFromMap(val);
             },
+
+            tClick(val,id){
+
+                console.log("tclick");
+
+                this.switchLayer('edit');
+                this.newMarker = val;
+                if(id) this.newMarker.id =id;
+
+
+
+                // if (val.markertype === 'mp3') {
+                //     //mp3プレイヤーを開く
+                //     this.a_mp3(['pod', 0, 'playing',false]);
+                //     setTimeout(()=> this.a_mp3(['pod',0,'file',val.mp3]),100);
+                //     setTimeout(()=> this.a_mp3(['pod',0,'volume',75]),100);
+                //     setTimeout(()=> this.a_mp3(['pod',0,'playing', true+Math.floor(Math.random() * 3)]),100);
+                //
+                // } else if (val.markertype === 'pod') {
+                //
+                //     //ポッドキャストepisodeの場合、Widgetを開く！（今はダミーでmp3プレイヤー）
+                //     this.a_mp3(['pod', 0, 'playing',false]);
+                //     setTimeout(()=> this.a_mp3(['pod',0,'file',val.mp3]),100);
+                //     setTimeout(()=> this.a_mp3(['pod',0,'volume',75]),100);
+                //     setTimeout(()=> this.a_mp3(['pod',0,'playing', true+Math.floor(Math.random() * 3)]),100);
+                //
+                // } else if (val.markertype === 'track') {
+                //     //Spotifyプレイヤーを開く（これもすべてWidgetにする！）
+                //     this.c_getTrack(val.spotifyid,(res)=>{
+                //         if(!!res.data){
+                //             this.a_spotify(['player','track',res.data]);
+                //             this.a_spotify(['player','play',{id:val.spotifyid,type:'track'}]);
+                //         }
+                //     });
+                //     this.a_index(['bottom','open']);
+                // }
+            },
+
+
             connectToSocket() {
                 if (this.spotify.me && this.spotify.me.id) {
                     let your_pos_and_data = {

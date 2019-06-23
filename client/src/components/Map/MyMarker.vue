@@ -10,7 +10,7 @@
                 class-name="marker_base">
         </l-icon>
         <l-popup>
-            <div @click="$emit('mClick')">
+            <div @click="$emit('tClick')">
                 <img :src="marker.thumb"/>
                 <div class="inner">
                     <h1>{{marker.title}}</h1>
@@ -47,27 +47,16 @@
                 let icontype = (this.marker.id === this.mapstore.mainuser.id) ? 'you' : this.marker.type;
                 icontype     = this.marker.id === 'GUEST' ? 'you' : icontype;
 
-                let icon  = this.mapstore.icons[icontype][this.marker.title.charCodeAt(0) % this.mapstore.icons[icontype].length];
-                    let w = 20;
-                    let h = 20;
-                    switch(icontype){
-                        case 'you':
-                            w = 22;
-                            h = 22;
-                            break;
-                        case 'mainuser':
-                        case 'user':
-                            w = 20;
-                            h = 20;
-                            break;
-                        case 'spot':
-                            w = 18;
-                            h = 18;
-                            break;
-                        case 'other':
-                            w = 18;
-                            h = 18;
-                            break;
+                    let icon  = this.mapstore.icons[icontype][this.marker.title.charCodeAt(0) % this.mapstore.icons[icontype].length];
+                    let w = 22;
+                    let h = 22;
+
+                    if(icontype==='you'){
+                        icon  = this.mapstore.icons['you'][0];
+                        w = 24;
+                        h = 24;
+                    }else if(!!this.marker.markertype && !!this.marker.triggerDist){
+                        icon  ="/static/img/markers/m_"+this.marker.markertype+"_"+this.marker.triggerDist+".png";
                     }
                     return {url:icon, w:w, h:h};
             }
