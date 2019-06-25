@@ -11,6 +11,7 @@ import News from '../components/News.vue';
 import Login from '../components/Login.vue';
 import Analysis from '../components/Analysis.vue';
 import MapArea from '../components/MapAreaPage.vue';
+import Organic from '../components/OrganicSvg.vue';
 
 
 let routes =  [
@@ -20,6 +21,7 @@ let routes =  [
   { path:'/mapadmin',name: 'MapAdmin',component: MapAdmin, meta: { requiresAuth: true }},
   { path:'/maparea', name: 'MapArea', component: MapArea,  meta: { requiresAuth: true }},
   { path:'/analysis',name: 'Analysis',component: Analysis, meta: { requiresAuth: true }},
+  { path:'/organic', name: 'Organic', component: Organic},
   { path:'/',        name: 'Home',    component: Home,     meta: { requiresAuth: true }},
 ];
 

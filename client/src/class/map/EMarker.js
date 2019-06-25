@@ -182,12 +182,17 @@ export default class EMarker{
             this.marker.title       = store.state.spotify.me.display_name;
             this.marker.userid      = store.state.spotify.me.id;
             if(store.state.spotify.bookmarks){
-                this.marker.spotifyid   = store.state.spotify.bookmarks[0].id;
-                this.marker.spotifytype = store.state.spotify.bookmarks[0].type;
-                this.marker.thumb       = store.state.spotify.bookmarks[0].album.images[0].url;
+                // this.marker.spotifyid   = store.state.spotify.bookmarks[0].id;
+                // this.marker.spotifytype = store.state.spotify.bookmarks[0].type;
+                // this.marker.thumb       = store.state.spotify.bookmarks[0].album.images[0].url;
+                //ユーザー情報は表示させないので、とりあえずダミーにしておく。
+                this.marker.spotifyid   = "5xcb3TD6lZ4X7RId59DNxo";
+                this.marker.spotifytype = "track";
+                this.marker.thumb = '/static/img/emory/marker_thumb_dummy.jpg';
             }else{
                 //ダミーでプリンス
                 this.marker.spotifyid   = "5xcb3TD6lZ4X7RId59DNxo";
+                this.marker.thumb = '/static/img/emory/marker_thumb_dummy.jpg';
             }
             this.marker.project     = "mainuser";
         }

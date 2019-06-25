@@ -96,14 +96,11 @@
                         translateY: anime.stagger(['-160px', '160px'], {easing: ease, from: 'last'}),
                         delay: anime.stagger(7, {from: 'center'})
                     }, 0);
-
             }
-
             play();
         },
 
         beforeDestroy(){
-
         },
 
         methods: {

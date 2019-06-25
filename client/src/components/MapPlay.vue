@@ -30,10 +30,10 @@
 
                         <div class="mode_toggle" v-if="mapstore.emory.project">
                             <mu-button full-width color="blue700" @click="switchLayer('toggle_project')" v-if="mapstore.map.projectBoundary">
-                                <mu-icon value="swap_calls" :size="15"></mu-icon>&nbsp;img
+                                overlay
                             </mu-button>
                             <mu-button full-width color="blue700" @click="switchLayer('toggle_project')" v-else>
-                                <mu-icon value="swap_calls" :size="15"></mu-icon>&nbsp;map
+                                normal
                             </mu-button>
                         </div>
 
@@ -279,6 +279,7 @@
 
             avatar_thumb(){
                 console.log("avatar_thumb!");
+                //return '/static/img/markers/m_mainuser_1.png';
                 return this.spotify.bookmarks ? this.spotify.bookmarks[0].album.images[0].url : '/static/img/markers/m_mainuser_1.png'
             }
         },

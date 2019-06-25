@@ -18,8 +18,8 @@
                         <mu-list-item-title><mu-icon value="home" :size="15"></mu-icon>&nbsp;トップ</mu-list-item-title>
                     </mu-list-item>
 
-<!--                    <mu-list-item button to="/map">-->
-<!--                        <mu-list-item-title><mu-icon value="location_on" :size="15"></mu-icon>&nbsp;MAP</mu-list-item-title>-->
+<!--                    <mu-list-item button to="/organic">-->
+<!--                        <mu-list-item-title><mu-icon value="location_on" :size="15"></mu-icon>&nbsp;SVG</mu-list-item-title>-->
 <!--                    </mu-list-item>-->
 
 <!--                    <mu-list-item button to="/news">-->
