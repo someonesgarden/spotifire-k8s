@@ -2,15 +2,12 @@
     <mu-container class="flex_v">
         <div id="organic_anime" class="base">
             <div class="wrapper" v-if="!!shapes">
-
                 <organic-svg-item
                         :title="'ノーベル文学賞をとった音楽家？'"
                         :subtitle="'ミネソタ生まれ。'"
                         :shape="shapes.organicshapes[0]"
                         :deco="shapes.decos.deco1">
                 </organic-svg-item>
-
-
             </div>
         </div>
     </mu-container>

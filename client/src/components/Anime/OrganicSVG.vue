@@ -50,7 +50,7 @@
     import OrganicShape from '../../class/anime/OrganicShape';
 
     export default {
-        name: "AnimeOrganicSvg",
+        name: "OrganicSvgItem",
         props:[
             'shape',
             'deco',
