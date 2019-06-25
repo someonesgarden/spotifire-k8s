@@ -2,12 +2,12 @@
     <mu-container class="flex_v">
         <div id="organic_anime" class="base">
             <div class="wrapper" v-if="!!shapes">
-                <organic-svg
+                <organic-curve
                         :title="'ノーベル文学賞をとった音楽家？'"
                         :subtitle="'ミネソタ生まれ。'"
                         :shape="shapes.organicshapes[0]"
                         :deco="shapes.decos.deco1">
-                </organic-svg>
+                </organic-curve>
             </div>
         </div>
     </mu-container>
@@ -15,13 +15,13 @@
 <script>
 
     import {mapGetters,mapActions} from 'vuex';
-    import OrganicSvg from './Anime/OrganicSvg';
+    import OrganicCurve from './Svg/OrganicCurve';
     import axios from 'axios';
 
     export default {
         name: 'AnimeSvg',
         components:{
-            OrganicSvg
+            OrganicCurve
         },
         data(){
           return{
