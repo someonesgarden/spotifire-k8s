@@ -18,9 +18,9 @@
                         <mu-list-item-title><mu-icon value="home" :size="15"></mu-icon>&nbsp;トップ</mu-list-item-title>
                     </mu-list-item>
 
-<!--                    <mu-list-item button to="/organic">-->
-<!--                        <mu-list-item-title><mu-icon value="location_on" :size="15"></mu-icon>&nbsp;SVG</mu-list-item-title>-->
-<!--                    </mu-list-item>-->
+                    <mu-list-item button to="/animesvg">
+                        <mu-list-item-title><mu-icon value="location_on" :size="15"></mu-icon>&nbsp;SVG</mu-list-item-title>
+                    </mu-list-item>
 
 <!--                    <mu-list-item button to="/news">-->
 <!--                        <mu-list-item-title><mu-icon value="filter_list" :size="12"></mu-icon>&nbsp;news</mu-list-item-title>-->
