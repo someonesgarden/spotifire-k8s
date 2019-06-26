@@ -149,8 +149,6 @@ export default {
   @import "scss/variables";
   @import "scss/mixins";
   @import "scss/app";
-  @import "scss/parts/layout/driveway";
-  @import "scss/driveway";
 
   .container-fluid{
     padding-right:0;

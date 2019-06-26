@@ -14,6 +14,8 @@
 @import "parts/analysis/analysis";
 @import "parts/modal";
 @import "parts/form";
+@import "parts/pwa";
+@import "parts/home";
 
 /* FLEX */
 .flex_v{
@@ -59,9 +61,7 @@
 }
 
 
-// app root
 .app-wrap {
-
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -70,14 +70,17 @@
   min-height: 100vh;
   width: 100%;
 
-  &.News, &.Top{
-    margin-top:90px;
-    padding-bottom:120px;
-  }
-
-
   background-size:cover;
   background-position:center center;
+
+  &.News, &.Top{
+    margin-top:60px;
+  }
+
+  &.News{
+   background-color: #8517fe;
+    color:white;
+  }
 
   &.Login{
     background-image:url('/static/img/bg/Login.jpg');
@@ -90,9 +93,6 @@
   &.Emory{
     background-image:url('/static/img/bg/Emory1.jpg');
   }
-
-
-
 
   // headings
   h1, h2, h3, h4, h5, h6 {
@@ -107,20 +107,6 @@
   h5 { font-size: 120%; }
   h6 { font-size: 100%; }
 }
-
-
-//.VueCarousel-slide {
-//  height:100px;
-//  color:#FFF;
-//  background:#59ecff;
-//  display: flex;
-//  align-items: center;
-//  justify-content: center;
-//  border-right:1px solid #FFF;
-//  box-sizing:border-box;
-//  font-size:12px;
-//  text-align:center;
-//}
 
 .VueCarousel-pagination{
   visibility: hidden;

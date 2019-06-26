@@ -1,0 +1,34 @@
+.pwa{
+  width:              96%;
+  /*background-color: rgba(252, 243, 225, 0.37);*/
+  padding:            2px;
+  border-radius:      4px;
+  margin:             8px auto 0 auto;
+  p{
+    float:left;
+    margin:1px 1px;
+    font-size:7px;
+    color:#343434;
+
+    span.circle{
+      width:6px;
+      height:6px;
+      border-radius:50%;
+      background-color: rgba(85, 83, 82, 0.72);
+      display:inline-block;
+      margin-right:1px;
+
+      &.granted{
+        background-color: #00e400;
+      }
+
+      &.prompt{
+        background-color: #dbba5f;
+      }
+
+      &.denied{
+        background-color:red;
+      }
+    }
+  }
+}

@@ -32,12 +32,12 @@
                 <mu-button color="teal500" class="smallbtn" full-width @click="goMap(spotify.me.id!=='GUEST')">ENTER</mu-button>
 
             </div>
-            <p>
+            <p style=" padding: 12px;">
                 ログインしない場合「ゲスト」としてプレイできますがSpotifyのプレイリストは使用できず他ユーザーから見えません。<br/>
             </p>
 
             <a href="https://www.spotify.com/jp/" target="_blank">
-                <img class="spotify_logo" src="/static/img/listen_on_spotify.jpg"/>
+                <img class="spotify_login_banner" src="/static/img/listen_on_spotify.jpg"/>
             </a>
         </div>
     </mu-container>
@@ -68,32 +68,4 @@
     }
 </script>
 <style lang="scss">
-    .home_inner {
-        position:relative;
-        text-align: center;
-        border-radius: 5px;
-        background-color: rgba(255, 255, 255, 0.38);
-        padding: 20px 12px;
-        margin: 8px;
-
-        img.emory_logo {
-            height: auto;
-            max-width: 220px;
-            margin: 8px auto;
-        }
-
-        img.spotify_logo{
-            height:25px;
-            border-radius:4px;
-            display:inline;
-        }
-
-        p {
-            line-height: 1.2rem;
-            /*background-color: white;*/
-            padding: 12px;
-            border-radius: 8px;
-        }
-
-    }
 </style>

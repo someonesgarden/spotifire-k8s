@@ -1,94 +1,82 @@
 <template>
     <mu-container class="flex_v">
 
-        <div class="home_inner">
+        <div class="home_inner" style="width:100%;  margin: 80px 8px 8px 8px;">
 
-            <img class="emory_logo" src="/static/img/logos/spotifire_experiments_b.png"/>
+            <img class="spotify_logo" src="/static/img/logos/spotifire_experiments_b.png"/>
 
             <div class="ui grid" style="margin-left:0;margin-right:0;margin-bottom:0;">
                 <div class="sixteen wide mobile eight wide tablet eight wide computer column">
-                    <mu-button class="menu_btns" color="black" full-width to="/emory"
-                               style="background-image:url('/static/img/banners/emory_home.jpg');">
+                    <mu-button class="menu_btns" color="black" full-width to="/emory" style="background-image:url('/static/img/banners/emory_home.jpg');">
                         EMORY(map)
                     </mu-button>
                 </div>
                 <div class="sixteen wide mobile eight wide tablet eight wide computer column">
-                    <mu-button class="menu_btns" color="black" full-width
-                               style="opacity:0.20;">
+                    <mu-button class="menu_btns" color="black" full-width style="opacity:0.20;" @click="verifyPageAccess('news')">
+                        Subsc:Listen
                     </mu-button>
                 </div>
             </div>
 
-
+            <div class="pwa">
+                <p v-for="(status,key) in pwa" :key="'pwa_'+key"><span class="circle" :class="status"></span>{{key}}</p>
+            </div>
         </div>
+
+        <mu-dialog width="300" :open.sync="openLoginModal">
+            <div class="eight wide mobile eight wide tablet eight wide computer column">
+                <mu-text-field placeholder="ID" v-model="pageid"></mu-text-field>
+            </div>
+
+            <div class="eight wide mobile eight wide tablet eight wide computer column">
+                <mu-text-field  type="password" placeholder="PASSWORD" v-model="pass"></mu-text-field>
+            </div>
+
+            <mu-button slot="actions" flat color="primary" @click="goPageAccess"><mu-icon value="input"></mu-icon>&nbsp;go</mu-button>
+            <mu-button slot="actions" flat color="primary" @click="openLoginModal=false"><mu-icon value="cancel"></mu-icon>&nbsp;cancel</mu-button>
+        </mu-dialog>
     </mu-container>
 </template>
 <script>
     import {mapGetters,mapActions} from 'vuex';
-    import spotifyMixin from '../mixins/spotify';
     import utilMixin from '../mixins/util';
 
     export default {
         name: 'home',
-        mixins:[spotifyMixin,utilMixin],
-        computed:mapGetters(['pwa','loggedIn','spotify']),
+        mixins:[utilMixin],
+        data(){
+          return{
+              openLoginModal:false,
+              pageType:'news',
+              pageid:"",
+              pass:""
+          }
+        },
+        computed:mapGetters(['pwa','spotify','home']),
         methods:{
             ...mapActions(['a_index']),
-            // goMap(login,to='/map'){
-            //     if(this.loggedIn){
-            //         if(login && !this.spotify.credential.expires_in){
-            //             this.c_getCredential();
-            //         }else{
-            //             this.a_spotify(['set','me',{id:'GUEST'}]);
-            //         }
-            //         this.$router.push(to);
-            //     }
-            // }
-        },
 
-    }
-</script>
-<style lang="scss">
-    .home_inner {
-        width:100%;
-        position:relative;
-        text-align: center;
-        border-radius: 5px;
-        background-color: rgba(255, 255, 255, 0.38);
-        padding: 12px 12px;
-        margin: 80px 8px 8px 8px;
+            verifyPageAccess(type){
+                this.pageType = type;
+                if(this.home.verify[type]) {
+                    this.$router.push('/' + type);
+                    return;
+                }
 
-        img.emory_logo {
-            height: auto;
-            max-width: 220px;
-            margin: 8px auto;
-        }
+                this.openLoginModal = true;
+            },
 
-        img.spotify_logo{
-            height:25px;
-            border-radius:4px;
-            display:inline;
-        }
-
-        p {
-            line-height: 1.2rem;
-            /*background-color: white;*/
-            padding: 12px;
-            border-radius: 8px;
-        }
-
-        .menu_btns, .menu_btns.hover{
-            background-size:cover;
-            background-position:center center;
-            height:60px;
-            margin:10px auto;
-            .mu-button-wrapper{
-                font-weight:bold;
-                font-size:1.2rem;
-                letter-spacing: 0.42rem;
-                color:white;
+            goPageAccess(){
+                if(this.pageid==='sss' && this.pass==='ssss'){
+                    this.a_index(['home','verify',{key:this.pageType,val:true}]);
+                    this.$router.push('/'+this.pageType);
+                }
+                this.openLoginModal = false;
             }
         }
 
     }
+</script>
+<style lang="scss">
+
 </style>

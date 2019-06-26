@@ -4,6 +4,10 @@ export const a_login    = ({commit},params) => commit('login', params)
 export const a_index    =  ({commit}, [type, action, data]) => {
     const actions = {
 
+        home:{
+          verify:()=>commit('setHomeVerify',data),
+        },
+
         header:{
           mode:    (data) => commit('setHeaderMode',data),
         },

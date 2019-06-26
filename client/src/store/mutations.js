@@ -6,6 +6,12 @@ const state = {
         mode:"normal"
     },
 
+    home:{
+        verify:{
+            news:false
+        }
+    },
+
     device:{
         platform: 'unknown',
         browser: 'unknown',
@@ -26,6 +32,10 @@ const state = {
 };
 
 const  mutations = {
+
+    setHomeVerify(state,data){
+      state.home.verify[data.key] = data.val;
+    },
 
     setHeaderMode(state,data){
       state.header.mode = data;
