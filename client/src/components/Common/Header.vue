@@ -1,14 +1,14 @@
 <template>
     <div id="HeaderTop" class="nav-header">
-        <mu-appbar class="mu-appbar-header">
-            <mu-button slot="left" @click="side.left.open = true" class="top-icon">
-                <mu-icon value="border_left"></mu-icon>
-            </mu-button>
 
-            <mu-menu  open-on-hover cover placement="left-start" :open.sync="open">
+        <!-- AppBar Normal -->
+        <mu-appbar class="appbar-normal mu-appbar-header" :class="[$route.name]">
+
+            <mu-menu  open-on-hover cover placement="left-start" :open.sync="open.normal">
+
                 <mu-button flat>
                     <img class="menu-icon" src="/static/img/spotifire_logo.png" style="width:110px; height:auto;"></mu-button>
-                <mu-list slot="content" @mouseup="toggleMenu">
+                <mu-list slot="content" @mouseup="toggleMenu('normal')">
 
 <!--                    <mu-list-item button  @click="a_index(['storyModal','set',true])">-->
 <!--                        <mu-list-item-title><mu-icon value="info" :size="15"></mu-icon>&nbsp;ストーリー</mu-list-item-title>-->
@@ -34,16 +34,66 @@
                 </mu-list>
             </mu-menu>
 
+            <mu-button flat slot="left" @click="side.left.open = true">
+                <mu-icon value="border_left"></mu-icon>
+            </mu-button>
             <mu-button flat slot="right" color="grey500" @click="a_index(['bottom','open'])">
                 <mu-icon value="border_bottom"></mu-icon>
             </mu-button>
-
             <mu-button flat slot="right" @click="side.right.open=true">
                 <mu-icon value="border_right"></mu-icon>
             </mu-button>
 
         </mu-appbar>
 
+        <!-- AppBar Emory -->
+        <mu-appbar color="blueGrey900" class="appbar-emory mu-appbar-header" :class="[$route.name]">
+
+            <mu-menu  open-on-hover cover placement="left-start" :open.sync="open.map">
+
+                <mu-button flat>
+                    <img class="menu-icon" src="/static/img/emory_logo_h_w.png" style="width:110px; height:auto;"></mu-button>
+                <mu-list slot="content" @mouseup="toggleMenu('map')">
+
+                    <!--                    <mu-list-item button  @click="a_index(['storyModal','set',true])">-->
+                    <!--                        <mu-list-item-title><mu-icon value="info" :size="15"></mu-icon>&nbsp;ストーリー</mu-list-item-title>-->
+                    <!--                    </mu-list-item>-->
+
+                    <mu-list-item button to="/">
+                        <mu-list-item-title><mu-icon value="home" :size="15"></mu-icon>&nbsp;トップ</mu-list-item-title>
+                    </mu-list-item>
+
+<!--                    <mu-list-item button to="/animesvg">-->
+<!--                        <mu-list-item-title><mu-icon value="location_on" :size="15"></mu-icon>&nbsp;SVG</mu-list-item-title>-->
+<!--                    </mu-list-item>-->
+
+                    <!--                    <mu-list-item button to="/news">-->
+                    <!--                        <mu-list-item-title><mu-icon value="filter_list" :size="12"></mu-icon>&nbsp;news</mu-list-item-title>-->
+                    <!--                    </mu-list-item>-->
+
+                    <mu-divider></mu-divider>
+                    <mu-list-item button  @click="a_index(['howModal','toggle',true])">
+                        <mu-list-item-title><mu-icon value="info" :size="15"></mu-icon>&nbsp;使い方</mu-list-item-title>
+                    </mu-list-item>
+
+                </mu-list>
+            </mu-menu>
+
+            <mu-button flat slot="left" @click="side.left.open = true">
+                <mu-icon value="border_left"></mu-icon>
+            </mu-button>
+            <mu-button flat slot="right" color="grey500" @click="a_index(['bottom','open'])">
+                <mu-icon value="border_bottom"></mu-icon>
+            </mu-button>
+            <mu-button flat slot="right" @click="side.right.open=true">
+                <mu-icon value="border_right"></mu-icon>
+            </mu-button>
+
+        </mu-appbar>
+
+
+
+        <!-- Drawers -->
         <mu-drawer :open.sync="side.left.open" :docked="side.left.docked" :width="300">
             <mu-list style="width:inherit;">
                 <aside-view @rightopen="side.right.open=true"></aside-view>
@@ -73,7 +123,10 @@
         },
         data:function(){
             return{
-                open:false,
+                open:{
+                  normal:false,
+                  map:false
+                },
                 side:{
                     left:{
                         open:false,
@@ -86,13 +139,12 @@
                 }
             }
         },
-        computed:mapGetters(['bottom','rootAction']),
+        computed:mapGetters(['bottom','rootAction','header']),
         methods:{
             ...mapActions(['a_index']),
 
-            toggleMenu(){
-                console.log("toggleMenu!");
-                this.open = !this.open;
+            toggleMenu(type){
+                this.open[type] = !this.open[type];
             }
         },
 
@@ -105,7 +157,7 @@
         }
     }
 </script>
-<style>
+<style lang="scss">
     .mu-appbar-header {
         position: fixed;
         left: 0;
@@ -115,10 +167,27 @@
         overflow: hidden;
     }
 
-    button.top-icon{
-        -webkit-box-shadow:inherit;
-        box-shadow:inherit;
-        background-color:inherit;
+    header.mu-appbar{
+        transition: 1s;
+        -webkit-transition: 1s;
+
+        &.appbar-normal{
+            &.Home, &.Login{
+                transform: translateY(0px);
+            }
+            &.Map{
+                transform: translateY(-68px);
+            }
+        }
+
+        &.appbar-emory{
+            &.Home, &.Login{
+                transform: translateY(-68px);
+            }
+            &.Map{
+                transform: translateY(0px);
+            }
+        }
     }
 
 </style>

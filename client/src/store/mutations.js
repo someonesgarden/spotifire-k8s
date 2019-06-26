@@ -1,6 +1,11 @@
 import isMobile from 'ismobilejs'
 
 const state = {
+
+    header:{
+        mode:"normal"
+    },
+
     device:{
         platform: 'unknown',
         browser: 'unknown',
@@ -21,6 +26,10 @@ const state = {
 };
 
 const  mutations = {
+
+    setHeaderMode(state,data){
+      state.header.mode = data;
+    },
 
     setPlatform(state) {
         console.log("setPlatform");
