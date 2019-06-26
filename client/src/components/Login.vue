@@ -4,7 +4,7 @@
 
             <mu-flex class="flex-wrapper" justify-content="center" align-items="center" direction="column">
 
-                <img class="menu-icon" src="/static/img/emory_logo1.png" style="width:180px;height:auto;margin-bottom:10px;">
+                <img class="menu-icon" src="/static/img/logos/spotifire_experiments.png" style="width:180px;height:auto;margin-bottom:10px;">
 
                 <mu-form ref="adminform" :model="admin" class="mu-demo-form" label-position="top" label-width="100">
 

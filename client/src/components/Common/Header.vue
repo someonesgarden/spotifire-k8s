@@ -14,8 +14,8 @@
 <!--                        <mu-list-item-title><mu-icon value="info" :size="15"></mu-icon>&nbsp;ストーリー</mu-list-item-title>-->
 <!--                    </mu-list-item>-->
 
-                    <mu-list-item button to="/">
-                        <mu-list-item-title><mu-icon value="home" :size="15"></mu-icon>&nbsp;トップ</mu-list-item-title>
+                    <mu-list-item button to="/emory">
+                        <mu-list-item-title><mu-icon value="extension" :size="15"></mu-icon>&nbsp;Emory</mu-list-item-title>
                     </mu-list-item>
 
 <!--                    <mu-list-item button to="/animesvg">-->
@@ -27,9 +27,9 @@
 <!--                    </mu-list-item>-->
 
                     <mu-divider></mu-divider>
-                    <mu-list-item button  @click="a_index(['howModal','toggle',true])">
-                        <mu-list-item-title><mu-icon value="info" :size="15"></mu-icon>&nbsp;使い方</mu-list-item-title>
-                    </mu-list-item>
+<!--                    <mu-list-item button  @click="a_index(['howModal','toggle',true])">-->
+<!--                        <mu-list-item-title><mu-icon value="info" :size="15"></mu-icon>&nbsp;使い方</mu-list-item-title>-->
+<!--                    </mu-list-item>-->
 
                 </mu-list>
             </mu-menu>
@@ -79,14 +79,14 @@
                 </mu-list>
             </mu-menu>
 
-            <mu-button flat slot="left" @click="side.left.open = true">
-                <mu-icon value="border_left"></mu-icon>
+            <mu-button flat slot="left">
+                <mu-icon value="train"></mu-icon>
             </mu-button>
             <mu-button flat slot="right" color="grey500" @click="a_index(['bottom','open'])">
                 <mu-icon value="border_bottom"></mu-icon>
             </mu-button>
-            <mu-button flat slot="right" @click="side.right.open=true">
-                <mu-icon value="border_right"></mu-icon>
+            <mu-button flat slot="right">
+                <mu-icon value="dashboard"></mu-icon>
             </mu-button>
 
         </mu-appbar>
@@ -175,7 +175,7 @@
             &.Home, &.Login{
                 transform: translateY(0px);
             }
-            &.Map{
+            &.Map, &.Emory{
                 transform: translateY(-68px);
             }
         }
@@ -184,7 +184,7 @@
             &.Home, &.Login{
                 transform: translateY(-68px);
             }
-            &.Map{
+            &.Map, &.Emory{
                 transform: translateY(0px);
             }
         }

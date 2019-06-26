@@ -44,11 +44,11 @@
 </template>
 <script>
     import {mapGetters,mapActions} from 'vuex';
-    import spotifyMixin from '../mixins/spotify/index';
+    import spotifyMixin from '../mixins/spotify';
     import utilMixin from '../mixins/util';
 
     export default {
-        name: 'home',
+        name: 'emory',
         mixins:[spotifyMixin,utilMixin],
         computed:mapGetters(['pwa','loggedIn','spotify']),
         methods:{

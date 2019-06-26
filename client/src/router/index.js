@@ -3,8 +3,8 @@ import store from '../store'
 import Router from 'vue-router';
 Vue.use(Router)
 
+// COMPONENTS
 // import Top from '../components/Top.vue';
-import Home from '../components/Home.vue';
 import Map from '../components/MapPlay.vue';
 import MapAdmin from '../components/MapAdmin.vue';
 import News from '../components/News.vue';
@@ -12,6 +12,10 @@ import Login from '../components/Login.vue';
 import Analysis from '../components/Analysis.vue';
 import MapArea from '../components/MapAreaPage.vue';
 import AnimeSvg from '../components/AnimeSvg.vue';
+
+//VIEWS
+import Emory from '../views/Emory.vue';
+import Home from '../views/Home.vue';
 
 
 let routes =  [
@@ -22,7 +26,8 @@ let routes =  [
   { path:'/maparea', name: 'MapArea', component: MapArea,  meta: { requiresAuth: true }},
   { path:'/analysis',name: 'Analysis',component: Analysis, meta: { requiresAuth: true }},
   { path:'/animesvg',name: 'AnimeSvg',component: AnimeSvg},
-  { path:'/',        name: 'Home',    component: Home,     meta: { requiresAuth: true }},
+  { path:'/emory',   name: 'Emory',   component: Emory,     meta: { requiresAuth: true }},
+  { path:'/',        name: 'Home',    component: Home,      meta: { requiresAuth: true }},
 ];
 
 
