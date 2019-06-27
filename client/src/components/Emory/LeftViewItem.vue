@@ -1,20 +1,20 @@
 <template>
     <mu-card class="leftviewitem">
 
-<!--        <mu-card-header :title="features.category" :sub-title="features.distance" :class="[features.type]">-->
+<!--        <mu-card-header :title="feature.category" :sub-title="feature.distance" :class="[feature.type]">-->
 <!--            <mu-avatar slot="avatar">-->
-<!--                <img :src="features.icon">-->
+<!--                <img :src="feature.icon">-->
 <!--            </mu-avatar>-->
 <!--        </mu-card-header>-->
 
-        <mu-card-media :title="features.title" :sub-title="features.subtitle">
-            <img :src="features.thumb">
+        <mu-card-media :title="feature.title" :sub-title="feature.subtitle">
+            <img :src="feature.thumb">
         </mu-card-media>
-        <div ref="spotifycode" v-spotifycode="{pid:'37i9dQZF1DX6JzJ8vAK836&',ptype:'playlist'}"></div>
+        <div v-if="feature.spotify" ref="spotifycode" v-spotifycode="{id:feature.spotify.id,type:feature.spotify.type}"></div>
         <mu-card-text>
-           {{features.desc}}
+           {{feature.desc}}
         </mu-card-text>
-       <left-view-timeline :steps="features.steps"></left-view-timeline>
+       <left-view-timeline :steps="feature.steps"></left-view-timeline>
     </mu-card>
 </template>
 
@@ -25,7 +25,7 @@
         components:{
             LeftViewTimeline
         },
-        props:['features']
+        props:['feature']
     }
 </script>
 

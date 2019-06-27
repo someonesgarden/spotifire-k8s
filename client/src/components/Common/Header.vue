@@ -118,7 +118,7 @@
 
 
         <!-- Emory Drawers -->
-        <mu-drawer :open.sync="side.emory.left.open" :docked="side.emory.left.docked" :width="300" style="background-color:#0d7970;">
+        <mu-drawer :open.sync="side.emory.left.open" :docked="side.emory.left.docked" :width="365" style="background-color:#0d7970;">
             <mu-list style="width:inherit;">
                 <emory-left-view></emory-left-view>
             </mu-list>

@@ -166,9 +166,4 @@ export default {
     opacity:1;
   }
 
-  .widget_player{
-    background-color:inherit;
-    overflow: hidden;
-  }
-
 </style>

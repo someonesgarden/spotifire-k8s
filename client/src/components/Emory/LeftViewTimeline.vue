@@ -8,7 +8,7 @@
                 </mu-step-label>
                 <mu-step-content>
                     <p v-html="step.desc"></p>
-<!--                    <widget-player></widget-player>-->
+                    <widget-player v-if="step.spotify" :type="step.spotify.type" :id="step.spotify.id"></widget-player>
                     <mu-button class="step-button" @click="vhandleNext" color="primary">次へ</mu-button>
                     <mu-button class="step-button" @click="vhandlePrev" color="amber500" v-if="index>0">戻る</mu-button>
                 </mu-step-content>
@@ -57,6 +57,11 @@
     .mu-stepper-vertical{
         .mu-step{
             margin-bottom:10px;
+
+            .mu-step-content {
+                padding-left: 8px;
+                padding-right: 8px;
+            }
         }
     }
 

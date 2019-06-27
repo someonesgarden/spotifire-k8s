@@ -9,7 +9,7 @@
                    <div class="title" :class="[feature.type]">{{feature.category}}</div>
                     <div class="subtitle">{{feature.distance}}</div>
                 </div>
-                <left-view-item :features="feature"></left-view-item>
+                <left-view-item :feature="feature"></left-view-item>
             </mu-expansion-panel>
 
         </mu-container>
@@ -38,18 +38,34 @@
                         title:"秋葉原2030",
                         subtitle:"Akihabara 2030",
                         desc:"秋葉原の街中に仕掛けられた『１０の暗号』を見つけ出して、伝説のタイムマシンを見つけだそう！",
+                        spotify:{
+                            type:'playlist',
+                            id:'37i9dQZF1DXbiEfzyzIRj9'
+                        },
                         steps:[
                             {
                                 title:'出発！',
                                 desc:'秋葉原のスポットへはJR山手線、京浜東北線、中央線をはじめ、つくばエクスプレスや都営新宿線、銀座線、日比谷線などたくさんの電車が走っています。',
+                                spotify:{
+                                    type:'track',
+                                    id:'5BWGc0gLdrFpAwfn0dMdPT'
+                                }
                             },
                             {
                                 title:'東京駅へ到着',
-                                desc:'まずは日本の中心地であり、全ての輸送網のセントラルステーションである東京駅へ。リズリカルに躍動する様々な人の流れを楽しもう！'
+                                desc:'まずは日本の中心地であり、全ての輸送網のセントラルステーションである東京駅へ。リズリカルに躍動する様々な人の流れを楽しもう！',
+                                spotify:{
+                                    type:'track',
+                                    id:'2dSKclTm3Ryp3hBd5jbU3d'
+                                }
                             },
                             {
                                 title:'秋葉原駅へ到着！',
-                                desc:'目的地である秋葉原ドンキホーテまでは徒歩10分。ピカピカ輝く電気街にインスピレーションを受けながら、スタート地点を目指そう！'
+                                desc:'目的地である秋葉原ドンキホーテまでは徒歩10分。ピカピカ輝く電気街にインスピレーションを受けながら、スタート地点を目指そう！',
+                                spotify:{
+                                    type:'track',
+                                    id:'4XpP4fXwIfO5OxQdmuJevx'
+                                }
                             }
                         ]
                     },
@@ -62,18 +78,34 @@
                         title:"渋谷の街角で",
                         subtitle:"Shibuya Love Story",
                         desc:"突然届いた一通のメール。日曜日の5時にハチ公前で待っているという。一体どんなドラマが始まるのか？",
+                        spotify:{
+                            type:'playlist',
+                            id:'37i9dQZF1DXafb0IuPwJyF'
+                        },
                         steps:[
                             {
                                 title:'出発！',
                                 desc:'渋谷のスポットへはJR山手線、京浜東北線、中央線をはじめ、つくばエクスプレスや都営新宿線、銀座線、日比谷線などたくさんの電車が走っています。',
+                                spotify:{
+                                    type:'track',
+                                    id:'56kKI2KKdF3mycxhkUTL7e'
+                                }
                             },
                             {
                                 title:'東京駅へ到着',
-                                desc:'まずは日本の中心地であり、全ての輸送網のセントラルステーションである東京駅へ。リズリカルに躍動する様々な人の流れを楽しもう！'
+                                desc:'まずは日本の中心地であり、全ての輸送網のセントラルステーションである東京駅へ。リズリカルに躍動する様々な人の流れを楽しもう！',
+                                spotify:{
+                                    type:'track',
+                                    id:'4EkTXtEgKnWbOi02vvTfOU'
+                                }
                             },
                             {
                                 title:'渋谷駅へ到着！',
-                                desc:'目的地であるハチ公は渋谷駅ハチ公口からすぐ。ピカピカ輝く電気街にインスピレーションを受けながら、スタート地点を目指そう！'
+                                desc:'目的地であるハチ公は渋谷駅ハチ公口からすぐ。ピカピカ輝く電気街にインスピレーションを受けながら、スタート地点を目指そう！',
+                                spotify:{
+                                    type:'track',
+                                    id:'1mBnMthO7pZYXHgNRcBswK'
+                                }
                             }
                         ]
                     },{
@@ -85,18 +117,34 @@
                         title:"真夜中の歌舞伎町に消えた３人",
                         subtitle:"Midnight Loitering",
                         desc:"新宿の街に消えた３人を見つけ出さなければ、東京は爆破されてしまうという。街中に仕掛けられたヒントを読み解いて、足跡を探しだそう！",
+                        spotify:{
+                            type:'playlist',
+                            id:'30SToZ61m32wCgGlRSnXLw'
+                        },
                         steps:[
                             {
                                 title:'出発！',
                                 desc:'秋葉原のスポットへはJR山手線、京浜東北線、中央線をはじめ、つくばエクスプレスや都営新宿線、銀座線、日比谷線などたくさんの電車が走っています。',
+                                spotify:{
+                                    type:'track',
+                                    id:'4EkTXtEgKnWbOi02vvTfOU'
+                                }
                             },
                             {
                                 title:'東京駅へ到着',
-                                desc:'まずは日本の中心地であり、全ての輸送網のセントラルステーションである東京駅へ。リズリカルに躍動する様々な人の流れを楽しもう！'
+                                desc:'まずは日本の中心地であり、全ての輸送網のセントラルステーションである東京駅へ。リズリカルに躍動する様々な人の流れを楽しもう！',
+                                spotify:{
+                                    type:'track',
+                                    id:'5BWGc0gLdrFpAwfn0dMdPT'
+                                }
                             },
                             {
                                 title:'秋葉原駅へ到着！',
-                                desc:'目的地である秋葉原ドンキホーテまでは徒歩10分。ピカピカ輝く電気街にインスピレーションを受けながら、スタート地点を目指そう！'
+                                desc:'目的地である秋葉原ドンキホーテまでは徒歩10分。ピカピカ輝く電気街にインスピレーションを受けながら、スタート地点を目指そう！',
+                                spotify:{
+                                    type:'track',
+                                    id:'4tuaME3Py58eaeIEMOvzID'
+                                }
                             }
                         ]
                     }

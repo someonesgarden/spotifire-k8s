@@ -1,5 +1,5 @@
 <template>
-    <mu-paper  class="widget_player" v-if="$route.name ==='Map' || $route.name ==='MapAdmin'" :z-depth="5" :style="{height:height+'px'}">
+    <mu-paper class="widget_player" :z-depth="5" :style="{height:height+'px'}">
         <iframe :src="url" :width="width" :height="height" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
     </mu-paper>
 </template>
@@ -28,4 +28,9 @@
 </script>
 
 <style scoped>
+    .widget_player{
+        background-color:inherit;
+        overflow: hidden;
+        margin-bottom:8px;
+    }
 </style>
