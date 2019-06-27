@@ -1,6 +1,9 @@
 <template>
     <div class="aside emoryleftview">
         <mu-container>
+            <mu-flex justify-content="center" align-items="center">
+                <mu-button full-width small color="black" @click="$emit('close')">X</mu-button>
+            </mu-flex>
             <mu-expansion-panel v-for="(feature,index) in features" :expand="panel === 'feature'+index" @change="panel = 'feature'+index === panel ? '' : 'feature'+index">
                 <div slot="header">
                     <mu-avatar slot="avatar" style="width:20px;height:20px; margin-right:6px;">
@@ -11,7 +14,9 @@
                 </div>
                 <left-view-item :feature="feature"></left-view-item>
             </mu-expansion-panel>
-
+            <mu-flex justify-content="center" align-items="center">
+                <mu-button full-width small color="black" @click="$emit('close')">X</mu-button>
+            </mu-flex>
         </mu-container>
         <br>
     </div>
