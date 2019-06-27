@@ -8,6 +8,7 @@
                 </mu-step-label>
                 <mu-step-content>
                     <p v-html="step.desc"></p>
+<!--                    <widget-player></widget-player>-->
                     <mu-button class="step-button" @click="vhandleNext" color="primary">次へ</mu-button>
                     <mu-button class="step-button" @click="vhandlePrev" color="amber500" v-if="index>0">戻る</mu-button>
                 </mu-step-content>
@@ -21,9 +22,13 @@
 </template>
 
 <script>
+    import WidgetPlayer from '../Spotify/Player/WidgetPlayer';
     export default {
         name: "LeftViewTimeline",
         props:['steps'],
+        components:{
+            WidgetPlayer
+        },
         data () {
             return {
                 vactiveStep: 0

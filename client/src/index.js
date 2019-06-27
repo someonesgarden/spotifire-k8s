@@ -39,6 +39,7 @@ import VueCarousel from 'vue-carousel';
 Vue.use(VueCarousel);
 
 import './filters';
+import './directives';
 
 import firebase from "firebase"
 

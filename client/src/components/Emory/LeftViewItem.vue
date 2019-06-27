@@ -10,6 +10,7 @@
         <mu-card-media :title="features.title" :sub-title="features.subtitle">
             <img :src="features.thumb">
         </mu-card-media>
+        <div ref="spotifycode" v-spotifycode="{pid:'37i9dQZF1DX6JzJ8vAK836&',ptype:'playlist'}"></div>
         <mu-card-text>
            {{features.desc}}
         </mu-card-text>
