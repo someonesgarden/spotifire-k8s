@@ -22,8 +22,8 @@
 </template>
 <script>
     import {mapActions,mapGetters} from 'vuex';
-    import feedMixin from '../mixins/feed/index';
-    import FeedBlock from './Feed/FeedBlock';
+    import feedMixin from '../mixins/feed';
+    import FeedBlock from '../components/Feed/FeedBlock';
 
     export default {
         name: 'news',

@@ -10,28 +10,10 @@
                     <img class="menu-icon" src="/static/img/spotifire_logo.png" style="width:110px; height:auto;"/>
                 </mu-button>
                 <mu-list slot="content" @mouseup="toggleMenu('normal')">
-
-<!--                    <mu-list-item button  @click="a_index(['storyModal','set',true])">-->
-<!--                        <mu-list-item-title><mu-icon value="info" :size="15"></mu-icon>&nbsp;ストーリー</mu-list-item-title>-->
-<!--                    </mu-list-item>-->
-
                     <mu-list-item button to="/emory">
                         <mu-list-item-title><mu-icon value="extension" :size="15"></mu-icon>&nbsp;Emory</mu-list-item-title>
                     </mu-list-item>
-
-<!--                    <mu-list-item button to="/animesvg">-->
-<!--                        <mu-list-item-title><mu-icon value="location_on" :size="15"></mu-icon>&nbsp;SVG</mu-list-item-title>-->
-<!--                    </mu-list-item>-->
-
-<!--                    <mu-list-item button to="/news">-->
-<!--                        <mu-list-item-title><mu-icon value="filter_list" :size="12"></mu-icon>&nbsp;news</mu-list-item-title>-->
-<!--                    </mu-list-item>-->
-
                     <mu-divider></mu-divider>
-<!--                    <mu-list-item button  @click="a_index(['howModal','toggle',true])">-->
-<!--                        <mu-list-item-title><mu-icon value="info" :size="15"></mu-icon>&nbsp;使い方</mu-list-item-title>-->
-<!--                    </mu-list-item>-->
-
                 </mu-list>
             </mu-menu>
 
@@ -54,32 +36,17 @@
                 <mu-button flat>
                     <img class="menu-icon" src="/static/img/emory_logo_h_w.png" style="width:110px; height:auto;"></mu-button>
                 <mu-list slot="content" @mouseup="toggleMenu('map')">
-
-                    <!--                    <mu-list-item button  @click="a_index(['storyModal','set',true])">-->
-                    <!--                        <mu-list-item-title><mu-icon value="info" :size="15"></mu-icon>&nbsp;ストーリー</mu-list-item-title>-->
-                    <!--                    </mu-list-item>-->
-
                     <mu-list-item button to="/">
                         <mu-list-item-title><mu-icon value="home" :size="15"></mu-icon>&nbsp;トップ</mu-list-item-title>
                     </mu-list-item>
-
-<!--                    <mu-list-item button to="/animesvg">-->
-<!--                        <mu-list-item-title><mu-icon value="location_on" :size="15"></mu-icon>&nbsp;SVG</mu-list-item-title>-->
-<!--                    </mu-list-item>-->
-
-                    <!--                    <mu-list-item button to="/news">-->
-                    <!--                        <mu-list-item-title><mu-icon value="filter_list" :size="12"></mu-icon>&nbsp;news</mu-list-item-title>-->
-                    <!--                    </mu-list-item>-->
-
                     <mu-divider></mu-divider>
                     <mu-list-item button  @click="a_index(['howModal','toggle',true])">
                         <mu-list-item-title><mu-icon value="info" :size="15"></mu-icon>&nbsp;使い方</mu-list-item-title>
                     </mu-list-item>
-
                 </mu-list>
             </mu-menu>
 
-            <mu-button flat slot="left">
+            <mu-button flat slot="left" @click="side.emory.left.open = true">
                 <mu-icon value="train"></mu-icon>
             </mu-button>
             <mu-button flat slot="right" color="grey500" @click="a_index(['bottom','open'])">
@@ -88,7 +55,6 @@
             <mu-button flat slot="right">
                 <mu-icon value="dashboard"></mu-icon>
             </mu-button>
-
         </mu-appbar>
 
         <!-- AppBar News -->
@@ -120,7 +86,6 @@
 <!--                    <mu-list-item button  @click="a_index(['howModal','toggle',true])">-->
 <!--                        <mu-list-item-title><mu-icon value="info" :size="15"></mu-icon>&nbsp;使い方</mu-list-item-title>-->
 <!--                    </mu-list-item>-->
-
                 </mu-list>
             </mu-menu>
 
@@ -133,11 +98,11 @@
             <mu-button flat slot="right">
                 <mu-icon value="dashboard"></mu-icon>
             </mu-button>
-
         </mu-appbar>
 
 
-        <!-- Drawers -->
+
+        <!-- Spotify Drawers -->
         <mu-drawer :open.sync="side.spotify.left.open" :docked="side.spotify.left.docked" :width="300">
             <mu-list style="width:inherit;">
                 <aside-view @rightopen="side.spotify.right.open=true"></aside-view>
@@ -149,6 +114,16 @@
                 <playlist-view @leftopen="side.spotify.left.open=true" @close="side.spotify.right.open=false" @open="side.spotify.right.open=true"/>
             </mu-list>
         </mu-drawer>
+        <!--/Spotify Drawers -->
+
+
+        <!-- Emory Drawers -->
+        <mu-drawer :open.sync="side.emory.left.open" :docked="side.emory.left.docked" :width="300" style="background-color:#0d7970;">
+            <mu-list style="width:inherit;">
+                <emory-left-view></emory-left-view>
+            </mu-list>
+        </mu-drawer>
+        <!--/Emory Drawers -->
 
     </div>
 </template>
@@ -156,13 +131,18 @@
 <script>
     import {mapGetters,mapActions} from 'vuex';
 
+    // LEFT
     import AsideView from './AsideView';
+    import EmoryLeftView from './EmoryLeftView';
+
+    // RIGHT
     import PlaylistView from './PlaylistView';
 
     export default {
         name: 'myheader',
         components:{
             AsideView,
+            EmoryLeftView,
             PlaylistView
         },
         data:function(){
@@ -179,6 +159,13 @@
                             docked:false
                         },
                         right:{
+                            open:false,
+                            docked:false
+                        }
+                    },
+
+                    emory:{
+                        left:{
                             open:false,
                             docked:false
                         }

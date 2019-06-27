@@ -7,16 +7,15 @@ Vue.use(Router)
 // import Top from '../components/Top.vue';
 import Map from '../components/MapPlay.vue';
 import MapAdmin from '../components/MapAdmin.vue';
-import News from '../components/News.vue';
 import Login from '../components/Login.vue';
 import Analysis from '../components/Analysis.vue';
 import MapArea from '../components/MapAreaPage.vue';
 import AnimeSvg from '../components/AnimeSvg.vue';
 
 //VIEWS
+import News  from '../views/News.vue';
 import Emory from '../views/Emory.vue';
-import Home from '../views/Home.vue';
-
+import Home  from '../views/Home.vue';
 
 let routes =  [
   { path:'/login',   name: 'Login',   component: Login},
