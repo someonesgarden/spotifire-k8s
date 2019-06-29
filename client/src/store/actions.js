@@ -211,3 +211,15 @@ export const a_genius = ({commit},[type, action, data]) => {
     }
     actions[type][action](data)
 };
+
+// --------------- SUBSCRIBE -----------------
+export const a_subscribe = ({commit},[type, action, data]) => {
+    const actions = {
+        set: {
+            populartracks:(data) => commit('subscribe/setPopularTracks',  data),
+            lyrics:(data)        => commit('subscribe/setLyrics',  data),
+        },
+    }
+    actions[type][action](data)
+};
+

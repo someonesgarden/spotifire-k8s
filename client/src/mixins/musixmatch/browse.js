@@ -2,8 +2,36 @@ import axios from 'axios';
 
 export default{
     methods: {
+        c_mm_isrc(isrc,cb){
+            let params =  {isrc: isrc};
+            console.log(params);
+
+            let headers = {'Accept-Language':'ja;q=1'};
+
+            //http://127.0.0.1:8080/api/musicbrainz/browse/searchTrackInRecording?isrc=USWB10001880&track_name=Purple%20Rain
+
+            axios.get('/api/musicbrainz/browse/searchRecording',{params:params, headers: headers}).then(
+                res => {
+
+                    let total = res.data.length>10 ? 10 : res.data.length;
+                    if(total>0){
+                        console.log("mbid num is"+res.data.length+". so, I will use "+total);
+
+                        cb(res.data);
+
+                    }else{
+                        cb(null);
+                    }
+                }
+            ).catch(error => {
+                console.log(error);
+                cb(null);
+            });
+        },
+
         c_mm_lyrics_isrc(isrc,track_name,cb){
             let params =  {isrc: isrc, track_name:track_name};
+            console.log(params);
             //http://127.0.0.1:8080/api/musicbrainz/browse/searchTrackInRecording?isrc=USWB10001880&track_name=Purple%20Rain
 
             axios.get('/api/musicbrainz/browse/searchTrackInRecording',{params:params}).then(

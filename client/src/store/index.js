@@ -13,6 +13,7 @@ import genius from './modules/genius/index';
 import modal from './modules/modal/index';
 import pwa from './modules/pwa/index';
 import svg from './modules/svg/index';
+import subscribe from './modules/subscribe/index';
 
 Vue.use(Vuex);
 
@@ -31,7 +32,8 @@ export default new Vuex.Store({
         genius,
         modal,
         pwa,
-        svg
+        svg,
+        subscribe
     }
 });
 

@@ -12,21 +12,24 @@ import Analysis from '../components/Analysis.vue';
 import MapArea from '../components/MapAreaPage.vue';
 import AnimeSvg from '../components/AnimeSvg.vue';
 
+
 //VIEWS
-import News  from '../views/News.vue';
+//import News  from '../views/News.vue';
 import Emory from '../views/Emory.vue';
 import Home  from '../views/Home.vue';
+import Subscribe from '../views/Subscribe.vue';
 
 let routes =  [
-  { path:'/login',   name: 'Login',   component: Login},
-  { path:'/news',    name: 'News',    component: News,     meta: { requiresAuth: true }},
-  { path:'/map',     name: 'Map',     component: Map,      meta: { requiresAuth: true }},
-  { path:'/mapadmin',name: 'MapAdmin',component: MapAdmin, meta: { requiresAuth: true }},
-  { path:'/maparea', name: 'MapArea', component: MapArea,  meta: { requiresAuth: true }},
-  { path:'/analysis',name: 'Analysis',component: Analysis, meta: { requiresAuth: true }},
-  { path:'/animesvg',name: 'AnimeSvg',component: AnimeSvg},
-  { path:'/emory',   name: 'Emory',   component: Emory,     meta: { requiresAuth: true }},
-  { path:'/',        name: 'Home',    component: Home,      meta: { requiresAuth: true }},
+  { path:'/login',    name: 'Login',    component: Login},
+ // { path:'/news',     name: 'News',     component: News,     meta: { requiresAuth: true }},
+  { path:'/subscribe',name: 'Subscribe',component: Subscribe,meta: { requiresAuth: true }},
+  { path:'/map',      name: 'Map',      component: Map,      meta: { requiresAuth: true }},
+  { path:'/mapadmin', name: 'MapAdmin', component: MapAdmin, meta: { requiresAuth: true }},
+  { path:'/maparea',  name: 'MapArea',  component: MapArea,  meta: { requiresAuth: true }},
+  { path:'/analysis', name: 'Analysis', component: Analysis, meta: { requiresAuth: true }},
+  { path:'/animesvg', name: 'AnimeSvg', component: AnimeSvg},
+  { path:'/emory',    name: 'Emory',    component: Emory,     meta: { requiresAuth: true }},
+  { path:'/',         name: 'Home',     component: Home,      meta: { requiresAuth: true }},
 ];
 
 

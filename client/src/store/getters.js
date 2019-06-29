@@ -15,7 +15,7 @@ const g_three   = modules => modules.three
 const genius    = modules => modules.genius
 const modal     = modules => modules.modal
 const pwa       = modules => modules.pwa
-
+const subscribe = modules => modules.subscribe
 
 export {
     rootAction,
@@ -33,5 +33,6 @@ export {
     modal,
     device,
     header,
-    home
+    home,
+    subscribe
 }

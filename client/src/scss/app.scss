@@ -18,7 +18,9 @@
 @import "parts/home";
 @import "parts/news";
 @import "parts/emory/leftview";
+@import "parts/subscribe/leftview";
 @import "parts/spotify/spotifycode";
+@import "parts/mu";
 
 /* FLEX */
 .flex_v{
@@ -80,7 +82,7 @@
     margin-top:60px;
   }
 
-  &.News{
+  &.News, &.Subscribe{
    background-color: #8517fe;
     color:white;
   }

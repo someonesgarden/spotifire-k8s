@@ -4,6 +4,26 @@ const keys = require('../../keys');
 const spotifyApi = keys.spotifyApi;
 
 
+router.get('/featured', (req,res)=>{
+    console.log("here is /featured");
+    const access_token = req.headers.authorization;
+    spotifyApi.setAccessToken(access_token);
+
+    const country   = req.query.country ? req.query.country : 'JP';
+
+    spotifyApi.getFeaturedPlaylists({ country: country, locale: 'ja-JP', 'accept-language':'ja-JP'}).then(
+            function(data) {
+                console.log(data.body);
+                res.send(data.body);
+            },
+            function(err) {
+                console.log(err.message);
+                res.send(null);
+            }
+        );
+});
+
+
 router.get('/idcheck', (req,res)=>{
 
     console.log("here is /idcheck");

@@ -49,3 +49,15 @@ Vue.filter('truncate', function(value) {
         return str.substring(0, length) + ommision;
     }
 });
+
+Vue.filter('truncate20', function(str) {
+
+    let length = 20;
+    let ommision = '..';
+    if(str.length <= length) {
+        return str;
+    }
+    else {
+        return str.substring(0, length) + ommision;
+    }
+});

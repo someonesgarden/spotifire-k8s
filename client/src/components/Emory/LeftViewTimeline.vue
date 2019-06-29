@@ -24,7 +24,7 @@
 <script>
     import WidgetPlayer from '../Spotify/Player/WidgetPlayer';
     export default {
-        name: "LeftViewTimeline",
+        name: "SubscribeLeftView",
         props:['steps'],
         components:{
             WidgetPlayer
@@ -54,15 +54,6 @@
 </script>
 
 <style scoped lang="scss">
-    .mu-stepper-vertical{
-        .mu-step{
-            margin-bottom:10px;
 
-            .mu-step-content {
-                padding-left: 8px;
-                padding-right: 8px;
-            }
-        }
-    }
 
 </style>

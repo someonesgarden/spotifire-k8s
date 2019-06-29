@@ -1,0 +1,43 @@
+/* STEPPER */
+
+.mu-stepper-vertical{
+  .mu-step{
+    margin-bottom:10px;
+
+    .mu-step-content {
+      padding-left: 8px;
+      padding-right: 8px;
+    }
+  }
+}
+
+
+.news-vsteper-container{
+  max-height:inherit;
+  max-width: 380px;
+  margin: auto;
+
+  .news-step-content {
+    margin: 0  16px;
+  }
+
+  .news-step-button {
+  }
+
+}
+
+
+/* CHIP */
+
+.chip-populartrack{
+  line-height:22px;
+  margin-right:3px;
+  position:relative;
+  font-size:8px;
+
+  span.artist{
+    margin-left:2px;
+    color:black;
+    font-size:7px;
+  }
+}

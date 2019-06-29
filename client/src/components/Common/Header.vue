@@ -58,7 +58,7 @@
         </mu-appbar>
 
         <!-- AppBar News -->
-        <mu-appbar class="appbar-news mu-appbar-header" color="purple900" :class="[$route.name]">
+        <mu-appbar class="appbar-subscribe mu-appbar-header" color="purple900" :class="[$route.name]">
 
             <mu-menu  open-on-hover cover placement="left-start" :open.sync="menu.news">
 
@@ -89,8 +89,8 @@
                 </mu-list>
             </mu-menu>
 
-            <mu-button flat slot="left">
-                <mu-icon value="train"></mu-icon>
+            <mu-button flat slot="left" @click="side.news.left.open = true">
+                <mu-icon value="spellcheck"></mu-icon>
             </mu-button>
             <mu-button flat slot="right" color="grey500" @click="a_index(['bottom','open'])">
                 <mu-icon value="border_bottom"></mu-icon>
@@ -99,7 +99,6 @@
                 <mu-icon value="dashboard"></mu-icon>
             </mu-button>
         </mu-appbar>
-
 
 
         <!-- Spotify Drawers -->
@@ -116,7 +115,6 @@
         </mu-drawer>
         <!--/Spotify Drawers -->
 
-
         <!-- Emory Drawers -->
         <mu-drawer :open.sync="side.emory.left.open" :docked="side.emory.left.docked" :width="350" style="background-color:#0d7970;">
             <mu-list style="width:inherit;">
@@ -124,6 +122,14 @@
             </mu-list>
         </mu-drawer>
         <!--/Emory Drawers -->
+
+        <!-- News Drawers -->
+        <mu-drawer :open.sync="side.news.left.open" :docked="side.news.left.docked" :width="350" style="background-color:#4f23be;">
+            <mu-list style="width:inherit;">
+                <subscribe-left-view></subscribe-left-view>
+            </mu-list>
+        </mu-drawer>
+        <!--/News Drawers -->
 
     </div>
 </template>
@@ -134,6 +140,7 @@
     // LEFT
     import AsideView from './AsideView';
     import EmoryLeftView from './EmoryLeftView';
+    import SubscribeLeftView from './SubscribeLeftView';
 
     // RIGHT
     import PlaylistView from './PlaylistView';
@@ -143,7 +150,8 @@
         components:{
             AsideView,
             EmoryLeftView,
-            PlaylistView
+            PlaylistView,
+            SubscribeLeftView
         },
         data:function(){
             return{
@@ -162,6 +170,13 @@
                             open:false,
                             docked:false
                         }
+                    },
+
+                    news:{
+                      left:{
+                          open:false,
+                          docked:false
+                      }
                     },
 
                     emory:{
@@ -215,7 +230,7 @@
 
         &.appbar-normal{
             transform: translateY(0px);
-            &.Map, &.Emory{
+            &.Map, &.Emory, &.Subscribe{
                 transform: translateY(-68px);
             }
         }
@@ -227,9 +242,9 @@
             }
         }
 
-        &.appbar-news{
+        &.appbar-subscribe{
             transform: translateY(-68px);
-            &.News{
+            &.Subscribe{
                 transform: translateY(0px);
             }
         }

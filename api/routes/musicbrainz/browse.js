@@ -53,7 +53,7 @@ router.get('/searchTrackInRecording',(req,res)=>{
             let releases = data.recordings[0].releases;
             if(releases) releases = releases.map(rel=>{return {format:rel.media[0].format, ...rel.media[0].track[0]}});
             if(releases) releases = releases.filter(rel=> rel.format==='CD' && rel.title.toLowerCase().indexOf(track_name) !== -1);
-            res.send(releases);
+            res.send(data);
         }else{
             res.send(null);
         }
@@ -62,6 +62,25 @@ router.get('/searchTrackInRecording',(req,res)=>{
             console.log(err);
             res.send(null);
         })
+});
+
+router.get('/searchRecording',(req,res)=>{
+    const isrc          = req.query.isrc;
+    mbApi.search('recording', {isrc:isrc}).then(data=> {
+
+        if(data.recordings && data.recordings.length>0){
+            let releases = data.recordings[0].releases;
+            if(releases) releases = releases.map(rel=>{return {format:rel.media[0].format, ...rel.media[0].track[0]}});
+            if(releases) releases = releases.filter(rel=> rel.format==='CD');
+            res.send(releases);
+        }else{
+            res.send(null);
+        }
+
+    }).catch(err=>{
+        console.log(err);
+        res.send(null);
+    })
 });
 
 module.exports = router;

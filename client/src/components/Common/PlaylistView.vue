@@ -268,7 +268,7 @@
                     <mu-card-media :title="playlist.name" :sub-title="'Playlist by '+playlist.owner.display_name" v-if="playlist.images.length>0">
                         <img :src="playlist.images[0].url">
                     </mu-card-media>
-                    <mu-card-text>{{playlist.description}}</mu-card-text>
+                    <mu-card-text v-html="playlist.description"></mu-card-text>
                 </mu-card>
 
                 <mu-tabs v-if="filter.use" :value.sync="filter.state" inverse color="secondary" text-color="rgba(0, 0, 0, .54)" center class="range">

@@ -228,7 +228,6 @@ export default{
             link.click()
         },
 
-
         c_gen_condition_csv:function(gen){
             this.p_out_seeds_csv(gen);
         },
@@ -443,6 +442,18 @@ export default{
                 }).catch(error => {
                 console.log(error);
             });
+        },
+
+        c_featured:function(cb){
+
+            let headers = {Authorization:this.spotify.credential.access_token, 'Accept-Language':'ja'};
+            axios.get('/api/spotify/browse/featured',{country:'JP',locale:'ja', headers: headers}).then(
+                res => {
+                    cb(res.data);
+                }).catch(error => {
+                console.log(error);
+            });
+
         }
     }
 }

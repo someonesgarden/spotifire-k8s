@@ -12,7 +12,7 @@
                     </mu-button>
                 </div>
                 <div class="sixteen wide mobile eight wide tablet eight wide computer column">
-                    <mu-button class="menu_btns" color="black" full-width style="opacity:0.20;" @click="verifyPageAccess('news')">
+                    <mu-button class="menu_btns" color="black" full-width style="opacity:0.20;" @click="verifyPageAccess('subscribe')">
                         Subsc:Listen
                     </mu-button>
                 </div>
