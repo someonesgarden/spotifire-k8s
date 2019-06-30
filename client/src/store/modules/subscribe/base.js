@@ -1,7 +1,8 @@
 const state = {
     populartracks:null,
     popularity_limit:35,
-    lyrics:{}
+    lyrics:null,
+    initials:null
 }
 
 const mutations = {
@@ -10,7 +11,11 @@ const mutations = {
     },
 
     setLyrics(state,data){
-        state.lyrics[data.key] = data.val;
+        state.lyrics = data;
+    },
+
+    setInitials(state,data){
+        state.initials = data;
     }
 }
 

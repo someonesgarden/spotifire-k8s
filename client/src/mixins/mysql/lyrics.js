@@ -14,7 +14,15 @@ export default{
                 isrc:       data.isrc,
                 lyrics:     data.lyrics,
                 link:       data.link,
-                morphs:     data.morphs
+                morphs:     data.morphs,
+
+                liveness:    data.liveness,
+                valence:     data.valence,
+                danceability:data.danceability,
+                energy:      data.energy,
+                acousticness:data.acousticness,
+                tempo:       data.tempo,
+                mode:        data.mode
             };
             axios.post('/api/mysql/lyrics/new', conditions)
                 .then(res => {

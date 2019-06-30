@@ -13,7 +13,7 @@
                                 <div class="sixteen wide mobile sixteen wide tablet sixteen wide computer column"
                                      style="padding-bottom:0;" v-if="subscribe.populartracks">
                                     <mu-chip class="chip-populartrack" color="cyan500"
-                                             v-for="(populartrack,index) in subscribe.populartracks" :key="'pt'+index">
+                                             v-for="(populartrack,index) in subscribe.populartracks" :key="'pt'+index" @click="getLyrics(populartrack)">
                                         <mu-avatar :size="22">
                                             <img :src="populartrack.thumb">
                                         </mu-avatar>
@@ -77,12 +77,18 @@
     import {mapGetters,mapActions} from 'vuex';
     import spotifyMixin from '../../mixins/spotify';
     import musixMixin from '../../mixins/musixmatch';
+    import mysqlMixin from '../../mixins/mysql';
+    import feedMixin from '../../mixins/feed/index';
+    import utilMixin from '../../mixins/util';
 
     export default {
         name: "LeftView",
         mixins:[
             spotifyMixin,
-            musixMixin
+            musixMixin,
+            mysqlMixin,
+            feedMixin,
+            utilMixin
         ],
         data () {
             return {
@@ -102,14 +108,12 @@
             trackLyricsByMusixMatch(isrc,track_name){
                 this.c_mm_lyrics_isrc(isrc,track_name,res=>{
                     console.log(res);
-
                     if(res){
                         this.a_genius(['set','song',{
                             full_title:track_name,
                             lyrics:res.lyrics.lyrics_body,
                             id:isrc,type:'musixmatch'
                         }]);
-
                         this.a_spotify(['update', 'item', 'lyrics']);
                     }
                 })
@@ -175,6 +179,85 @@
                     }
                 });
 
+            },
+
+            getLyrics(track){
+                //Get Initial
+                console.log("Get Initial");
+                console.log(track);
+                this.c_mysql_find('initials','initial',track.name.slice(0,1), res=>{
+
+                    console.log(track.name.slice(0,1));
+                    console.log(res);
+                    if(res.data.length===0){
+                        console.log("no initial found");
+                        this.c_mysql_initials_new({initial:track.name.slice(0,1),spotifyids:track.id},res2=>{
+
+                        })
+                    }else{
+                        console.log("initial found!");
+                        if(res.data[0].spotifyids.indexOf(track.id)===-1){
+                            console.log(res.data[0].spotifyids, track.id,"and this id is not there.. you can register!");
+
+                            this.c_mysql_initials_update({
+                                id:res.data[0].id,
+                                initial:track.name.slice(0,1),
+                                spotifyids:track.id+"|"+res.data[0].spotifyids
+                            },res2=>{
+                                console.log(res2)
+                            })
+                        }
+                    }
+                })
+
+                //Get Lyrics
+                this.c_mysql_find('lyrics','spotifyid',track.id, res=>{
+
+                    console.log('spotifyid',track.id);
+                    if(res.data.length===0) {
+                        console.log("not saved!");
+                        this.c_kget(track,k_res=>{
+                            if(k_res.lyrics){
+                                console.log("lyrics found!");
+
+                                this.c_getTrack(track.id,(g_res)=>{
+
+                                    this.kuromojiParse(k_res.lyrics).then((res2) => {
+                                        let freqs = this.getFreqs(res2.data,60);
+                                        this.c_mysql_lyrics_new(
+                                            {...track,
+                                                ...k_res,
+                                                type:"kget",
+                                                morphs:JSON.stringify(freqs),
+                                                liveness:g_res.data.features.liveness,
+                                                valence:g_res.data.features.valence,
+                                                danceability:g_res.data.features.danceability,
+                                                energy:g_res.data.features.energy,
+                                                acousticness:g_res.data.features.acousticness,
+                                                tempo:g_res.data.features.tempo,
+                                                mode:g_res.data.features.mode
+                                            }, res3=>{
+
+                                            });
+                                    })
+                                })
+
+                                // this.kuromojiParse(k_res.lyrics).then((res2) => {
+                                //     let freqs = this.getFreqs(res2.data,60);
+                                //     this.c_mysql_lyrics_new({...track, ...k_res, type:"kget", morphs:JSON.stringify(freqs)}, res3=>{
+                                //
+                                //     });
+                                // })
+
+
+                            }else{
+                                console.log("no lyrics found..");
+                            }
+                        })
+                    }else{
+                        console.log(res.data.length+"songs already there!");
+                    }
+                });
             }
         }
     }
@@ -182,3 +265,5 @@
 
 <style scoped lang="scss">
 </style>
+
+

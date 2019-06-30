@@ -216,8 +216,9 @@ export const a_genius = ({commit},[type, action, data]) => {
 export const a_subscribe = ({commit},[type, action, data]) => {
     const actions = {
         set: {
-            populartracks:(data) => commit('subscribe/setPopularTracks',  data),
-            lyrics:(data)        => commit('subscribe/setLyrics',  data),
+            populartracks:(data) => commit('subscribe/setPopularTracks', data),
+            lyrics:(data)        => commit('subscribe/setLyrics',        data),
+            initials:(data)      => commit('subscribe/setInitials',      data),
         },
     }
     actions[type][action](data)
