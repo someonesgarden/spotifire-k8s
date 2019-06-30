@@ -1,6 +1,6 @@
 const state = {
     populartracks:null,
-    popularity_limit:40,
+    popularity_limit:35,
     lyrics:{}
 }
 

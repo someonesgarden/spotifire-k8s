@@ -183,8 +183,10 @@
                     </mu-list-item>
                 </div>
                 <!--/ARTISTS-->
+
                 <!--Lyrics-->
                 <mu-divider></mu-divider>
+
                 <mu-list-item button :ripple="false" class="range" @click="trackLyricsByGenius(track.artists[0].name+' '+track.name)">
                     <mu-list-item-action>
                         <mu-icon value="translate" color="orange"></mu-icon>
@@ -192,6 +194,15 @@
                     <mu-list-item-title>&nbsp;Lyrics by Genius.com</mu-list-item-title>
                 </mu-list-item>
                 <mu-divider></mu-divider>
+
+                <mu-list-item button :ripple="false" class="range" @click="trackLyricsByKGet({artist:track.artists[0].name,name:track.name,isrc:track.external_ids.isrc})">
+                    <mu-list-item-action>
+                        <mu-icon value="translate" color="green"></mu-icon>
+                    </mu-list-item-action>
+                    <mu-list-item-title>&nbsp;Lyrics by 歌詞GET</mu-list-item-title>
+                </mu-list-item>
+                <mu-divider></mu-divider>
+
                 <mu-list-item button :ripple="false" class="range" @click="trackLyricsByMusixMatch(track.external_ids.isrc, track.name)" v-if="track.external_ids">
                     <mu-list-item-action>
                         <mu-icon value="translate" color="purple"></mu-icon>
@@ -496,6 +507,17 @@
                    }
                 }
                 return show;
+            },
+
+            trackLyricsByKGet(q){
+
+                this.c_kget(q, res=> {
+                    console.log(res);
+                    this.a_genius(['set','song',{...res, type:'歌詞GET'}]);
+                    if(res) this.a_spotify(['update', 'item', 'lyrics']);
+                })
+
+
             },
 
             trackLyricsByGenius(q){

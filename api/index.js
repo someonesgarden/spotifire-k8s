@@ -10,6 +10,7 @@ const mysqlRouter       = require('./routes/mysql/index');
 const geniusRouter      = require('./routes/genius/index');
 const musixRouter       = require('./routes/musixmatch/index');
 const musicbrainzRouter = require('./routes/musicbrainz/index');
+const kget              = require('./routes/kget/index');
 
 const app = express();
 let http = require('http').Server(app);
@@ -113,6 +114,7 @@ app.use('/mysql',       mysqlRouter);
 app.use('/genius',      geniusRouter);
 app.use('/musixmatch',  musixRouter);
 app.use('/musicbrainz', musicbrainzRouter);
+app.use('/kget',        kget);
 
 // app.listen(5000, err => {
 //   console.log('Listening on Port 5000');

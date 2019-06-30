@@ -2,26 +2,26 @@ import axios from 'axios';
 
 export default{
     methods: {
-        c_mm_isrc(isrc,cb){
-            let params =  {isrc: isrc};
-            console.log(params);
-
+        //歌詞ゲットから歌詞をダウンロード。
+        //mysqlサーバーをたてて、その中に保存する！！
+        c_kget(track,cb){
+            let params  =  {artist:track.artist,song:track.name,isrc:track.isrc};
             let headers = {'Accept-Language':'ja;q=1'};
-
-            //http://127.0.0.1:8080/api/musicbrainz/browse/searchTrackInRecording?isrc=USWB10001880&track_name=Purple%20Rain
-
-            axios.get('/api/musicbrainz/browse/searchRecording',{params:params, headers: headers}).then(
+            axios.get('/api/kget/browse/spider',{params:params, headers: headers}).then(
                 res => {
 
-                    let total = res.data.length>10 ? 10 : res.data.length;
-                    if(total>0){
-                        console.log("mbid num is"+res.data.length+". so, I will use "+total);
-
-                        cb(res.data);
-
-                    }else{
-                        cb(null);
+                    let song = {
+                        spotifyid:track.id,
+                        spotifytype:'track',
+                        id:track.isrc,
+                        full_title:track.name,
+                        primary_artist:{
+                            name:track.artist
+                        },
+                        lyrics:res.data.lyrics,
+                        link:res.data.link
                     }
+                    cb(song);
                 }
             ).catch(error => {
                 console.log(error);

@@ -43,7 +43,7 @@ module.exports = {
     // pgPassword: process.env.PGPASSWORD,
     // pgPort: process.env.PGPORT
     mysqlHost:process.env.MYSQL_HOST,
-    mysqlPort:process.env.MYSQL_PORT,
+    mysqlPort:3306,
     mysqlDatabase:process.env.MYSQL_DB,
     mysqlUser:process.env.MYSQL_USER,
     mysqlPassword:process.env.MYSQL_PW,
