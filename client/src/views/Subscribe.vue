@@ -37,10 +37,38 @@
             ...mapActions(['a_index','a_subscribe']),
 
             getLyrics(track){
-                this.c_mysql_find('spotifyid',track.id, res=>{
+                //Get Initial
+               console.log("Get Initial");
+               console.log(track);
+                this.c_mysql_find('initials','initial',track.name.slice(0,1), res=>{
 
+                    console.log(track.name.slice(0,1));
+                    console.log(res);
+                    if(res.data.length===0){
+                        console.log("no initial found");
+                        this.c_mysql_initials_new({initial:track.name.slice(0,1),spotifyids:track.id},res2=>{
+                            console.log(res2)
+                        })
+                    }else{
+                        console.log("initial found!");
+                        if(res.data[0].spotifyids.indexOf(track.id)===-1){
+                            console.log(res.data[0].spotifyids, track.id,"and this id is not there.. you can register!");
+
+                            this.c_mysql_initials_update({
+                                id:res.data[0].id,
+                                initial:track.name.slice(0,1),
+                                spotifyids:track.id+"|"+res.data[0].spotifyids
+                            },res2=>{
+                                console.log(res2)
+                            })
+                        }
+                    }
+
+                })
+
+                //Get Lyrics
+                this.c_mysql_find('lyrics','spotifyid',track.id, res=>{
                     console.log('spotifyid',track.id);
-
                     if(res.data.length===0) {
                         console.log("not saved!");
                         this.c_kget(track,res=>{

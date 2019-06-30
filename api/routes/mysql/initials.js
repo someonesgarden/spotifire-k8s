@@ -26,6 +26,22 @@ router.post('/new', (req,res)=>{
             res.send(null);
         });
 })
+// Update
+router.post('/update', (req,res)=>{
+    Initials.update({
+        initial:req.body.initial,
+        spotifyids:req.body.spotifyids},
+        {
+            where:{
+                id:req.body.id}
+        }).then((result) => {
+            res.send(result);
+        },
+        (error) => {
+            console.log("update Initial", error.message);
+            res.send(null);
+        });
+})
 
 //Initialsの検索
 router.get('/get', (req,res)=>{
