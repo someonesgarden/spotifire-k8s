@@ -46,11 +46,9 @@
             },
 
             loadInitials(){
-                console.log("loadInitials..");
-                axios.get('/api/mysql/initials/all').then(res => {
+                console.log("loadInitials from spotife.work(laravel)..");
+                axios.get('https://spotifire.work/api/mysql/initials/all').then(res => {
                     console.log(res);
-                    alert("loadInitials");
-                    alert(JSON.stringify(res));
                     if(res) this.a_subscribe(['set','initials',res.data]);
 
                 }).catch(error => {
@@ -59,11 +57,9 @@
             },
 
             loadLyrics(){
-                console.log("loadLyrics..");
-                axios.get('/api/mysql/lyrics/all').then(res => {
+                console.log("loadLyrics from spotife.work(laravel)..");
+                axios.get('https://spotifire.work/api/mysql/lyrics/all').then(res => {
                     console.log(res);
-                    alert("loadLyrics");
-                    alert(JSON.stringify(res));
                     if(res) this.a_subscribe(['set','lyrics',res.data]);
                 }).catch(error => {
                     console.log(error);
