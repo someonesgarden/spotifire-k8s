@@ -5,7 +5,7 @@ export default{
     methods: {
         c_mysql_lyrics_new(data,cb=null){
 
-            console.log("c_mysql_lyrics_new");
+            console.log("c_mysql_lyrics_new:spotifire.work!!");
             console.log(data);
             const conditions = {
                 spotifyid:  data.spotifyid,
@@ -28,7 +28,8 @@ export default{
                 tempo:       data.tempo,
                 mode:        data.mode
             };
-            axios.post('/api/mysql/lyrics/new', conditions)
+            // axios.post('/api/mysql/lyrics/new', conditions)
+            axios.post('https://spotifire.work/api/mysql/lyrics/create', conditions)
                 .then(res => {
                     console.log(res);
                     if (cb) cb(res);

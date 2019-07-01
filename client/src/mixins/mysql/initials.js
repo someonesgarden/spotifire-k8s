@@ -10,7 +10,8 @@ export default{
                 genres:data.genres
             };
             console.log(conditions);
-            axios.post('/api/mysql/initials/new', conditions)
+            //axios.post('/api/mysql/initials/new', conditions)
+            axios.post('https://spotifire.work/api/mysql/initials/create', conditions)
                 .then(res => {
                     console.log(res);
                     if (cb) cb(res);
@@ -27,7 +28,8 @@ export default{
                 initial: data.initial
             };
             console.log(conditions);
-            axios.post('/api/mysql/initials/update', conditions)
+            //axios.post('/api/mysql/initials/update', conditions)
+            axios.post('https://spotifire.work/api/mysql/initials/update', conditions)
                 .then(res => {
                     console.log(res);
                     if (cb) cb(res);

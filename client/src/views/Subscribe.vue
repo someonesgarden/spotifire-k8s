@@ -67,9 +67,9 @@
             },
 
             deleteLyric(id,index){
-                console.log(id);
+                console.log("deleteLyric at "+id);
                 //データベースから削除
-                axios.get('/api/mysql/lyrics/delete',{params:{'id':id}}).then(res => {
+                axios.get('https://spotifire.work/api/mysql/lyrics/delete',{params:{'id':id}}).then(res => {
 
                     if(res){
                         //Storeから削除

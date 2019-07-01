@@ -4,7 +4,7 @@ export default{
 
     methods: {
         c_mysql_find(table,key,val,cb){
-          axios.get('/api/mysql/'+table+'/get',{params:{key:key,val:val}}).then(res => {
+          axios.get('https://spotifire.work/api/mysql/'+table+'/get',{params:{key:key,val:val}}).then(res => {
               cb(res);
           }).catch(error => {
               console.log(error);
