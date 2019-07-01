@@ -33,23 +33,15 @@ export default{
 
                 }else{
                     console.log("initial found!");
+
                     if(res.data[0].spotifyids.indexOf(track.id)===-1){
                         console.log("同じイニシャルはあるが、trackは登録されていない場合、作成する");
 
-                        this.c_getArtist(track.artistid,a_res=> {
-                            let genres = JSON.stringify(a_res.data.genres);
-                            this.c_mysql_initials_new({
-                                initial:track.name.slice(0,1),
-                                spotifyids:track.id,
-                                genres:genres
-                            }, res_=> this.a_subscribe(['set','update','initials']))
-                        });
-
-                        // this.c_mysql_initials_update({
-                        //     id:res.data[0].id,
-                        //     initial:track.name.slice(0,1),
-                        //     spotifyids:track.id+"|"+res.data[0].spotifyids
-                        // },res_=> this.a_subscribe(['set','update','initials']))
+                        this.c_mysql_initials_update({
+                            id:res.data[0].id,
+                            initial:track.name.slice(0,1),
+                            spotifyids:track.id+"|"+res.data[0].spotifyids
+                        },res_=> this.a_subscribe(['set','update','initials']))
                     }
                 }
             })
@@ -60,6 +52,7 @@ export default{
                 console.log('spotifyid',track.id);
                 if(res.data.length===0) {
                     console.log("not saved!");
+                    console.log(track.artistid);
                     this.c_getArtist(track.artistid,a_res=>{
                         let genres = JSON.stringify(a_res.data.genres);
 

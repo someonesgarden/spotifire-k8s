@@ -4,7 +4,7 @@
             <div class="ui grid" v-if="subscribe.initials">
 
                 <div class="sixteen wide mobile sixteen wide tablet sixteen wide computer column" style="border-bottom:thin dashed white;">
-                    <mu-chip v-for="(initial,index) in subscribe.initials" :key="'initial'+index" color="deepPurple700" :style="{fontSize:0.3+0.1*tracksOnInitial(initial.spotifyids)+'rem'}">{{initial.initial}}</mu-chip>
+                    <mu-chip v-for="(initial,index) in subscribe.initials" :key="'initial'+index" color="deepPurple700" :style="{fontSize:0.3+0.25*tracksOnInitial(initial.spotifyids)+'rem'}">{{initial.initial}}</mu-chip>
                 </div>
             </div>
 

@@ -45,8 +45,8 @@
                             </p>
 
                             <div class="sixteen wide mobile sixteen wide tablet sixteen wide computer column" style="padding-bottom:0;" v-if="spotify.tracks">
-                                <mu-chip class="chip-populartrack" color="teal500"
-                                         v-for="(item,index) in searchedJPTracks" :key="'track'+index" @click="getLyrics({name:item.name,id:item.id,artist:item.artists[0].name,thumb:item.album.images[0].url})">
+                                <mu-chip class="chip-populartrack" color="teal500" v-for="(item,index) in searchedJPTracks" :key="'track'+index"
+                                    @click="getLyrics({name:item.name, id:item.id,artistid:item.artists[0].id,artist:item.artists[0].name,thumb:item.album.images[0].url,isrc:item.external_ids.isrc})">
                                     <mu-avatar :size="22">
                                         <img :src="item.album.images[0].url">
                                     </mu-avatar>
