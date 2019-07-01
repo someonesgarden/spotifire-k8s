@@ -50,7 +50,7 @@
                 axios.get('/api/mysql/initials/all').then(res => {
                     console.log(res);
                     alert("loadInitials");
-                    alert(res);
+                    alert(JSON.stringify(res));
                     if(res) this.a_subscribe(['set','initials',res.data]);
 
                 }).catch(error => {
@@ -63,7 +63,7 @@
                 axios.get('/api/mysql/lyrics/all').then(res => {
                     console.log(res);
                     alert("loadLyrics");
-                    alert(res);
+                    alert(JSON.stringify(res));
                     if(res) this.a_subscribe(['set','lyrics',res.data]);
                 }).catch(error => {
                     console.log(error);
