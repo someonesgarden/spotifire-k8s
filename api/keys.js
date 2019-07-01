@@ -37,15 +37,14 @@ module.exports = {
     twitterConsumerSecret:process.env.TWITTER_CONSUMER_SECRET,
     twitterAccessTokenKey:process.env.TWITTER_ACCESS_TOKEN_KEY,
     twitterAccessTokenSecret:process.env.TWITTER_ACCESS_TOKEN_SECRET,
+    mysqlHost:process.env.MYSQL_HOST,
+    mysqlPort:process.env.MYSQL_PORT,
+    mysqlDatabase:process.env.MYSQL_DB,
+    mysqlUser:process.env.MYSQL_USER,
+    mysqlPassword:process.env.MYSQL_PW,
     // pgUser: process.env.PGUSER,
     // pgHost: process.env.PGHOST,
     // pgDatabase: process.env.PGDATABASE,
     // pgPassword: process.env.PGPASSWORD,
     // pgPort: process.env.PGPORT
-    mysqlHost:process.env.MYSQL_HOST,
-    mysqlPort:3306,
-    mysqlDatabase:process.env.MYSQL_DB,
-    mysqlUser:process.env.MYSQL_USER,
-    mysqlPassword:process.env.MYSQL_PW,
-
 };

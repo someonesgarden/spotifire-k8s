@@ -53,6 +53,7 @@
 
                 }).catch(error => {
                     console.log(error);
+                    alert(error);
                 });
             },
 
@@ -63,6 +64,7 @@
                     this.a_subscribe(['set','lyrics',res.data]);
                 }).catch(error => {
                     console.log(error);
+                    alert(error);
                 });
             },
 
