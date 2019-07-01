@@ -1,7 +1,11 @@
 const Sequelize = require('sequelize');
 const keys = require('../../../keys');
-const sequelize = new Sequelize(keys.mysqlDatabase,keys.mysqlUser,keys.mysqlPassword,
+const sequelize = new Sequelize(
+    keys.mysqlDatabase,
+    keys.mysqlUser,
+    keys.mysqlPassword,
     {
+        port:keys.mysqlPort,
         host:keys.mysqlHost,
         dialect:'mysql'
     });

@@ -11,7 +11,7 @@ router.get('/all', (req,res)=>{
         },
         function(err) {
             console.log('get all Initials error:', err.message);
-            res.send(null);
+            res.send(err.message);
         }
     );
 });
