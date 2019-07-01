@@ -11,7 +11,7 @@ router.get('/all', (req,res)=>{
         },
         function(err) {
             console.log('get all lyrics error:', err.message);
-            res.send(err.message);
+            res.send(null);
         }
     );
 });

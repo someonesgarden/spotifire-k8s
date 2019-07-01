@@ -49,11 +49,12 @@
                 console.log("loadInitials..");
                 axios.get('/api/mysql/initials/all').then(res => {
                     console.log(res);
-                    this.a_subscribe(['set','initials',res.data]);
+                    alert("loadInitials");
+                    alert(res);
+                    if(res) this.a_subscribe(['set','initials',res.data]);
 
                 }).catch(error => {
                     console.log(error);
-                    alert(error);
                 });
             },
 
@@ -61,10 +62,11 @@
                 console.log("loadLyrics..");
                 axios.get('/api/mysql/lyrics/all').then(res => {
                     console.log(res);
-                    this.a_subscribe(['set','lyrics',res.data]);
+                    alert("loadLyrics");
+                    alert(res);
+                    if(res) this.a_subscribe(['set','lyrics',res.data]);
                 }).catch(error => {
                     console.log(error);
-                    alert(error);
                 });
             },
 
