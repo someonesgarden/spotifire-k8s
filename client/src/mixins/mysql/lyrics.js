@@ -4,10 +4,14 @@ export default{
 
     methods: {
         c_mysql_lyrics_new(data,cb=null){
+
+            console.log("c_mysql_lyrics_new");
+            console.log(data);
             const conditions = {
                 spotifyid:  data.spotifyid,
                 spotifytype:data.spotifytype,
                 thumb:      data.thumb,
+                genres:     data.genres,
                 artist:     data.primary_artist ? data.primary_artist.name : '',
                 song:       data.full_title,
                 type:       data.type,

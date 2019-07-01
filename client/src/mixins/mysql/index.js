@@ -9,6 +9,6 @@ export default{
         lyricsMix,
         initialsMix
     ],
-    computed: mapGetters(['spotify']),
-    methods: mapActions(['a_spotify'])
+    computed: mapGetters(['spotify','subscribe']),
+    methods: mapActions(['a_spotify','a_subscribe'])
 }

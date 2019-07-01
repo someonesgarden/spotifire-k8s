@@ -12,12 +12,13 @@ const Lyrics = sequelize.define('lyrics', {
     song        : { field: 'song' ,         type: Sequelize.STRING(100),   allowNull: false                      }, // VARCHAR(100) NOT NULL
     type        : { field: 'type' ,         type: Sequelize.STRING(10),    allowNull: false                      }, // VARCHAR(100) NOT NULL
     thumb       : { field: 'thumb' ,        type: Sequelize.STRING(255)                                          }, // VARCHAR(100) NOT NULL
-    link        : { field: 'link' ,         type: Sequelize.STRING(125)                                          }, // VARCHAR(100) NOT NULL
-    isrc        : { field: 'isrc' ,         type: Sequelize.STRING(30)                                           }, // VARCHAR(100) NOT NULL
-    spotifyid   : { field: 'spotifyid',     type: Sequelize.STRING(30)                                           }, // VARCHAR(100) NOT NULL
-    spotifytype : { field: 'spotifytype',   type: Sequelize.STRING(10)                                           }, // VARCHAR(100) NOT NULL
-    lyrics      : { field: 'lyrics',        type: Sequelize.STRING(500)                                          }, // VARCHAR(500) DEFAULT NULL
-    morphs      : { field: 'morphs',        type: Sequelize.STRING(500)                                          }, // VARCHAR(500) DEFAULT NULL
+    genres      : { field: 'genres' ,       type: Sequelize.STRING(255)                                          }, // TEXT
+    link        : { field: 'link' ,         type: Sequelize.STRING(125)                                          }, // VARCHAR(100)
+    isrc        : { field: 'isrc' ,         type: Sequelize.STRING(30)                                           }, // VARCHAR(100)
+    spotifyid   : { field: 'spotifyid',     type: Sequelize.STRING(30)                                           }, // VARCHAR(100)
+    spotifytype : { field: 'spotifytype',   type: Sequelize.STRING(10)                                           }, // VARCHAR(100)
+    lyrics      : { field: 'lyrics',        type: Sequelize.STRING(500)                                          }, // VARCHAR(500)
+    morphs      : { field: 'morphs',        type: Sequelize.STRING(500)                                          }, // VARCHAR(500)
     liveness    : { field: 'liveness',      type: Sequelize.FLOAT                                          }, // FLOAT DEFAULT NULL
     valence     : { field: 'valence',       type: Sequelize.FLOAT                                          }, // FLOAT DEFAULT NULL
     danceability: { field: 'danceability',  type: Sequelize.FLOAT                                          }, // FLOAT DEFAULT NULL

@@ -5,13 +5,12 @@
                 <mu-stepper :active-step="vactiveStep" orientation="vertical">
                     <mu-step>
                         <mu-step-label>
-                            Featured Playlistを取得
+                            Featured (JP only) | popular={{subscribe.popularity_limit}}
                         </mu-step-label>
 
                         <mu-step-content>
                             <div class="ui grid" style="margin-bottom:5px;">
-                                <div class="sixteen wide mobile sixteen wide tablet sixteen wide computer column"
-                                     style="padding-bottom:0;" v-if="subscribe.populartracks">
+                                <div class="sixteen wide mobile sixteen wide tablet sixteen wide computer column" style="padding-bottom:0;" v-if="subscribe.populartracks">
                                     <mu-chip class="chip-populartrack" color="cyan500"
                                              v-for="(populartrack,index) in subscribe.populartracks" :key="'pt'+index" @click="getLyrics(populartrack)">
                                         <mu-avatar :size="22">
@@ -21,34 +20,60 @@
                                         <span class="artist">{{populartrack.artist | truncate20}}</span>
                                     </mu-chip>
                                 </div>
-
-                                <div class="sixteen wide mobile sixteen wide tablet sixteen wide computer column"
-                                     style="padding-bottom:0;">
-                                    <mu-button full-width round color="black" v-if="!spotify.credential.expires_in"
-                                               @click="c_getCredential">
+                                <div class="sixteen wide mobile sixteen wide tablet sixteen wide computer column" style="padding-bottom:0;" v-else>
+                                    <mu-button full-width round color="black" v-if="!spotify.credential.expires_in" @click="c_getCredential">
                                         LOGIN
                                     </mu-button>
                                     <mu-button full-width round color="red" v-else @click="stepOne">
-                                        プレイリストを取得
+                                        Fetch Playlists
                                         <mu-icon right value="send"></mu-icon>
                                     </mu-button>
                                     <mu-divider></mu-divider>
                                 </div>
                             </div>
 
-                            <mu-button @click="vhandleNext" color="primary">次へ</mu-button>
+                            <mu-button @click="vhandleNext" color="primary">Next</mu-button>
                         </mu-step-content>
                     </mu-step>
                     <mu-step>
                         <mu-step-label>
-                            创建一个群组
+                            Search Tracks (JP only)
                         </mu-step-label>
                         <mu-step-content>
                             <p>
-                                创建群组，50人左右，以18-25单身青年为主。。。。。
+                                Featured以外に自分で検索する。
                             </p>
-                            <mu-button class="news-step-button" @click="vhandleNext" color="primary">次へ</mu-button>
-                            <mu-button flat class="news-step-button" @click="vhandlePrev">前へ</mu-button>
+
+                            <div class="sixteen wide mobile sixteen wide tablet sixteen wide computer column" style="padding-bottom:0;" v-if="spotify.tracks">
+                                <mu-chip class="chip-populartrack" color="teal500"
+                                         v-for="(item,index) in searchedJPTracks" :key="'track'+index" @click="getLyrics({name:item.name,id:item.id,artist:item.artists[0].name,thumb:item.album.images[0].url})">
+                                    <mu-avatar :size="22">
+                                        <img :src="item.album.images[0].url">
+                                    </mu-avatar>
+                                    {{item.name}}
+                                    <span class="artist">{{item.artists[0].name | truncate20}}</span>
+                                </mu-chip>
+                            </div>
+
+                            <div class="ui grid" style="margin-bottom:5px;">
+                                <div class="sixteen wide mobile sixteen wide tablet sixteen wide computer column" style="padding-bottom:0;">
+                                    <mu-text-field :value="spotify.searchQuery.term" @change="(val)=> a_spotify(['set','searchQuery',{key:'term',val:val}])"></mu-text-field>
+                                    <mu-button full-width round color="black" v-if="!spotify.credential.expires_in" @click="c_getCredential">
+                                        LOGIN
+                                    </mu-button>
+                                    <mu-button full-width round color="red" v-else @click="c_search(true)">
+                                        Search Tracks
+                                        <mu-icon right value="send"></mu-icon>
+                                    </mu-button>
+                                </div>
+
+                            </div>
+
+
+
+
+                            <mu-button class="news-step-button" @click="vhandleNext" color="primary">Next</mu-button>
+                            <mu-button flat class="news-step-button" @click="vhandlePrev">Prev</mu-button>
                         </mu-step-content>
                     </mu-step>
                     <mu-step>
@@ -59,13 +84,13 @@
                             <p>
                                 多在群里发消息宣传宣传，有事没事多在群里唠唠嗑，确定的话就ok拉
                             </p>
-                            <mu-button class="news-step-button" @click="vhandleNext" color="primary">完成</mu-button>
-                            <mu-button flat class="news-step-button" @click="vhandlePrev">前へ</mu-button>
+                            <mu-button class="news-step-button" @click="vhandleNext" color="primary">Finish</mu-button>
+                            <mu-button flat class="news-step-button" @click="vhandlePrev">Prev</mu-button>
                         </mu-step-content>
                     </mu-step>
                 </mu-stepper>
                 <p v-if="vfinished">
-                    都完成啦!<a href="javascript:;" @click="vreset">リセット</a>
+                    s<a href="javascript:;" @click="vreset">Reset All</a>
                 </p>
             </div>
         </mu-container>
@@ -100,10 +125,15 @@
 
             vfinished () {
                 return this.vactiveStep > 2;
+            },
+
+            searchedJPTracks(){
+                if(this.spotify.tracks.items) return this.spotify.tracks.items.filter(item=>(item.external_ids.isrc && item.external_ids.isrc.indexOf('JP')!== -1))
+                return null
             }
         },
         methods: {
-            ...mapActions(['a_index','a_subscribe']),
+            ...mapActions(['a_index','a_subscribe','a_spotify']),
 
             trackLyricsByMusixMatch(isrc,track_name){
                 this.c_mm_lyrics_isrc(isrc,track_name,res=>{
@@ -136,6 +166,7 @@
                         const headers   = {Authorization:this.spotify.credential.access_token};
                         const api       = axios.create();
                         const playlists = data.playlists.items;
+                        console.log(playlists);
                         const popularity_limit = this.subscribe.popularity_limit; //Popularityが低い曲は歌詞がある可能性は低いので限度を決める
                         let tracks      = {};
                         let track_ary   = [];
@@ -153,6 +184,7 @@
                                             // ISRCの先頭にJPがあるかどうか。
                                             if(item.track.external_ids.isrc && item.track.external_ids.isrc.indexOf('JP')!== -1) {
 
+
                                                 tracks[item.track.id] = {
                                                     thumb:item.track.album.images[0].url,
                                                     id: item.track.id,
@@ -160,7 +192,8 @@
                                                     name: item.track.name,
                                                     type: item.track.type,
                                                     isrc: item.track.external_ids ? item.track.external_ids.isrc : '',
-                                                    artist: item.track.artists ? item.track.artists[0].name : ''
+                                                    artist:item.track.artists[0].name,
+                                                    artistid:item.track.artists[0].id,
                                                 };
 
                                                 // this.c_mb(item.track.external_ids.isrc,item.track.name,  (res)=>{
@@ -173,91 +206,11 @@
                             });
                             Object.keys(tracks).forEach(key=> track_ary.push(tracks[key]));
                             track_ary.sort((a,b)=> b.popularity - a.popularity);
-                            console.log(track_ary);
                             this.a_subscribe(['set','populartracks',track_ary]);
                         })
                     }
                 });
 
-            },
-
-            getLyrics(track){
-                //Get Initial
-                console.log("Get Initial");
-                console.log(track);
-                this.c_mysql_find('initials','initial',track.name.slice(0,1), res=>{
-
-                    console.log(track.name.slice(0,1));
-                    console.log(res);
-                    if(res.data.length===0){
-                        console.log("no initial found");
-                        this.c_mysql_initials_new({initial:track.name.slice(0,1),spotifyids:track.id},res2=>{
-
-                        })
-                    }else{
-                        console.log("initial found!");
-                        if(res.data[0].spotifyids.indexOf(track.id)===-1){
-                            console.log(res.data[0].spotifyids, track.id,"and this id is not there.. you can register!");
-
-                            this.c_mysql_initials_update({
-                                id:res.data[0].id,
-                                initial:track.name.slice(0,1),
-                                spotifyids:track.id+"|"+res.data[0].spotifyids
-                            },res2=>{
-                                console.log(res2)
-                            })
-                        }
-                    }
-                })
-
-                //Get Lyrics
-                this.c_mysql_find('lyrics','spotifyid',track.id, res=>{
-
-                    console.log('spotifyid',track.id);
-                    if(res.data.length===0) {
-                        console.log("not saved!");
-                        this.c_kget(track,k_res=>{
-                            if(k_res.lyrics){
-                                console.log("lyrics found!");
-
-                                this.c_getTrack(track.id,(g_res)=>{
-
-                                    this.kuromojiParse(k_res.lyrics).then((res2) => {
-                                        let freqs = this.getFreqs(res2.data,60);
-                                        this.c_mysql_lyrics_new(
-                                            {...track,
-                                                ...k_res,
-                                                type:"kget",
-                                                morphs:JSON.stringify(freqs),
-                                                liveness:g_res.data.features.liveness,
-                                                valence:g_res.data.features.valence,
-                                                danceability:g_res.data.features.danceability,
-                                                energy:g_res.data.features.energy,
-                                                acousticness:g_res.data.features.acousticness,
-                                                tempo:g_res.data.features.tempo,
-                                                mode:g_res.data.features.mode
-                                            }, res3=>{
-
-                                            });
-                                    })
-                                })
-
-                                // this.kuromojiParse(k_res.lyrics).then((res2) => {
-                                //     let freqs = this.getFreqs(res2.data,60);
-                                //     this.c_mysql_lyrics_new({...track, ...k_res, type:"kget", morphs:JSON.stringify(freqs)}, res3=>{
-                                //
-                                //     });
-                                // })
-
-
-                            }else{
-                                console.log("no lyrics found..");
-                            }
-                        })
-                    }else{
-                        console.log(res.data.length+"songs already there!");
-                    }
-                });
             }
         }
     }

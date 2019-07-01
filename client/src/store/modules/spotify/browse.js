@@ -2,7 +2,7 @@ const state = {
     searchResNum:0,
     searchQuery:{
         term: 'Prince',
-        datatypes: ['playlist'],
+        datatypes: ['playlist','track'],
         limit: 30,
         offset:0,
         id:'2oKgQmWLlAgCqw0YD8SvEg'

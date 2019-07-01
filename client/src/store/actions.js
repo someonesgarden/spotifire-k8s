@@ -219,7 +219,11 @@ export const a_subscribe = ({commit},[type, action, data]) => {
             populartracks:(data) => commit('subscribe/setPopularTracks', data),
             lyrics:(data)        => commit('subscribe/setLyrics',        data),
             initials:(data)      => commit('subscribe/setInitials',      data),
+            update:(data)        => commit('subscribe/setUpdate',        data)
         },
+        delete:{
+            lyric:(data)        => commit('subscribe/delLyric',          data)
+        }
     }
     actions[type][action](data)
 };

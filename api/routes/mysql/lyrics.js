@@ -44,6 +44,23 @@ router.get('/get', (req,res)=>{
         });
 })
 
+router.get('/delete', (req,res)=>{
+    const id          = req.query.id;
+    //Lyrics.destroy({where: {id: id}}).on('success', (u)=>res.send('success'));
+
+    Lyrics.destroy({
+        where: {
+            id: id
+        }
+    }).then((record) => {
+            res.send(200);
+        })
+        .catch((err) => {
+            res.send(null);
+        });
+
+})
+
 //Lyricsの更新
 
 module.exports = router;

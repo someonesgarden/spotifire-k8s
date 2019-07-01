@@ -6,6 +6,9 @@ export default{
         //mysqlサーバーをたてて、その中に保存する！！
         c_kget(track,cb){
             let params  =  {artist:track.artist,song:track.name,isrc:track.isrc};
+            console.log("c_kget,params");
+            console.log(params);
+
             let headers = {'Accept-Language':'ja;q=1'};
             axios.get('/api/kget/browse/spider',{params:params, headers: headers}).then(
                 res => {

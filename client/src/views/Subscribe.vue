@@ -1,18 +1,24 @@
 <template>
     <mu-container class="flex_v">
         <div class="base">
-            <div class="ui grid" style="margin-bottom:5px;" v-if="subscribe.initials">
+            <div class="ui grid" v-if="subscribe.initials">
 
-                <div class="sixteen wide mobile sixteen wide tablet sixteen wide computer column" style="padding-bottom:0;border-bottom:thin dashed white;">
-
-                   <span v-for="(initial,index) in subscribe.initials" :key="'initial'+index" :style="{fontSize:0.6*tracksOnInitial(initial.spotifyids)+'rem'}">{{initial.initial}}</span>
-
+                <div class="sixteen wide mobile sixteen wide tablet sixteen wide computer column" style="border-bottom:thin dashed white;">
+                    <mu-chip v-for="(initial,index) in subscribe.initials" :key="'initial'+index" color="deepPurple700" :style="{fontSize:0.3+0.1*tracksOnInitial(initial.spotifyids)+'rem'}">{{initial.initial}}</mu-chip>
                 </div>
             </div>
 
-            <div class="ui grid" style="margin-bottom:5px;" v-if="subscribe.lyrics">
-                <h3> <mu-icon value="filter_2"></mu-icon>&nbsp;Lyrics from MusixMatch</h3>
-                <div class="sixteen wide mobile sixteen wide tablet sixteen wide computer column" style="padding-bottom:0;border-bottom:thin dashed white;">
+            <div class="ui grid" v-if="subscribe.lyrics">
+                <div class="sixteen wide mobile sixteen wide tablet sixteen wide computer column" style="border-bottom:thin dashed white;">
+
+                    <mu-chip class="chip-populartrack" color="orange500" v-for="(lyric,index) in subscribe.lyrics" :key="'pt'+index" delete @delete="deleteLyric(lyric.id,index)">
+                        <mu-avatar :size="22">
+                            <img :src="lyric.thumb">
+                        </mu-avatar>
+                        {{lyric.song}}
+                        <span class="artist">{{lyric.artist | truncate20}}</span>
+                    </mu-chip>
+
                 </div>
             </div>
         </div>
@@ -37,25 +43,63 @@
 
             tracksOnInitial(ids){
                 return ids.split('|').length
+            },
+
+            loadInitials(){
+                console.log("loadInitials..");
+                axios.get('/api/mysql/initials/all').then(res => {
+                    console.log(res);
+                    this.a_subscribe(['set','initials',res.data]);
+
+                }).catch(error => {
+                    console.log(error);
+                });
+            },
+
+            loadLyrics(){
+                console.log("loadLyrics..");
+                axios.get('/api/mysql/lyrics/all').then(res => {
+                    console.log(res);
+                    this.a_subscribe(['set','lyrics',res.data]);
+                }).catch(error => {
+                    console.log(error);
+                });
+            },
+
+            deleteLyric(id,index){
+                console.log(id);
+                //データベースから削除
+                axios.get('/api/mysql/lyrics/delete',{params:{'id':id}}).then(res => {
+
+                    if(res){
+                        //Storeから削除
+                        console.log("データベースから消去完了。Storeから消去",index);
+                        this.a_subscribe(['delete','lyric', index]);
+                    }
+                }).catch(error => {
+                    console.log(error);
+                });
             }
+        },
+
+        watch:{
+          'subscribe.update':{
+              handler(newState){
+                  let reducers = {
+                      initials: ()=> this.loadInitials(),
+                      lyrics:   ()=> this.loadLyrics()
+                  };
+                  if (!reducers[newState.type]) return false;
+                  return reducers[newState.type]()
+              },
+              deep:true
+          }
         },
 
 
         mounted(){
-            axios.get('/api/mysql/initials/all').then(res => {
-                console.log(res);
-                this.a_subscribe(['set','initials',res.data]);
-
-            }).catch(error => {
-                console.log(error);
-            });
-
-            axios.get('/api/mysql/lyrics/all').then(res => {
-                console.log(res);
-                this.a_subscribe(['set','lyrics',res.data]);
-            }).catch(error => {
-                console.log(error);
-            });
+            this.loadInitials();
+            this.loadLyrics();
         }
     }
 </script>

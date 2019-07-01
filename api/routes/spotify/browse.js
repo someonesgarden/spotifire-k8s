@@ -2,6 +2,9 @@ let express = require('express');
 let router = express.Router();
 const keys = require('../../keys');
 const spotifyApi = keys.spotifyApi;
+const WebApiRequest = require('../../node_modules/spotify-web-api-node/src/webapi-request');
+const HttpManager   = require('../../node_modules/spotify-web-api-node/src/http-manager');
+
 
 
 router.get('/featured', (req,res)=>{
@@ -10,17 +13,34 @@ router.get('/featured', (req,res)=>{
     spotifyApi.setAccessToken(access_token);
 
     const country   = req.query.country ? req.query.country : 'JP';
+    const options   = {limit:45, country: country, locale: 'ja-JP', 'accept-language':'ja-JP'};
 
-    spotifyApi.getFeaturedPlaylists({ country: country, locale: 'ja-JP', 'accept-language':'ja-JP'}).then(
-            function(data) {
-                console.log(data.body);
-                res.send(data.body);
-            },
-            function(err) {
-                console.log(err.message);
+    console.log(options);
+
+    // spotifyApi.getFeaturedPlaylists({ country: country, locale: 'ja-JP', 'accept-language':'ja-JP'}).then(
+    //         function(data) {
+    //             console.log(data.body);
+    //             res.send(data.body);
+    //         },
+    //         function(err) {
+    //             console.log(err.message);
+    //             res.send(null);
+    //         }
+    //     );
+
+    return WebApiRequest.builder(access_token)
+        .withPath('/v1/browse/featured-playlists')
+        .withHeaders({ 'Content-Type' : 'application/json', 'Accept-Language':'ja;q=1'})
+        .withQueryParameters(options)
+        .build()
+        .execute(HttpManager.get, (err,data)=>{
+            if(err){
+                console.log('Could not get featured playlists!', err.message);
                 res.send(null);
+                return;
             }
-        );
+            res.send(data.body);
+        });
 });
 
 
@@ -51,21 +71,30 @@ router.get('/idcheck', (req,res)=>{
 });
 
 router.post('/search', (req,res)=>{
-    const data = req.body;
+    const data         = req.body;
     const access_token = data.access_token;
     const conditions   = data.conditions;
+    const options      = { limit : conditions.limit, offset : conditions.offset};
 
-    spotifyApi.setAccessToken(access_token);
-    //locale: 'en_US'をoptionにつけると英語？
-    spotifyApi.search(conditions.term, conditions.datatypes, { limit : conditions.limit, offset : conditions.offset}).then(
-        function(data) {
+    return WebApiRequest.builder(access_token)
+        .withPath('/v1/search/')
+        .withHeaders({ 'Content-Type' : 'application/json', 'Accept-Language':'ja;q=1'})
+        .withQueryParameters(
+            {
+                type: conditions.datatypes.join(','),
+                q: conditions.term
+            },
+            options
+        )
+        .build()
+        .execute(HttpManager.get, (err,data)=>{
+            if(err){
+                console.log('Could not refresh the token!', err.message);
+                res.send(null);
+                return;
+            }
             res.send(data.body);
-        },
-        function(err) {
-            console.log('Could not refresh the token!', err.message);
-            res.send(null);
-        }
-    );
+        });
 });
 
 

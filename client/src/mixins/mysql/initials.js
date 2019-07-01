@@ -6,7 +6,8 @@ export default{
         c_mysql_initials_new(data,cb=null){
             const conditions = {
                 spotifyids:  data.spotifyids,
-                initial: data.initial
+                initial: data.initial,
+                genres:data.genres
             };
             console.log(conditions);
             axios.post('/api/mysql/initials/new', conditions)

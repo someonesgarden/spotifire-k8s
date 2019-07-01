@@ -195,7 +195,7 @@
                 </mu-list-item>
                 <mu-divider></mu-divider>
 
-                <mu-list-item button :ripple="false" class="range" @click="trackLyricsByKGet({artist:track.artists[0].name,name:track.name,isrc:track.external_ids.isrc})">
+                <mu-list-item button :ripple="false" class="range" @click="trackLyricsByKGet()">
                     <mu-list-item-action>
                         <mu-icon value="translate" color="green"></mu-icon>
                     </mu-list-item-action>
@@ -420,6 +420,9 @@
     import spotifyMixin from '../../mixins/spotify/index';
     import geniusMixin from '../../mixins/genius/index';
     import musixMixin from '../../mixins/musixmatch/index';
+    import mysqlMixin from '../../mixins/mysql';
+    import feedMixin from '../../mixins/feed/index';
+    import utilMixin from '../../mixins/util';
     import {ruleEmpty} from '../../store/rules';
 
     import searchResList from '../List/SearchResList';
@@ -427,14 +430,14 @@
     import PlayBtn from './PlayBtn';
     export default {
         name: "PlaylistView",
-        mixins:[spotifyMixin,geniusMixin,musixMixin],
+        mixins:[spotifyMixin,geniusMixin,musixMixin,mysqlMixin,feedMixin,utilMixin],
         components:{
           searchResList,
             Chart,
             PlayBtn
         },
         computed:{
-            ...mapGetters(['spotify','genius'])
+            ...mapGetters(['spotify','genius','subscrib'])
         },
         created(){
             this.gen = this.spotify.gen
@@ -478,7 +481,7 @@
             }
         },
         methods:{
-            ...mapActions(['a_index','a_spotify','a_genius']),
+            ...mapActions(['a_index','a_spotify','a_genius','a_subscrib']),
 
             showTab(item,state=null){
                 let show = true;
@@ -509,15 +512,21 @@
                 return show;
             },
 
-            trackLyricsByKGet(q){
-
-                this.c_kget(q, res=> {
-                    console.log(res);
-                    this.a_genius(['set','song',{...res, type:'歌詞GET'}]);
-                    if(res) this.a_spotify(['update', 'item', 'lyrics']);
-                })
-
-
+            trackLyricsByKGet(){
+                this.getLyrics(
+                    {
+                        name:     this.track.name,
+                        isrc:     this.track.external_ids.isrc,
+                        id:       this.track.id,
+                        artist:   this.track.artists ? this.track.artists[0].name :'',
+                        artistid: this.track.artists ? this.track.artists[0].id : '',
+                        thumb:    this.track.album.images ? this.track.album.images[0].url : ''
+                    }, (res) => {
+                        if (res){
+                            this.a_genius(['set','song',{...res, type:'歌詞GET'}]);
+                            this.a_spotify(['update', 'item', 'lyrics']);
+                        }
+                    });
             },
 
             trackLyricsByGenius(q){
