@@ -7,7 +7,10 @@ const sequelize = new Sequelize(
     {
         port:keys.mysqlPort,
         host:keys.mysqlHost,
-        dialect:'mysql'
+        dialect:'mysql',
+        dialectOptions: {
+            ssl: false
+        }
     });
 
 const Initials = sequelize.define('initials', {

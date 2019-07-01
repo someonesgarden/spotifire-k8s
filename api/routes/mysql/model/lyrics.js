@@ -2,8 +2,12 @@ const Sequelize = require('sequelize');
 const keys = require('../../../keys');
 const sequelize = new Sequelize(keys.mysqlDatabase,keys.mysqlUser,keys.mysqlPassword,
     {
+        port:keys.mysqlPort,
         host:keys.mysqlHost,
-        dialect:'mysql'
+        dialect:'mysql',
+        dialectOptions: {
+            ssl: false
+        }
     });
 
 const Lyrics = sequelize.define('lyrics', {
