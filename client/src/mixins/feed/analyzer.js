@@ -51,10 +51,13 @@ export default{
 
             //一文字だけの単語は除去・四文字以上は特別扱い
             let freqWords2 = [];
-            freqWords.map(word=>{ if(word.text.length>1){
-                freqWords2.push(word);
-                if(word.text.length>3) over4length.push(word.text);
-            } });
+            freqWords.map(word=>{
+               if(word.text.length>1 && !word.text.match(/^[A-Za-z0-9,.]*$/)){
+                    freqWords2.push(word);
+                    if(word.text.length>3) over4length.push(word.text);
+                }
+            });
+
             freqWords2.sort((a,b)=> b.value - a.value);
 
             //トップ５を抽出

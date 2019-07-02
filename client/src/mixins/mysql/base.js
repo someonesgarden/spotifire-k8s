@@ -68,11 +68,14 @@ export default{
                                 this.c_getTrack(track.id,(g_res)=>{
                                     this.kuromojiParse(k_res.lyrics).then((res2) => {
                                         let freqs = this.getFreqs(res2.data,60);
+
+                                        freqs = JSON.stringify(freqs);
+
                                         this.c_mysql_lyrics_new(
                                             {...track,
                                                 ...k_res,
                                                 type:"kget",
-                                                morphs:JSON.stringify(freqs),
+                                                morphs:freqs,
                                                 liveness:g_res.data.features.liveness,
                                                 valence:g_res.data.features.valence,
                                                 danceability:g_res.data.features.danceability,

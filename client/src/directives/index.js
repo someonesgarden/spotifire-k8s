@@ -1,5 +1,6 @@
 import Vue from 'vue'
 
+// <div v-spotifycode="{id:feature.spotify.id,type:feature.spotify.type}"></div>
 Vue.directive('spotifycode', {
 
     bind(el, binding) {
@@ -23,3 +24,4 @@ Vue.directive('spotifycode', {
         if(!!id) el.style.backgroundImage = `url('https://scannables.scdn.co/uri/plain/jpeg/000000/white/640/spotify:${type}:${id}')`;
     }
 })
+
