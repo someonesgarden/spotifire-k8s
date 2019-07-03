@@ -79,11 +79,10 @@
             <mu-button flat slot="right" color="grey500" @click="a_index(['bottom','open'])">
                 <mu-icon value="border_bottom"></mu-icon>
             </mu-button>
-            <mu-button flat slot="right">
+            <mu-button flat slot="right" @click="side.news.right.open=true">
                 <mu-icon value="dashboard"></mu-icon>
             </mu-button>
         </mu-appbar>
-
 
         <!-- Spotify Drawers -->
         <mu-drawer :open.sync="side.spotify.left.open" :docked="side.spotify.left.docked" :width="300">
@@ -113,6 +112,12 @@
                 <subscribe-left-view></subscribe-left-view>
             </mu-list>
         </mu-drawer>
+
+        <mu-drawer :open.sync="side.news.right.open" :docked="side.news.right.docked" :right="true" :width="300">
+            <mu-list style="width:inherit;padding:0;">
+                <subscribe-right-view  @close="side.news.right.open=false" @open="side.news.right.open=true"/>
+            </mu-list>
+        </mu-drawer>
         <!--/News Drawers -->
 
     </div>
@@ -128,6 +133,7 @@
 
     // RIGHT
     import PlaylistView from './PlaylistView';
+    import SubscribeRightView from './SubscribeRightView';
 
     export default {
         name: 'myheader',
@@ -135,7 +141,8 @@
             AsideView,
             EmoryLeftView,
             PlaylistView,
-            SubscribeLeftView
+            SubscribeLeftView,
+            SubscribeRightView
         },
         data:function(){
             return{
@@ -156,11 +163,15 @@
                         }
                     },
 
-                    news:{
-                      left:{
-                          open:false,
-                          docked:false
-                      }
+                    news: {
+                        left: {
+                            open: false,
+                            docked: false
+                        },
+                        right: {
+                            open: false,
+                            docked: false
+                        }
                     },
 
                     emory:{

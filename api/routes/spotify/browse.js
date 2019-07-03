@@ -17,17 +17,6 @@ router.get('/featured', (req,res)=>{
 
     console.log(options);
 
-    // spotifyApi.getFeaturedPlaylists({ country: country, locale: 'ja-JP', 'accept-language':'ja-JP'}).then(
-    //         function(data) {
-    //             console.log(data.body);
-    //             res.send(data.body);
-    //         },
-    //         function(err) {
-    //             console.log(err.message);
-    //             res.send(null);
-    //         }
-    //     );
-
     return WebApiRequest.builder(access_token)
         .withPath('/v1/browse/featured-playlists')
         .withHeaders({ 'Content-Type' : 'application/json', 'Accept-Language':'ja;q=1'})
@@ -101,20 +90,54 @@ router.post('/search', (req,res)=>{
 router.post('/recommendations', (req,res)=>{
     const data = req.body;
     const access_token = data.access_token;
-    const queries   = data.queries ? data.queries : { min_energy: 0.4, seed_artists: ['4og9jrin5xH5JiFPbeGUPb', '6l3HvQ5sa6mXTsMTB19rO5'], min_popularity: 10 };
+    const options   = data.queries ? data.queries : { min_energy: 0.4, seed_artists: ['4og9jrin5xH5JiFPbeGUPb', '6l3HvQ5sa6mXTsMTB19rO5'], min_popularity: 10 };
 
-    console.log(queries);
+    // console.log(options);
+    //
+    // spotifyApi.setAccessToken(access_token);
+    // spotifyApi.getRecommendations(options).then(
+    //     function(data) {
+    //         res.send(data.body);
+    //     },
+    //     function(err) {
+    //         console.log(err.message);
+    //         res.send(null);
+    //     }
+    // );
 
-    spotifyApi.setAccessToken(access_token);
-    spotifyApi.getRecommendations(queries).then(
-        function(data) {
-            res.send(data.body);
-        },
-        function(err) {
-            console.log(err.message);
-            res.send(null);
+    /* */
+    let _opts = {};
+    let optionsOfTypeArray = ['seed_artists', 'seed_genres', 'seed_tracks'];
+    for (let option in options) {
+        if (options.hasOwnProperty(option)) {
+            if (
+                optionsOfTypeArray.indexOf(option) !== -1 &&
+                Object.prototype.toString.call(options[option]) === '[object Array]'
+            ) {
+                _opts[option] = options[option].join(',');
+            } else {
+                _opts[option] = options[option];
+            }
         }
-    );
+    }
+
+    return WebApiRequest.builder(access_token)
+        .withPath('/v1/recommendations')
+        .withHeaders({ 'Content-Type' : 'application/json', 'Accept-Language':'ja;q=1'})
+        .withQueryParameters(_opts)
+        .build()
+        .execute(HttpManager.get, (err,data)=>{
+            if(err){
+                console.log('Could not get recos', err.message);
+                res.send(null);
+                return;
+            }
+            res.send(data.body);
+        });
+
+
+
+
 });
 
 

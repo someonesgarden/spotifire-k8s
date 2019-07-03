@@ -355,7 +355,7 @@ export default{
             }
         },
 
-        c_reco:function(){
+        c_reco:function(cb=null){
             let queries = {};
             let gen = this.spotify.gen;
             let val = gen.val;
@@ -439,8 +439,10 @@ export default{
                     console.log(res);
                         this.a_spotify(['set','generated',res.data]);
                         this.a_spotify(['update','item','generated']);
+                        if(cb) cb(res);
                 }).catch(error => {
                 console.log(error);
+                if(cb) cb(null);
             });
         },
 
@@ -454,6 +456,38 @@ export default{
                 console.log(error);
             });
 
-        }
+        },
+
+        c_generateTracks(track2generate){
+
+            this.c_getTrack(track2generate,(res)=>{
+
+                let track = res.data;
+
+                //Featureをジェネレータにセット
+                this.a_spotify(['set','feature',{popularity:track.popularity, val:track.features}]);
+
+                //Seedをセット
+                this.c_getArtist(track.artists[0].id,(res2)=>{
+
+                    //一つ目はトラック、二つ目はアーティスト
+                    let seeds  = [
+                        { type: 'TRACK',  id: track.id},
+                        { type: 'ARTIST', id: track.artists[0].id}
+                    ];
+                    //アーティスト情報にジャンルがあるので、これを取得してシードに追加
+                    res2.data.genres.forEach((genre)=> seeds.push({ type: 'GENRE', id: genre}));
+
+                    //上位5個に揃える
+                    this.a_spotify(['set','seeds',seeds.slice(0,5)]);
+
+                    //レコメンデーションの取得を呼び出す
+                    this.c_reco((res3)=>{
+                        console.log(res3);
+                    });
+
+                });
+            })
+        },
     }
 }

@@ -31,7 +31,7 @@
                 <div class="sixteen wide mobile sixteen wide tablet sixteen wide computer column" style="border-bottom:thin dashed white;">
 
                     <mu-chip color="teal500" v-for="(mo,key,index) in morphsByCondition"
-                             :key="'m'+index" :style="{fontSize:0.3+0.3*mo.length+'rem'}" delete
+                             :key="'m'+index" :style="{fontSize:0.3+0.1*mo.length+'rem'}" delete
                              @click="openSnack('feature',key)"
                              @delete="alertAction('morphs',{mo:mo,key:key},index)">
                         {{key}}
@@ -66,6 +66,7 @@
 
 <script>
     import axios from 'axios';
+    import _ from 'lodash';
     import {mapGetters,mapActions} from 'vuex';
     import musixMixin from '../mixins/musixmatch';
     import mysqlMixin from '../mixins/mysql';

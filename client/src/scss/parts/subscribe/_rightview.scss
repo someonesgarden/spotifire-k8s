@@ -1,0 +1,62 @@
+.subscribe_rightview {
+  font-family: $gothic2 !important;
+  background-color: $black3;
+  color: white;
+  padding: 8px;
+  height:100vh;
+
+  ul.mu-list {
+
+    &.track {
+      h3 {
+        font-size: 1.2rem;
+        font-weight: bold;
+        margin: 1.5rem 0;
+      }
+
+      .mu-card {
+        width: 100%;
+        margin: 0 auto;
+        background-color:inherit;
+        color:white;
+
+        .info {
+          margin:8px 0;
+
+          p {
+            color: white;
+            margin:0;
+            line-height:1.5rem;
+
+            &.hash {
+              font-weight: bold;
+              font-size: 1.3rem;
+              line-height:2rem;
+            }
+
+            &.tags {
+              font-size:1.0rem;
+            }
+
+            &.morphs {
+              font-size:1.0rem;
+            }
+
+            &.followers {
+              font-size: 0.8rem;
+
+            }
+          }
+        }
+      }
+
+      form.forms{
+        background-color: #fff1df;
+        padding: 1rem;
+        border-radius: 4px;
+      }
+
+
+    }
+  }
+}

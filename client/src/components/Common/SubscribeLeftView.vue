@@ -31,7 +31,6 @@
                                     <mu-divider></mu-divider>
                                 </div>
                             </div>
-
                             <mu-button @click="vhandleNext" color="primary">Next</mu-button>
                         </mu-step-content>
                     </mu-step>
@@ -66,31 +65,65 @@
                                         <mu-icon right value="send"></mu-icon>
                                     </mu-button>
                                 </div>
-
                             </div>
-
-
-
-
                             <mu-button class="news-step-button" @click="vhandleNext" color="primary">Next</mu-button>
                             <mu-button flat class="news-step-button" @click="vhandlePrev">Prev</mu-button>
                         </mu-step-content>
                     </mu-step>
                     <mu-step>
                         <mu-step-label>
-                            宣传活动
+                            Generate Tracks
                         </mu-step-label>
                         <mu-step-content>
                             <p>
-                                多在群里发消息宣传宣传，有事没事多在群里唠唠嗑，确定的话就ok拉
+                                これまで検索した曲からジェネレート。
                             </p>
+                            <div class="ui grid" style="margin-bottom:5px;">
+                                <div class="sixteen wide mobile sixteen wide tablet sixteen wide computer column" style="padding-bottom:0;" v-if="spotify.generated">
+                                    <mu-chip class="chip-populartrack" color="indigo500" v-for="(item,index) in spotify.generated.tracks" :key="'track'+index"
+                                             @click="getLyricsFromTrackID(item.id)">
+                                        <mu-avatar :size="22">
+                                            <img :src="item.album.images[0].url">
+                                        </mu-avatar>
+                                        {{item.name}}
+                                        <span class="artist">{{item.artists[0].name | truncate20}}</span>
+                                    </mu-chip>
+                                </div>
+
+                                <div class="sixteen wide mobile sixteen wide tablet sixteen wide computer column" style="padding-bottom:0;" v-if="subscribe.populartracks">
+                                    <mu-select v-model="track2generate" class="range">
+                                        <mu-option v-for="(item, index) in subscribe.populartracks" :key="'gen1_'+index" :label="item.name" :value="item.id" class="range"></mu-option>
+                                    </mu-select>
+                                </div>
+
+                                <div class="sixteen wide mobile sixteen wide tablet sixteen wide computer column" style="padding-bottom:0;" v-if="spotify.tracks">
+                                    <mu-select v-model="track2generate" class="range">
+                                        <mu-option v-for="(item, index) in searchedJPTracks" :key="'gen2_'+index" :label="item.name" :value="item.id" class="range"></mu-option>
+                                    </mu-select>
+                                </div>
+
+                                <div class="sixteen wide mobile sixteen wide tablet sixteen wide computer column" style="padding-bottom:0;">
+
+                                    <mu-button full-width round color="black" v-if="!spotify.credential.expires_in" @click="c_getCredential">
+                                        LOGIN
+                                    </mu-button>
+                                    <mu-button full-width round color="red" v-else @click="c_generateTracks(track2generate)">
+                                        Generate Tracks
+                                        <mu-icon right value="send"></mu-icon>
+                                    </mu-button>
+                                </div>
+                            </div>
+
                             <mu-button class="news-step-button" @click="vhandleNext" color="primary">Finish</mu-button>
                             <mu-button flat class="news-step-button" @click="vhandlePrev">Prev</mu-button>
                         </mu-step-content>
                     </mu-step>
+
+
                 </mu-stepper>
                 <p v-if="vfinished">
-                    s<a href="javascript:;" @click="vreset">Reset All</a>
+                    <mu-button class="news-step-button"  @click="vreset" color="black">BACK TO</mu-button>
+<!--                    <a href="javascript:;" @click="vreset">Reset All</a>-->
                 </p>
             </div>
         </mu-container>
@@ -117,7 +150,8 @@
         ],
         data () {
             return {
-                vactiveStep: 0
+                vactiveStep: 0,
+                track2generate:""
             };
         },
         computed: {
@@ -135,19 +169,19 @@
         methods: {
             ...mapActions(['a_index','a_subscribe','a_spotify']),
 
-            trackLyricsByMusixMatch(isrc,track_name){
-                this.c_mm_lyrics_isrc(isrc,track_name,res=>{
-                    console.log(res);
-                    if(res){
-                        this.a_genius(['set','song',{
-                            full_title:track_name,
-                            lyrics:res.lyrics.lyrics_body,
-                            id:isrc,type:'musixmatch'
-                        }]);
-                        this.a_spotify(['update', 'item', 'lyrics']);
-                    }
-                })
-            },
+            // trackLyricsByMusixMatch(isrc,track_name){
+            //     this.c_mm_lyrics_isrc(isrc,track_name,res=>{
+            //         console.log(res);
+            //         if(res){
+            //             this.a_genius(['set','song',{
+            //                 full_title:track_name,
+            //                 lyrics:res.lyrics.lyrics_body,
+            //                 id:isrc,type:'musixmatch'
+            //             }]);
+            //             this.a_spotify(['update', 'item', 'lyrics']);
+            //         }
+            //     })
+            // },
 
             vhandleNext () {
                 this.vactiveStep++;
@@ -195,10 +229,6 @@
                                                     artist:item.track.artists[0].name,
                                                     artistid:item.track.artists[0].id,
                                                 };
-
-                                                // this.c_mb(item.track.external_ids.isrc,item.track.name,  (res)=>{
-                                                //     console.log(res);
-                                                // });
                                             }
                                         }
                                     }
@@ -210,7 +240,6 @@
                         })
                     }
                 });
-
             }
         }
     }

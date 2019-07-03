@@ -12,6 +12,35 @@ export default{
           });
         },
 
+        c_trackLyricsByMusixMatch(isrc,track_name){
+            this.c_mm_lyrics_isrc(isrc,track_name,res=>{
+                console.log(res);
+                if(res){
+                    this.a_genius(['set','song',{
+                        full_title:track_name,
+                        lyrics:res.lyrics.lyrics_body,
+                        id:isrc,type:'musixmatch'
+                    }]);
+                    this.a_spotify(['update', 'item', 'lyrics']);
+                }
+            })
+        },
+
+        getLyricsFromTrackID(trackid){
+          this.c_getTrack(trackid,(res)=>{
+              let track = res.data;
+              this.getLyrics(
+                  {
+                      name:track.name,
+                      id:track.id,
+                      artistid:track.artists[0].id,
+                      artist:track.artists[0].name,
+                      thumb:track.album.images[0].url,
+                      isrc:track.external_ids.isrc
+                  }
+              );
+          })
+        },
 
         getLyrics(track,cb=null){
 
