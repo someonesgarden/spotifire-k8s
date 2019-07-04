@@ -43,7 +43,7 @@
 <script>
 
     import {mapGetters,mapActions} from 'vuex';
-    import spotifyMixin from '../mixins/spotify/index';
+    import spotifyMixin from '../mixins/spotify';
     import FeaturesChart from '../class/FeaturesChart';
 
     export default {

@@ -41,11 +41,9 @@
 </template>
 <script>
     import {mapGetters,mapActions} from 'vuex';
-
-    import spotifyMixin from '../mixins/spotify/index';
+    import spotifyMixin from '../mixins/spotify';
     import utilMixin from '../mixins/util';
     import {ruleEmpty} from '../store/rules';
-
 
     export default {
         name: 'mylogin',
@@ -62,7 +60,6 @@
         },
         computed:mapGetters(['pwa','loggedIn','spotify']),
         created(){
-
             this.checkPWA('geolocation');
             this.checkPWA('gyroscope');
             this.checkPWA('magnetometer');

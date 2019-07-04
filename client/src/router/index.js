@@ -3,25 +3,20 @@ import store from '../store'
 import Router from 'vue-router';
 Vue.use(Router)
 
-// COMPONENTS
-// import Top from '../components/Top.vue';
-import Map from '../components/MapPlay.vue';
-import MapAdmin from '../components/MapAdmin.vue';
-import Login from '../components/Login.vue';
-import Analysis from '../components/Analysis.vue';
-import MapArea from '../components/MapAreaPage.vue';
-import AnimeSvg from '../components/AnimeSvg.vue';
-
-
 //VIEWS
-//import News  from '../views/News.vue';
-import Emory from '../views/Emory.vue';
-import Home  from '../views/Home.vue';
+// import Top from '../views/Top.vue';
+import Analysis  from '../views/Analysis.vue';
+import AnimeSvg  from '../views/AnimeSvg.vue';
+import Emory     from '../views/Emory.vue';
+import Home      from '../views/Home.vue';
 import Subscribe from '../views/Subscribe.vue';
+import MapArea   from '../views/MapAreaPage.vue';
+import Map       from '../views/MapPlay.vue';
+import MapAdmin  from '../views/MapAdmin.vue';
+import Login     from '../views/Login.vue';
 
 let routes =  [
   { path:'/login',    name: 'Login',    component: Login},
- // { path:'/news',     name: 'News',     component: News,     meta: { requiresAuth: true }},
   { path:'/subscribe',name: 'Subscribe',component: Subscribe,meta: { requiresAuth: true }},
   { path:'/map',      name: 'Map',      component: Map,      meta: { requiresAuth: true }},
   { path:'/mapadmin', name: 'MapAdmin', component: MapAdmin, meta: { requiresAuth: true }},

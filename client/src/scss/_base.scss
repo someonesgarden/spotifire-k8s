@@ -1,3 +1,7 @@
+body,html{
+  height:inherit;
+}
+
 body {
   margin: 0;
   background:inherit;
@@ -15,21 +19,12 @@ body {
   }
 }
 
-body,html{
-  height:inherit;
-}
-
 h1,h2,h3,h4,h5{
   font-family:  $mincho !important;
 }
 
 a{
   cursor: pointer;
-}
-
-/* TEXT */
-h1, h2 {
-  font-weight: normal;
 }
 
 ul {
@@ -43,73 +38,50 @@ ul {
 }
 
 
-// media query helpers
-.if-small {
-  display: none;
-  @media #{$screenSmall} {
-    display: initial;
-  }
-}
-.if-medium {
-  display: none;
-  @media #{$screenMedium} {
-    display: initial;
-  }
-}
-.if-large {
-  display: none;
-  @media #{$screenLarge} {
-    display: initial;
-  }
-}
-
-// not rendered
-.hidden, [hidden], [v-cloak] {
-  display: none;
-}
-
-// visible but not usable
-.disabled, [disabled] {
-  pointer-events: none;
-  opacity: 0.5;
-}
-
-// clickable elms
-.clickable {
-  cursor: pointer;
-}
-
-
-// Muse
-.mu-overlay{
-  opacity:0.2;
-}
-
-/* FLEX */
-.flex_v{
-  @include flex('v');
-  //height: calc(100vh - 60px);
-  //text-align:center;
-
-  .base{
-    width:100%;
-    padding:20px 12px;
-  }
-}
-.flex_h{
-  @include flex('h');
-  .base{
-    width:100%;
-    padding:20px 12px;
-  }
-}
-
-.flex-wrapper {
+.app-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: nowrap;
+  min-height: 100vh;
   width: 100%;
-  height: 56px;
-  margin-top: 8px;
 
-  &:first-child {
-    margin-top: 0;
+  background-size:cover;
+  background-position:center center;
+
+  &.News, &.Top, &.Subscribe{
+    margin-top:60px;
   }
+
+  &.News, &.Subscribe{
+    background-color: #8517fe;
+    color:white;
+  }
+
+  &.Login{
+    background-image:url('/static/img/spotifire/bg/Login.jpg');
+  }
+
+  &.Home{
+    background-image:url('/static/img/spotifire/bg/Home.jpg');
+  }
+
+  &.Emory{
+    background-image:url('/static/img/emory/bg/bg1.jpg');
+  }
+
+  // headings
+  h1, h2, h3, h4, h5, h6 {
+    display: block;
+    font-weight: normal;
+    line-height: 1.1em;
+  }
+  h1 { font-size: 220%; }
+  h2 { font-size: 180%; }
+  h3 { font-size: 160%; }
+  h4 { font-size: 140%; }
+  h5 { font-size: 120%; }
+  h6 { font-size: 100%; }
 }
+

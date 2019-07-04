@@ -22,11 +22,11 @@ Vue.use(MuseUI);
 import theme from 'muse-ui/lib/theme';
 //import * as colors from 'muse-ui/lib/theme/colors';
 theme.add('teal', {
-  primary: '#17b06f',
+  primary:   '#17b06f',
   secondary: '#1c1c1c',
-  warning:'#4259fd',
-  success: '#4caf50',
-  track: '#00bd81',
+  warning:   '#4259fd',
+  success:   '#4caf50',
+  track:     '#00bd81',
 }, 'light');
 theme.use('teal');
 

@@ -1,81 +1,40 @@
+/* COMMON */
 @import "variables";
 @import "mixins";
 @import "animations";
 @import "reset";
 @import "base";
+@import "flex";
 
+/* PARTS */
 @import "parts/spotify/player";
 @import "parts/spotify/spotifycode";
 @import "parts/twitter/twitter";
 
 @import "parts/aside";
 @import "parts/bottom";
-@import "parts/map/base";
+@import "parts/modal";
+@import "parts/feed/card";
+@import "parts/pwa";
+//@import "parts/etc";
+
+@import "parts/mu/base";
+@import "parts/mu/form";
+@import "parts/mu/card";
+@import "parts/mu/stepper_chip";
+
+@import "parts/emory/map";
+@import "parts/emory/leftview";
+@import "parts/emory/leaflet";
 
 @import "parts/anime/animejs";
 @import "parts/anime/organic";
 @import "parts/analysis/analysis";
-@import "parts/modal";
-
-@import "parts/pwa";
-@import "parts/emory/leftview";
 
 @import "parts/subscribe/leftview";
 @import "parts/subscribe/rightview";
 @import "parts/subscribe/snackbar";
 
-@import "parts/mu/form";
-@import "parts/mu/stepper_chip";
-
-@import "views/top";
+/* VIEWS */
 @import "views/home";
 @import "views/news";
-
-
-.app-wrap {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: nowrap;
-  min-height: 100vh;
-  width: 100%;
-
-  background-size:cover;
-  background-position:center center;
-
-  &.News, &.Top, &.Subscribe{
-    margin-top:60px;
-  }
-
-  &.News, &.Subscribe{
-   background-color: #8517fe;
-    color:white;
-  }
-
-  &.Login{
-    background-image:url('/static/img/spotifire/bg/Login.jpg');
-  }
-
-  &.Home{
-    background-image:url('/static/img/spotifire/bg/Home.jpg');
-  }
-
-  &.Emory{
-    background-image:url('/static/img/emory/bg/bg1.jpg');
-  }
-
-  // headings
-  h1, h2, h3, h4, h5, h6 {
-    display: block;
-    font-weight: normal;
-    line-height: 1.1em;
-  }
-  h1 { font-size: 220%; }
-  h2 { font-size: 180%; }
-  h3 { font-size: 160%; }
-  h4 { font-size: 140%; }
-  h5 { font-size: 120%; }
-  h6 { font-size: 100%; }
-}
-

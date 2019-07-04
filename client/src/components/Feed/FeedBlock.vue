@@ -1,5 +1,5 @@
 <template>
-    <div class="card flex_v">
+    <div class="feedcard card flex_v">
         <div class="inner">
             <div class="graph">
                 <feed-graph :feature="generateFeature"></feed-graph>

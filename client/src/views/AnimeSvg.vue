@@ -15,8 +15,8 @@
 <script>
 
     import {mapGetters,mapActions} from 'vuex';
-    import OrganicCurve from './Svg/OrganicCurve';
-    import axios from 'axios';
+    import OrganicCurve from '../components/Svg/OrganicCurve';
+    import axios from 'axios/index';
 
     export default {
         name: 'AnimeSvg',

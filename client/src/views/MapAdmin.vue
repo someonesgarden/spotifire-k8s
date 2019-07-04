@@ -249,15 +249,15 @@
 
 <script>
     import {mapGetters, mapActions} from 'vuex';
-    import spotifyMixin from '../mixins/spotify/index';
-    import mapMixin from '../mixins/map/index';
+    import spotifyMixin from '../mixins/spotify';
+    import mapMixin from '../mixins/map';
     import utilMixin from '../mixins/util';
-    import wsMixin from '../mixins/ws/index';
+    import wsMixin from '../mixins/ws';
     import {ruleEmpty} from '../store/rules';
     import firebase from 'firebase';
-    import MapView from './Map/MapViewLL';
-    import MapUserItem from './Map/MapUserItem';
-    import MyAvatar from './Map/MyAvatar';
+    import MapView from '../components/Map/MapViewLL';
+    import MapUserItem from '../components/Map/MapUserItem';
+    import MyAvatar from '../components/Map/MyAvatar';
     import BounceLoader from 'vue-spinner/src/BounceLoader.vue';
     import M from '../class/map/EMarker';
     import P from '../class/map/EProject';
