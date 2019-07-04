@@ -30,7 +30,7 @@
             <div class="ui grid" v-if="subscribe.lyrics">
                 <div class="sixteen wide mobile sixteen wide tablet sixteen wide computer column" style="border-bottom:thin dashed white;">
 
-                    <mu-chip color="teal500" v-for="(mo,key,index) in morphsByCondition"
+                    <mu-chip :color="morphChipColor(mo.length)" v-for="(mo,key,index) in morphsByCondition"
                              :key="'m'+index" :style="{fontSize:0.3+0.1*mo.length+'rem'}" delete
                              @click="openSnack('feature',key)"
                              @delete="alertAction('morphs',{mo:mo,key:key},index)">
@@ -49,7 +49,7 @@
 
         <mu-snackbar class="subscribe_snackbar" :position="'bottom'" :open.sync="snackbar.open" v-if="snackbar.key" :class="[snackbar.type]">
             <div v-if="morphs && snackbar.type==='feature'">
-                <snack-feature-item v-for="(lyric,index) in lyricsFromMorphs(morphs[snackbar.key])" :key="'feature'+lyric.spotifyid" :lyric="lyric"></snack-feature-item>
+                <snack-feature-item v-for="(lyric,index) in lyricsFromMorphs(morphs[snackbar.key])" :key="'feature'+lyric.spotifyid+index" :lyric="lyric"></snack-feature-item>
             </div>
             <div v-else-if="snackbar.type==='track'">
                 <snack-track :lyric="subscribe.lyrics[snackbar.key]"></snack-track>
@@ -144,6 +144,54 @@
         },
         methods:{
             ...mapActions(['a_index','a_subscribe']),
+
+            morphChipColor(num){
+
+                let reducers = {
+                    2: ()=> "pink400",
+                    3: ()=> "purple300",
+                    4: ()=> "indigo400",
+                    5: ()=> "amber400",
+                    6: ()=>  "cyan500",
+                    7: ()=>  "deepPurple400",
+                    8: ()=>  "blue400",
+                    9: ()=>  "green500",
+                    10: ()=>  "lightGreen400",
+                    11: ()=>  "lime500",
+                    12: ()=>  "orange400",
+                    13: ()=>  "brown400",
+                    14: ()=>  "blueGrey400",
+                    15: ()=>  "deepOrange400",
+                    16: ()=>  "grey400",
+                    17: ()=>  "red400",
+                    18: ()=>  "indigoA700",
+                    19: ()=>  "deepPurpleA400",
+                    20: ()=>  "blueA400",
+                };
+                if (!reducers[num]) return Math.floor(Math.random()*2)=== 0 ? "teal600" : "teal400";
+                return reducers[num]()
+
+              //
+              //   let color ="teal500";
+              //   switch(num){
+              //       case 2:
+              //           color = "pink400";
+              //           break;
+              //       case 3:
+              //           color = "purple500";
+              //           break;
+              //       case 4:
+              //           color = "indigo500";
+              //           break;
+              //       case 5:
+              //           color =  "amber500";
+              //           break;
+              //       case 6:
+              //           color = "cyan500";
+              //           break;
+              //   }
+              // return color;
+            },
 
             lyricsFromMorphs(morphs){
                 if(typeof morphs !== 'undefined'){

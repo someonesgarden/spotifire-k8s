@@ -18,6 +18,17 @@ export default{
         //     });
         // },
 
+        getRuigo(word, cb){
+
+            let params =  {'word': word};
+            axios.get('/api/ruigo/browse/spider',{params:params})
+                .then(res => {
+                    cb(res);
+                }).catch(error => {
+                console.log(error);
+            });
+        },
+
         async kuromojiParse(q="") {
 
             // q='広島'

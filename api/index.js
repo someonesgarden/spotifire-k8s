@@ -11,6 +11,7 @@ const geniusRouter      = require('./routes/genius/index');
 const musixRouter       = require('./routes/musixmatch/index');
 const musicbrainzRouter = require('./routes/musicbrainz/index');
 const kget              = require('./routes/kget/index');
+const ruigo             = require('./routes/ruigo/index');
 
 const app = express();
 let http = require('http').Server(app);
@@ -115,6 +116,7 @@ app.use('/genius',      geniusRouter);
 app.use('/musixmatch',  musixRouter);
 app.use('/musicbrainz', musicbrainzRouter);
 app.use('/kget',        kget);
+app.use('/ruigo',       ruigo);
 
 // app.listen(5000, err => {
 //   console.log('Listening on Port 5000');

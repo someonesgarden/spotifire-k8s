@@ -3,7 +3,8 @@
   background-color: $black3;
   color: white;
   padding: 8px;
-  height:100vh;
+  min-height:100vh;
+  height:100%;
 
   ul.mu-list {
 
@@ -36,6 +37,9 @@
 
             &.tags {
               font-size:1.0rem;
+              span{
+                margin-right:5px;
+              }
             }
 
             &.morphs {

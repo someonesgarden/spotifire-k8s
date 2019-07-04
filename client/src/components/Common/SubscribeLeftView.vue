@@ -92,17 +92,17 @@
 
                                 <div class="sixteen wide mobile sixteen wide tablet sixteen wide computer column" style="padding-bottom:0;" v-if="subscribe.populartracks">
                                     <mu-select v-model="track2generate" class="range">
-                                        <mu-option v-for="(item, index) in subscribe.populartracks" :key="'gen1_'+index" :label="item.name" :value="item.id" class="range"></mu-option>
+                                        <mu-option v-for="(item, index) in subscribe.populartracks" :key="'gen1_'+index" :label="item.name+'/'+item.artist" :value="item.id" class="range"></mu-option>
                                     </mu-select>
                                 </div>
 
                                 <div class="sixteen wide mobile sixteen wide tablet sixteen wide computer column" style="padding-bottom:0;" v-if="spotify.tracks">
                                     <mu-select v-model="track2generate" class="range">
-                                        <mu-option v-for="(item, index) in searchedJPTracks" :key="'gen2_'+index" :label="item.name" :value="item.id" class="range"></mu-option>
+                                        <mu-option v-for="(item, index) in searchedJPTracks" :key="'gen2_'+index" :label="item.name+'/'+item.artists[0].name" :value="item.id" class="range"></mu-option>
                                     </mu-select>
                                 </div>
 
-                                <div class="sixteen wide mobile sixteen wide tablet sixteen wide computer column" style="padding-bottom:0;">
+                                <div class="sixteen wide mobile sixteen wide tablet sixteen wide computer column" style="padding-bottom:0;" v-if="track2generate!==''">
 
                                     <mu-button full-width round color="black" v-if="!spotify.credential.expires_in" @click="c_getCredential">
                                         LOGIN
