@@ -6,7 +6,6 @@
 }
 
 .listaside{
-
   .container{
     &.range{
       padding:0;
@@ -22,7 +21,6 @@
   }
 
   ul.mu-list{
-
     .row{
       margin-right:0;
       margin-left:0;
@@ -62,7 +60,6 @@
           min-width:inherit;
         }
       }
-
     }
 
     li.playlist{
@@ -71,8 +68,6 @@
           min-height:56px;
           height:auto !important;
         }
-
-
 
         .album_area{
           margin:2px 6px 6px 2px;
@@ -92,11 +87,8 @@
           &.over{
             background-color: #20b4a6;
           }
-
-
         }
       }
-
     }
   }
 
@@ -132,6 +124,5 @@
         }
       }
     }
-
   }
 }

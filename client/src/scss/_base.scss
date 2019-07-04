@@ -1,26 +1,3 @@
-// page reset
-*, *:before, *:after {
-  margin: 0;
-  padding: 0;
-  border: 0;
-  outline: none;
-  background-color: transparent;
-  text-transform: none;
-  text-shadow: none;
-  box-shadow: none;
-  box-sizing: border-box;
-  appearance: none;
-  -webkit-overflow-scrolling: touch;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  transform-style: flat;
-  transition:
-          border-color $fxSpeed $fxEase,
-          background-color $fxSpeed $fxEase,
-          opacity $fxSpeed $fxEase,
-          transform $fxSpeed $fxEase;
-}
-
 body {
   margin: 0;
   background:inherit;
@@ -38,7 +15,7 @@ body {
   }
 }
 
-bodh,html{
+body,html{
   height:inherit;
 }
 
@@ -106,4 +83,33 @@ ul {
 // Muse
 .mu-overlay{
   opacity:0.2;
+}
+
+/* FLEX */
+.flex_v{
+  @include flex('v');
+  //height: calc(100vh - 60px);
+  //text-align:center;
+
+  .base{
+    width:100%;
+    padding:20px 12px;
+  }
+}
+.flex_h{
+  @include flex('h');
+  .base{
+    width:100%;
+    padding:20px 12px;
+  }
+}
+
+.flex-wrapper {
+  width: 100%;
+  height: 56px;
+  margin-top: 8px;
+
+  &:first-child {
+    margin-top: 0;
+  }
 }

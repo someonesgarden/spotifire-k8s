@@ -51,7 +51,7 @@
                         :icon-url="'/static/img/markers/m_LBmarker.png'"
                         :shadow-size="[30,30]"
                         :shadow-anchow="[15,15]"
-                        shadow-url='/static/img/marker-shadow.png'
+                        shadow-url='/static/img/emory/marker-shadow.png'
                         class-name="marker_base">
                 </l-icon>
             </l-marker>
@@ -63,7 +63,7 @@
                         :icon-url="'/static/img/markers/m_RTmarker.png'"
                         :shadow-size="[30,30]"
                         :shadow-anchow="[15,15]"
-                        shadow-url='/static/img/marker-shadow.png'
+                        shadow-url='/static/img/emory/marker-shadow.png'
                         class-name="marker_base">
                 </l-icon>
             </l-marker>
@@ -183,7 +183,7 @@
         /*background-image: none !important;*/
     }
     .leaflet-fake-icon-shadow {
-        background-image: url('/static/img/marker-shadow.png') !important;
+        background-image: url('/static/img/emory/marker-shadow.png') !important;
     }
 
     .range{

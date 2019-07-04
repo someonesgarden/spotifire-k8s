@@ -4,7 +4,7 @@
         <div class="home_inner">
 
             <mu-icon value="build" :size="20" color="black" style="position:absolute;top:10px;left:10px;" @click="goMap(false,'/mapadmin')"></mu-icon>
-            <img class="emory_logo" src="/static/img/emory_logo1.png"/>
+            <img class="emory_logo" src="/static/img/emory/logos/isometric_b.png"/>
 
             <div class="ui grid" style="padding:0;margin:0 0 10px 0;">
                 <div class="sixteen wide column" style="padding:0;margin:0;">

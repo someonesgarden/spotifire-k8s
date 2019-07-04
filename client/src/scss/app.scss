@@ -1,71 +1,35 @@
 @import "variables";
 @import "mixins";
 @import "animations";
+@import "reset";
 @import "base";
-@import "optional";
-@import "parts/spotify/player.scss";
-@import "parts/twitter/twitter_h.scss";
-@import "parts/top";
+
+@import "parts/spotify/player";
+@import "parts/spotify/spotifycode";
+@import "parts/twitter/twitter";
+
 @import "parts/aside";
 @import "parts/bottom";
 @import "parts/map/base";
+
 @import "parts/anime/animejs";
 @import "parts/anime/organic";
 @import "parts/analysis/analysis";
 @import "parts/modal";
-@import "parts/form";
+
 @import "parts/pwa";
-@import "parts/home";
-@import "parts/news";
 @import "parts/emory/leftview";
+
 @import "parts/subscribe/leftview";
 @import "parts/subscribe/rightview";
 @import "parts/subscribe/snackbar";
-@import "parts/spotify/spotifycode";
-@import "parts/mu";
 
-/* FLEX */
-.flex_v{
-  @include flex('v');
-  //height: calc(100vh - 60px);
-  //text-align:center;
+@import "parts/mu/form";
+@import "parts/mu/stepper_chip";
 
-  .base{
-    width:100%;
-    padding:20px 12px;
-  }
-}
-.flex_h{
-  @include flex('h');
-  .base{
-    width:100%;
-    padding:20px 12px;
-  }
-}
-
-.flex-wrapper {
-  width: 100%;
-  height: 56px;
-  margin-top: 8px;
-
-  &:first-child {
-    margin-top: 0;
-  }
-}
-
-.fix200x32 {
-  width: 200px;
-  height: 32px;
-  background-color: $gold;
-  color:$white;
-  text-align: center;
-  line-height: 32px;
-  margin-left: 8px;
-
-  &:first-child {
-    margin-left: 0;
-  }
-}
+@import "views/top";
+@import "views/home";
+@import "views/news";
 
 
 .app-wrap {
@@ -98,7 +62,7 @@
   }
 
   &.Emory{
-    background-image:url('/static/img/emory/design/bg/bg1.jpg');
+    background-image:url('/static/img/emory/bg/bg1.jpg');
   }
 
   // headings
@@ -115,7 +79,3 @@
   h6 { font-size: 100%; }
 }
 
-.VueCarousel-pagination{
-  visibility: hidden;
-  display:none;
-}

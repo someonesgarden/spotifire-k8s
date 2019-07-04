@@ -6,7 +6,7 @@
                 :icon-url="'/static/img/markers/m_area1.png'"
                 :shadow-size="[0,0]"
                 :shadow-anchow="[0,0]"
-                shadow-url='/static/img/marker-shadow.png'
+                shadow-url='/static/img/emory/marker-shadow.png'
                 class-name="marker_base">
         </l-icon>
         <l-tooltip :options="{ permanent: true, interactive: true, direction:'top',offset: [0, 20]}">

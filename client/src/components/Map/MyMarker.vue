@@ -6,7 +6,7 @@
                 :icon-url="iconImg.url"
                 :shadow-size="[iconImg.w,iconImg.h]"
                 :shadow-anchow="[iconImg.w/2,iconImg.h/2]"
-                shadow-url='/static/img/marker-shadow.png'
+                shadow-url='/static/img/emory/marker-shadow.png'
                 class-name="marker_base">
         </l-icon>
         <l-popup>
@@ -68,6 +68,6 @@
         /*background-image: none !important;*/
     }
     .leaflet-fake-icon-shadow {
-        background-image: url('/static/img/marker-shadow.png') !important;
+        background-image: url('/static/img/emory/marker-shadow.png') !important;
     }
 </style>
