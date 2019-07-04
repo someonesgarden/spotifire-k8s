@@ -37,7 +37,7 @@
             </p>
 
             <a href="https://www.spotify.com/jp/" target="_blank">
-                <img class="spotify_login_banner" src="/static/img/listen_on_spotify.jpg"/>
+                <img class="spotify_login_banner" src="/static/img/spotify/listen_on_spotify.jpg"/>
             </a>
         </div>
     </mu-container>

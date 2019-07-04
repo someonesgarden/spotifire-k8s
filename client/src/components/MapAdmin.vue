@@ -10,7 +10,7 @@
 
                 <mu-flex class="info_menu" justify-content="center" align-items="center">
                     <mu-flex class="info_box how" justify-content="center" align-items="center" direction="column" fill style="background-color:rgba(20,30,23,0.69);">
-                        <img src="/static/img/emory_logo1_admin.png" style="width:180px;height:auto;">
+                        <img src="/static/img/emory/logos/isometric_admin_w.png" style="width:180px;height:auto;">
 
                         <mu-icon value="play_circle_outline" :size="22" color="white" style="position:absolute;bottom:10px;left:10px;" @click="goMap(false,'/map')"></mu-icon>
                         <mu-icon value="settings_input_antenna" :size="22" color="white" style="position:absolute;top:10px;left:10px;" @click="trackOnce"></mu-icon>

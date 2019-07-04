@@ -6,12 +6,12 @@
 
         <div class="ui grid home">
             <div class="eight wide column" style="text-align:center;">
-                <img id="compass_h" ref="compass_h" src="/static/img/compass.jpg" :style="angleHClass"/><br/>
+                <img id="compass_h" ref="compass_h" src="/static/img/emory/compass.jpg" :style="angleHClass"/><br/>
                 [水平角度]<br/>{{sensor.angleH | dicimal3}}
             </div>
 
             <div class="eight wide column" style="text-align:center;">
-                <img id="compass_v" ref="compass_v" src="/static/img/compass.jpg" :style="angleVClass"/><br/>
+                <img id="compass_v" ref="compass_v" src="/static/img/emory/compass.jpg" :style="angleVClass"/><br/>
                 [垂直角度]<br/>{{sensor.angleV | dicimal3}}
             </div>
         </div>

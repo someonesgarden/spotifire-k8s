@@ -7,7 +7,7 @@
             <mu-menu  open-on-hover cover placement="left-start" :open.sync="menu.normal">
 
                 <mu-button flat>
-                    <img class="menu-icon" src="/static/img/spotifire_logo.png" style="width:110px; height:auto;"/>
+                    <img class="menu-icon" src="/static/img/spotifire/logos/black_red.png" style="width:110px; height:auto;"/>
                 </mu-button>
                 <mu-list slot="content" @mouseup="toggleMenu('normal')">
                     <mu-list-item button to="/emory">
@@ -34,7 +34,7 @@
             <mu-menu  open-on-hover cover placement="left-start" :open.sync="menu.map">
 
                 <mu-button flat>
-                    <img class="menu-icon" src="/static/img/emory_logo_h_w.png" style="width:110px; height:auto;"></mu-button>
+                    <img class="menu-icon" src="/static/img/emory/logos/horizontal_w.png" style="width:110px; height:auto;"></mu-button>
                 <mu-list slot="content" @mouseup="toggleMenu('map')">
                     <mu-list-item button to="/">
                         <mu-list-item-title><mu-icon value="home" :size="15"></mu-icon>&nbsp;トップ</mu-list-item-title>
@@ -63,7 +63,7 @@
             <mu-menu  open-on-hover cover placement="left-start" :open.sync="menu.news">
 
                 <mu-button flat>
-                    <img class="menu-icon" src="/static/img/logos/news_logos.png" style="width:110px; height:auto;"></mu-button>
+                    <img class="menu-icon" src="/static/img/subscribe/logos/white.png" style="width:110px; height:auto;"></mu-button>
                 <mu-list slot="content" @mouseup="toggleMenu('news')">
 
                     <mu-list-item button to="/">

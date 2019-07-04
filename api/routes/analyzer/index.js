@@ -4,5 +4,4 @@ let parserRouter = require('./parser');
 
 //------ ROUTINGS
 router.use('/parser',parserRouter);
-
 module.exports = router;

@@ -8,9 +8,7 @@ const genius = new GeniusAPi(keys.geniusAccessToken);
 
 router.get('/search', (req,res)=>{
     const q = req.query.q;
-    genius.search(q).then(function (data) {
-        res.send(data.hits);
-    }).catch((error) => {
+    genius.search(q).then(data => res.send(data.hits)).catch((error) => {
         console.log('Genius Search Error', error.message);
         res.send(null);
     });
@@ -29,9 +27,7 @@ router.get('/artist', (req,res)=>{
 //378195
 router.get('/song', (req,res)=>{
     const id   = req.query.id;
-    genius.song(id).then(function (data) {
-        res.send(data);
-    }).catch((error) => {
+    genius.song(id).then(data => res.send(data)).catch((error) => {
         console.log('Genius Get Song Error', error.message);
         res.send(null);
     });

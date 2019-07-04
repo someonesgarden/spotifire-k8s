@@ -10,7 +10,7 @@
 
                 <mu-flex class="info_menu" justify-content="center" align-items="center">
                     <mu-flex class="info_box how" justify-content="center" align-items="center" direction="column" fill>
-                        <img src="/static/img/emory_logo1.png" style="width:180px;height:auto;">
+                        <img src="/static/img/emory/logos/isometric_b.png" style="width:180px;height:auto;">
 
                         <mu-icon value="build" :size="22" color="black" style="position:absolute;bottom:10px;left:10px;" @click="goMap(false,'/mapadmin')"></mu-icon>
 

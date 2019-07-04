@@ -3,11 +3,11 @@
 
         <div class="home_inner" style="width:100%;  margin: 80px 8px 8px 8px;">
 
-            <img class="spotify_logo" src="/static/img/logos/spotifire_experiments_b.png"/>
+            <img class="spotify_logo" src="/static/img/spotifire/logos/experiments_b.png"/>
 
             <div class="ui grid" style="margin-left:0;margin-right:0;margin-bottom:0;">
                 <div class="sixteen wide mobile eight wide tablet eight wide computer column">
-                    <mu-button class="menu_btns" color="black" full-width to="/emory" style="background-image:url('/static/img/banners/emory_home.jpg');">
+                    <mu-button class="menu_btns" color="black" full-width to="/emory" style="background-image:url('/static/img/spotifire/banners/emory_home.jpg');">
                         EMORY(map)
                     </mu-button>
                 </div>

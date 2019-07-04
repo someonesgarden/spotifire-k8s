@@ -78,7 +78,6 @@
 
   import HeadTop from './components/Common/Header.vue';
   import Player from './components/Spotify/Player/Player.vue';
-  import Magazine from './components/Layout/Magazine.vue';
   import BottomView from './components/Common/BottomView';
   import AudioPlayer from './components/Mp3/AudioPlayer';
   import HowSlide from './components/Slide/HowSlide.vue';
@@ -92,7 +91,6 @@ export default {
     components: {
         HeadTop,
         Player,
-        Magazine,
         BottomView,
         AudioPlayer,
         HowSlide,
@@ -103,12 +101,9 @@ export default {
 
     mounted(){
       this.a_index(['platform','check']);
-      // this.pwasensors = new PWASensors({});
-      // this.pwasensors.init();
     },
 
   beforeDestroy(){
-   // if(!!this.pwasensors) this.pwasensors.stopAll();
   },
 
   data:function(){
