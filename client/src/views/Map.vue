@@ -2,13 +2,11 @@
 
     <div class="ui grid mapmain">
         <div class="sixteen wide mobile eight wide tablet ten wide computer column mapleft" ref="gradbg">
-            <div class="gradbg__anime" style="width:100%;height:100%;">
 
-                <div class="sixteen wide mobile">
+            <mu-flex  justify-content="center" align-items="center" class="left_content gradbg__anime" style="width:100%;height:100%;background-image:url('/static/img/emory/proj_dummy.jpg');">
 
-                </div>
-
-            </div>
+                <img src="/static/img/emory/logos/horizontal_w2.png" style="max-width:300px;height:auto;"/>
+            </mu-flex>
         </div>
 
         <div class="sixteen wide mobile eight wide tablet six wide computer column mapright">
@@ -283,7 +281,7 @@
         },
         mounted() {
             //アニメーションの初期設定
-            new GradBgs(this.$refs.gradbg);
+            //new GradBgs(this.$refs.gradbg);
 
             this.switchLayer('info');
 
