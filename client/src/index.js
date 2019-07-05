@@ -15,24 +15,11 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
-
-import MuseUI from 'muse-ui'
-Vue.use(MuseUI);
-
-Vue.config.productionTip = false
-
-import VueMasonry from 'vue-masonry-css'
-Vue.use(VueMasonry);
-
-import VueCarousel from 'vue-carousel';
-Vue.use(VueCarousel);
-
+import firebase from "firebase"
+import MaterialKit from "./plugins/material-kit";
 import './filters';
 import './directives';
 
-import firebase from "firebase"
-
-Vue.config.productionTip = false
 
 let config = {
   apiKey: "",
@@ -43,8 +30,12 @@ let config = {
   messagingSenderId: "",
   appId:"",
 };
+
 firebase.initializeApp(config);
 
+Vue.config.productionTip = false;
+
+Vue.use(MaterialKit);
 
 window.vm = new Vue({
   el: '#app',
@@ -52,4 +43,4 @@ window.vm = new Vue({
   components: { App },
   router,
   store
-})
+});

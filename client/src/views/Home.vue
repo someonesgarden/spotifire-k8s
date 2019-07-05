@@ -1,17 +1,17 @@
 <template>
     <mu-container class="flex_v">
 
-        <div class="home_inner" style="width:100%;  margin: 80px 8px 8px 8px;">
+        <div class="home_inner" style="width:100%;">
 
             <img class="spotify_logo" src="/static/img/spotifire/logos/experiments_b.png"/>
 
-            <div class="ui grid" style="margin-left:0;margin-right:0;margin-bottom:0;">
-                <div class="sixteen wide mobile eight wide tablet eight wide computer column">
+            <div class="md-layout">
+                <div class="md-layout-item md-medium-size-50 md-small-size-50 md-xsmall-size-100">
                     <mu-button class="menu_btns" color="black" full-width to="/emory" style="background-image:url('/static/img/spotifire/banners/emory_home.jpg');">
                         EMORY(map)
                     </mu-button>
                 </div>
-                <div class="sixteen wide mobile eight wide tablet eight wide computer column">
+                <div class="md-layout-item md-medium-size-50 md-small-size-50 md-xsmall-size-100">
                     <mu-button class="menu_btns" color="black" full-width style="opacity:0.20;" @click="verifyPageAccess('subscribe')">
                         Subsc:Listen
                     </mu-button>
@@ -23,13 +23,15 @@
             </div>
         </div>
 
-        <mu-dialog width="300" :open.sync="openLoginModal">
-            <div class="eight wide mobile eight wide tablet eight wide computer column">
-                <mu-text-field placeholder="ID" v-model="pageid"></mu-text-field>
-            </div>
+        <mu-dialog :open.sync="openLoginModal">
 
-            <div class="eight wide mobile eight wide tablet eight wide computer column">
-                <mu-text-field  type="password" placeholder="PASSWORD" v-model="pass"></mu-text-field>
+            <div class="md-layout md-gutter">
+                <div class="md-layout-item md-medium-size-50 md-small-size-50 md-xsmall-size-100">
+                    <mu-text-field placeholder="ID" v-model="pageid"></mu-text-field>
+                </div>
+                <div class="md-layout-item md-medium-size-50 md-small-size-50 md-xsmall-size-100">
+                    <mu-text-field  type="password" placeholder="PASSWORD" v-model="pass"></mu-text-field>
+                </div>
             </div>
 
             <mu-button slot="actions" flat color="primary" @click="goPageAccess"><mu-icon value="input"></mu-icon>&nbsp;go</mu-button>

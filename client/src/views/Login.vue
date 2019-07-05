@@ -1,34 +1,34 @@
 <template>
     <mu-container class="flex_v">
         <div>
-
             <mu-flex class="flex-wrapper" justify-content="center" align-items="center" direction="column">
 
                 <img class="menu-icon" src="/static/img/spotifire/logos/experiments.png" style="width:180px;height:auto;margin-bottom:10px;">
 
                 <mu-form ref="adminform" :model="admin" class="mu-demo-form" label-position="top" label-width="100">
 
-                    <div class="ui grid" style="margin-left:0;margin-right:0;margin-bottom:0;">
-                        <div class="eight wide mobile eight wide tablet eight wide computer column" style="padding-bottom:0;">
+                    <div class="md-layout md-alignment-center md-gutter">
+
+                        <div class="md-layout-item md-medium-size-50 md-small-size-50 md-xsmall-size-100">
                             <mu-form-item :rules="emptyRules" prop="id" class="range" style="padding-bottom:0;margin-bottom:0;">
                                 <mu-text-field prop="id" placeholder="ID" v-model="admin.id" style="text-align:center;"></mu-text-field>
                             </mu-form-item>
                         </div>
 
-                        <div class="eight wide mobile eight wide tablet eight wide computer column" style="padding-bottom:0;">
+                        <div class="md-layout-item md-medium-size-50 md-small-size-50 md-xsmall-size-100">
                             <mu-form-item :rules="emptyRules" prop="pass" class="range" style="padding-bottom:0;margin-bottom:0;">
                                 <mu-text-field  type="password" placeholder="PASSWORD" prop="pass" v-model="admin.pass"  :action-icon="visibility ? 'visibility_off' : 'visibility'" :action-click="() => (visibility = !visibility)" :type="visibility ? 'text' : 'password'" style="text-align:center;"></mu-text-field>
                             </mu-form-item>
                         </div>
-                    </div>
 
-                    <div class="ui grid" style="margin:0;">
-                        <mu-col span="12" sm="12" md="12" lg="12" xl="12">
+                        <div class="md-layout-item md-xsmall-size-100">
                             <div class="grid-cell">
                                 <mu-button color="blueGrey900" class="smallbtn" full-width @click="loginAction">ログイン</mu-button>
                             </div>
-                        </mu-col>
+                        </div>
+
                     </div>
+
                 </mu-form>
 
                 <div class="pwa">

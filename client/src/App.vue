@@ -97,9 +97,6 @@ export default {
       this.a_index(['platform','check']);
     },
 
-  beforeDestroy(){
-  },
-
   data:function(){
     return {
       pwasensors: null

@@ -1,43 +1,38 @@
 <template>
     <mu-container class="flex_v">
 
-        <div class="home_inner">
-
+        <div class="home_inner" style="width:80%;">
             <mu-icon value="build" :size="20" color="black" style="position:absolute;top:10px;left:10px;" @click="goMap(false,'/mapadmin')"></mu-icon>
-            <img class="emory_logo" src="/static/img/emory/logos/isometric_b.png"/>
+            <img class="emory_logo" src="/static/img/emory/logos/isometric_b.png" alt="emory_logo"/>
 
-            <div class="ui grid" style="padding:0;margin:0 0 10px 0;">
-                <div class="sixteen wide column" style="padding:0;margin:0;">
-                    <mu-button color="amber600" class="smallbtn" full-width   @click="a_index(['howModal','toggle',true])">
+
+            <div class="md-layout md-alignment-center">
+
+                <div class="md-layout-item md-medium-size-100 md-small-size-100 md-xsmall-size-100">
+                    <mu-button color="amber600" class="smallbtn" full-width @click="a_index(['howModal','toggle',true])">
                         <mu-icon value="help_outline"></mu-icon>&nbsp;Emoryについて
                     </mu-button>
                 </div>
-            </div>
 
-            <div class="ui grid" style="padding:0;margin:0;" v-if="!spotify.me.id">
-                <div class="sixteen wide mobile eight wide tablet eight wide computer column"
-                     style="padding:0;margin:0;">
+                <div class="md-layout-item md-medium-size-50 md-small-size-50 md-xsmall-size-100" v-if="!spotify.me.id">
                     <mu-button color="teal500" class="smallbtn" full-width @click="goMap(true)">
                         <mu-icon value="check_circle"></mu-icon>&nbsp;Spotifyにログイン
                     </mu-button>
                 </div>
-                <div class="sixteen wide mobile eight wide tablet eight wide computer column"
-                     style="padding:0;margin:0;">
+                <div class="md-layout-item md-medium-size-50 md-small-size-50 md-xsmall-size-100" v-if="!spotify.me.id">
                     <mu-button color="orange700" class="smallbtn" full-width @click="goMap(false)">
                         <mu-icon value="exit_to_app"></mu-icon>&nbsp;ログインせず使用
                     </mu-button>
                 </div>
-            </div>
-            <div class="sixteen wide mobile eight wide tablet eight wide computer column" style="padding:0;margin:0;" v-else>
-                <mu-button color="teal500" class="smallbtn" full-width @click="goMap(spotify.me.id!=='GUEST')">ENTER</mu-button>
 
+                <div class="md-layout-item md-medium-size-100 md-small-size-100 md-xsmall-size-100" v-else>
+                    <mu-button color="teal500" class="smallbtn" full-width @click="goMap(spotify.me.id!=='GUEST')">ENTER</mu-button>
+                </div>
             </div>
-            <p style=" padding: 12px;">
-                ログインしない場合「ゲスト」としてプレイできますがSpotifyのプレイリストは使用できず他ユーザーから見えません。<br/>
-            </p>
+
 
             <a href="https://www.spotify.com/jp/" target="_blank">
-                <img class="spotify_login_banner" src="/static/img/spotify/listen_on_spotify.jpg"/>
+                <img class="spotify_login_banner" src="/static/img/spotify/listen_on_spotify.jpg" alt="spotify_logo"/>
             </a>
         </div>
     </mu-container>

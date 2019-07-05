@@ -1,18 +1,13 @@
 <template>
-
-    <div class="ui grid mapmain">
-        <div class="sixteen wide mobile eight wide tablet ten wide computer column mapleft" ref="gradbg">
-
+    <div class="mapmain md-layout">
+        <div class="md-layout-item md-medium-size-50 md-small-size-50 md-xsmall-size-100 mapleft" ref="gradbg">
             <mu-flex  justify-content="center" align-items="center" class="left_content gradbg__anime" style="width:100%;height:100%;">
-
             </mu-flex>
         </div>
 
-        <div class="sixteen wide mobile eight wide tablet six wide computer column mapright">
-
+        <div class="md-layout-item md-medium-size-50 md-small-size-50 md-xsmall-size-100 mapright">
             <mu-flex class="mapflex" align-items="center">
                 <mu-flex class="maparea" justify-content="center" fill>
-
                     <!--MAP-->
                     <map-view id="map" class="overlay" ref="emorymap" :markersRef="markersRef" @switchLayer="switchLayer" @mapClick="mapClick" @mClick="mClick" @tClick="mClick" @pClick="pClick"/>
 
@@ -148,17 +143,12 @@
                 </mu-flex>
             </mu-flex>
 
-
             <!-- MP3 EPISODE PLAYER-->
             <div class="mp3_players" v-if="$route.name ==='Map' || $route.name ==='MapAdmin'">
                 <audio-player :key="'pod'+index" :num="index" :pod="pod" v-for="(pod,index) in mp3.pods"></audio-player>
             </div>
-            <!--/ MP3 EPISODE PLAYER-->
-
         </div>
     </div>
-
-
 </template>
 
 <script>
