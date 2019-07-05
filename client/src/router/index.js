@@ -11,7 +11,7 @@ import Emory     from '../views/Emory.vue';
 import Home      from '../views/Home.vue';
 import Subscribe from '../views/Subscribe.vue';
 import MapArea   from '../views/MapAreaPage.vue';
-import Map       from '../views/MapPlay.vue';
+import Map       from '../views/Map.vue';
 import MapAdmin  from '../views/MapAdmin.vue';
 import Login     from '../views/Login.vue';
 

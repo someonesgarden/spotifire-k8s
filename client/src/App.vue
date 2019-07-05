@@ -5,12 +5,6 @@
       <router-view></router-view>
     </mu-container>
 
-    <!-- MP3 EPISODE PLAYER-->
-    <div class="mp3_players" v-if="$route.name ==='Map' || $route.name ==='MapAdmin'">
-      <audio-player :key="'pod'+index" :num="index" :pod="pod" v-for="(pod,index) in mp3.pods"></audio-player>
-    </div>
-    <!--/ MP3 EPISODE PLAYER-->
-
     <!-- BOTTOM-VIEW-->
     <mu-bottom-sheet :open.sync="bottom.open" class="bottomnav">
       <bottom-view></bottom-view>
@@ -141,24 +135,5 @@ export default {
 </script>
 
 <style lang="scss">
-  @import "scss/variables";
-  @import "scss/mixins";
   @import "scss/app";
-
-  .container-fluid{
-    padding-right:0;
-    padding-left:0;
-  }
-
-  .mp3_players{
-    width:100%;
-    position:fixed;
-    bottom:3px;
-    text-align:center;
-    margin:2px auto;
-    /*background-color: rgba(210, 222, 217, 0.3);*/
-    padding:4px 0 2px 0;
-    opacity:1;
-  }
-
 </style>

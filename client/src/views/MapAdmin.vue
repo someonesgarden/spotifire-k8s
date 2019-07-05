@@ -1,7 +1,7 @@
 <template>
     <mu-flex class="mapflex" align-items="center">
         <mu-flex justify-content="center" class="maparea" fill>
-            <map-view id="map" ref="emorymap" :markersRef="markersRef" @switchLayer="switchLayer" @mapClick="mapClick" @mClick="mClick" @tClick="tClick" @pClick="pClick"/>
+            <map-view id="map" class="overlay" ref="emorymap" :markersRef="markersRef" @switchLayer="switchLayer" @mapClick="mapClick" @mClick="mClick" @tClick="tClick" @pClick="pClick"/>
 
             <!-- INFO_OVERLAY(MENU) -->
             <mu-flex justify-content="center" direction="column" align-items="center" class="info_overlay overlay" ref="info_overlay">
@@ -589,81 +589,3 @@
         }
     }
 </script>
-
-<style lang="scss">
-    .selectedPoint{
-        position:absolute;
-        top:-300px;
-        width:20px;
-        height:20px;
-        border-radius:50%;
-        background-color: rgba(255, 0, 0, 0.75);
-        &.project{
-            background-color: rgba(0, 128, 0, 0.75);
-        }
-    }
-
-    .bounce-loader{
-        position:absolute;
-        width:60px;
-        height:60px;
-        left:calc(50vw - 30px);
-        top:calc(50vh - 60px);
-    }
-
-    .play_card_img {
-
-        width: 100%;
-        max-width: 200px !important;
-        text-align: center;
-        padding: 5px;
-        margin: 0 auto;
-
-        img {
-            width: 100%;
-            height: auto;
-            margin: 0 auto;
-        }
-    }
-
-    .info_col {
-        .mu-card-title-container {
-            padding: 6px;
-        }
-
-        .mu-card-title{
-            font-size:20px;
-            color: #fff;
-            line-height:26px;
-        }
-
-        .mu-card-sub-title{
-            color: #fff;
-        }
-
-
-
-        .mu-avatar {
-            width: 25px;
-            height: 25px;
-            margin-right:2px;
-        }
-    }
-
-    .info_box{
-        position:relative;
-
-        .geo_status{
-            position:absolute;
-            left:0;
-            top:0;
-        }
-
-        .map_toggle{
-            position:absolute;
-            right:0;
-            bottom:0;
-        }
-    }
-
-</style>

@@ -1,87 +1,53 @@
-body,html{
-  height:inherit;
+body, html {
+  height: inherit;
 }
 
 body {
   margin: 0;
-  background:inherit;
+  background: inherit;
   background-size: cover;
   background-color: $colorDocument;
-  background-image:
-          linear-gradient( 217deg, rgba( $gradPrimary, .8 ), rgba( $gradPrimary, 0 ) 70.71% ),
-          linear-gradient( 127deg, rgba( $gradDocument, 1 ), rgba( $gradDocument, 0 ) 70.71% ),
-          linear-gradient( 336deg, rgba( $gradSecondary, .8 ), rgba( $gradSecondary, 0 ) 70.71% );
-  #app {
-    // font-family: 'Avenir', Helvetica, Arial, sans-serif;
-    font-family:  $mincho !important;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+  background-image: linear-gradient(217deg, rgba($gradPrimary, .8), rgba($gradPrimary, 0) 70.71%),
+  linear-gradient(127deg, rgba($gradDocument, 1), rgba($gradDocument, 0) 70.71%),
+  linear-gradient(336deg, rgba($gradSecondary, .8), rgba($gradSecondary, 0) 70.71%);
+
+  .app-wrap {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: nowrap;
+    min-height: 100vh;
+    width: 100%;
+    background-size: cover;
+    background-position: center center;
+
+    &.News, &.Top, &.Subscribe {
+      margin-top: 60px;
+    }
+
+    &.News, &.Subscribe {
+      background-color: #8517fe;
+      color: white;
+    }
+
+    &.Login {
+      background-image: url('/static/img/spotifire/bg/Login.jpg');
+    }
+
+    &.Home {
+      background-image: url('/static/img/spotifire/bg/Home.jpg');
+    }
+
+    &.Emory {
+      background-image: url('/static/img/emory/bg/bg1.jpg');
+    }
+
+    .container-fluid {
+      padding-right: 0;
+      padding-left: 0;
+    }
   }
 }
 
-h1,h2,h3,h4,h5{
-  font-family:  $mincho !important;
-}
-
-a{
-  cursor: pointer;
-}
-
-ul {
-  list-style-type: none;
-  padding: 0;
-
-  li {
-    display: inline-block;
-    margin: 0 10px;
-  }
-}
-
-
-.app-wrap {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: nowrap;
-  min-height: 100vh;
-  width: 100%;
-
-  background-size:cover;
-  background-position:center center;
-
-  &.News, &.Top, &.Subscribe{
-    margin-top:60px;
-  }
-
-  &.News, &.Subscribe{
-    background-color: #8517fe;
-    color:white;
-  }
-
-  &.Login{
-    background-image:url('/static/img/spotifire/bg/Login.jpg');
-  }
-
-  &.Home{
-    background-image:url('/static/img/spotifire/bg/Home.jpg');
-  }
-
-  &.Emory{
-    background-image:url('/static/img/emory/bg/bg1.jpg');
-  }
-
-  // headings
-  h1, h2, h3, h4, h5, h6 {
-    display: block;
-    font-weight: normal;
-    line-height: 1.1em;
-  }
-  h1 { font-size: 220%; }
-  h2 { font-size: 180%; }
-  h3 { font-size: 160%; }
-  h4 { font-size: 140%; }
-  h5 { font-size: 120%; }
-  h6 { font-size: 100%; }
-}
 

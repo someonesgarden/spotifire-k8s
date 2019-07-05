@@ -79,7 +79,31 @@ export default {
             }else{
                 this.a_index(['pwa', 'set', {key: type, val: 'error'}]);
             }
-        }
+        },
+
+        c_getRandomColor(letters) {
+            let color = '#';
+            for (let i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * letters.length)];
+            }
+            return color;
+        },
+
+        c_gradient_bg:function(base=255,offset=0) {
+            let c1 = {
+                r: Math.floor(Math.random()*base+offset),
+                g: Math.floor(Math.random()*base+offset),
+                b: Math.floor(Math.random()*base+offset)
+            };
+            let c2 = {
+                r: Math.floor(Math.random()*base+offset),
+                g: Math.floor(Math.random()*base+offset),
+                b: Math.floor(Math.random()*base+offset)
+            };
+            c1.rgb = 'rgb('+c1.r+','+c1.g+','+c1.b+')';
+            c2.rgb = 'rgb('+c2.r+','+c2.g+','+c2.b+')';
+            return 'background: radial-gradient(at top left, '+c1.rgb+', '+c2.rgb+')';
+        },
 
     }
 }

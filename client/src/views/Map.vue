@@ -1,177 +1,160 @@
 <template>
-    <mu-flex class="mapflex" align-items="center">
-        <mu-flex justify-content="center" class="maparea" fill>
-            <map-view id="map" class="overlay" ref="emorymap" :markersRef="markersRef" @switchLayer="switchLayer" @mapClick="mapClick" @mClick="mClick" @tClick="mClick" @pClick="pClick"/>
 
-            <!-- INFO_OVERLAY(MENU) -->
-            <mu-flex justify-content="center" direction="column" align-items="center" class="info_overlay overlay" ref="info_overlay">
+    <div class="ui grid">
+        <div class="sixteen wide mobile eight wide tablet ten wide computer column mapleft">
 
-                <bounce-loader class="bounce-loader" v-if="mapstore.tracking"></bounce-loader>
+        </div>
 
-                <mu-flex class="info_menu" justify-content="center" align-items="center">
-                    <mu-flex class="info_box how" justify-content="center" align-items="center" direction="column" fill>
-                        <img src="/static/img/emory/logos/isometric_b.png" style="width:180px;height:auto;">
+        <div class="sixteen wide mobile eight wide tablet six wide computer column mapright">
 
-                        <mu-icon value="build" :size="22" color="black" style="position:absolute;bottom:10px;left:10px;" @click="goMap(false,'/mapadmin')"></mu-icon>
+            <mu-flex class="mapflex" align-items="center">
+                <mu-flex class="maparea" justify-content="center" fill>
 
-                        <mu-icon value="settings_input_antenna" :size="22" color="black" style="position:absolute;top:10px;left:10px;" @click="trackOnce"></mu-icon>
+                    <!--MAP-->
+                    <map-view id="map" class="overlay" ref="emorymap" :markersRef="markersRef" @switchLayer="switchLayer" @mapClick="mapClick" @mClick="mClick" @tClick="mClick" @pClick="pClick"/>
 
-                        <!--                        <div class="geo_status">-->
-<!--                            <mu-button full-width color="pink700" @click="trackOnce">-->
-<!--                                <mu-icon value="settings_input_antenna" :size="15"></mu-icon>&nbsp;now-->
-<!--                            </mu-button>-->
-<!--                        </div>-->
+                    <!-- INFO_OVERLAY(MENU) -->
+                    <mu-flex class="info_overlay overlay" ref="info_overlay" justify-content="center" direction="column" align-items="center">
 
-                        <div class="map_toggle">
-                            <mu-button full-width color="purple800" @click="switchLayer('map')">
-                                <mu-icon value="map" :size="15"></mu-icon>&nbsp;MAP
-                            </mu-button>
-                        </div>
+                        <bounce-loader class="bounce-loader" v-if="mapstore.tracking"></bounce-loader>
 
-                        <div class="mode_toggle" v-if="mapstore.emory.project">
-                            <mu-button full-width color="blue700" @click="switchLayer('toggle_project')" v-if="mapstore.map.projectBoundary">
-                                overlay
-                            </mu-button>
-                            <mu-button full-width color="blue700" @click="switchLayer('toggle_project')" v-else>
-                                normal
-                            </mu-button>
-                        </div>
+                        <mu-flex class="info_menu" justify-content="center" align-items="center">
+                            <mu-flex class="info_box how" justify-content="center" align-items="center" direction="column" fill>
+                                <img src="/static/img/emory/logos/isometric_b.png" style="width:180px;height:auto;">
+
+                                <mu-icon value="build" :size="22" color="black" style="position:absolute;bottom:10px;left:10px;" @click="goMap(false,'/mapadmin')"></mu-icon>
+
+                                <mu-icon value="settings_input_antenna" :size="22" color="black" style="position:absolute;top:10px;left:10px;" @click="trackOnce"></mu-icon>
+
+                                <!--                        <div class="geo_status">-->
+                                <!--                            <mu-button full-width color="pink700" @click="trackOnce">-->
+                                <!--                                <mu-icon value="settings_input_antenna" :size="15"></mu-icon>&nbsp;now-->
+                                <!--                            </mu-button>-->
+                                <!--                        </div>-->
+
+                                <div class="map_toggle">
+                                    <mu-button full-width color="purple800" @click="switchLayer('map')">
+                                        <mu-icon value="map" :size="15"></mu-icon>&nbsp;MAP
+                                    </mu-button>
+                                </div>
+
+                                <div class="mode_toggle" v-if="mapstore.emory.project">
+                                    <mu-button full-width color="blue700" @click="switchLayer('toggle_project')" v-if="mapstore.map.projectBoundary">
+                                        overlay
+                                    </mu-button>
+                                    <mu-button full-width color="blue700" @click="switchLayer('toggle_project')" v-else>
+                                        normal
+                                    </mu-button>
+                                </div>
 
 
-                    </mu-flex>
-                </mu-flex>
-
-                <mu-flex class="info_menu" justify-content="center" align-items="center">
-
-                    <div class="usercard  login" v-if="spotify.credential.expires_in">
-                        <mu-avatar slot="avatar" style="border:2px solid white;">
-                            <img :src="avatar_thumb">
-                        </mu-avatar>
-                        <div class="title">{{spotify.me.id}}</div>
-                        <div class="subtitle">Spotifyにログイン中</div>
-                    </div>
-                    <div class="usercard" v-else>
-<!--                        <mu-avatar slot="avatar">-->
-<!--                            <img src="/static/img/markers/m_mainuser_1.png">-->
-<!--                        </mu-avatar>-->
-                        <div class="title">GUEST USER</div>
-                        <div class="subtitle">ログインしていません。</div>
-                        <div class="key_btn" @click="c_getCredential"><mu-icon value="vpn_key" :size="18"></mu-icon></div>
-                    </div>
-
-                </mu-flex>
-
-                <mu-flex class="info_menu" justify-content="center" align-items="center">
-                    <mu-flex class="info_box address" fill>
-                    <mu-form :model="newMarker" class="range">
-                        <mu-form-item prop="project" class="range">
-                            <mu-select  prop="project" :value="mapstore.emory.project ? mapstore.emory.project : 'プロジェクトを選んでください'" @change="onProjectSelected">
-                                <mu-option v-for="(p,key,inx) in mapstore.emory.projects" :key="'proj'+key" :label="p.title" :value="key" v-if="key !== mapstore.emory.all"></mu-option>
-                            </mu-select>
-                        </mu-form-item>
-                    </mu-form>
-                    </mu-flex>
-                </mu-flex>
-
-                <mu-flex class="info_menu" justify-content="center" align-items="center" v-if="mapstore.emory.project">
-                    <mu-flex class="info_box play" justify-content="center" align-items="center" direction="column" fill @click="switchLayer('play_map')">
-                    </mu-flex>
-                    <mu-flex class="info_box area" justify-content="center" align-items="center" direction="column" fill @click="switchLayer('play_imagemap')">
-                    </mu-flex>
-                </mu-flex>
-
-            </mu-flex>
-            <!--/  INFO_OVERLAY(MENU)-->
-
-            <!-- PLAY OVERLAY-->
-            <div class="play_overlay overlay" ref="play_overlay" :class="{hide:!mapstore.mainuser}">
-                <mu-flex class="info_box"　justify-content="center" align-items="center" direction="column" style="height:100%;">
-                    <mu-flex justify-content="center" align-items="center" direction="column" style="width:100%;height:100%;padding:8px;">
-                        <mu-flex justify-content="center" align-items="center" direction="column" class="inner" style="background-color:rgba(35,230,169,0.9);height:100%;width:100%;border-radius:6px;padding:6px;">
-
-                            <div gutter style="width:100%;margin-top:-16px;" v-if="mapstore.emory.project">
-
-                                <mu-col class="info_col" span="12" sm="12" md="12" lg="12" xl="12" style="float:left;" v-if="mapstore.emory.projects[mapstore.emory.project]">
-                                    <mu-card raised style="width: 100%; margin: 0 auto;background-color:rgb(41, 41, 93);">
-
-                                        <div class="play_card_img">
-                                            <mu-card-media
-                                                    :title="mapstore.emory.projects[mapstore.emory.project].title"
-                                                    :sub-title="mapstore.emory.projects[mapstore.emory.project].desc">
-                                                <img :src="mapstore.emory.projects[mapstore.emory.project].thumb">
-                                            </mu-card-media>
-                                        </div>
-
-                                        <mu-card-header style="white-space: inherit;padding:4px;" v-if="mapstore.mainuser">
-                                            <my-avatar :marker="marker" :id="marker.id" v-for="(marker,id) in sortedMarkers" :key="'mv'+id"></my-avatar>
-                                        </mu-card-header>
-                                    </mu-card>
-                                </mu-col>
-
-                                <mu-col span="12" sm="12" md="12" lg="12" xl="12" style="width:100%;text-align:center;" v-else>
-                                    <h1 style="margin:4px auto;color:black;">プロジェクトを選択してください。</h1>
-                                </mu-col>
-                                <mu-col span="12" sm="12" md="12" lg="12" xl="12" style="width:100%;text-align:center;">
-                                    <mu-select label="有効範囲" prop="triggerDist" :value="mapstore.emory.triggerDist" @change="(val)=>a_mapstore(['emory','setTriggerDist',val])" style="margin-bottom:0;padding-bottom:0;">
-                                        <mu-option  label="8m" :value="8"></mu-option>
-                                        <mu-option  label="10m" :value="10"></mu-option>
-                                        <mu-option  label="20m" :value="20"></mu-option>
-                                        <mu-option  label="30m" :value="30"></mu-option>
-                                        <mu-option  label="50m" :value="50"></mu-option>
-                                        <mu-option  label="80m" :value="80"></mu-option>
-                                    </mu-select>
-                                </mu-col>
-                            </div>
-
-                            <mu-flex justify-content="center" align-items="center" direction="row">
-                                <mu-button color="primary"    class="smallbtn"  @click="playStart" v-if="mapstore.emory.projects[mapstore.emory.project]">プレイ開始</mu-button>
-                                <mu-button color="indigo800"  class="smallbtn"  @click="backToInfo">メニューへ</mu-button>
                             </mu-flex>
+                        </mu-flex>
+
+                        <mu-flex class="info_menu" justify-content="center" align-items="center">
+
+                            <div class="usercard  login" v-if="spotify.credential.expires_in">
+                                <mu-avatar slot="avatar" style="border:2px solid white;">
+                                    <img :src="avatar_thumb">
+                                </mu-avatar>
+                                <div class="title">{{spotify.me.id}}</div>
+                                <div class="subtitle">Spotifyにログイン中</div>
+                            </div>
+                            <div class="usercard" v-else>
+                                <!--                        <mu-avatar slot="avatar">-->
+                                <!--                            <img src="/static/img/markers/m_mainuser_1.png">-->
+                                <!--                        </mu-avatar>-->
+                                <div class="title">GUEST USER</div>
+                                <div class="subtitle">ログインしていません。</div>
+                                <div class="key_btn" @click="c_getCredential"><mu-icon value="vpn_key" :size="18"></mu-icon></div>
+                            </div>
 
                         </mu-flex>
 
+                        <mu-flex class="info_menu" justify-content="center" align-items="center">
+                            <mu-flex class="info_box address" fill>
+                                <mu-form :model="newMarker" class="range">
+                                    <mu-form-item prop="project" class="range">
+                                        <mu-select  prop="project" :value="mapstore.emory.project ? mapstore.emory.project : 'プロジェクトを選んでください'" @change="onProjectSelected">
+                                            <mu-option v-for="(p,key,inx) in mapstore.emory.projects" :key="'proj'+key" :label="p.title" :value="key" v-if="key !== mapstore.emory.all"></mu-option>
+                                        </mu-select>
+                                    </mu-form-item>
+                                </mu-form>
+                            </mu-flex>
+                        </mu-flex>
+
+                        <mu-flex class="info_menu" justify-content="center" align-items="center" v-if="mapstore.emory.project">
+                            <mu-flex class="info_box play" justify-content="center" align-items="center" direction="column" fill @click="switchLayer('play_map')">
+                            </mu-flex>
+                            <mu-flex class="info_box area" justify-content="center" align-items="center" direction="column" fill @click="switchLayer('play_imagemap')">
+                            </mu-flex>
+                        </mu-flex>
+
                     </mu-flex>
+
+                    <!-- PLAY OVERLAY-->
+                    <div class="play_overlay overlay" ref="play_overlay" :class="{hide:!mapstore.mainuser}">
+                        <mu-flex class="info_box"　justify-content="center" align-items="center" direction="column" style="height:100%;">
+                            <mu-flex justify-content="center" align-items="center" direction="column" style="width:100%;height:100%;padding:8px;">
+                                <mu-flex justify-content="center" align-items="center" direction="column" class="inner" style="background-color:rgba(35,230,169,0.9);height:100%;width:100%;border-radius:6px;padding:6px;">
+
+                                    <div gutter style="width:100%;margin-top:-16px;" v-if="mapstore.emory.project">
+
+                                        <mu-col class="info_col" span="12" sm="12" md="12" lg="12" xl="12" style="float:left;" v-if="mapstore.emory.projects[mapstore.emory.project]">
+                                            <mu-card raised style="width: 100%; margin: 0 auto;background-color:rgb(41, 41, 93);">
+
+                                                <div class="play_card_img">
+                                                    <mu-card-media
+                                                            :title="mapstore.emory.projects[mapstore.emory.project].title"
+                                                            :sub-title="mapstore.emory.projects[mapstore.emory.project].desc">
+                                                        <img :src="mapstore.emory.projects[mapstore.emory.project].thumb">
+                                                    </mu-card-media>
+                                                </div>
+
+                                                <mu-card-header style="white-space: inherit;padding:4px;" v-if="mapstore.mainuser">
+                                                    <my-avatar :marker="marker" :id="marker.id" v-for="(marker,id) in sortedMarkers" :key="'mv'+id"></my-avatar>
+                                                </mu-card-header>
+                                            </mu-card>
+                                        </mu-col>
+
+                                        <mu-col span="12" sm="12" md="12" lg="12" xl="12" style="width:100%;text-align:center;" v-else>
+                                            <h1 style="margin:4px auto;color:black;">プロジェクトを選択してください。</h1>
+                                        </mu-col>
+                                        <mu-col span="12" sm="12" md="12" lg="12" xl="12" style="width:100%;text-align:center;">
+                                            <mu-select label="有効範囲" prop="triggerDist" :value="mapstore.emory.triggerDist" @change="(val)=>a_mapstore(['emory','setTriggerDist',val])" style="margin-bottom:0;padding-bottom:0;">
+                                                <mu-option  label="8m" :value="8"></mu-option>
+                                                <mu-option  label="10m" :value="10"></mu-option>
+                                                <mu-option  label="20m" :value="20"></mu-option>
+                                                <mu-option  label="30m" :value="30"></mu-option>
+                                                <mu-option  label="50m" :value="50"></mu-option>
+                                                <mu-option  label="80m" :value="80"></mu-option>
+                                            </mu-select>
+                                        </mu-col>
+                                    </div>
+
+                                    <mu-flex justify-content="center" align-items="center" direction="row">
+                                        <mu-button color="primary"    class="smallbtn"  @click="playStart" v-if="mapstore.emory.projects[mapstore.emory.project]">プレイ開始</mu-button>
+                                        <mu-button color="indigo800"  class="smallbtn"  @click="backToInfo">メニューへ</mu-button>
+                                    </mu-flex>
+
+                                </mu-flex>
+
+                            </mu-flex>
+                        </mu-flex>
+                    </div>
                 </mu-flex>
+            </mu-flex>
+
+
+            <!-- MP3 EPISODE PLAYER-->
+            <div class="mp3_players" v-if="$route.name ==='Map' || $route.name ==='MapAdmin'">
+                <audio-player :key="'pod'+index" :num="index" :pod="pod" v-for="(pod,index) in mp3.pods"></audio-player>
             </div>
-            <!--/ PLAY OVERLAY-->
+            <!--/ MP3 EPISODE PLAYER-->
 
-<!--            &lt;!&ndash; NET OVERLAY &ndash;&gt;-->
-<!--            <div class="net_overlay overlay" ref="net_overlay"  :class="{hide:!mapstore.mainuser}">-->
+        </div>
+    </div>
 
-<!--                <mu-flex class="info_box"　justify-content="center" align-items="center" direction="column" style="height:100%;">-->
-
-<!--                    <h1>-->
-<!--                        <mu-icon value="network_check" :size="20"></mu-icon>-->
-<!--                        socket.io.-->
-<!--                    </h1>-->
-<!--                    <h2>WebSocketを経由してリアルタイムにつながったユーザーを確認します。</h2>-->
-
-<!--                    <mu-list style="width:inherit;">-->
-<!--                        <map-user-item :user="user" v-for="(user,key,index) in ws.users" :key="'user'+key+index"/>-->
-<!--                    </mu-list>-->
-
-<!--                    <mu-flex justify-content="center" align-items="center" direction="row">-->
-
-<!--                        <mu-button color="indigo500" @click="connectToSocket" v-if="!ws.you.connected">-->
-<!--                            <mu-icon value="device_hub" :size="15"></mu-icon>-->
-<!--                            CONNECT-->
-<!--                        </mu-button>-->
-<!--                        <mu-button  color="red500" @click="socketDisconnect" v-else>-->
-<!--                            <mu-icon value="settings_input_composite" :size="15"></mu-icon>-->
-<!--                            DISCONNECT-->
-<!--                        </mu-button>-->
-
-<!--                        <mu-button color="primary"  class="smallbtn" @click="backToInfo">終了</mu-button>-->
-<!--                    </mu-flex>-->
-
-<!--                </mu-flex>-->
-<!--            </div>-->
-<!--            &lt;!&ndash;/NET OVERLAY &ndash;&gt;-->
-
-
-        </mu-flex>
-
-    </mu-flex>
 
 </template>
 
@@ -188,10 +171,12 @@
     import MapUserItem from '../components/Map/MapUserItem';
     import MyAvatar from '../components/Map/MyAvatar';
     import BounceLoader from 'vue-spinner/src/BounceLoader.vue';
+    import AudioPlayer from '../components/Mp3/AudioPlayer';
+
     import M from '../class/map/EMarker';
     import P from '../class/map/EProject';
     export default {
-        name: 'mapPlay',
+        name: 'Map',
         mixins: [
             spotifyMixin,
             mapMixin,
@@ -202,7 +187,8 @@
             MapView,
             MapUserItem,
             MyAvatar,
-            BounceLoader
+            BounceLoader,
+            AudioPlayer
         },
         data() {
             return {
@@ -275,7 +261,7 @@
             }
         },
         computed:{
-            ...mapGetters(['spotify', 'mapstore','loggedIn', 'ws']),
+            ...mapGetters(['spotify', 'mapstore','loggedIn', 'ws','mp3']),
 
             avatar_thumb(){
                 console.log("avatar_thumb!");

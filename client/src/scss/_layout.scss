@@ -1,0 +1,30 @@
+ul {
+  list-style-type: none;
+  padding: 0;
+
+  li {
+    display: inline-block;
+    margin: 0 10px;
+  }
+}
+
+.hide{
+  opacity:0.0;
+}
+
+.hidden-xs{
+  @media all and (max-width: 767px) {
+    display: none;
+    visibility: hidden;
+  }
+}
+
+.visible-xs{
+  display: none;
+  visibility: hidden;
+
+  @media all and (min-width: 768px) {
+    display: inherit;
+    visibility: visible;
+  }
+}

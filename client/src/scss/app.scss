@@ -5,6 +5,8 @@
 @import "reset";
 @import "base";
 @import "flex";
+@import "layout";
+@import "text";
 
 /* PARTS */
 @import "parts/spotify/player";
@@ -26,6 +28,7 @@
 @import "parts/emory/map";
 @import "parts/emory/leftview";
 @import "parts/emory/leaflet";
+@import "parts/emory/mp3player";
 
 @import "parts/anime/animejs";
 @import "parts/anime/organic";
