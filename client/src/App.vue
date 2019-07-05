@@ -2,7 +2,7 @@
   <div id="app" v-cloak class="app-wrap" :class="[$route.name,{login:($route.name==='Login' || $route.name==='')}]">
     <head-top></head-top>
     <mu-container fluid class="main-container">
-      <router-view></router-view>
+      <router-view/>
     </mu-container>
 
     <!-- BOTTOM-VIEW-->

@@ -3,9 +3,8 @@
     <div class="ui grid mapmain">
         <div class="sixteen wide mobile eight wide tablet ten wide computer column mapleft" ref="gradbg">
 
-            <mu-flex  justify-content="center" align-items="center" class="left_content gradbg__anime" style="width:100%;height:100%;background-image:url('/static/img/emory/proj_dummy.jpg');">
+            <mu-flex  justify-content="center" align-items="center" class="left_content gradbg__anime" style="width:100%;height:100%;">
 
-                <img src="/static/img/emory/logos/horizontal_w2.png" style="max-width:300px;height:auto;"/>
             </mu-flex>
         </div>
 
@@ -281,7 +280,7 @@
         },
         mounted() {
             //アニメーションの初期設定
-            //new GradBgs(this.$refs.gradbg);
+            new GradBgs(this.$refs.gradbg);
 
             this.switchLayer('info');
 

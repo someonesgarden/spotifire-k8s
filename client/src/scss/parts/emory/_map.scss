@@ -8,19 +8,19 @@
     margin-top:46px;
   }
 
-
   .mapleft{
     padding:0 !important;
     margin:0 !important;
     background-color: #d26c11;
 
     @media all and (max-width: 767px) {
-      height: 300px;
+      position:absolute;
+      top:0;
       z-index: 1;
-
-      transition: 1s;
-      -webkit-transition: 1s;
-      transform: translateY(calc(100vh - 60px));
+      //
+      //transition: 1s;
+      //-webkit-transition: 1s;
+      //transform: translateY(calc(100vh - 60px));
     }
   }
 
