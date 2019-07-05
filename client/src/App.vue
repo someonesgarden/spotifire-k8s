@@ -1,7 +1,7 @@
 <template>
   <div id="app" v-cloak class="app-wrap" :class="[$route.name,{login:($route.name==='Login' || $route.name==='')}]">
     <head-top></head-top>
-    <mu-container fluid>
+    <mu-container fluid class="main-container">
       <router-view></router-view>
     </mu-container>
 
@@ -136,4 +136,7 @@ export default {
 
 <style lang="scss">
   @import "scss/app";
+  .main-container{
+    //margin-top:80px;
+  }
 </style>

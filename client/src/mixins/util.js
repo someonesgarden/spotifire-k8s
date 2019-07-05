@@ -102,7 +102,7 @@ export default {
             };
             c1.rgb = 'rgb('+c1.r+','+c1.g+','+c1.b+')';
             c2.rgb = 'rgb('+c2.r+','+c2.g+','+c2.b+')';
-            return 'background: radial-gradient(at top left, '+c1.rgb+', '+c2.rgb+')';
+            return 'radial-gradient(circle at top left, '+c1.rgb+' 80px, '+c2.rgb+' 500px)';
         },
 
     }

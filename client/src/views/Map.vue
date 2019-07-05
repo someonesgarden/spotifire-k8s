@@ -1,8 +1,14 @@
 <template>
 
     <div class="ui grid">
-        <div class="sixteen wide mobile eight wide tablet ten wide computer column mapleft">
+        <div class="sixteen wide mobile eight wide tablet ten wide computer column mapleft" ref="gradbg">
+            <div class="gradbg__anime" style="width:100%;height:100%;">
 
+                <div class="sixteen wide mobile">
+
+                </div>
+
+            </div>
         </div>
 
         <div class="sixteen wide mobile eight wide tablet six wide computer column mapright">
@@ -175,6 +181,8 @@
 
     import M from '../class/map/EMarker';
     import P from '../class/map/EProject';
+    import GradBgs from '../class/anime/GradBgs';
+
     export default {
         name: 'Map',
         mixins: [
@@ -274,6 +282,9 @@
             this.projsRef   = firebase.database().ref('projects');
         },
         mounted() {
+            //アニメーションの初期設定
+            new GradBgs(this.$refs.gradbg);
+
             this.switchLayer('info');
 
             //最初の一回だけ、現在位置へジャンプする
