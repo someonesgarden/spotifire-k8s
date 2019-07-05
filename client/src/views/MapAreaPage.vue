@@ -1,5 +1,5 @@
 <template>
-    <mu-flex class="mapflex" align-items="center">
+    <mu-flex class="mapflex" align-items="center" style="height:100vh;">
         <mu-flex v-if="project_id" justify-content="center" class="maparea" direction="column" fill style="position:relative;">
 
             <div class="ui grid area_info" style="padding:10px;margin:0;width:100%;text-align:center;z-index:420;position:absolute;bottom:0px;background-color:#db1678;color:white;">

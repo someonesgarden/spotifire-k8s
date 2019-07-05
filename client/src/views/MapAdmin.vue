@@ -1,5 +1,7 @@
 <template>
-    <mu-flex class="mapflex" align-items="center">
+
+    <mu-flex class="mapflex" align-items="center" style="height:100vh;">
+
         <mu-flex justify-content="center" class="maparea" fill>
             <map-view id="map" class="overlay" ref="emorymap" :markersRef="markersRef" @switchLayer="switchLayer" @mapClick="mapClick" @mClick="mClick" @tClick="tClick" @pClick="pClick"/>
 

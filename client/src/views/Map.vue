@@ -1,6 +1,6 @@
 <template>
 
-    <div class="ui grid">
+    <div class="ui grid mapmain">
         <div class="sixteen wide mobile eight wide tablet ten wide computer column mapleft" ref="gradbg">
             <div class="gradbg__anime" style="width:100%;height:100%;">
 

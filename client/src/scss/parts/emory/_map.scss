@@ -1,8 +1,27 @@
-.ui.grid{
+.ui.grid.mapmain{
+
+  position:relative;
+  height:calc(100vh - 58px);
+  margin-top:55px;
+  @media all and (max-width: 767px) {
+    height:calc(100vh - 48px);
+    margin-top:46px;
+  }
+
+
   .mapleft{
     padding:0 !important;
     margin:0 !important;
     background-color: #d26c11;
+
+    @media all and (max-width: 767px) {
+      height: 300px;
+      z-index: 1;
+
+      transition: 1s;
+      -webkit-transition: 1s;
+      transform: translateY(calc(100vh - 60px));
+    }
   }
 
   .mapright{
@@ -120,8 +139,11 @@
 
 .mapflex {
   width:    100%;
-  margin:   60px 0 0 0;
-  height:   calc(100vh - 60px);
+  height:   100%;
+  margin:   0;
+  //margin:   60px 0 0 0;
+  //height:   calc(100vh - 60px);
+
   overflow: hidden;
 
   .maparea {
