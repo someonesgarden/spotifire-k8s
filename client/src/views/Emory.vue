@@ -181,13 +181,15 @@
       this.a_mapstore(['set','mode','info']);
 
       //最初の一回だけ、現在位置へジャンプする
-      if(!this.mapstore.emory.play.init){
+      //if(!this.mapstore.emory.play.init){
+
         this.$nextTick(()=>{
           this.trackOnce();
           this.a_mapstore(['emory','initPlay', true]);
         });
         setTimeout(() => this.trackOnce(), 2000);
-      }
+
+     // }
 
       //とりあえずゲストで入らせる。最初からログインさせるときは　はずす！
       this.a_spotify(['set','me',{id:'GUEST'}]);
@@ -324,6 +326,13 @@
 
     },
     watch:{
+      // '$route.name': {
+      //   handler(newRoute){
+      //     console.log(newRoute);
+      //     setTimeout(() => this.trackOnce(), 1000);
+      //   }
+      // },
+
       'spotify.me':{
         handler(newMe){
           if(!!newMe.id){

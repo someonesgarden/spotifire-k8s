@@ -134,12 +134,18 @@
 
         opacity:1.0;
 
+        .VueCarousel-inner{
+          align-items:center;
+        }
+
         &.selected{
           background-color:rgba(71, 30, 57, 0.12);
         }
       }
 
       .md-card-background{
+        margin: 10px 0;
+
         &.selected{
           background-color: rgba(10, 8, 15, 0.1);
           background-image:none !important;

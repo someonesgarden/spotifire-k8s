@@ -8,9 +8,6 @@
                 <p class="card-description" style="color:white;">
                     {{proj.desc}}
                 </p>
-                <br><br>
-<!--                <p>登録マーカー：{{sortedMarkersNum}}</p>-->
-
                 <div class="md-layout">
                     <div class="md-layout-item md-size-100 mx-auto md-xsmall-size-100 text-center">
                         <div class="vertical-center">
