@@ -1,5 +1,9 @@
 const state = {
     emory: {
+        alpha:{
+            slider:false
+        },
+
         mode:'info',
         editing: {
             status:     false,
@@ -19,7 +23,6 @@ const state = {
 
         //all:'-LgQfo9-XfQHou8ixUre',
         all:'all',
-
         selectedPoint:{
           top:-300,
           left:-300
@@ -55,6 +58,15 @@ const state = {
 }
 
 const mutations = {
+    setAlpha(state,data){
+        if(data.val==='toggle'){
+            state.emory.alpha[data.key] = !state.emory.alpha[data.key];
+            return;
+        }
+
+      state.emory.alpha[data.key] = data.val;
+    },
+
     setSelectedPoint(state,data){
       state.emory.selectedPoint.left = data[0];
       state.emory.selectedPoint.top = data[1];

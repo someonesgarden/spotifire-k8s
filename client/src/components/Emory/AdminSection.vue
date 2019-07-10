@@ -2,7 +2,7 @@
 
     <mu-flex justify-content="center" align-items="center" direction="row">
 
-        <div class="md-layout">
+        <div class="md-layout tight light">
             <div class="md-layout-item md-medium-size-50 md-small-size-50 md-xsmall-size-100" v-if="!spotify.me.id">
                 <mu-button color="teal500" class="smallbtn" full-width @click="goMap(true)">
                     <mu-icon value="check_circle"></mu-icon>&nbsp;Spotifyにログイン
@@ -31,7 +31,7 @@
                 </div>
             </div>
 
-            <div class="md-layout">
+            <div class="md-layout tight">
                 <div class="md-layout-item md-size-100 mx-auto md-xsmall-size-100 text-center">
                     <div class="vertical-center">
                         <mu-button color="orange700" class="smallbtn md-sm" full-width @click="goEdit">

@@ -381,4 +381,5 @@
   .ctrl-btn{
     min-width:48px;
   }
+
 </style>

@@ -2,7 +2,8 @@
     <mu-flex justify-content="center" direction="row" align-items="center">
 
         <carousel ref="projects"
-                  style="width:100%;background-color:rgba(241, 20, 37, 0.72);padding:0 8px;"
+                  class="carousel"
+                  :class="{selected:mapstore.emory.alpha.slider}"
                   :per-page-custom="[[320, 1], [767, 3],[991, 4],[1199, 5]]"
                   :navigationEnabled="false"
                   :pagination-enabled="false"
@@ -14,7 +15,9 @@
 
                 <pricing-card style="background-color:inherit;box-shadow:none !important;max-width:450px;width:76%;margin:8px auto;">
                     <template slot="cardContent">
-                        <img class="emory_logo" :src="info.img" alt="emory_logo" style="width:100%;height:auto;"/>
+                        <img class="emory_logo"
+                             :class="{selected:mapstore.emory.alpha.slider}"
+                             :src="info.img" alt="emory_logo" style="width:100%;height:auto;"/>
                         <h4 class="card-category" style="color:white;font-weight:bold;">{{info.subtitle}}</h4>
 
                         <mu-form :model="mapstore.emory" class="range">
@@ -31,7 +34,7 @@
 
                             <div class="md-layout-item md-size-100 mx-auto md-xsmall-size-100 text-center">
                                 <div class="vertical-center">
-                                    <md-button class="ctrl-btn md-sm" @click="a_mapstore(['set','mode','map'])"><md-icon>map</md-icon></md-button>
+                                    <md-button class="ctrl-btn md-sm" @click="a_mapstore(['emory', 'alpha', {key: 'slider', val: 'toggle'}])"><md-icon>location_on</md-icon></md-button>
                                     <md-button class="ctrl-btn md-sm" @click="$emit('trackOnce')"><md-icon>settings_input_antenna</md-icon></md-button>
                                     <md-button class="ctrl-btn md-sm" @click="a_mapstore(['set','projBoundary','toggle'])" v-if="mapstore.emory.project.id">
                                         <span v-if="mapstore.map.projectBoundary">OVERLAY</span>
@@ -58,13 +61,14 @@
 <script>
     import {mapGetters, mapActions} from 'vuex';
     import mapMixin from '../../mixins/map';
+    import utilMixin from '../../mixins/util';
 
     import {PricingCard} from '../../components/MD/index';
     import ProjectSlideItem from './ProjectSlideItem';
 
     export default {
         name: "InfoOverlay",
-        mixins:[mapMixin],
+        mixins:[mapMixin,utilMixin],
         components:{
             PricingCard,
             ProjectSlideItem
@@ -89,7 +93,6 @@
                 'a_mapstore'
             ]),
 
-
             selectStory(keys) {
                 let key_ary = keys.split('|');
                 let index   = key_ary[1];
@@ -108,15 +111,14 @@
                 this.$refs.projects.goToPage(Math.floor((parseInt(index)+1)/separator));
                 let key = key_ary[0];
                 this.setIdAndMoveCenter(key);
+                this.scrollTo('#app');// スクロールトップ
             }
         }
     }
 </script>
 
 <style scoped>
-
     .slide{
         padding:8px;
     }
-
 </style>

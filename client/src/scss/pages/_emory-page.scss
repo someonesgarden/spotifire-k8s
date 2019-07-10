@@ -8,6 +8,15 @@
 
   .section {
     padding: 48px 0;
+
+    .info{
+      h4{
+        @media all and (max-width: 767px) {
+          font-size:1rem;
+        }
+      }
+    }
+
     .avatar{
       margin: 0 auto;
       width: 64px;
@@ -26,6 +35,11 @@
       &.large{
         width: 90px;
         height: 90px;
+
+        @media all and (max-width: 767px) {
+          width: 60px;
+          height: 60px;
+        }
       }
     }
   }
@@ -104,6 +118,78 @@
             color: white;
           }
         }
+      }
+
+      .carousel{
+        width:100%;
+        background-color:rgba(241, 20, 37, 0.72);
+        padding:0 8px;
+
+        //@include transition(0.5s ease-in-out);
+        @include transition (0.33s, cubic-bezier(0.685, 0.0473, 0.346, 1));
+
+        opacity:1.0;
+
+        &.selected{
+          background-color:rgba(241, 20, 37, 0.12);
+        }
+      }
+
+      .md-card-background{
+        &.selected{
+          background-color: rgba(33, 3, 19, 0.1);
+          background-image:none !important;
+          opacity:0.8;
+        }
+      }
+
+      .md-card-pricing{
+        @include transition (0.33s, cubic-bezier(0.685, 0.0473, 0.346, 1));
+
+        &:after{
+          background-color: rgba(33, 3, 19, 0.69);
+          //&.selected{
+          //  background-color: rgba(33, 3, 19, 0.1);
+          //}
+        }
+
+        &.noimg{
+          &:after{
+            background-color: rgb(59, 182, 153);
+            //&.selected{
+            //  background-color: rgba(33, 3, 19, 0.1);
+            //}
+          }
+        }
+
+        &.selected{
+          background-color: rgba(33, 3, 19, 0.1);
+          background-image:none;
+          &.noimg, &:after{
+            background-color: rgba(33, 3, 19, 0.1);
+          }
+        }
+
+        //&.selected{
+        //  background-color: rgba(33, 3, 19, 0.1);
+        //  background-image:none !important;
+        //}
+
+
+        img.emory_logo{
+          @include transition (0.33s, cubic-bezier(0.685, 0.0473, 0.346, 1));
+
+          &.selected{
+           opacity:0.3;
+          }
+        }
+
+      }
+
+      .md-icon-button{
+        border-radius:50%;
+        width:40px;
+        height:40px;
       }
 
     }

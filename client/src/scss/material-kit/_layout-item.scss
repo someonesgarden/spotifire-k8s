@@ -1,3 +1,10 @@
+.md-layout{
+  &.tight{
+    margin-right:0 !important;
+    margin-left:0 !important;
+  }
+}
+
 .md-layout-item {
   padding-right: 15px;
   padding-left: 15px;
@@ -13,3 +20,5 @@
     content: " ";
   }
 }
+
+
