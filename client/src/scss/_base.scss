@@ -1,29 +1,58 @@
-body, html {
-  height: inherit;
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html,body{
+  height:100%;
+}
+.app-wrap{
+  width: 100%;
+  position: relative;
+  height:auto !important; /*IE6対策*/
+  height: 100%; /*IE6対策*/
+  min-height: 100%;
+}
+
+.wrapper{
+  height:100%;
+  width:100%;
+  display: block;
+}
+
+html{
+  height: 100%;
+  box-sizing: border-box;
 }
 
 body {
+  display: block;
+  min-height: 100%;
+  position: relative;
   margin: 0;
+
   background: inherit;
   background-size: cover;
-  background-color: $colorDocument;
-  background-image: linear-gradient(217deg, rgba($gradPrimary, .8), rgba($gradPrimary, 0) 70.71%),
-  linear-gradient(127deg, rgba($gradDocument, 1), rgba($gradDocument, 0) 70.71%),
-  linear-gradient(336deg, rgba($gradSecondary, .8), rgba($gradSecondary, 0) 70.71%);
+  background-color: #EEEEEE;
+  letter-spacing: unset;
+  font-size: 1rem;
+  line-height: 1.5em;
 
   .app-wrap {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: nowrap;
-    min-height: 100vh;
-    width: 100%;
-    background-size: cover;
-    background-position: center center;
+    //display: flex;
+    //flex-direction: column;
+    //justify-content: center;
+    //align-items: center;
+    //flex-wrap: nowrap;
+    //min-height: 100vh;
+    //width: 100%;
+    //height:100%;
+    //background-size: cover;
+    //background-position: center center;
+
 
     &.News, &.Top, &.Subscribe {
-      margin-top: 60px;
+      //margin-top: 60px;
     }
 
     &.News, &.Subscribe {
@@ -36,11 +65,12 @@ body {
     }
 
     &.Home {
-      background-image: url('/static/img/spotifire/bg/Home.jpg');
+      //background-image: url('/static/img/spotifire/bg/Home.jpg');
+
     }
 
     &.Emory {
-      background-image: url('/static/img/emory/bg/bg1.jpg');
+      //background-image: url('/static/img/emory/bg/bg1.jpg');
     }
 
     .container-fluid {

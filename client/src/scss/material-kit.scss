@@ -1,0 +1,57 @@
+//variables and mixins
+//@import "material-kit/variables";
+//@import "material-kit/mixins";
+
+//plugin css
+//@import "material-kit/plugins/_perfect-scrollbar";
+//@import "material-kit/plugins/_plugin-nouislider";
+
+// Core CSS
+@import "material-kit/misc";
+@import "material-kit/headers";
+@import "material-kit/footers";
+@import "material-kit/typography";
+@import "material-kit/buttons";
+@import "material-kit/inputs";
+@import "material-kit/select";
+@import "material-kit/cards";
+@import "material-kit/responsive";
+
+//@import "material-kit/parts/carousel";
+//@import "material-kit/parts/autocomplete";
+//@import "material-kit/parts/collapse";
+//@import "material-kit/parts/tags";
+//@import "material-kit/parts/vertical-nav";
+//@import "material-kit/parts/images";
+//@import "material-kit/parts/info-areas";
+//@import "material-kit/parts/datepicker";
+//@import "material-kit/parts/fileinput";
+//@import "material-kit/parts/badges";
+//@import "material-kit/parts/comments";
+//@import "material-kit/parts/progress";
+//@import "material-kit/parts/social-subscribe-line";
+//@import "material-kit/parts/alerts";
+//@import "material-kit/parts/tables";
+//@import "material-kit/parts/checkboxes";
+//@import "material-kit/parts/togglebutton";
+//@import "material-kit/parts/pagination";
+//@import "material-kit/parts/radios";
+//@import "material-kit/parts/pills";
+//@import "material-kit/parts/dialogs";
+//@import "material-kit/parts/navbars";
+//@import "material-kit/parts/popups";
+//@import "material-kit/parts/dropdown";
+//@import "material-kit/parts/tabs";
+
+// Sections
+@import "material-kit/sections/sections";
+@import "material-kit/layout-item";
+
+//@import "material-kit/sections/features";
+//@import "material-kit/sections/blogs";
+//@import "material-kit/sections/team";
+//@import "material-kit/sections/projects";
+//@import "material-kit/sections/pricing";
+//@import "material-kit/sections/testimonials";
+//@import "material-kit/sections/contactus";
+

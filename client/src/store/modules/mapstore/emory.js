@@ -1,5 +1,10 @@
 const state = {
     emory: {
+        mode:'info',
+        editing: {
+            status:     false,
+            type:       'marker'
+        },
         play:{
           init:false
         },
@@ -11,13 +16,57 @@ const state = {
             }
         },
         triggerDist:30,
-        all:'-LgQfo9-XfQHou8ixUre',
-        project: null
+
+        //all:'-LgQfo9-XfQHou8ixUre',
+        all:'all',
+
+        selectedPoint:{
+          top:-300,
+          left:-300
+        },
+
+        marker: {
+            id:null,
+            markertype: 'mp3',
+            isEpisode:  false,
+            center:     null,
+            title:      "",
+            desc:       "",
+            type:       'other',
+            spotifyid:  "",
+            public:     'open',
+            thumb:      null,
+            project:    null,
+            w:          35,
+            h:          35,
+            loop:       false
+        },
+
+        project:{
+            id:         null,
+            center:     null,
+            zoom:       22,
+            desc:       "",
+            title:      "",
+            spotifyid:  ""
+        }
     }
 
 }
 
 const mutations = {
+    setSelectedPoint(state,data){
+      state.emory.selectedPoint.left = data[0];
+      state.emory.selectedPoint.top = data[1];
+    },
+
+    setMode(state,data){
+      state.emory.mode = data;
+    },
+
+    setEditing(state,data){
+      state.emory.editing[data.key] = data.val;
+    },
 
     setEmoryPlay(state,dat){
       state.emory.play[dat.key] = dat.val;
@@ -34,6 +83,21 @@ const mutations = {
     setEmoryProject(state,val){
         state.emory.project = val;
     },
+
+    setEmoryProjectID(state,val){
+        state.emory.project.id = val;
+        state.emory.marker.project = val;
+    },
+
+    setEmoryMarker(state,data){
+        state.emory.marker = data;
+    },
+    setMarkerParam(state,data){
+        state.emory.marker[data.key] = data.val;
+    },
+    setProjectParam(state,data){
+        state.emory.project[data.key] = data.val;
+    }
 
 }
 

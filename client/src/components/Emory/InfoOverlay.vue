@@ -1,0 +1,122 @@
+<template>
+    <mu-flex justify-content="center" direction="row" align-items="center">
+
+        <carousel ref="projects"
+                  style="width:100%;background-color:rgba(241, 20, 37, 0.72);padding:0 8px;"
+                  :per-page-custom="[[320, 1], [767, 3],[991, 4],[1199, 5]]"
+                  :navigationEnabled="false"
+                  :pagination-enabled="false"
+                  :autoplay="false"
+                  :loop="true" :autoplayTimeout="3000">
+
+            <!-- Main Menu -->
+            <slide class="slide">
+
+                <pricing-card style="background-color:inherit;box-shadow:none !important;max-width:450px;width:76%;margin:8px auto;">
+                    <template slot="cardContent">
+                        <img class="emory_logo" :src="info.img" alt="emory_logo" style="width:100%;height:auto;"/>
+                        <h4 class="card-category" style="color:white;font-weight:bold;">{{info.subtitle}}</h4>
+
+                        <mu-form :model="mapstore.emory" class="range">
+                            <mu-form-item prop="project" class="range" style="background-color:white;border-radius:4px;">
+
+                                <mu-select :value="mapstore.emory.project.id ? mapstore.emory.projects[mapstore.emory.project.id].title : 'ストーリーを選択'" @change="selectStory">
+                                    <mu-option v-for="(p,key,inx) in mapstore.emory.projects" :key="'proj'+key" :label="p.title" :value="key+'|'+inx"></mu-option>
+                                </mu-select>
+
+                            </mu-form-item>
+                        </mu-form>
+
+                        <div class="md-layout">
+
+                            <div class="md-layout-item md-size-100 mx-auto md-xsmall-size-100 text-center">
+                                <div class="vertical-center">
+                                    <md-button class="ctrl-btn md-sm" @click="a_mapstore(['set','mode','map'])"><md-icon>map</md-icon></md-button>
+                                    <md-button class="ctrl-btn md-sm" @click="$emit('trackOnce')"><md-icon>settings_input_antenna</md-icon></md-button>
+                                    <md-button class="ctrl-btn md-sm" @click="a_mapstore(['set','projBoundary','toggle'])" v-if="mapstore.emory.project.id">
+                                        <span v-if="mapstore.map.projectBoundary">OVERLAY</span>
+                                        <span v-else>NORMAL</span>
+                                    </md-button>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </pricing-card>
+            </slide>
+            <!--/Main Menu-->
+
+            <slide class="slide" v-for="(proj,key,index) in mapstore.emory.projects" :key="'prjj'+index">
+                <project-slide-item :proj="proj" :id="key" @backToLeft="$refs.projects.goToPage(0)" />
+            </slide>
+
+        </carousel>
+
+
+    </mu-flex>
+</template>
+
+<script>
+    import {mapGetters, mapActions} from 'vuex';
+    import mapMixin from '../../mixins/map';
+
+    import {PricingCard} from '../../components/MD/index';
+    import ProjectSlideItem from './ProjectSlideItem';
+
+    export default {
+        name: "InfoOverlay",
+        mixins:[mapMixin],
+        components:{
+            PricingCard,
+            ProjectSlideItem
+        },
+        computed: {
+            ...mapGetters([
+                'spotify',
+                'mapstore',
+                'loggedIn'])
+        },
+        data(){
+            return{
+                info:{
+                    title:"EMOTION + STORY",
+                    subtitle:"音楽と物語の中で迷子になる心地よさ。",
+                    img:"/static/img/emory/logos/isometric_w.png"
+                }
+            }
+        },
+        methods:{
+            ...mapActions([
+                'a_mapstore'
+            ]),
+
+
+            selectStory(keys) {
+                let key_ary = keys.split('|');
+                let index   = key_ary[1];
+                let separator = 1;
+
+                if(window.innerWidth>=1200){
+                    separator = 5;
+                }
+                else if(window.innerWidth>=992){
+                    separator = 4;
+                }
+                else if(window.innerWidth>=768){
+                    separator = 3;
+                }
+
+                this.$refs.projects.goToPage(Math.floor((parseInt(index)+1)/separator));
+                let key = key_ary[0];
+                this.setIdAndMoveCenter(key);
+            }
+        }
+    }
+</script>
+
+<style scoped>
+
+    .slide{
+        padding:8px;
+    }
+
+</style>

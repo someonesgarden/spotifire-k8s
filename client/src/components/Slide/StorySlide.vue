@@ -7,9 +7,12 @@
             </mu-flex>
             <p v-html="modal.modals.story.content"></p>
         </div>
-        <mu-paper  class="widget_player" :z-depth="5" :style="{height:height+'px'}">
-            <iframe :src="url" :width="width" :height="height" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
-        </mu-paper>
+        <div class="widget_player" :style="{height:height+'px'}">
+            <iframe
+                    :src="url" :width="width" :height="height"
+                    :style="{height:height+'px'}"
+                    frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+        </div>
 
         <mu-button full-width color="greenA400" @click="a_index(['storyModal','toggle',false])">
             <mu-icon value="keyboard_arrow_down"></mu-icon>
@@ -30,7 +33,6 @@
         },
         computed:mapGetters(['modal']),
         mounted(){
-            console.log("StorySlide:mounted");
             this.a_mapstore(['set', 'tracking', false]);
 
             if(this.modal.modals.story.spotifytype && this.modal.modals.story.spotifyid){
@@ -38,14 +40,13 @@
             }
 
             if(this.modal.modals.story.spotifytype==='episode'){
-                this.height = 230;
+                this.height = 240;
             }else if(this.modal.modals.story.spotifytype==='track'){
                 this.height = 80;
             }
         },
 
         beforeDestroy(){
-          console.log("StorySlide:beforeDestroy");
             this.a_mapstore(['set', 'tracking', true]);
         },
 

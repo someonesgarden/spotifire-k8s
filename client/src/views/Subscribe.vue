@@ -1,9 +1,9 @@
 <template>
-    <mu-container class="flex_v" id="Subscribe">
+    <mu-container id="Subscribe">
         <div class="base">
             <div class="ui grid" v-if="subscribe.initials">
 
-                <div class="sixteen wide mobile sixteen wide tablet sixteen wide computer column" style="border-bottom:thin dashed white;">
+                <div class="sixteen wide mobile sixteen wide tablet sixteen wide computer column">
                     <mu-chip v-for="(initial,index) in subscribe.initials"
                              @click="openSnack('initial',index)"
                              :key="'initial'+index" color="deepPurple700" :style="{fontSize:0.3+0.25*tracksOnInitial(initial.spotifyids)+'rem'}">{{initial.initial}}</mu-chip>
@@ -11,7 +11,7 @@
             </div>
 
             <div class="ui grid" v-if="subscribe.lyrics">
-                <div class="sixteen wide mobile sixteen wide tablet sixteen wide computer column" style="border-bottom:thin dashed white;">
+                <div class="sixteen wide mobile sixteen wide tablet sixteen wide computer column">
 
                     <mu-chip class="chip-populartrack" color="orange500" v-for="(lyric,index) in subscribe.lyrics"
                              :key="'pt'+index" delete
@@ -23,20 +23,17 @@
                         {{lyric.song}}
                         <span class="artist">{{lyric.artist | truncate20}}</span>
                     </mu-chip>
-
                 </div>
             </div>
 
             <div class="ui grid" v-if="subscribe.lyrics">
-                <div class="sixteen wide mobile sixteen wide tablet sixteen wide computer column" style="border-bottom:thin dashed white;">
-
+                <div class="sixteen wide mobile sixteen wide tablet sixteen wide computer column">
                     <mu-chip :color="morphChipColor(mo.length)" v-for="(mo,key,index) in morphsByCondition"
                              :key="'m'+index" :style="{fontSize:0.3+0.1*mo.length+'rem'}" delete
                              @click="openSnack('feature',key)"
                              @delete="alertAction('morphs',{mo:mo,key:key},index)">
                         {{key}}
                     </mu-chip>
-
                 </div>
             </div>
         </div>
@@ -78,6 +75,7 @@
 
     export default {
         name: "Subscribe",
+        bodyClass: "subscribe-page",
         mixins:[musixMixin,mysqlMixin,feedMixin,utilMixin],
         components:{
             SnackFeatureItem,
@@ -132,12 +130,7 @@
                 deep:true
             }
         },
-        // created:function(){
-        //     window.addEventListener('click', (val)=>console.log(val), false);
-        // },
-        // destroyed: function () {
-        //     window.removeEventListener('click', (val)=>console.log(val), false);
-        // },
+
         mounted:function(){
             this.loadInitials();
             this.loadLyrics();
@@ -170,27 +163,6 @@
                 };
                 if (!reducers[num]) return Math.floor(Math.random()*2)=== 0 ? "teal600" : "teal400";
                 return reducers[num]()
-
-              //
-              //   let color ="teal500";
-              //   switch(num){
-              //       case 2:
-              //           color = "pink400";
-              //           break;
-              //       case 3:
-              //           color = "purple500";
-              //           break;
-              //       case 4:
-              //           color = "indigo500";
-              //           break;
-              //       case 5:
-              //           color =  "amber500";
-              //           break;
-              //       case 6:
-              //           color = "cyan500";
-              //           break;
-              //   }
-              // return color;
             },
 
             lyricsFromMorphs(morphs){
@@ -305,7 +277,3 @@
         }
     }
 </script>
-
-<style scoped lang="scss">
-
-</style>

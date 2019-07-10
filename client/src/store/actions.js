@@ -43,6 +43,11 @@ export const a_index    =  ({commit}, [type, action, data]) => {
         storyModal:{
             toggle:(data)=> commit('modal/setModal', {key:'story',val:data}),
             set:(data)=> commit('modal/setStory', data)
+        },
+
+        side:{
+            left:(data)=> commit('side/setLeft', data),
+            right:(data)=> commit('side/setRight', data)
         }
     };
     actions[type][action](data)
@@ -125,6 +130,8 @@ export const a_spotify  =  ({commit}, [type, action, data]) => {
 export const a_mapstore = ({commit},[type, action, data]) => {
     const actions = {
         set: {
+            mode:(data)       => commit('mapstore/setMode',      data),
+            editing:(data)    => commit('mapstore/setEditing',   data),
             mainuser:(data)   => commit('mapstore/setMainuser',  data),
             markers:(data)    => commit('mapstore/setMarkers',   data),
             tracking:(data)   => commit('mapstore/setTracking',  data),
@@ -142,11 +149,16 @@ export const a_mapstore = ({commit},[type, action, data]) => {
         },
 
         emory:{
-            setPlay:(data)   => commit('mapstore/setEmoryPlay',data),
-            initPlay:(data)  => commit('mapstore/setEmoryPlay',{key:'init',val:data}),
-            setprojects:(data)   => commit('mapstore/setEmoryProjects',data),
-            setproject:(data)   => commit('mapstore/setEmoryProject',data),
-            setTriggerDist:(data)=> commit('mapstore/setTriggerDist',data)
+            selectedPoint:(data) => commit('mapstore/setSelectedPoint',data),
+            setPlay:(data)      => commit('mapstore/setEmoryPlay',data),
+            initPlay:(data)     => commit('mapstore/setEmoryPlay',{key:'init',val:data}),
+            setprojects:(data)  => commit('mapstore/setEmoryProjects',data),
+            setprojectid:(data)   => commit('mapstore/setEmoryProjectID',data),
+            setTriggerDist:(data) => commit('mapstore/setTriggerDist',data),
+            setmarker:(data)      => commit('mapstore/setEmoryMarker',data),
+            setproject:(data)     => commit('mapstore/setEmoryProject',data),
+            markerparam:(data)    => commit('mapstore/setMarkerParam', data),
+            projectparam:(data)   => commit('mapstore/setProjectParam', data)
         }
     }
     actions[type][action](data)

@@ -1,7 +1,7 @@
 <template>
     <div class="aside listaside subscribe_rightview">
 
-        <mu-container class="range">
+        <div class="range">
 
             <!--TABS-->
             <mu-row gutter>
@@ -74,7 +74,7 @@
             </mu-list>
             <!---/ ARTIST --->
 
-        </mu-container>
+        </div>
         <br>
     </div>
 </template>

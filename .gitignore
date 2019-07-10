@@ -13,4 +13,4 @@ docker-compose.yml
 /k8s_notyet/
 /deploy_notgood.sh
 /.gitignore
-/backups/
+/client/src/scss/material-kit/example-pages/

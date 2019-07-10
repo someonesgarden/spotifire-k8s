@@ -1,5 +1,5 @@
 <template>
-    <mu-container class="flex_v">
+    <mu-container style="padding:0;margin:0;">
         <div id="analysis_area" class="base">
             <mu-paper :z-depth="1" class="analysis_metalist">
                 <mu-list toggle-nested>

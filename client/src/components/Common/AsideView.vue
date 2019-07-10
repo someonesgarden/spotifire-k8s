@@ -1,6 +1,6 @@
 <template>
     <div class="aside">
-        <h3><strong><mu-icon value="search" size="10"></mu-icon>&nbsp;SEARCH</strong></h3>
+        <p><strong><mu-icon value="search" size="10"></mu-icon>&nbsp;SEARCH</strong></p>
         <mu-container v-if="gen">
             <mu-form :model="gen" label-position="left" label-width="32" class="range">
                 <mu-row gutter>
@@ -84,7 +84,7 @@
 
                 <hr>
                 <br>
-                <h3><strong><mu-icon value="games" size="10"></mu-icon>&nbsp;RECOMMENDATIONS</strong></h3>
+                <p><strong><mu-icon value="games" size="10"></mu-icon>&nbsp;RECOMMENDATIONS</strong></p>
 
                 <mu-row gutter>
                     <mu-col span="10" sm="10" md="10" lg="10">

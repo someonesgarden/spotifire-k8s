@@ -11,6 +11,7 @@ import three from './modules/three/index';
 import mp3 from './modules/mp3/index';
 import genius from './modules/genius/index';
 import modal from './modules/modal/index';
+import side  from './modules/side/index';
 import pwa from './modules/pwa/index';
 import svg from './modules/svg/index';
 import subscribe from './modules/subscribe/index';
@@ -31,6 +32,7 @@ export default new Vuex.Store({
         mp3,
         genius,
         modal,
+        side,
         pwa,
         svg,
         subscribe

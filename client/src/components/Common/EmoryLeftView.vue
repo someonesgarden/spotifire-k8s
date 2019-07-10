@@ -1,6 +1,6 @@
 <template>
     <div class="aside emoryleftview">
-        <mu-container>
+        <div style="padding-right:8px;padding-left:8px;">
             <mu-flex justify-content="center" align-items="center">
                 <mu-button full-width small color="black" @click="$emit('close')">X</mu-button>
             </mu-flex>
@@ -17,7 +17,7 @@
             <mu-flex justify-content="center" align-items="center">
                 <mu-button full-width small color="black" @click="$emit('close')">X</mu-button>
             </mu-flex>
-        </mu-container>
+        </div>
         <br>
     </div>
 </template>

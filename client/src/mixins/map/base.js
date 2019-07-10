@@ -8,16 +8,44 @@ export default{
                 Object.keys(this.mapstore.markers).forEach(key=> {
                     let marker = this.mapstore.markers[key];
                     marker.id = key;
-                    if(marker.project === 'mainuser' || (marker.project===this.mapstore.emory.project)) result[key]= marker;
+                    if(marker.project === 'mainuser' || (marker.project===this.mapstore.emory.project.id)) result[key]= marker;
                 });
             }
             return result;
+        },
+
+        // sortProjsByDist(){
+        //     let results = [];
+        //     if(this.mapstore.mainuser){
+        //         let projects = this.mapstore.emory.projects;
+        //         let mainuser = this.mapstore.mainuser.id==="GUEST" ? this.mapstore.mainuser : this.mapstore.markers[this.mapstore.mainuser.id];
+        //         if(mainuser){
+        //             results = Object.keys(projects).map(k=> {return {...projects[k],id:k,dist:this.distKmofCenters(mainuser.center, projects[k].center)}});
+        //             results.sort((a, b)=> a.dist > b.dist ? 1 : -1);
+        //         }
+        //     }
+        //
+        //     return results;
+        // },
+
+        activeProj(){
+            return  this.mapstore.emory.project.id ? this.mapstore.emory.projects[this.mapstore.emory.project.id] : null;
         }
     },
 
     methods: {
 
+        setIdAndMoveCenter(key){
+            this.a_mapstore(['emory', 'setprojectid', key]);
+            this.a_mapstore(['set','poly',null]);  //リセット(polyの消去）
+            this.a_mapstore(['set', 'tracking', false]); //トラッキングの停止
+            this.a_mapstore(['center', 'map', this.mapstore.emory.projects[key].center]); //プロジェクト位置へマップを移動
+            this.distOfProjPoints();
+            this.drawPoly();
+        },
+
         resetAllPods(){
+            console.log("resetAllPods!");
             this.mp3.pods.forEach((p, i) => {
                 setTimeout(() =>  this.a_mp3(['pod', i, 'file', null]), 20);
                 setTimeout(() => this.a_mp3(['pod', i, 'volume', 0]), 20);
@@ -57,7 +85,6 @@ export default{
             }
         },
 
-
         bottomAvatarClick(mkr){
             this.a_mapstore(['set','tracking',false]);
             let marker = this.mapstore.markers[mkr.id];
@@ -66,17 +93,6 @@ export default{
 
         geoError(error) { console.log(error);},
 
-        findMe(){
-            console.log("moveToMe");
-        },
-
-        trackStart(){
-            this.a_mapstore(['set','tracking',true]);
-        },
-
-        trackToggle(){
-            this.a_mapstore(['toggle','tracking']);
-        },
 
         distKmOfTwo(lat1, lng1, lat2, lng2) {
             lat1 *= Math.PI / 180;
@@ -102,13 +118,14 @@ export default{
             return this.distKmOfTwo(center1.lat,center1.lng,center2.lat,center2.lng);
         },
 
+
+
         distOfProjPoints(){
 
             if(this.mapstore.mainuser){
+
                 //自分と現在のプロジェクトのpointの距離を測る
                 let mainuser = this.mapstore.mainuser.id==="GUEST" ? this.mapstore.mainuser : this.mapstore.markers[this.mapstore.mainuser.id];
-
-               // let mainuser = this.mapstore.markers[this.mapstore.mainuser.id];
 
                 if(this.sortedMarkers && mainuser){
                     let dists = Object.keys(this.sortedMarkers).map(k=> {

@@ -14,16 +14,17 @@
                         <mu-list-item-title><mu-icon value="extension" :size="15"></mu-icon>&nbsp;Emory</mu-list-item-title>
                     </mu-list-item>
                     <mu-divider></mu-divider>
+
                 </mu-list>
             </mu-menu>
 
-            <mu-button flat slot="left" @click="side.spotify.left.open = true">
+            <mu-button flat slot="left" @click="a_index(['side','left',{key:'spotify',val:true}])">
                 <mu-icon value="border_left"></mu-icon>
             </mu-button>
             <mu-button flat slot="right" color="grey500" @click="a_index(['bottom','open'])">
                 <mu-icon value="border_bottom"></mu-icon>
             </mu-button>
-            <mu-button flat slot="right" @click="side.spotify.right.open=true">
+            <mu-button flat slot="right" @click="a_index(['side','right',{key:'spotify',val:true}])">
                 <mu-icon value="border_right"></mu-icon>
             </mu-button>
         </mu-appbar>
@@ -46,14 +47,15 @@
                 </mu-list>
             </mu-menu>
 
-            <mu-button flat slot="left" @click="side.emory.left.open = true">
+<!--            side.emory.left.open = true-->
+            <mu-button flat slot="left" @click="a_index(['side','left',{key:'emory',val:true}])">
                 <mu-icon value="train"></mu-icon>
             </mu-button>
             <mu-button flat slot="right" color="grey500" @click="a_index(['bottom','open'])">
                 <mu-icon value="border_bottom"></mu-icon>
             </mu-button>
-            <mu-button flat slot="right">
-                <mu-icon value="dashboard"></mu-icon>
+            <mu-button flat slot="right" @click="a_index(['howModal','toggle',true])">
+                <mu-icon value="info"></mu-icon>
             </mu-button>
         </mu-appbar>
 
@@ -85,37 +87,37 @@
         </mu-appbar>
 
         <!-- Spotify Drawers -->
-        <mu-drawer :open.sync="side.spotify.left.open" :docked="side.spotify.left.docked" :width="300">
+        <mu-drawer :open.sync="side.spotify.left.open" :docked="side.spotify.left.docked" :width="300" @change="()=> a_index(['side','left',{key:'spotify',val:'toggle'}])">
             <mu-list style="width:inherit;">
-                <aside-view @rightopen="side.spotify.right.open=true"></aside-view>
+                <aside-view @rightopen="a_index(['side','right',{key:'spotify',val:true}])"></aside-view>
             </mu-list>
         </mu-drawer>
 
-        <mu-drawer :open.sync="side.spotify.right.open" :docked="side.spotify.right.docked" :right="true" :width="300">
+        <mu-drawer :open.sync="side.spotify.right.open" :docked="side.spotify.right.docked" :right="true" :width="300" @change="()=> a_index(['side','right',{key:'spotify',val:'toggle'}])">
             <mu-list>
-                <playlist-view @leftopen="side.spotify.left.open=true" @close="side.spotify.right.open=false" @open="side.spotify.right.open=true"/>
+                <playlist-view @leftopen="a_index(['side','left',{key:'spotify',val:true}])" @close="a_index(['side','right',{key:'spotify',val:false}])" @open="a_index(['side','right',{key:'spotify',val:true}])"/>
             </mu-list>
         </mu-drawer>
         <!--/Spotify Drawers -->
 
         <!-- Emory Drawers -->
-        <mu-drawer :open.sync="side.emory.left.open" :docked="side.emory.left.docked" :width="350" style="background-color:#0d7970;">
+        <mu-drawer :open.sync="side.emory.left.open" :docked="side.emory.left.docked" :width="350" style="background-color:#0d7970;" @change="()=> a_index(['side','left',{key:'emory',val:'toggle'}])">
             <mu-list style="width:inherit;">
-                <emory-left-view @close="side.emory.left.open=false"></emory-left-view>
+                <emory-left-view @close="a_index(['side','left',{key:'emory',val:false}])"></emory-left-view>
             </mu-list>
         </mu-drawer>
         <!--/Emory Drawers -->
 
         <!-- News Drawers -->
-        <mu-drawer :open.sync="side.news.left.open" :docked="side.news.left.docked" :width="350" style="background-color:#4f23be;">
+        <mu-drawer :open.sync="side.news.left.open" :docked="side.news.left.docked" :width="350" style="background-color:#4f23be;" @change="()=> a_index(['side','left',{key:'news',val:'toggle'}])">
             <mu-list style="width:inherit;">
                 <subscribe-left-view></subscribe-left-view>
             </mu-list>
         </mu-drawer>
 
-        <mu-drawer :open.sync="side.news.right.open" :docked="side.news.right.docked" :right="true" :width="300">
+        <mu-drawer :open.sync="side.news.right.open" :docked="side.news.right.docked" :right="true" :width="300" @change="()=> a_index(['side','right',{key:'news',val:'toggle'}])">
             <mu-list style="width:inherit;padding:0;">
-                <subscribe-right-view  @close="side.news.right.open=false" @open="side.news.right.open=true"/>
+                <subscribe-right-view  @close="a_index(['side','right',{key:'news',val:false}])" @open="a_index(['side','right',{key:'news',val:true}])"/>
             </mu-list>
         </mu-drawer>
         <!--/News Drawers -->
@@ -150,48 +152,16 @@
                     normal: false,
                     map: false,
                     news: false
-                },
-                side:{
-                    spotify:{
-                        left:{
-                            open:false,
-                            docked:false
-                        },
-                        right:{
-                            open:false,
-                            docked:false
-                        }
-                    },
-
-                    news: {
-                        left: {
-                            open: false,
-                            docked: false
-                        },
-                        right: {
-                            open: false,
-                            docked: false
-                        }
-                    },
-
-                    emory:{
-                        left:{
-                            open:false,
-                            docked:false
-                        }
-                    },
-                    left:{
-                        open:false,
-                        docked:false
-                    },
-                    right:{
-                        open:false,
-                        docked:false
-                    }
                 }
             }
         },
-        computed:mapGetters(['bottom','rootAction','header']),
+        computed:mapGetters([
+            'bottom',
+            'rootAction',
+            'header',
+            'side'
+        ]),
+
         methods:{
             ...mapActions(['a_index']),
 
@@ -203,7 +173,7 @@
         watch:{
             'rootAction':{
                 handler(newAction){
-                    if(newAction.type==='leftopen') this.side.spotify.left.open = true;
+                    if(newAction.type==='leftopen') this.a_index(['side','left',{key:'spotify',val:true}]);
                 },deep:true
             }
         }
@@ -215,7 +185,7 @@
         left: 0;
         right: 0;
         top: 0;
-        z-index: 101;
+        z-index: 1000;
         overflow: hidden;
     }
 
@@ -225,14 +195,14 @@
 
         &.appbar-normal{
             transform: translateY(0px);
-            &.Map, &.Emory, &.Subscribe{
+            &.Map, &.Emory, &.Subscribe, &.MapAdmin{
                 transform: translateY(-68px);
             }
         }
 
         &.appbar-emory{
             transform: translateY(-68px);
-            &.Map, &.Emory{
+            &.Map, &.Emory, &.MapAdmin{
                 transform: translateY(0px);
             }
         }

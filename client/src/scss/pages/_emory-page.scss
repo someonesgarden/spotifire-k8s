@@ -1,0 +1,169 @@
+.emory-page {
+
+  .page-header {
+    &::before {
+      background: rgba(0,0,0, .2);
+    }
+  }
+
+  .section {
+    padding: 48px 0;
+    .avatar{
+      margin: 0 auto;
+      width: 64px;
+      height: 64px;
+      overflow: hidden;
+      border-radius: 50%;
+      background-size:cover;
+      background-position:center center;
+      @include shadow-6dp();
+
+      &.float-left{
+        float:left;
+        margin-right: 15px;
+      }
+
+      &.large{
+        width: 90px;
+        height: 90px;
+      }
+    }
+  }
+
+  .overlay {
+    position: absolute;
+    height:  100%;
+    width:   100%;
+    margin:  0;
+    padding: 0;
+    left:    0;
+    top:     0;
+
+    &.maps_overlay{
+
+    }
+
+    &.info_overlay {
+      z-index: 100;
+      //background-color: rgba(36, 210, 131, 0.68);
+      // mix-blend-mode: hard-light;
+      background-image: url("/static/img/emory/bg/bg1.png");
+      background-size:cover;
+      background-position:center center;
+
+      .info_menu {
+        font-family: $stencil_font;
+        margin: 0 12px;
+        min-width: 280px;
+        //background-color: rgba(28, 33, 64, 0.68);
+        background-color:rgba(255, 255, 255, 0.2);
+        // mix-blend-mode: hard-light;
+        padding: 2rem 1rem;
+        border-radius: 8px;
+
+        .usercard {
+          width: 100%;
+          padding: 10px;
+          margin: 5px;
+          background-color: #e85610;
+          border-radius: 4px;
+          position: relative;
+
+          .key_btn {
+            padding: 6px;
+            position: absolute;
+            top: 0;
+            right: 0;
+          }
+
+          &.login {
+            background-color: #006d45;
+          }
+
+          .mu-avatar {
+            float: left;
+            margin: 0 10px 5px 0;
+            background-color: inherit;
+          }
+
+          .title {
+            font-size: 15px;
+          }
+
+          .subtitle {
+            font-size: 14px;
+            color: #fff;
+          }
+
+          .header-title {
+            display: inline-block;
+            vertical-align: top;
+            white-space: normal;
+            padding-right: 90px;
+            background-color: red;
+            color: white;
+          }
+        }
+      }
+
+    }
+
+    &.play_overlay {
+      z-index: -1;
+      background-color: rgba(11, 46, 118, 0.59);
+
+      .info_col {
+        .mu-card-title-container {
+          padding: 6px;
+        }
+
+        .mu-card-title{
+          font-size:20px;
+          color: #fff;
+          line-height:26px;
+        }
+
+        .mu-card-sub-title{
+          color: #fff;
+        }
+        .mu-avatar {
+          width: 25px;
+          height: 25px;
+          margin-right:2px;
+        }
+
+        .play_card_img {
+          width: 100%;
+          max-width: 200px !important;
+          text-align: center;
+          padding: 5px;
+          margin: 0 auto;
+
+          img {
+            width: 100%;
+            height: auto;
+            margin: 0 auto;
+          }
+        }
+      }
+    }
+
+    &.edit_overlay {
+      z-index: -1;
+      background-color: rgba(44, 0, 61, 0.62);
+    }
+
+    .selectedPoint{
+      z-index:410;
+      position:absolute;
+      top:-300px;
+      width:20px;
+      height:20px;
+      border-radius:50%;
+      background-color: rgba(255, 0, 0, 0.75);
+      &.project{
+        background-color: rgba(0, 128, 0, 0.75);
+      }
+    }
+  }
+}

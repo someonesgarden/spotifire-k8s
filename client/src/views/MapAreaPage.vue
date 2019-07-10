@@ -82,6 +82,7 @@
 
     export default {
         name: "MapAreaPage",
+        bodyClass: "maparea-page",
         components: {
             LMap,
             LImageOverlay,
@@ -116,7 +117,7 @@
         },
 
         mounted(){
-           this.project_id = this.mapstore.emory.project;
+           this.project_id = this.mapstore.emory.project.id;
 
            if(this.project_id){
                this.projsRef.child(this.project_id).once('value').then(ss=>{

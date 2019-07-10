@@ -19,6 +19,8 @@ $pageSwithingTime: 0.5s;
 $standardMeasure: 15px;
 
 // FONTS
+$font-family-sans-serif: 'Roboto', 'Helvetica', 'Arial', sans-serif !default;
+
 $headline_font:     'Montserrat';
 $basic_font:        'Raleway';
 $stencil_font:      'Allerta Stencil';
@@ -43,11 +45,9 @@ $gothic2:       "ヒラギノ角ゴ Pro W3","Hiragino Kaku Gothic Pro","メイ�
 $padSpace: 1em;
 $padSmall: $padSpace / 2;
 $headerHeight: 3.5em;
-// $bgImg: 'https://raw.githubusercontent.com/rainner/soma-fm-player/master/public/img/bg.jpg';
 $bgImg: '/static/img/bg/bg1.jpg';
 
 // document colors
-$colorDocument: #8086a0;
 $colorDocumentDark: #1e1f30;
 $colorDocumentDarker: darken( $colorDocumentDark, 10% );
 $colorDocumentLight: #a0a6b0;

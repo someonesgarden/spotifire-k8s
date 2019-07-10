@@ -1,115 +1,134 @@
 <template>
-    <mu-container class="flex_v">
-        <div>
-            <mu-flex class="flex-wrapper" justify-content="center" align-items="center" direction="column">
+  <div class="wrapper">
 
-                <img class="menu-icon" src="/static/img/spotifire/logos/experiments.png" style="width:180px;height:auto;margin-bottom:10px;">
+    <parallax
+            class="section page-header header-filter"
+            parallax-active="true"
+            :style="headerStyle">
+      <div class="container">
 
-                <mu-form ref="adminform" :model="admin" class="mu-demo-form" label-position="top" label-width="100">
+          <div class="md-layout-item md-size-33 md-small-size-66 md-xsmall-size-100 md-medium-size-40 mx-auto text-center">
+            <login-card header-color="green">
+              <h4 slot="title" class="card-title">
+                <img src="/static/img/spotifire/logos/white_black.png" style="width:210px;height:auto;margin:0 auto;">
+              </h4>
+              <md-button
+                      slot="buttons"
+                      href="javascript:void(0)"
+                      class="md-just-icon md-simple md-white">
+                <i class="fab fa-facebook-square"></i>
+              </md-button>
+              <md-button
+                      slot="buttons"
+                      href="javascript:void(0)"
+                      class="md-just-icon md-simple md-white">
+                <i class="fab fa-twitter"></i>
+              </md-button>
 
-                    <div class="md-layout md-alignment-center md-gutter">
+              <p slot="description" class="description">Prototypes with Spotify API</p>
 
-                        <div class="md-layout-item md-medium-size-50 md-small-size-50 md-xsmall-size-100">
-                            <mu-form-item :rules="emptyRules" prop="id" class="range" style="padding-bottom:0;margin-bottom:0;">
-                                <mu-text-field prop="id" placeholder="ID" v-model="admin.id" style="text-align:center;"></mu-text-field>
-                            </mu-form-item>
-                        </div>
+              <md-field class="md-form-group" slot="inputs">
+                <md-icon>face</md-icon>
+                <label>ID...</label>
+                <md-input v-model="admin.id"></md-input>
+              </md-field>
 
-                        <div class="md-layout-item md-medium-size-50 md-small-size-50 md-xsmall-size-100">
-                            <mu-form-item :rules="emptyRules" prop="pass" class="range" style="padding-bottom:0;margin-bottom:0;">
-                                <mu-text-field  type="password" placeholder="PASSWORD" prop="pass" v-model="admin.pass"  :action-icon="visibility ? 'visibility_off' : 'visibility'" :action-click="() => (visibility = !visibility)" :type="visibility ? 'text' : 'password'" style="text-align:center;"></mu-text-field>
-                            </mu-form-item>
-                        </div>
+              <md-field class="md-form-group" slot="inputs" :md-toggle-password="false">
+                <md-icon>lock_outline</md-icon>
+                <label>Password...</label>
+                <md-input v-model="admin.pass" type="password"></md-input>
+              </md-field>
+              <md-button slot="footer" class="md-simple md-success md-lg" @click="loginAction">
+                LOGIN
+              </md-button>
+            </login-card>
+          </div>
 
-                        <div class="md-layout-item md-xsmall-size-100">
-                            <div class="grid-cell">
-                                <mu-button color="blueGrey900" class="smallbtn" full-width @click="loginAction">ログイン</mu-button>
-                            </div>
-                        </div>
-
-                    </div>
-
-                </mu-form>
-
-                <div class="pwa">
-                    <p v-for="(status,key) in pwa" :key="'pwa_'+key"><span class="circle" :class="status"></span>{{key}}</p>
-                </div>
-            </mu-flex>
-
+        <div class="pwa">
+          <p v-for="(status,key) in pwa" :key="'pwa_'+key" v-if="status!=='error'"><span class="circle" :class="status"></span>{{key}}</p>
         </div>
-    </mu-container>
+      </div>
+    </parallax>
+
+  </div>
 </template>
+
 <script>
-    import {mapGetters,mapActions} from 'vuex';
-    import spotifyMixin from '../mixins/spotify';
-    import utilMixin from '../mixins/util';
-    import {ruleEmpty} from '../store/rules';
+  import {mapGetters, mapActions} from 'vuex';
+  import {LoginCard} from "../components/MD";
+  import Mixins from "../mixins/basicMixins";
 
-    export default {
-        name: 'mylogin',
-        mixins:[spotifyMixin,utilMixin],
-        data(){
-          return{
-              emptyRules: [ruleEmpty],
-              visibility:false,
-              admin:{
-                  id:null,
-                  pass:null
-              }
-          }
-        },
-        computed:mapGetters(['pwa','loggedIn','spotify']),
-        created(){
-            this.checkPWA('geolocation');
-            this.checkPWA('gyroscope');
-            this.checkPWA('magnetometer');
-            this.checkPWA('microphone');
-            this.checkPWA('midi');
-            this.checkPWA('notifications');
-            this.checkPWA('camera');
-            this.checkPWA('accelerometer');
-            this.checkPWA('ambient-light-sensor');
-            this.checkPWA('background-sync');
-            this.checkPWA('persistent-storage');
-            this.checkPWA('clipboard-read');
-            this.checkPWA('clipboard-write');
-            this.checkPWA('accessibility-events');
-            this.checkPWA('payment-handler');
-            this.checkPWAExist('serviceWorker');
-            this.checkPWAExist('bluetooth');
-            this.checkPWAExist('PushManager');
-            this.checkPWA('mediaDevices');
-            this.checkPWA('getUserMedia');
-            this.checkPWA('webkitGetUserMedia');
-            this.checkPWA('mozGetUserMedia');
-            this.checkPWA('DeviceOrientationEvent');
-            this.checkPWA('DeviceMotionEvent');
-            this.checkPWAInFunction('Gyroscope');
+  import utilMixin from '../mixins/util';
+  //import spotifyMixin from '../mixins/spotify';
 
-            //プッシュ通知はサービスワーカーが使えた上で
-            //
-            //
-            // mediaDevicesさらに確認する必要があるのでここでは調べない
-        },
 
-        methods:{
-            ...mapActions(['a_login']),
+export default {
+  mixins: [
+    utilMixin,
+    Mixins.HeaderImage,
+    //spotifyMixin
+  ],
+  components: {
+    LoginCard
+  },
+  bodyClass: "login-page",
+  data() {
+    return {
+      image: "/static/img/spotifire/bg/Login.jpg",
+      visibility:false,
+      admin:{
+        id:null,
+        pass:null
+      }
+    };
+  },
+  computed: mapGetters([
+    'pwa',
+    'loggedIn',
+    'spotify'
+  ]),
+  created(){
+    this.checkPWA('geolocation');
+    this.checkPWA('gyroscope');
+    this.checkPWA('magnetometer');
+    this.checkPWA('microphone');
+    this.checkPWA('midi');
+    this.checkPWA('notifications');
+    this.checkPWA('camera');
+    this.checkPWA('accelerometer');
+    this.checkPWA('ambient-light-sensor');
+    this.checkPWA('background-sync');
+    this.checkPWA('persistent-storage');
+    this.checkPWA('clipboard-read');
+    this.checkPWA('clipboard-write');
+    this.checkPWA('accessibility-events');
+    this.checkPWA('payment-handler');
+    this.checkPWAExist('serviceWorker');
+    this.checkPWAExist('bluetooth');
+    this.checkPWAExist('PushManager');
+    this.checkPWA('mediaDevices');
+    this.checkPWA('getUserMedia');
+    this.checkPWA('webkitGetUserMedia');
+    this.checkPWA('mozGetUserMedia');
+    this.checkPWA('DeviceOrientationEvent');
+    this.checkPWA('DeviceMotionEvent');
+    this.checkPWAInFunction('Gyroscope');
+  },
 
-            loginAction(){
-                this.$refs.adminform.validate().then(valid => {
+  mounted(){
+    this.scrollTo('#app');// トップ
+  },
 
-                    if(valid){
-                        //if(!this.spotify.credential.expires_in) this.c_getCredential();
-                        this.a_login(this.admin);
-                        if(this.loggedIn) this.$router.push('/');
-                    }
-                });
-            }
-        },
+  methods:{
+    ...mapActions(['a_login','a_index']),
+    loginAction(){
+      this.a_login(this.admin);
+      if(this.loggedIn) this.$router.push('/');
 
     }
+  },
+
+};
 </script>
-<style lang="scss">
 
-
-</style>
+<style lang="scss"></style>

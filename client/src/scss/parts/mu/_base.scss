@@ -2,3 +2,17 @@
 .mu-overlay{
   opacity:0.2;
 }
+
+.mu-input{
+  &.white{
+
+    .mu-select{
+        .mu-select-input{
+          color: $white !important;
+        }
+    }
+
+  }
+}
+
+

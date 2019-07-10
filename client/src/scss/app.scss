@@ -1,45 +1,54 @@
 /* COMMON */
 @import "variables";
+@import "material-kit/variables";
 @import "mixins";
+@import "material-kit/mixins";
+
 @import "animations";
+@import "shadows";
 @import "reset";
 @import "base";
-@import "flex";
-@import "layout";
-@import "text";
 
-/* PARTS */
+/* --------- PARTS --------- */
+/* Spotify */
 @import "parts/spotify/player";
 @import "parts/spotify/spotifycode";
+
+/* Twitter */
 @import "parts/twitter/twitter";
 
+/* Common */
 @import "parts/aside";
 @import "parts/bottom";
 @import "parts/modal";
 @import "parts/feed/card";
 @import "parts/pwa";
-//@import "parts/etc";
 
+/* Muse */
 @import "parts/mu/base";
 @import "parts/mu/form";
 @import "parts/mu/card";
 @import "parts/mu/stepper_chip";
 
-@import "parts/md/base";
-
-@import "parts/emory/map";
+/* Emory */
 @import "parts/emory/leftview";
 @import "parts/emory/leaflet";
 @import "parts/emory/mp3player";
 
+/* Anime */
 @import "parts/anime/animejs";
 @import "parts/anime/organic";
+
+/*Analysis*/
 @import "parts/analysis/analysis";
 
 @import "parts/subscribe/leftview";
 @import "parts/subscribe/rightview";
 @import "parts/subscribe/snackbar";
 
-/* VIEWS */
-@import "views/home";
-@import "views/news";
+/* PAGES */
+@import "pages/index-page";
+@import "pages/emory-page";
+@import "pages/login-page";
+@import "pages/maparea-page";
+@import "pages/subscribe-page";

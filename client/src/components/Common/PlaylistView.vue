@@ -20,49 +20,42 @@
 
         <mu-divider></mu-divider>
 
+        <div class="md-layout md-gutter md-alignment-center tabs">
+            <div class="md-layout-item md-medium-size-33 md-small-size-33 md-xsmall-size-33">
+                <mu-button flat color="primary" v-if="playlist" @click="mode='playlist'" :class="{active:mode==='playlist'}">Playlist</mu-button>
+                <mu-button flat v-else disabled>Playlist</mu-button>
+            </div>
+            <div class="md-layout-item md-medium-size-33 md-small-size-33 md-xsmall-size-33">
+                <mu-button flat color="primary" v-if="album" @click="mode='album'" :class="{active:mode==='album'}">Album</mu-button>
+                <mu-button flat v-else disabled>Album</mu-button>
+            </div>
+            <div class="md-layout-item md-medium-size-33 md-small-size-33 md-xsmall-size-33">
+                <mu-button flat color="primary" v-if="artist" @click="mode='artist'" :class="{active:mode==='artist'}">Artist</mu-button>
+                <mu-button flat v-else disabled>Artist</mu-button>
+            </div>
+            <div class="md-layout-item md-medium-size-33 md-small-size-33 md-xsmall-size-33">
+                <mu-button flat color="primary" v-if="track" @click="mode='track'" :class="{active:mode==='track'}">Track</mu-button>
+                <mu-button flat v-else disabled>Track</mu-button>
+            </div>
+            <div class="md-layout-item md-medium-size-33 md-small-size-33 md-xsmall-size-33">
+                <mu-button flat color="primary" v-if="genius.song" @click="mode='lyrics'" :class="{active:mode==='lyrics'}">Lyrics</mu-button>
+                <mu-button flat v-else disabled>Lyrics</mu-button>
+            </div>
+            <div class="md-layout-item md-medium-size-33 md-small-size-33 md-xsmall-size-33">
+                <mu-button flat color="primary" v-if="spotify.generated" @click="mode='generated'" :class="{active:mode==='generated'}">Generate</mu-button>
+                <mu-button flat v-else disabled>Generate</mu-button>
+            </div>
+            <div class="md-layout-item md-medium-size-50 md-small-size-50 md-xsmall-size-50">
+                <mu-button flat color="primary" v-if="show" @click="mode='show'" :class="{active:mode==='show'}">Podcast(Show)</mu-button>
+                <mu-button flat v-else disabled>Podcast(Show)</mu-button>
+            </div>
+            <div class="md-layout-item md-medium-size-50 md-small-size-50 md-xsmall-size-50">
+                <mu-button flat color="primary" v-if="episode" @click="mode='episode'" :class="{active:mode==='episode'}">Podcast(Episode)</mu-button>
+                <mu-button flat v-else disabled>Podcast(Episode)</mu-button>
+            </div>
+        </div>
+
         <mu-container class="range">
-
-            <!--TABS-->
-            <mu-row gutter>
-                <mu-col span="4"><div class="grid-cell">
-                    <mu-button flat color="primary" v-if="playlist" @click="mode='playlist'" :class="{active:mode==='playlist'}">Playlist</mu-button>
-                    <mu-button flat v-else disabled>Playlist</mu-button>
-                </div></mu-col>
-                <mu-col span="4"><div class="grid-cell">
-                    <mu-button flat color="primary" v-if="album" @click="mode='album'" :class="{active:mode==='album'}">Album</mu-button>
-                    <mu-button flat v-else disabled>Album</mu-button>
-                </div></mu-col>
-                <mu-col span="4"><div class="grid-cell">
-                    <mu-button flat color="primary" v-if="artist" @click="mode='artist'" :class="{active:mode==='artist'}">Artist</mu-button>
-                    <mu-button flat v-else disabled>Artist</mu-button>
-                </div></mu-col>
-            </mu-row>
-            <mu-row gutter>
-                <mu-col span="4"><div class="grid-cell">
-                    <mu-button flat color="primary" v-if="track" @click="mode='track'" :class="{active:mode==='track'}">Track</mu-button>
-                    <mu-button flat v-else disabled>Track</mu-button>
-                </div></mu-col>
-                <mu-col span="4"><div class="grid-cell">
-                    <mu-button flat color="primary" v-if="genius.song" @click="mode='lyrics'" :class="{active:mode==='lyrics'}">Lyrics</mu-button>
-                    <mu-button flat v-else disabled>Lyrics</mu-button>
-                </div></mu-col>
-
-                <mu-col span="4"><div class="grid-cell">
-                    <mu-button flat color="primary" v-if="spotify.generated" @click="mode='generated'" :class="{active:mode==='generated'}">Generate</mu-button>
-                    <mu-button flat v-else disabled>Generate</mu-button>
-                </div></mu-col>
-            </mu-row>
-            <mu-row gutter>
-                <mu-col span="6"><div class="grid-cell">
-                    <mu-button flat color="primary" v-if="show" @click="mode='show'" :class="{active:mode==='show'}">Podcast(Show)</mu-button>
-                    <mu-button flat v-else disabled>Podcast(Show)</mu-button>
-                </div></mu-col>
-                <mu-col span="6"><div class="grid-cell">
-                    <mu-button flat color="primary" v-if="episode" @click="mode='episode'" :class="{active:mode==='episode'}">Podcast(Episode)</mu-button>
-                    <mu-button flat v-else disabled>Podcast(Episode)</mu-button>
-                </div></mu-col>
-            </mu-row>
-            <!--/TABS-->
 
             <!--- ARTIST --->
             <mu-list v-if="artist && mode==='artist'">
@@ -715,6 +708,20 @@
 </script>
 
 <style scoped lang="scss">
+
+    .tabs{
+        .md-layout-item{
+            padding:0;
+            margin:0;
+            min-height:20px;
+            .mu-flat-button{
+                height:20px;
+                min-height:20px;
+                line-height:20px;
+                font-size:12px;
+            }
+        }
+    }
 
     h6.topid{
         padding:10px 0 5px 0;

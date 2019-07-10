@@ -1,9 +1,9 @@
 <template>
-  <div id="app" v-cloak class="app-wrap" :class="[$route.name,{login:($route.name==='Login' || $route.name==='')}]">
-    <head-top></head-top>
-    <mu-container fluid class="main-container">
-      <router-view/>
-    </mu-container>
+  <div id="app" class="app-wrap" :class="[$route.name,{login:($route.name==='Login' || $route.name==='')}]">
+<!--    <head-top></head-top>-->
+    <router-view name="header"/>
+    <router-view/>
+    <router-view name="footer" />
 
     <!-- BOTTOM-VIEW-->
     <mu-bottom-sheet :open.sync="bottom.open" class="bottomnav">
@@ -70,70 +70,49 @@
   import feedMixin from './mixins/feed/index';
   import spotifyMixin from './mixins/spotify/index';
 
-  import HeadTop from './components/Common/Header.vue';
   import Player from './components/Spotify/Player/Player.vue';
   import BottomView from './components/Common/BottomView';
   import AudioPlayer from './components/Mp3/AudioPlayer';
   import HowSlide from './components/Slide/HowSlide.vue';
   import StorySlide from './components/Slide/StorySlide.vue';
   import SensorCheckSlide from './components/Slide/SensorCheckSlide.vue';
-  //import PWASensors from './class/PWASensors';
 
-export default {
-  name: 'app',
-  mixins:[feedMixin,spotifyMixin],
-    components: {
-        HeadTop,
-        Player,
-        BottomView,
-        AudioPlayer,
-        HowSlide,
-        StorySlide,
-        SensorCheckSlide
-    },
-  computed:mapGetters(['bottom','alert','mp3','pwa','modal','device']),
-
-    mounted(){
-      this.a_index(['platform','check']);
-    },
-
-  data:function(){
-    return {
-      pwasensors: null
-    }
-  },
-
-  watch:{
-    'modal.modals.story':{
-      handler(newStory){
-        console.log("modal.modals.story changed");
-        console.log(newStory);
+  export default {
+      name: 'app',
+      mixins: [feedMixin, spotifyMixin],
+      components: {
+          Player,
+          BottomView,
+          AudioPlayer,
+          HowSlide,
+          StorySlide,
+          SensorCheckSlide
       },
-      deep:true
-    }
-  },
+      computed: mapGetters(['bottom', 'alert', 'mp3', 'pwa', 'modal', 'device']),
 
-  methods:{
-    ...mapActions(['a_index']),
+      mounted() {
+          this.a_index(['platform', 'check']);
+      },
 
-    dialogClick(){
-      this.a_index(['alert','close']);
-      if (this.alert.action === 'login') {
-        if(!this.spotify.credential.expires_in) this.c_getCredential();
+      methods: {
+          ...mapActions(['a_index']),
+
+          dialogClick() {
+              this.a_index(['alert', 'close']);
+              if (this.alert.action === 'login') {
+                  if (!this.spotify.credential.expires_in) this.c_getCredential();
+              }
+          },
+
+          storyModalAction(page = 0) {
+              $refs.story.goToPage(page);
+              let data = modal.modals.story.items[0];
+          }
       }
-    },
-
-    storyModalAction(page=0){
-      $refs.story.goToPage(page);
-      let data = modal.modals.story.items[0];
-    }
   }
-}
 </script>
 
 <style lang="scss">
   @import "scss/app";
-  .main-container{
-    //margin-top:80px;
-  }
+  @import "scss/material-kit";
 </style>

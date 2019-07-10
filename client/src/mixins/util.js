@@ -1,5 +1,11 @@
 export default {
     methods: {
+        scrollTo (target,top=0){
+            if(!!target) top = jQuery(target).offset().top;
+            jQuery('html, body').stop().animate({'scrollTop': top}, 500, 'swing');
+
+        },
+
         goMap(login,to='/map'){
             if(this.loggedIn){
                 if(login && !this.spotify.credential.expires_in){
