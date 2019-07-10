@@ -89,6 +89,7 @@
                 }
             }
         },
+
         methods:{
             ...mapActions([
                 'a_mapstore'

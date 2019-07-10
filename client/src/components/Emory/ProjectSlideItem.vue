@@ -105,7 +105,7 @@
 
 .card-category{
     &.active{
-        color:orange !important;
+        color:#ffa500 !important;
         font-size:1.0rem !important;
     }
 }

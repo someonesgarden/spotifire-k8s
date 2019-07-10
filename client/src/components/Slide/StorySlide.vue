@@ -3,7 +3,7 @@
         <div style="float:none;clear:both;width:100%;margin-bottom:10px;">
             <mu-flex justify-content="center" direction="row" align-items="center" style="width:100%;">
                 <img :src="modal.modals.story.thumb" class="circle">
-                <h1>{{modal.modals.story.title}}</h1>
+                <h2>{{modal.modals.story.title}}</h2>
             </mu-flex>
             <p v-html="modal.modals.story.content"></p>
         </div>
