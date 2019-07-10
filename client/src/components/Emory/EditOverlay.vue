@@ -9,7 +9,7 @@
                 </h4>
 
                 <h4 v-if="!mapstore.emory.marker.center">「編集」で表示される地図をクリックすると座標選択できます。</h4>
-                <h4 v-else>このポイントを保存する場合は「保存」を押してください。</h4>
+                <p v-else>このポイントを保存する場合は「保存」を押してください。</p>
                 <br>
 
                 <!--Edit Marker-->
@@ -149,6 +149,10 @@
                 <!--Edit Project-->
                 <mu-form :model="mapstore.emory.project" ref="newprojectform" :label-position="'top'" label-width="100" v-if="mapstore.emory.project.center && mapstore.emory.editing.type==='project'" class="range edit_form">
                     <img :src="mapstore.emory.project.thumb" v-if="mapstore.emory.project.thumb">
+                    <mu-text-field prop="thumb" placeholder="プロジェクトの画像"  v-if="mapstore.emory.project.thumb"
+                                   v-model="mapstore.emory.project.thumb"
+                                   @change="(val)=>projParam('thumb',val)"></mu-text-field>
+
                     <mu-form-item prop="title" :rules="blankRules">
                         <mu-text-field prop="title" placeholder="プロジェクトのタイトル"
                                        v-model="mapstore.emory.project.title"

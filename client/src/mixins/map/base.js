@@ -14,19 +14,19 @@ export default{
             return result;
         },
 
-        // sortProjsByDist(){
-        //     let results = [];
-        //     if(this.mapstore.mainuser){
-        //         let projects = this.mapstore.emory.projects;
-        //         let mainuser = this.mapstore.mainuser.id==="GUEST" ? this.mapstore.mainuser : this.mapstore.markers[this.mapstore.mainuser.id];
-        //         if(mainuser){
-        //             results = Object.keys(projects).map(k=> {return {...projects[k],id:k,dist:this.distKmofCenters(mainuser.center, projects[k].center)}});
-        //             results.sort((a, b)=> a.dist > b.dist ? 1 : -1);
-        //         }
-        //     }
-        //
-        //     return results;
-        // },
+        sortProjsByDist(){
+            let results = [];
+            if(this.mapstore.mainuser){
+                let projects = this.mapstore.emory.projects;
+                let mainuser = this.mapstore.mainuser.id==="GUEST" ? this.mapstore.mainuser : this.mapstore.markers[this.mapstore.mainuser.id];
+                if(mainuser){
+                    results = Object.keys(projects).map(k=> {return {...projects[k],id:k,dist:this.distKmofCenters(mainuser.center, projects[k].center)}});
+                    results.sort((a, b)=> a.dist > b.dist ? 1 : -1);
+                }
+            }
+
+            return results;
+        },
 
         activeProj(){
             return  this.mapstore.emory.project.id ? this.mapstore.emory.projects[this.mapstore.emory.project.id] : null;
@@ -39,9 +39,14 @@ export default{
             this.a_mapstore(['emory', 'setprojectid', key]);
             this.a_mapstore(['set','poly',null]);  //リセット(polyの消去）
             this.a_mapstore(['set', 'tracking', false]); //トラッキングの停止
-            this.a_mapstore(['center', 'map', this.mapstore.emory.projects[key].center]); //プロジェクト位置へマップを移動
-            this.distOfProjPoints();
-            this.drawPoly();
+            if(this.mapstore.emory.projects[key]){
+                this.a_mapstore(['center', 'map', this.mapstore.emory.projects[key].center]);
+
+                this.distOfProjPoints();
+                this.drawPoly();
+                //プロジェクト位置へマップを移動
+            }
+
         },
 
         resetAllPods(){

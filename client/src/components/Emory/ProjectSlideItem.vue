@@ -1,7 +1,7 @@
 <template>
         <pricing-card class="projectitem md-card-background" :class="{noimg:!proj.thumb,selected:mapstore.emory.alpha.slider}" :card-image="proj.thumb ? proj.thumb : ''" style="padding:8px;margin-left:auto;margin-right:auto;">
             <template slot="cardContent">
-                <h6 class="card-category text-success"><md-icon>room</md-icon>10km</h6>
+                <h6 class="card-category text-success" :class="{active:proj.dist<0.2}"><md-icon>room</md-icon>{{proj.dist | distance}}</h6>
                 <h3 class="card-title">
                     {{proj.title}}
                 </h3>
@@ -15,11 +15,21 @@
                     <div class="md-layout-item md-size-100 mx-auto md-xsmall-size-100 text-center">
                         <div class="vertical-center">
                             <md-button class="md-icon-button md-indigo md-sm"  @click="backToLeft"><md-icon>arrow_back</md-icon></md-button>
+
+                            <md-button class="md-icon-button md-orange md-sm" @click="a_index(['side','left',{key:'emory',val:true}])"><md-icon>train</md-icon></md-button>
                             <md-button class="md-icon-button md-teal md-sm"
-                                       @click="playStart"
-                            ><md-icon>play_arrow</md-icon></md-button>
-                            <md-button class="md-icon-button md-indigo md-sm" @click="a_index(['side','left',{key:'emory',val:true}])"><md-icon>train</md-icon></md-button>
-                            <md-button class="md-icon-button md-teal md-sm"  @click="moveMapTo"><md-icon>location_on</md-icon></md-button>
+                                       v-if="mapstore.emory.project.id===proj.id && mapstore.emory.alpha.slider"
+                                       @click="a_mapstore(['emory','alpha',{key:'slider',val:false}])"><md-icon>location_on</md-icon></md-button>
+                            <md-button class="md-icon-button md-green md-sm"
+                                       v-else
+                                       @click="moveMapTo"><md-icon>location_on</md-icon></md-button>
+                        </div>
+                    </div>
+
+                    <div class="md-layout-item md-size-100 mx-auto md-xsmall-size-100 text-center">
+                        <div class="vertical-center">
+                            <md-button class="md-orange" @click="playStart" v-if="proj.dist < 0.2"><md-icon>play_arrow</md-icon>&nbsp;PLAY</md-button>
+                            <span v-else>近づいてください</span>
                         </div>
                     </div>
                 </div>
@@ -35,13 +45,18 @@
     import MyAvatar from '../../components/Map/MyAvatar';
     export default {
         name: "ProjectSlideItem",
-        props:['proj','id'],
+        props:['proj'],
         mixins:[
             mapMixin
         ],
         components:{
             MyAvatar,
             PricingCard
+        },
+        data(){
+            return{
+                timeout:null
+            }
         },
         computed: {
             ...mapGetters(['mapstore']),
@@ -60,17 +75,25 @@
 
             backToLeft() {
                 this.a_mapstore(['emory', 'alpha', {key: 'slider', val: false}]);
+                if(this.timeout) clearTimeout(this.timeout);
                 this.$emit('backToLeft');
             },
 
             moveMapTo(){
-                if(this.id) this.setIdAndMoveCenter(this.id);
-                this.a_mapstore(['emory','alpha',{key:'slider',val:'toggle'}]);
+                if(this.proj.id && this.mapstore.emory.projects){
+                    this.setIdAndMoveCenter(this.proj.id);
+                    this.a_mapstore(['emory','alpha',{key:'slider',val:true}]);
+                    if(this.timeout) clearTimeout(this.timeout);
+                    this.timeout = setTimeout(()=> this.a_mapstore(['emory','alpha',{key:'slider',val:false}]),2000);
+                }
             },
 
             playStart(){
-                if(this.id){
-                    this.setIdAndMoveCenter(this.id);
+                this.a_mapstore(['emory','alpha',{key:'slider',val:false}]);
+                if(this.timeout) clearTimeout(this.timeout);
+
+                if(this.proj.id){
+                    this.setIdAndMoveCenter(this.proj.id);
                     setTimeout(()=>{
                         this.a_mapstore(['set', 'tracking', true]);
                         this.a_mapstore(['set','mode','map']);
@@ -83,6 +106,12 @@
 </script>
 <style lang="scss" scoped>
 
+.card-category{
+    &.active{
+        color:orange !important;
+        font-size:1.0rem !important;
+    }
+}
 
 
 </style>

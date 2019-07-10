@@ -39,11 +39,11 @@ export default class EProject{
             this.checkSpotify(res=>{
                 if(res.data!==""){
                     if(res.data.body.type==='track'){
-                        this.project.thumb = res.data.body.album.images[0].url;
+                        if(!this.project.thumb) this.project.thumb = res.data.body.album.images[0].url;
                         this.project.spotifytype = 'track';
                         this.project.spotifyname = res.data.body.name;
                     }else if(res.data.body.type==='playlist' || res.data.body.type==='album' || res.data.body.type==='artist'){
-                        this.project.thumb = res.data.body.images[0].url;
+                        if(!this.project.thumb) this.project.thumb = res.data.body.images[0].url;
                         this.project.spotifytype = res.data.body.type;
                         this.project.spotifyname = res.data.body.name;
                     }else{

@@ -65,6 +65,10 @@
       background-size:cover;
       background-position:center center;
 
+      &.selected{
+        background-image: none;
+      }
+
       .info_menu {
         font-family: $stencil_font;
         margin: 0 12px;
@@ -131,13 +135,13 @@
         opacity:1.0;
 
         &.selected{
-          background-color:rgba(241, 20, 37, 0.12);
+          background-color:rgba(71, 30, 57, 0.12);
         }
       }
 
       .md-card-background{
         &.selected{
-          background-color: rgba(33, 3, 19, 0.1);
+          background-color: rgba(10, 8, 15, 0.1);
           background-image:none !important;
           opacity:0.8;
         }
@@ -237,6 +241,15 @@
     &.edit_overlay {
       z-index: -1;
       background-color: rgba(44, 0, 61, 0.62);
+
+      .md-card{
+        form.edit_form{
+          img{
+            width:100px;
+            margin:0 auto;
+          }
+        }
+      }
     }
 
     .selectedPoint{

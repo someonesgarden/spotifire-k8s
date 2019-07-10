@@ -93,8 +93,12 @@
       @include  btn-styles($teal-600);
     }
 
+    &.md-green{
+      @include  btn-styles($green-900);
+    }
+
     &.md-orange{
-      @include  btn-styles($orange-800);
+      @include  btn-styles($orange-900);
     }
 
 

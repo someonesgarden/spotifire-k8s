@@ -1,5 +1,5 @@
 <template>
-    <mu-flex justify-content="center" direction="row" align-items="center">
+    <mu-flex justify-content="center" direction="row" align-items="center" :class="{selected:mapstore.emory.alpha.slider}">
 
         <carousel ref="projects"
                   class="carousel"
@@ -24,7 +24,7 @@
                             <mu-form-item prop="project" class="range" style="background-color:white;border-radius:4px;">
 
                                 <mu-select :value="mapstore.emory.project.id ? mapstore.emory.projects[mapstore.emory.project.id].title : 'ストーリーを選択'" @change="selectStory">
-                                    <mu-option v-for="(p,key,inx) in mapstore.emory.projects" :key="'proj'+key" :label="p.title" :value="key+'|'+inx"></mu-option>
+                                    <mu-option v-for="(p,inx) in sortProjsByDist" :key="'proj'+inx" :label="p.title" :value="p.id+'|'+inx"></mu-option>
                                 </mu-select>
 
                             </mu-form-item>
@@ -34,11 +34,13 @@
 
                             <div class="md-layout-item md-size-100 mx-auto md-xsmall-size-100 text-center">
                                 <div class="vertical-center">
-                                    <md-button class="ctrl-btn md-sm" @click="a_mapstore(['emory', 'alpha', {key: 'slider', val: 'toggle'}])"><md-icon>location_on</md-icon></md-button>
-                                    <md-button class="ctrl-btn md-sm" @click="$emit('trackOnce')"><md-icon>settings_input_antenna</md-icon></md-button>
-                                    <md-button class="ctrl-btn md-sm" @click="a_mapstore(['set','projBoundary','toggle'])" v-if="mapstore.emory.project.id">
-                                        <span v-if="mapstore.map.projectBoundary">OVERLAY</span>
-                                        <span v-else>NORMAL</span>
+
+                                    <md-button class="md-icon-button md-indigo md-sm" @click="a_mapstore(['emory', 'alpha', {key: 'slider', val: 'toggle'}])"><md-icon>location_on</md-icon></md-button>
+                                    <md-button class="md-icon-button md-indigo md-sm" @click="$emit('trackOnce')"><md-icon>settings_input_antenna</md-icon></md-button>
+
+                                    <md-button class="md-icon-button md-indigo md-sm" @click="a_mapstore(['set','projBoundary','toggle'])" v-if="mapstore.emory.project.id">
+                                        <span v-if="mapstore.map.projectBoundary"><md-icon>image</md-icon></span>
+                                        <span v-else><md-icon>map</md-icon></span>
                                     </md-button>
                                 </div>
                             </div>
@@ -48,12 +50,11 @@
             </slide>
             <!--/Main Menu-->
 
-            <slide class="slide" v-for="(proj,key,index) in mapstore.emory.projects" :key="'prjj'+index">
-                <project-slide-item :proj="proj" :id="key" @backToLeft="$refs.projects.goToPage(0)" />
+            <slide class="slide" v-for="(proj, index) in sortProjsByDist" :key="'prjj'+index">
+                <project-slide-item :proj="proj" @backToLeft="$refs.projects.goToPage(0)" v-if="proj"/>
             </slide>
 
         </carousel>
-
 
     </mu-flex>
 </template>
@@ -112,6 +113,9 @@
                 let key = key_ary[0];
                 this.setIdAndMoveCenter(key);
                 this.scrollTo('#app');// スクロールトップ
+
+                this.a_mapstore(['emory','alpha',{key:'slider',val:true}]);
+                setTimeout(()=> this.a_mapstore(['emory','alpha',{key:'slider',val:false}]), 2000);
             }
         }
     }

@@ -4,7 +4,6 @@ import moment from 'moment'
 
 Vue.filter('trimspaces', txt=> txt.trim());
 
-
 Vue.filter('dicimal2', fnum=> Math.round(fnum*10)/10);
 Vue.filter('dicimal3', fnum=> Math.round(fnum*100)/100);
 Vue.filter('dicimal4', fnum=> Math.round(fnum*1000)/1000);
@@ -35,9 +34,7 @@ Vue.filter( 'toText', ( str, def ) => {
 });
 
 Vue.filter('truncate', function(value) {
-
     let str = value.replace(/<("[^"]*"|'[^']*'|[^'">])*>/g,'');
-
     //var length = length ? parseInt(length, 10) : 20;
    let length = 220;
    let ommision = '...';
@@ -59,5 +56,15 @@ Vue.filter('truncate20', function(str) {
     }
     else {
         return str.substring(0, length) + ommision;
+    }
+});
+
+Vue.filter('distance', function(dist) {
+
+    let km = parseInt(dist*100)/100;
+    if(km>1){
+        return km+' km';
+    }else{
+        return parseInt(dist*1000)+' m';
     }
 });
