@@ -24,10 +24,11 @@
                 立体的な「音」を聴きながら進める体験型ウェブアプリケーションです。
               </h5>
             </div>
+
           </div>
           <div class="features text-center">
             <div class="md-layout">
-              <div class="md-layout-item md-size-33 md-small-size-33">
+              <div class="md-layout-item md-size-33 md-small-size-100">
                 <div class="info">
                   <div class="avatar large" style="background-image:url('/static/img/design/circle1.jpg');"/>
                   <h4 class="info-title">エリアから</h4>
@@ -36,7 +37,7 @@
                   </p>
                 </div>
               </div>
-              <div class="md-layout-item md-size-33 md-small-size-33">
+              <div class="md-layout-item md-size-33 md-small-size-100">
                 <div class="info">
                   <div class="avatar large" style="background-image:url('/static/img/design/circle2.jpg');"/>
                   <h4 class="info-title">音楽から</h4>
@@ -45,7 +46,7 @@
                   </p>
                 </div>
               </div>
-              <div class="md-layout-item md-size-33 md-small-size-33">
+              <div class="md-layout-item md-size-33 md-small-size-100">
                 <div class="info">
                   <div class="avatar large" style="background-image:url('/static/img/design/circle3.jpg');"/>
                   <h4 class="info-title">物語から</h4>
