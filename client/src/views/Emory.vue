@@ -380,11 +380,22 @@
     height:100vh;
   }
 
+  /*.mp3_players{*/
+  /*  transform: rotate(90deg);*/
+  /*  left:calc(-50vw + 20px);*/
+  /*  z-index:4;*/
+  /*  text-align:inherit;*/
+  /*}*/
+
   .mp3_players{
+    position: absolute;
+    top: 50%;
+    left: -100px;
+    margin: 0;
+    padding: 4px 0 2px;
+    z-index: 4;
+    text-align: left;
     transform: rotate(90deg);
-    left:calc(-50vw + 20px);
-    z-index:4;
-    text-align:inherit;
   }
 
   .ctrl-btn{

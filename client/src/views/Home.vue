@@ -12,9 +12,9 @@
 <!--              <span class="pro-badge">-->
 <!--                0.1-->
 <!--              </span>-->
-              <h3 class="title">
-                Prototypes with Spotify API
-              </h3>
+<!--              <h3 class="title">-->
+<!--                Prototypes with Spotify API-->
+<!--              </h3>-->
               <div class="pwa">
                 <p v-for="(status,key) in pwa" :key="'pwa_'+key"><span class="circle" :class="status"></span>{{key}}</p>
               </div>

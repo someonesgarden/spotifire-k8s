@@ -136,6 +136,26 @@
 
         .VueCarousel-inner{
           align-items:center;
+
+
+        }
+
+        .VueCarousel-navigation-prev {
+          left: 40px;
+          color:white;
+
+          &:focus{
+            outline: none;
+          }
+        }
+
+        .VueCarousel-navigation-next {
+          right: 40px;
+          color:white;
+
+          &:focus{
+            outline: none;
+          }
         }
 
         &.selected{

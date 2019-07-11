@@ -5,7 +5,10 @@
                   class="carousel"
                   :class="{selected:mapstore.emory.alpha.slider}"
                   :per-page-custom="[[320, 1], [767, 3],[991, 4],[1199, 5]]"
-                  :navigationEnabled="false"
+                  :navigationEnabled="true"
+                  :navigationClickTargetSize="12"
+                  navigationNextLabel="»"
+                  navigationPrevLabel="«"
                   :pagination-enabled="false"
                   :autoplay="false"
                   :loop="true" :autoplayTimeout="3000">
