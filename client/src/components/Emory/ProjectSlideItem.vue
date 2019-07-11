@@ -11,12 +11,17 @@
                 <div class="md-layout">
                     <div class="md-layout-item md-size-100 mx-auto md-xsmall-size-100 text-center">
                         <div class="vertical-center">
-                            <md-button class="md-icon-button md-indigo md-sm"  @click="backToLeft"><md-icon>arrow_back</md-icon></md-button>
-
-                            <md-button class="md-icon-button md-orange md-sm" @click="a_index(['side','left',{key:'emory',val:true}])"><md-icon>train</md-icon></md-button>
+                            <md-button class="md-icon-button md-indigo md-sm" @click="backToLeft" v-if="mapstore.emory.slider.no>0">
+                                <md-icon>arrow_back</md-icon>
+                            </md-button>
+                            <md-button class="md-icon-button md-orange md-sm" @click="a_index(['side','left',{key:'emory',val:true}])">
+                                <md-icon>train</md-icon>
+                            </md-button>
                             <md-button class="md-icon-button md-teal md-sm"
                                        v-if="mapstore.emory.project.id===proj.id && mapstore.emory.alpha.slider"
-                                       @click="a_mapstore(['emory','alpha',{key:'slider',val:false}])"><md-icon>location_on</md-icon></md-button>
+                                       @click="a_mapstore(['emory','alpha',{key:'slider',val:false}])">
+                                <md-icon>location_on</md-icon>
+                            </md-button>
                             <md-button class="md-icon-button md-green md-sm"
                                        v-else
                                        @click="moveMapTo"><md-icon>location_on</md-icon></md-button>

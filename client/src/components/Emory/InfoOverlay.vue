@@ -6,12 +6,12 @@
                   :class="{selected:mapstore.emory.alpha.slider}"
                   :per-page-custom="[[320, 1], [767, 3],[991, 4],[1199, 5]]"
                   :navigationEnabled="true"
-                  :navigationClickTargetSize="12"
                   navigationNextLabel="»"
                   navigationPrevLabel="«"
                   :pagination-enabled="false"
                   :autoplay="false"
-                  :loop="true" :autoplayTimeout="3000">
+                  :loop="false"
+                  @pageChange="(val)=>a_mapstore(['emory','sliderno',val])">
 
             <!-- Main Menu -->
             <slide class="slide">
@@ -85,6 +85,7 @@
         },
         data(){
             return{
+                slideno:0,
                 info:{
                     title:"EMOTION + STORY",
                     subtitle:"音楽と物語の中で迷子になる心地よさ。",

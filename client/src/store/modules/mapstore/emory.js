@@ -4,6 +4,10 @@ const state = {
             slider:false
         },
 
+        slider:{
+          no:0
+        },
+
         mode:'info',
         editing: {
             status:     false,
@@ -58,6 +62,11 @@ const state = {
 }
 
 const mutations = {
+
+    setSliderNo(state,data){
+        state.emory.slider.no = data;
+    },
+
     setAlpha(state,data){
         if(data.val==='toggle'){
             state.emory.alpha[data.key] = !state.emory.alpha[data.key];

@@ -136,25 +136,35 @@
 
         .VueCarousel-inner{
           align-items:center;
-
-
         }
 
         .VueCarousel-navigation-prev {
-          left: 40px;
+          left: 45px;
           color:white;
+          font-size:2rem;
+          user-select: none;
 
           &:focus{
             outline: none;
           }
+
+          &.VueCarousel-navigation--disabled{
+            visibility: hidden;
+          }
         }
 
         .VueCarousel-navigation-next {
-          right: 40px;
+          right: 45px;
           color:white;
+          font-size:2rem;
+          user-select: none;
 
           &:focus{
             outline: none;
+          }
+
+          &.VueCarousel-navigation--disabled{
+            visibility: hidden;
           }
         }
 
@@ -187,17 +197,11 @@
 
         &:after{
           background-color: rgba(33, 3, 19, 0.69);
-          //&.selected{
-          //  background-color: rgba(33, 3, 19, 0.1);
-          //}
         }
 
         &.noimg{
           &:after{
             background-color: rgb(59, 182, 153);
-            //&.selected{
-            //  background-color: rgba(33, 3, 19, 0.1);
-            //}
           }
         }
 
@@ -208,12 +212,6 @@
             background-color: rgba(33, 3, 19, 0.1);
           }
         }
-
-        //&.selected{
-        //  background-color: rgba(33, 3, 19, 0.1);
-        //  background-image:none !important;
-        //}
-
 
         img.emory_logo{
           @include transition (0.33s, cubic-bezier(0.685, 0.0473, 0.346, 1));
