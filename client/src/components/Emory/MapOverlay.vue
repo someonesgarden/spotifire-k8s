@@ -91,41 +91,37 @@
         mixins:[mapMixin],
         props: ['markersRef'],
         components:{
-            MyMarker,
-            MyTooltip,
-            LMap,
-            LTileLayer,
-            LPolygon,
-            LImageOverlay
+            LMap, LTileLayer, LPolygon, LImageOverlay,
+            MyMarker, MyTooltip,
         },
         data() {
             return {
-                watchID:null,
-                center:null,
-                track_max:0,
-                trackTimeout: false,
-                timeout: null,
-                projectPoly: null
+                watchID:        null,
+                center:         null,
+                track_max:      0,
+                trackTimeout:   false,
+                timeout:        null,
+                projectPoly:    null
             };
         },
+
         computed:mapGetters(['ws','mp3', 'mapstore', 'spotify']),
+
+        mounted(){
+            this.trackAction();
+        },
 
         watch: {
             'mapstore.tracking': {
-                handler: function () {
-                    if (this.mapstore.tracking){
-                        console.log("watch:tracking:START");
-                        this.m_resetAllPods(); //全てのmp3プレイヤーを初期化
-                        this.keepTracking();
-                    }else{
-                        console.log("watch:tracking:STOP");
-                        this.timeout = null;
-                        this.center  = null;
-                        //this.m_resetAllPods();
-                        setTimeout(()=> this.m_resetAllPods,2000);//全てのmp3プレイヤーを初期化
-                    }
-                }
+                handler: 'trackAction',
+                immediate: true
             },
+            // 'mapstore.tracking': {
+            //     handler: function () {
+            //         this.trackAction();
+            //     }
+            // },
+
             'mapstore.map.center': {
                 handler: function (newCenter) {
                     if(newCenter) this.setView(newCenter, this.mapstore.map.zoom);
@@ -136,6 +132,20 @@
         methods: {
             ...mapActions(['a_mapstore','a_ws','a_mp3','a_index']),
 
+            trackAction(){
+                if (this.mapstore.tracking){
+                    console.log("watch:tracking:START");
+                    this.m_resetAllPods(); //全てのmp3プレイヤーを初期化
+                    this.keepTracking();
+                }else{
+                    console.log("watch:tracking:STOP");
+                    this.timeout = null;
+                    this.center  = null;
+                    //this.m_resetAllPods();
+                    setTimeout(()=> this.m_resetAllPods,2000);//全てのmp3プレイヤーを初期化
+                }
+            },
+
             onProjectSelected(key) {
                 this.a_mapstore(['emory','markerparam',{key:'project',val:key}]);
                 //リセット(polyの消去）
@@ -144,7 +154,7 @@
                 this.a_mapstore(['set', 'tracking', false]);
                 let proj = this.mapstore.emory.projects[key];
                 this.a_mapstore(['center', 'map', proj.center]);
-                //setTimeout(() => this.a_mapstore(['center', 'map', proj.center]), 5100);
+
                 this.m_distOfProjPoints();
                 this.m_drawPoly();
             },
@@ -224,9 +234,6 @@
                 this.trackTimeout = false;
                 this.timeout      = null;
                 this.mp3.pods.forEach((p, i) => {
-                    // this.a_mp3(['pod', i, 'file', null]);
-                    // this.a_mp3(['pod', i, 'volume', 0]);
-                    // this.a_mp3(['pod', i, 'playing',false]);
                     setTimeout(() =>  this.a_mp3(['pod', i, 'file', null]), 20);
                     setTimeout(() => this.a_mp3(['pod', i, 'volume', 0]), 20);
                     setTimeout(() => this.a_mp3(['pod', i, 'playing',false]), 20);
@@ -236,23 +243,20 @@
 
             //一回だけはこちら！
             geoCurrentPosition(){
-                console.log("track once called!");
                 if(!!navigator.geolocation) navigator.geolocation.getCurrentPosition(this.geoSuccess,this.m_geoError,this.mapstore.map.geocodingOptions);
             },
 
             geolocation() {
-                console.log("watchPosition called!");
                 if(!!navigator.geolocation) this.watchID = navigator.geolocation.watchPosition(this.geoSuccess,this.m_geoError,this.mapstore.map.geocodingOptions);
             },
 
             geoSuccess(position){
-                console.log("getSuccess");
-                console.log(position);
                 this.resetPos(position);
                 this.m_drawPoly();
                 if(this.mapstore.mainuser){
                     this.m_distOfProjPoints();
-                    this.distMarkerActionUpdate();
+                    console.log("distMarkerActionUpdate!",new Date().getTime());
+                    //this.distMarkerActionUpdate();
                 }
                 navigator.geolocation.clearWatch(this.watchID);
             },

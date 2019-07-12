@@ -9,6 +9,7 @@ const state = {
         },
 
         mode:'info',
+        loader:false,
         editing: {
             status:     false,
             type:       'marker'
@@ -62,6 +63,14 @@ const state = {
 }
 
 const mutations = {
+
+    setLoader(state,data){
+        if(data==='toggle'){
+            state.emory.loader = !state.emory.loader;
+            return;
+        }
+        state.emory.loader = data;
+    },
 
     setSliderNo(state,data){
         state.emory.slider.no = data;

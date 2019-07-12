@@ -53,12 +53,12 @@
             </slide>
             <!--/Main Menu-->
 
-            <slide class="slide" v-for="(proj, index) in m_sortProjsByDist" :key="'prjj'+index">
+            <slide class="slide" v-for="(proj, index) in m_sortProjsByDist" :key="'prjj'+index" v-if="!mapstore.emory.loader">
                 <project-slide-item :proj="proj" @backToLeft="$refs.projects.goToPage(0)" v-if="proj"/>
             </slide>
-
         </carousel>
 
+        <scale-loader class="loader" v-if="mapstore.emory.loader"></scale-loader>
     </mu-flex>
 </template>
 
@@ -70,12 +70,15 @@
     import {PricingCard} from '../../components/MD/index';
     import ProjectSlideItem from './ProjectSlideItem';
 
+    import ScaleLoader  from 'vue-spinner/src/ScaleLoader.vue';
+
     export default {
         name: "InfoOverlay",
         mixins:[mapMixin,utilMixin],
         components:{
             PricingCard,
-            ProjectSlideItem
+            ProjectSlideItem,
+            ScaleLoader
         },
         computed: {
             ...mapGetters([
@@ -90,7 +93,8 @@
                     title:"EMOTION + STORY",
                     subtitle:"音楽と物語の中で迷子になる心地よさ。",
                     img:"/static/img/emory/logos/isometric_w.png"
-                }
+                },
+                loading:false
             }
         },
 
@@ -126,8 +130,15 @@
     }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
     .slide{
         padding:8px;
+    }
+
+    .loader{
+        position:absolute;
+        top:49vh;
+        left:49vw;
+        pointer-events: none;
     }
 </style>

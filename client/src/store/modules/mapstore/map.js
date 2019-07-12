@@ -22,7 +22,7 @@ const state = {
 
     geo:null,
 
-    tracking:       false,
+    tracking:       true,
     trackDuration:  2000,
 
     markers:        {},

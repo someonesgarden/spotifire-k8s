@@ -213,6 +213,7 @@
         this.a_index(['alert','action','login']);
       }
 
+      this.a_mapstore(['emory','loader',true]);
       //全マーカーとエリアの設定
       this.firebaseDB.marker.on('value', (snapshot)=> this.a_mapstore(['set','markers',snapshot.val()]));
       this.firebaseDB.project.on('value',   (snapshot)=> this.a_mapstore(['emory','setprojects',snapshot.val()]));
@@ -326,6 +327,7 @@
       },
 
     },
+
     watch:{
       'spotify.me':{
         handler(newMe){
@@ -350,9 +352,16 @@
           }
         }
       },
+
       'mapstore.emory.mode':{
         handler(newMode){
           this.switchLayer();
+        }
+      },
+
+      'mapstore.emory.projects':{
+        handler(newProjects){
+          if(newProjects) this.a_mapstore(['emory','loader',false]);
         }
       }
     }

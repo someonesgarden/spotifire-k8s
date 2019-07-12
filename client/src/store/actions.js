@@ -153,6 +153,7 @@ export const a_mapstore = ({commit},[type, action, data]) => {
             tracking: (data) => commit('mapstore/toggleTracking',data)
         },
         emory:{
+            loader:(data)         => commit('mapstore/setLoader', data),
             marker:(data)         => commit('mapstore/setEmoryMarker',data),
             project:(data)        => commit('mapstore/setEmoryProject',data),
 

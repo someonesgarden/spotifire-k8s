@@ -1,8 +1,8 @@
 import M from '../../class/map/EMarker';
-import P from '../../class/map/EProject';
+//import P from '../../class/map/EProject';
 
 const nullmarker = new M({}).marker;
-const nullproject = new P({}).project;
+//const nullproject = new P({}).project;
 
 export default{
 
@@ -16,8 +16,6 @@ export default{
                     if(marker.project === 'mainuser' || (marker.project===this.mapstore.emory.project.id)) result[key]= marker;
                 });
             }
-
-            console.log("this.mapstore.emory.project.id is",this.mapstore.emory.project.id);
             return result;
         },
 
