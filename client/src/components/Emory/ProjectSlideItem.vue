@@ -1,5 +1,5 @@
 <template>
-        <pricing-card class="projectitem md-card-background" :class="{noimg:!proj.thumb,selected:mapstore.emory.alpha.slider}" :card-image="proj.thumb ? proj.thumb : ''" style="padding:8px;margin-left:auto;margin-right:auto;">
+        <pricing-card class="projectitem md-card-background" :class="{noimg:!proj.thumb,selected:mapstore.emory.alpha.slider}" :card-image="proj.thumb ? proj.thumb : ''" style="">
             <template slot="cardContent">
                 <h6 class="card-category text-success" :class="{active:proj.dist<0.2}"><md-icon>room</md-icon>{{proj.dist | distance}}</h6>
                 <h3 class="card-title">

@@ -58,7 +58,7 @@
             </slide>
         </carousel>
 
-        <scale-loader class="loader" v-if="mapstore.emory.loader"></scale-loader>
+        <scale-loader class="loader" :color="'orange'" v-if="mapstore.emory.loader"></scale-loader>
     </mu-flex>
 </template>
 
@@ -137,8 +137,17 @@
 
     .loader{
         position:absolute;
-        top:49vh;
-        left:49vw;
+        top: calc(50vh - 40px);
+        left:calc(50vw - 40px);
         pointer-events: none;
+
+        width: 80px;
+        height: 80px;
+        background-color: rgba(255,255,255,0.8);
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: 4px solid orange;
     }
 </style>
