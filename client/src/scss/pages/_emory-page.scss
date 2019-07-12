@@ -141,7 +141,10 @@
 
       .carousel{
         width:100%;
-        background-color:rgba(241, 20, 37, 0.72);
+        //background-color:rgba(241, 20, 37, 0.72);
+        // background-color:rgba(255,255,255, 0.38);
+        background-image:url('/static/img/emory/bg/gradbg1.png');
+        background-size:cover;
         padding:0 8px;
 
         //@include transition(0.5s ease-in-out);
@@ -185,6 +188,7 @@
 
         &.selected{
           background-color:rgba(71, 30, 57, 0.12);
+          background-image:none;
         }
       }
 

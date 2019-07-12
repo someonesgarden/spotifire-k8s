@@ -7,6 +7,7 @@ const  project0 = {
         spotifyid: "",
         title:"",
         desc: "",
+        id:"",
         thumb: null
     };
 

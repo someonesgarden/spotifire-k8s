@@ -13,7 +13,7 @@
                 <br>
 
                 <!--Edit Marker-->
-                <mu-form :model="mapstore.emory.marker" ref="newmarkerform" label-width="100" class="range edit_form"
+                <mu-form :model="mapstore.emory.marker" ref="marker" label-width="100" class="range edit_form"
                          v-if="mapstore.emory.marker.center && mapstore.emory.editing.type==='marker'">
                     <img :src="mapstore.emory.marker.thumb" style="width:80px;height:auto;margin:5px auto;" v-if="mapstore.emory.marker.thumb"/>
 
@@ -140,14 +140,14 @@
                     </div>
 
                     <mu-flex justify-content="center" align-items="center" direction="row">
-                        <mu-button color="red"  class="smallbtn" @click="delMarkerAlert=true" v-if="mapstore.emory.marker.id"><mu-icon value="delete_forever" :size="20"></mu-icon>&nbsp;削除</mu-button>
-                        <mu-button color="info" class="smallbtn" @click="saveNewMarker"  v-if="mapstore.emory.marker.center"><mu-icon value="save" :size="20"></mu-icon>&nbsp;保存</mu-button>
+                        <mu-button color="red"  class="smallbtn" @click="delAlert.marker=true" v-if="mapstore.emory.marker.id"><mu-icon value="delete_forever" :size="20"></mu-icon>&nbsp;削除</mu-button>
+                        <mu-button color="info" class="smallbtn" @click="saveNewPoint('marker')"  v-if="mapstore.emory.marker.center"><mu-icon value="save" :size="20"></mu-icon>&nbsp;保存</mu-button>
                     </mu-flex>
                 </mu-form>
                 <!--//Edit Marker-->
 
                 <!--Edit Project-->
-                <mu-form :model="mapstore.emory.project" ref="newprojectform" :label-position="'top'" label-width="100" v-if="mapstore.emory.project.center && mapstore.emory.editing.type==='project'" class="range edit_form">
+                <mu-form :model="mapstore.emory.project" ref="project" :label-position="'top'" label-width="100" v-if="mapstore.emory.project.center && mapstore.emory.editing.type==='project'" class="range edit_form">
                     <img :src="mapstore.emory.project.thumb" v-if="mapstore.emory.project.thumb">
                     <mu-text-field prop="thumb" placeholder="プロジェクトの画像"  v-if="mapstore.emory.project.thumb"
                                    v-model="mapstore.emory.project.thumb"
@@ -177,8 +177,8 @@
                     </mu-form-item>
 
                     <mu-flex justify-content="center" align-items="center" direction="row">
-                        <mu-button color="red" class="smallbtn" @click="delProjAlert=true" v-if="mapstore.emory.project.id"><mu-icon value="delete_forever" :size="20"></mu-icon>&nbsp;削除</mu-button>
-                        <mu-button color="info" class="smallbtn" @click="saveNewProject" v-if="mapstore.emory.project.center"><mu-icon value="save" :size="20"></mu-icon>&nbsp;保存</mu-button>
+                        <mu-button color="red" class="smallbtn" @click="delAlert.project=true" v-if="mapstore.emory.project.id"><mu-icon value="delete_forever" :size="20"></mu-icon>&nbsp;削除</mu-button>
+                        <mu-button color="info" class="smallbtn" @click="saveNewPoint('project')" v-if="mapstore.emory.project.center"><mu-icon value="save" :size="20"></mu-icon>&nbsp;保存</mu-button>
                     </mu-flex>
                 </mu-form>
                 <!--//Edit Project-->
@@ -191,16 +191,16 @@
                 </mu-flex>
 
 
-                <mu-dialog title="マーカーを削除する" width="600" max-width="80%" :esc-press-close="false" :overlay-close="false" :open="delMarkerAlert">
+                <mu-dialog title="マーカーを削除する" width="600" max-width="80%" :esc-press-close="false" :overlay-close="false" :open="delAlert.marker">
                     <p>決定をクリックすると削除されます。この処理は取り消せません。<br/>削除しない場合は「キャンセル」を押してください。</p>
-                    <mu-button slot="actions" flat color="primary" @click="delMarkerAlert=false">キャンセル</mu-button>
-                    <mu-button slot="actions" flat color="primary" @click="delFirebase(markersRef,mapstore.emory.marker.id)">決定</mu-button>
+                    <mu-button slot="actions" flat color="primary" @click="delAlert.marker=false">キャンセル</mu-button>
+                    <mu-button slot="actions" flat color="primary" @click="delFirebase(firebaseDB.marker,mapstore.emory.marker.id)">決定</mu-button>
                 </mu-dialog>
 
-                <mu-dialog title="プロジェクトを削除する" width="600" max-width="80%" :esc-press-close="false" :overlay-close="false" :open="delProjAlert">
+                <mu-dialog title="プロジェクトを削除する" width="600" max-width="80%" :esc-press-close="false" :overlay-close="false" :open="delAlert.project">
                     <p>決定をクリックすると削除されます。この処理は取り消せません。<br/>削除しない場合は「キャンセル」を押してください。</p>
-                    <mu-button slot="actions" flat color="primary" @click="delProjAlert=false">キャンセル</mu-button>
-                    <mu-button slot="actions" flat color="primary" @click="delFirebase(projsRef,mapstore.emory.project.id)">決定</mu-button>
+                    <mu-button slot="actions" flat color="primary" @click="delAlert.project=false">キャンセル</mu-button>
+                    <mu-button slot="actions" flat color="primary" @click="delFirebase(firebaseDB.project,mapstore.emory.project.id)">決定</mu-button>
                 </mu-dialog>
             </template>
         </pricing-card>
@@ -220,6 +220,11 @@
     import M from '../../class/map/EMarker';
     import P from '../../class/map/EProject';
 
+    let nulls = {
+        marker:new M({}).marker,
+        project:new P({}).project
+    };
+
     const nullmarker = new M({}).marker;
     const nullproject = new P({}).project;
 
@@ -234,72 +239,52 @@
         components:{
             PricingCard
         },
-        props:['markersRef','projsRef'],
+        props:['firebaseDB'],
         data(){
             return{
-                //Alert
-                delMarkerAlert:false,
-                delProjAlert:false,
-
-                //FORM
+                delAlert:{
+                    marker:false,
+                    project:false
+                },
                 blankRules: [ruleEmpty],
             }
         },
-        computed: {
-            ...mapGetters([
-                'spotify',
-                'mapstore',
-                'loggedIn'])
-        },
+        computed:mapGetters(['spotify', 'mapstore', 'loggedIn']),
         methods: {
-            ...mapActions([
-                'a_index',
-                'a_spotify',
-                'a_mapstore']),
+            ...mapActions(['a_index', 'a_spotify', 'a_mapstore']),
 
             delFirebase(ref,id){
                 ref.child(id).remove();
                 this.m_cancelEditMode();
-                this.delMarkerAlert = false;
-                this.delProjAlert = false;
+                this.delAlert.marker = false;
+                this.delAlert.project = false;
             },
-            saveNewMarker() {
-                this.$refs.newmarkerform.validate().then(valid => {
-                    if (valid) {
-                        if (this.mapstore.emory.marker.center) {
-                            if (this.mapstore.emory.marker.center.lat !== 34.722677123) { //初期値「大阪のある場所」じゃなければ
 
-                                this.a_mapstore(['emory','setproject',this.mapstore.emory.project.id]);
-                                new M(this.mapstore.emory.marker).updateOrNew(this.markersRef);
+            saveNewPoint(type='marker'){
+                this.$refs[type].validate().then(valid => {
+                    if(!valid || !this.mapstore.emory[type].center) return;
+                    if(this.mapstore.emory[type].center.lat === 34.722677123) return; //初期座標のままだと終了
 
-                                // フォームの初期化
-                                this.a_mapstore(['emory','setmarker',nullmarker]);
-                                this.m_cancelEditMode();
-                            }
-                        }
+                    if (type === 'marker') {
+                        this.a_mapstore(['emory', 'project', this.mapstore.emory.project.id]);
+
+                        new M(this.mapstore.emory[type]).updateOrNew(this.firebaseDB[type]);
+                        this.a_mapstore(['emory', type, nulls[type]]);  // フォームの初期化
                     }
-                });
-            },
-            saveNewProject(){
-                this.$refs.newprojectform.validate().then(valid => {
-                    if (valid) {
-                        if (this.mapstore.emory.project.center) {
-                            if (this.mapstore.emory.project.center.lat !== 34.722677123) { //初期値「大阪のある場所」じゃなければ
+                    else if (type === 'project') {
+                        this.m_emoryParam('zoom', 20, 'project');
 
-                                //this.newProject.zoom = 20;
-                                this.m_emoryParam('zoom',20,'project');
+                        let newProj = new P(this.mapstore.emory[type]).updateOrNew(this.firebaseDB[type]);
 
-                                new P(this.mapstore.emory.project).updateOrNew(this.projsRef);
+                        console.log(newProj);
 
-                               // フォームの初期化
-                                this.a_mapstore(['emory','setproject',nullproject]);
-                                this.m_cancelEditMode();
-                            }
-                        }
-
+                        this.a_mapstore(['emory', type, nulls[type]]);  // フォームの初期化
                     }
+
+
+                    this.m_cancelEditMode();
                 });
-            },
+            }
         }
     }
 </script>

@@ -16,6 +16,8 @@ export default{
                     if(marker.project === 'mainuser' || (marker.project===this.mapstore.emory.project.id)) result[key]= marker;
                 });
             }
+
+            console.log("this.mapstore.emory.project.id is",this.mapstore.emory.project.id);
             return result;
         },
 
@@ -49,13 +51,12 @@ export default{
         },
 
         m_cancelEditMode() {
-            this.a_mapstore(['emory','setmarker',nullmarker]);
-            this.a_mapstore(['emory','setproject',nullproject]);
+            this.a_mapstore(['emory','marker',nullmarker]);
             this.a_mapstore(['set','mode','map']);
         },
 
         m_endEditing() {
-            this.a_mapstore(['emory','setmarker',nullmarker]);
+            this.a_mapstore(['emory','marker',nullmarker]);
             this.a_mapstore(['emory','selectedPoint',[-300,-300]]);
             this.a_mapstore(['set','editing',{key:'status',val:false}]);
             this.a_mapstore(['set','mode','info']);

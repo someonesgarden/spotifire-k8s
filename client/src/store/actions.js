@@ -153,14 +153,15 @@ export const a_mapstore = ({commit},[type, action, data]) => {
             tracking: (data) => commit('mapstore/toggleTracking',data)
         },
         emory:{
-            selectedPoint:(data) => commit('mapstore/setSelectedPoint',data),
-            setPlay:(data)      => commit('mapstore/setEmoryPlay',data),
-            initPlay:(data)     => commit('mapstore/setEmoryPlay',{key:'init',val:data}),
-            setprojects:(data)  => commit('mapstore/setEmoryProjects',data),
+            marker:(data)         => commit('mapstore/setEmoryMarker',data),
+            project:(data)        => commit('mapstore/setEmoryProject',data),
+
+            selectedPoint:(data)  => commit('mapstore/setSelectedPoint',data),
+            setPlay:(data)        => commit('mapstore/setEmoryPlay',data),
+            initPlay:(data)       => commit('mapstore/setEmoryPlay',{key:'init',val:data}),
+            setprojects:(data)    => commit('mapstore/setEmoryProjects',data),
             setprojectid:(data)   => commit('mapstore/setEmoryProjectID',data),
             setTriggerDist:(data) => commit('mapstore/setTriggerDist',data),
-            setmarker:(data)      => commit('mapstore/setEmoryMarker',data),
-            setproject:(data)     => commit('mapstore/setEmoryProject',data),
             markerparam:(data)    => commit('mapstore/setMarkerParam', data),
             projectparam:(data)   => commit('mapstore/setProjectParam', data),
             alpha:(data)          => commit('mapstore/setAlpha', data),

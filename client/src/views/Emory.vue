@@ -1,10 +1,10 @@
 <template>
   <div class="wrapper">
       <parallax class="section page-header header-filter" parallax-active="true" :style="headerStyle">
-          <maps-overlay ref="maps_overlay" class="maps_overlay layers overlay" :markersRef="markersRef"/>
+          <maps-overlay ref="maps_overlay" class="maps_overlay layers overlay" :markersRef="firebaseDB.marker"/>
           <info-overlay ref="info_overlay" class="info_overlay overlay" @trackOnce="trackOnce"/>
           <play-overlay ref="play_overlay" class="play_overlay overlay" :class="{hide:!mapstore.mainuser}"/>
-          <edit-overlay ref="edit_overlay" class="edit_overlay overlay" :class="{hide:!mapstore.mainuser}" :markersRef="markersRef" :projsRef="projsRef"/>
+          <edit-overlay ref="edit_overlay" class="edit_overlay overlay" :class="{hide:!mapstore.mainuser}" :firebaseDB="firebaseDB"/>
 
           <div class="mp3_players">
             <audio-player :key="'pod'+index" :num="index" :pod="pod" v-for="(pod,index) in mp3.pods"></audio-player>
@@ -127,7 +127,6 @@
 
   import AdminSection from '../components/Emory/AdminSection';
 
-
   export default {
     name:"emory_main",
     bodyClass: "emory-page",
@@ -150,13 +149,19 @@
     data() {
       return {
         image: '/static/img/emory/bg/bg1.png',
-        mode:        'info',
-        socket:       null,
-        userisready:  false,
-        mainuser:     null,
-        //FIREBASE
-        markersRef:   null,
-        projsRef:     null,
+        mode:       'info',
+        socket:     null,
+        userisready:false,
+        mainuser:   null,
+
+        // //FIREBASE
+        // markersRef: null,
+        // projsRef:   null,
+
+        firebaseDB:{
+          marker:   null,
+          project:  null,
+        },
         blankRules: [ruleEmpty]
       };
     },
@@ -173,22 +178,19 @@
       }
     },
     created() {
-      this.markersRef = firebase.database().ref('markers');
-      this.projsRef   = firebase.database().ref('projects');
+      this.firebaseDB.marker    = firebase.database().ref('markers');
+      this.firebaseDB.project   = firebase.database().ref('projects');
     },
     mounted() {
       this.m_scrollTo('#app');// トップ
 
       this.a_mapstore(['set','mode','info']);
 
-      //最初の一回だけ、現在位置へジャンプする
-      //if(!this.mapstore.emory.play.init){
         this.$nextTick(()=>{
           this.trackOnce();
           this.a_mapstore(['emory','initPlay', true]);
         });
         setTimeout(() => this.trackOnce(), 2000);
-     // }
 
       //とりあえずゲストで入らせる。最初からログインさせるときは　はずす！
       this.a_spotify(['set','me',{id:'GUEST'}]);
@@ -212,14 +214,14 @@
       }
 
       //全マーカーとエリアの設定
-      this.markersRef.on('value', (snapshot)=> this.a_mapstore(['set','markers',snapshot.val()]));
-      this.projsRef.on('value',   (snapshot)=> this.a_mapstore(['emory','setprojects',snapshot.val()]));
+      this.firebaseDB.marker.on('value', (snapshot)=> this.a_mapstore(['set','markers',snapshot.val()]));
+      this.firebaseDB.project.on('value',   (snapshot)=> this.a_mapstore(['emory','setprojects',snapshot.val()]));
     },
 
     beforeDestroy() {
       this.socketDisconnect();
       this.a_mapstore(['set', 'tracking', false]);
-      this.markersRef = null;
+      this.firebaseDB.marker = null;
     },
 
     methods: {
@@ -249,7 +251,7 @@
 
         }else{
           //メインユーザーを検索してなければ作成
-          this.markersRef.orderByChild('userid').startAt(meid).endAt(meid).once('value', ss=>{
+          this.firebaseDB.marker.orderByChild('userid').startAt(meid).endAt(meid).once('value', ss=>{
             if(ss.val()) {
               console.log("FOUND");
               let key = Object.keys(ss.val())[0];
@@ -257,7 +259,7 @@
               this.a_mapstore(['set', 'mainuser', {...val, id: key}]);
             } else{
               //ローカルにユーザーデータがない場合だけ作成される
-              if(!this.mapstore.mainuser) new M({type:'mainuser'}).updateOrNew(this.markersRef);
+              if(!this.mapstore.mainuser) new M({type:'mainuser'}).updateOrNew(this.firebaseDB.marker);
             }
           })
         }

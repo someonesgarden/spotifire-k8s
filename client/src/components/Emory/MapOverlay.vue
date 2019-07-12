@@ -31,6 +31,7 @@
                            :key="'marker'+id"
                            :id="id"
                            @mClick="mClick(marker,id)" @tClick="tClick(marker,id)"></my-marker>
+
                 <my-marker v-if="mapstore.mainuser && mapstore.mainuser.id==='GUEST'" :marker="mapstore.mainuser"></my-marker>
 
                 <my-tooltip v-if="mapstore.emory.projects" v-for="(p,id) in mapstore.emory.projects"
@@ -167,7 +168,7 @@
                 //EDITモードの場合
                 if(this.mapstore.emory.editing.status){
                     if(id) val.id = id;
-                    this.a_mapstore(['emory','setproject',val]);
+                    this.a_mapstore(['emory','project',val]);
                     this.a_mapstore(['set','mode','edit']);
                     return;
                 }
@@ -191,7 +192,7 @@
                 //EDITモードの場合
                 if(this.mapstore.emory.editing.status){
                     if(id) val.id = id;
-                    this.a_mapstore(['emory','setmarker',val]);
+                    this.a_mapstore(['emory','marker',val]);
                     this.a_mapstore(['set','mode','edit']);
                     return;
                 }
