@@ -4,12 +4,12 @@
 
         <div class="md-layout tight light">
             <div class="md-layout-item md-medium-size-50 md-small-size-50 md-xsmall-size-100" v-if="!spotify.me.id">
-                <mu-button color="teal500" class="smallbtn" full-width @click="goMap(true)">
+                <mu-button color="teal500" class="smallbtn" full-width @click="m_goMap(true)">
                     <mu-icon value="check_circle"></mu-icon>&nbsp;Spotifyにログイン
                 </mu-button>
             </div>
             <div class="md-layout-item md-medium-size-50 md-small-size-50 md-xsmall-size-100" v-if="!spotify.me.id">
-                <mu-button color="orange700" class="smallbtn" full-width @click="goMap(false)">
+                <mu-button color="orange700" class="smallbtn" full-width @click="m_goMap(false)">
                     <mu-icon value="exit_to_app"></mu-icon>&nbsp;ログインせず使用
                 </mu-button>
             </div>
@@ -88,7 +88,7 @@
             goEdit(){
                 //管理機能の中にはplaylist登録などもあるので、ログインしていない場合はログインさせる。
                 if(!this.spotify.credential.expires_in) this.c_getCredential();
-                this.scrollTo('#app');
+                this.m_scrollTo('#app');
                 this.a_mapstore(['set','mode','edit']);
             }
         }

@@ -75,9 +75,9 @@ export default{
             freqWords2.forEach((d,i)=> {if(i<limit) top5.push(d.text)});
 
             let temp  = [...top5,...over4length];
-            let temp2 = temp.filter((d)=> !this.isNumber(d));
-            let temp3 = temp2.filter((d)=> !this.isSpecialCharas(d));
-            let temp4 = temp3.filter((d)=> !this.isHiragana(d));
+            let temp2 = temp.filter((d)=> !this.m_isNumber(d));
+            let temp3 = temp2.filter((d)=> !this.m_isSpecialCharas(d));
+            let temp4 = temp3.filter((d)=> !this.m_isHiragana(d));
 
             return temp4.filter((x, i, self)=> self.indexOf(x) === i);
         }

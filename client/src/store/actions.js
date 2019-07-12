@@ -134,11 +134,16 @@ export const a_mapstore = ({commit},[type, action, data]) => {
             editing:(data)    => commit('mapstore/setEditing',   data),
             mainuser:(data)   => commit('mapstore/setMainuser',  data),
             markers:(data)    => commit('mapstore/setMarkers',   data),
-            tracking:(data)   => commit('mapstore/setTracking',  data),
-            locations: (data) => commit('mapstore/setLocations', data),
+
             markerdists:(data)=> commit('mapstore/setMarkerDists',data),
             poly:(data)       => commit('mapstore/setMapPoly',data),
-            projBoundary:(data)=>commit('mapstore/setMapProjBoundary',data)
+            projBoundary:(data)=>commit('mapstore/setMapProjBoundary',data),
+
+            tracking:(data)   => commit('mapstore/setTracking',  data),
+        },
+
+        geo:{
+            set:(data) => commit('mapstore/setGeo', data),
         },
         center:{
             mainuser:(data)   => commit('mapstore/setMainuserCenter',data),
@@ -147,7 +152,6 @@ export const a_mapstore = ({commit},[type, action, data]) => {
         toggle: {
             tracking: (data) => commit('mapstore/toggleTracking',data)
         },
-
         emory:{
             selectedPoint:(data) => commit('mapstore/setSelectedPoint',data),
             setPlay:(data)      => commit('mapstore/setEmoryPlay',data),
@@ -162,12 +166,12 @@ export const a_mapstore = ({commit},[type, action, data]) => {
             alpha:(data)          => commit('mapstore/setAlpha', data),
             sliderno:(data)       => commit('mapstore/setSliderNo',data)
         }
-    }
+    };
     actions[type][action](data)
 };
 
 // --------------- FEED -------------------
-export const a_feed     =  ({commit}, [type, action, data]) => {
+export const a_feed = ({commit}, [type, action, data]) => {
     const actions = {
         set:{
             feed:   (data) => commit('feed/setFeed', data),
@@ -178,7 +182,7 @@ export const a_feed     =  ({commit}, [type, action, data]) => {
 }
 
 // --------------- WEB SOCKET -------------
-export const a_ws       =  ({commit}, [type, action, data]) => {
+export const a_ws = ({commit}, [type, action, data]) => {
     const actions = {
         set:{
             socketid:(data) => commit('ws/setSocketID', data),
@@ -201,7 +205,7 @@ export const a_ws       =  ({commit}, [type, action, data]) => {
 }
 
 // --------------- Three ------------------
-export const a_three    =  ({commit},param) => commit('three/setParam', param)
+export const a_three = ({commit},param) => commit('three/setParam', param)
 
 // --------------- MP3 PLAYERS ------------
 export const a_mp3 =  ({commit}, [type, num, action, data]) => {

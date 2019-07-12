@@ -1,8 +1,13 @@
+import M from '../../class/map/EMarker';
+import P from '../../class/map/EProject';
+
+const nullmarker = new M({}).marker;
+const nullproject = new P({}).project;
 
 export default{
 
     computed:{
-        sortedMarkers(){
+        m_sortedMarkers(){
             let result = {};
             if(this.mapstore.markers){
                 Object.keys(this.mapstore.markers).forEach(key=> {
@@ -14,43 +19,66 @@ export default{
             return result;
         },
 
-        sortProjsByDist(){
+        m_sortProjsByDist(){
             let results = [];
             if(this.mapstore.mainuser){
                 let projects = this.mapstore.emory.projects;
                 let mainuser = this.mapstore.mainuser.id==="GUEST" ? this.mapstore.mainuser : this.mapstore.markers[this.mapstore.mainuser.id];
                 if(mainuser){
-                    results = Object.keys(projects).map(k=> {return {...projects[k],id:k,dist:this.distKmofCenters(mainuser.center, projects[k].center)}});
+                    results = Object.keys(projects).map(k=> {return {...projects[k],id:k,dist:this.m_distKmofCenters(mainuser.center, projects[k].center)}});
                     results.sort((a, b)=> a.dist > b.dist ? 1 : -1);
                 }
             }
-
             return results;
         },
 
-        activeProj(){
+        m_activeProj(){
             return  this.mapstore.emory.project.id ? this.mapstore.emory.projects[this.mapstore.emory.project.id] : null;
         }
     },
 
     methods: {
+        /* EDITOverlay */
+        m_emoryParam(key,val,type='marker'){
+            this.a_mapstore(['emory',type+'param',{key:key,val:val}]);
+        },
 
-        setIdAndMoveCenter(key){
+        m_editMap(type='marker'){
+            this.a_mapstore(['set','editing',{key:'type',val:type}]);
+            this.m_cancelEditMode();
+        },
+
+        m_cancelEditMode() {
+            this.a_mapstore(['emory','setmarker',nullmarker]);
+            this.a_mapstore(['emory','setproject',nullproject]);
+            this.a_mapstore(['set','mode','map']);
+        },
+
+        m_endEditing() {
+            this.a_mapstore(['emory','setmarker',nullmarker]);
+            this.a_mapstore(['emory','selectedPoint',[-300,-300]]);
+            this.a_mapstore(['set','editing',{key:'status',val:false}]);
+            this.a_mapstore(['set','mode','info']);
+        },
+
+
+        /* Map Basic */
+        m_setIdAndMoveCenter(key){
             this.a_mapstore(['emory', 'setprojectid', key]);
             this.a_mapstore(['set','poly',null]);  //リセット(polyの消去）
             this.a_mapstore(['set', 'tracking', false]); //トラッキングの停止
             if(this.mapstore.emory.projects[key]){
                 this.a_mapstore(['center', 'map', this.mapstore.emory.projects[key].center]);
 
-                this.distOfProjPoints();
-                this.drawPoly();
+                this.m_distOfProjPoints();
+                this.m_drawPoly();
                 //プロジェクト位置へマップを移動
             }
 
         },
 
-        resetAllPods(){
-            console.log("resetAllPods!");
+        m_resetAllPods(){
+            console.log("m_resetAllPods!");
             this.mp3.pods.forEach((p, i) => {
                 setTimeout(() =>  this.a_mp3(['pod', i, 'file', null]), 20);
                 setTimeout(() => this.a_mp3(['pod', i, 'volume', 0]), 20);
@@ -58,7 +86,7 @@ export default{
             });
         },
 
-        callPlayerFromMap(val){
+        m_callPlayerFromMap(val){
             if (val.markertype === 'mp3') {
                 //mp3プレイヤーを開く
                 this.a_mp3(['pod', 0, 'playing',false]);
@@ -90,16 +118,15 @@ export default{
             }
         },
 
-        bottomAvatarClick(mkr){
+        m_bottomAvatarClick(mkr){
             this.a_mapstore(['set','tracking',false]);
             let marker = this.mapstore.markers[mkr.id];
             if(marker) this.a_mapstore(['center','map',this.mapstore.markers[mkr.id].center]);
         },
 
-        geoError(error) { console.log(error);},
+        m_geoError(error) { console.log(error)},
 
-
-        distKmOfTwo(lat1, lng1, lat2, lng2) {
+        m_distKmOfTwo(lat1, lng1, lat2, lng2) {
             lat1 *= Math.PI / 180;
             lng1 *= Math.PI / 180;
             lat2 *= Math.PI / 180;
@@ -107,7 +134,7 @@ export default{
             return 6371 * Math.acos(Math.cos(lat1) * Math.cos(lat2) * Math.cos(lng2 - lng1) + Math.sin(lat1) * Math.sin(lat2));
         },
 
-        drawPoly(){
+        m_drawPoly(){
             let polys = [];
             //実際のユーザー以外のポイントでポリゴンを作る
             if(this.mapstore.markerDists){
@@ -119,22 +146,20 @@ export default{
 
         },
 
-        distKmofCenters(center1,center2){
-            return this.distKmOfTwo(center1.lat,center1.lng,center2.lat,center2.lng);
+        m_distKmofCenters(center1,center2){
+            return this.m_distKmOfTwo(center1.lat,center1.lng,center2.lat,center2.lng);
         },
 
-
-
-        distOfProjPoints(){
+        m_distOfProjPoints(){
 
             if(this.mapstore.mainuser){
 
                 //自分と現在のプロジェクトのpointの距離を測る
                 let mainuser = this.mapstore.mainuser.id==="GUEST" ? this.mapstore.mainuser : this.mapstore.markers[this.mapstore.mainuser.id];
 
-                if(this.sortedMarkers && mainuser){
-                    let dists = Object.keys(this.sortedMarkers).map(k=> {
-                        return {id:k, dist:this.distKmofCenters(mainuser.center, this.sortedMarkers[k].center)}
+                if(this.m_sortedMarkers && mainuser){
+                    let dists = Object.keys(this.m_sortedMarkers).map(k=> {
+                        return {id:k, dist:this.m_distKmofCenters(mainuser.center, this.m_sortedMarkers[k].center)}
                     });
                     dists.sort((a, b)=> a.dist > b.dist ? 1 : -1);
                     this.a_mapstore(['set','markerdists',dists]);

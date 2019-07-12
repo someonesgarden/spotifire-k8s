@@ -1,12 +1,12 @@
 export default {
     methods: {
-        scrollTo (target,top=0){
+        m_scrollTo (target,top=0){
             if(!!target) top = jQuery(target).offset().top;
             jQuery('html, body').stop().animate({'scrollTop': top}, 500, 'swing');
 
         },
 
-        goMap(login,to='/map'){
+        m_goMap(login,to='/map'){
             if(this.loggedIn){
                 if(login && !this.spotify.credential.expires_in){
                     this.c_getCredential();
@@ -17,27 +17,27 @@ export default {
             }
         },
 
-        isNumber(val) {
+        m_isNumber(val) {
             let pattern = /^[-]?([1-9]\d*|0)(\.\d+)?$/;
             return pattern.test(val);
         },
 
-        isSpecialCharas(val) {
+        m_isSpecialCharas(val) {
             let pattern = /([。.,?？*+=~^"#%&¥]+)/;
             return pattern.test(val);
         },
 
-        isHiragana(val, num) {
+        m_isHiragana(val, num) {
             let pattern = /^[ぁ-んー　]*$/;
             return (pattern.test(val) && val.length < 3);
         },
 
-        checkPWA(type) {
+        m_checkPWA(type) {
             let navigator_ = navigator ? navigator : (window.navigator ? window.navigator : null);
             if(navigator_){
                 if(navigator_.permissions){
                     navigator_.permissions.query({name: type})
-                        .then((result) => {
+                        .then(result => {
                             if (result.state === 'granted') {
                                 console.log(type + 'は利用可能です。');
                             } else if (result.state === 'denied') {
@@ -48,7 +48,7 @@ export default {
                             this.a_index(['pwa', 'set', {key: type, val: result.state}]);
                         }).catch(er => {
                         console.log(er);
-                        this.checkPWAExist(type);
+                        this.m_checkPWAExist(type);
                     });
                 }else{
 
@@ -56,22 +56,22 @@ export default {
                         console.log(type + 'は利用可能です。');
                         this.a_index(['pwa','set',{key:type,val:'granted'}]);
                     }else{
-                        this.checkPWAInWindow(type);
+                        this.m_checkPWAInWindow(type);
                     }
                 }
             }
         },
 
-        checkPWAExist(type) {
+        m_checkPWAExist(type) {
             if (type in navigator) {
                 console.log(type + 'は利用可能です。');
                 this.a_index(['pwa','set',{key:type,val:'granted'}]);
             }else{
-                this.checkPWAInWindow(type);
+                this.m_checkPWAInWindow(type);
             }
         },
 
-        checkPWAInWindow(type) {
+        m_checkPWAInWindow(type) {
             if (Boolean(type in window)) {
                 this.a_index(['pwa','set',{key:type,val:'granted'}]);
             }else{
@@ -79,7 +79,7 @@ export default {
             }
         },
 
-        checkPWAInFunction(type) {
+        m_checkPWAInFunction(type) {
             if (typeof type === "function") {
                 this.a_index(['pwa','set',{key:type,val:'granted'}]);
             }else{

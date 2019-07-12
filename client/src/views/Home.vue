@@ -161,7 +161,7 @@
     };
   },
     mounted(){
-      this.scrollTo('#app');// トップ
+      this.m_scrollTo('#app');// トップ
     },
 
     methods:{

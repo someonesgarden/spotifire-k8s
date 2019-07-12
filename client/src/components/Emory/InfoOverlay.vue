@@ -27,7 +27,7 @@
                             <mu-form-item prop="project" class="range" style="background-color:white;border-radius:4px;">
 
                                 <mu-select :value="mapstore.emory.project.id ? mapstore.emory.projects[mapstore.emory.project.id].title : 'ストーリーを選択'" @change="selectStory">
-                                    <mu-option v-for="(p,inx) in sortProjsByDist" :key="'proj'+inx" :label="p.title" :value="p.id+'|'+inx"></mu-option>
+                                    <mu-option v-for="(p,inx) in m_sortProjsByDist" :key="'proj'+inx" :label="p.title" :value="p.id+'|'+inx"></mu-option>
                                 </mu-select>
 
                             </mu-form-item>
@@ -53,7 +53,7 @@
             </slide>
             <!--/Main Menu-->
 
-            <slide class="slide" v-for="(proj, index) in sortProjsByDist" :key="'prjj'+index">
+            <slide class="slide" v-for="(proj, index) in m_sortProjsByDist" :key="'prjj'+index">
                 <project-slide-item :proj="proj" @backToLeft="$refs.projects.goToPage(0)" v-if="proj"/>
             </slide>
 
@@ -116,8 +116,8 @@
 
                 this.$refs.projects.goToPage(Math.floor((parseInt(index)+1)/separator));
                 let key = key_ary[0];
-                this.setIdAndMoveCenter(key);
-                this.scrollTo('#app');// スクロールトップ
+                this.m_setIdAndMoveCenter(key);
+                this.m_scrollTo('#app');// スクロールトップ
 
                 this.a_mapstore(['emory','alpha',{key:'slider',val:true}]);
                 setTimeout(()=> this.a_mapstore(['emory','alpha',{key:'slider',val:false}]), 2000);

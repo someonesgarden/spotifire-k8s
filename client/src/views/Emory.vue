@@ -177,19 +177,17 @@
       this.projsRef   = firebase.database().ref('projects');
     },
     mounted() {
-      this.scrollTo('#app');// トップ
+      this.m_scrollTo('#app');// トップ
 
       this.a_mapstore(['set','mode','info']);
 
       //最初の一回だけ、現在位置へジャンプする
       //if(!this.mapstore.emory.play.init){
-
         this.$nextTick(()=>{
           this.trackOnce();
           this.a_mapstore(['emory','initPlay', true]);
         });
         setTimeout(() => this.trackOnce(), 2000);
-
      // }
 
       //とりあえずゲストで入らせる。最初からログインさせるときは　はずす！
@@ -327,13 +325,6 @@
 
     },
     watch:{
-      // '$route.name': {
-      //   handler(newRoute){
-      //     console.log(newRoute);
-      //     setTimeout(() => this.trackOnce(), 1000);
-      //   }
-      // },
-
       'spotify.me':{
         handler(newMe){
           if(!!newMe.id){
@@ -380,13 +371,6 @@
     width:100vw;
     height:100vh;
   }
-
-  /*.mp3_players{*/
-  /*  transform: rotate(90deg);*/
-  /*  left:calc(-50vw + 20px);*/
-  /*  z-index:4;*/
-  /*  text-align:inherit;*/
-  /*}*/
 
   .mp3_players{
     position: absolute;

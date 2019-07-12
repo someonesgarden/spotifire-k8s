@@ -28,7 +28,7 @@
                         </li>
 
                         <li v-if="mapstore.mainuser">
-                            <my-avatar :marker="marker" :id="marker.id" v-for="(marker,id) in sortedMarkers" :key="'mv'+id"></my-avatar>
+                            <my-avatar :marker="marker" :id="marker.id" v-for="(marker,id) in m_sortedMarkers" :key="'mv'+id"></my-avatar>
                         </li>
                     </ul>
 

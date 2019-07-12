@@ -88,35 +88,35 @@ export default {
     'spotify'
   ]),
   created(){
-    this.checkPWA('geolocation');
-    this.checkPWA('gyroscope');
-    this.checkPWA('magnetometer');
-    this.checkPWA('microphone');
-    this.checkPWA('midi');
-    this.checkPWA('notifications');
-    this.checkPWA('camera');
-    this.checkPWA('accelerometer');
-    this.checkPWA('ambient-light-sensor');
-    this.checkPWA('background-sync');
-    this.checkPWA('persistent-storage');
-    this.checkPWA('clipboard-read');
-    this.checkPWA('clipboard-write');
-    this.checkPWA('accessibility-events');
-    this.checkPWA('payment-handler');
-    this.checkPWAExist('serviceWorker');
-    this.checkPWAExist('bluetooth');
-    this.checkPWAExist('PushManager');
-    this.checkPWA('mediaDevices');
-    this.checkPWA('getUserMedia');
-    this.checkPWA('webkitGetUserMedia');
-    this.checkPWA('mozGetUserMedia');
-    this.checkPWA('DeviceOrientationEvent');
-    this.checkPWA('DeviceMotionEvent');
-    this.checkPWAInFunction('Gyroscope');
+    this.m_checkPWA('geolocation');
+    this.m_checkPWA('gyroscope');
+    this.m_checkPWA('magnetometer');
+    this.m_checkPWA('microphone');
+    this.m_checkPWA('midi');
+    this.m_checkPWA('notifications');
+    this.m_checkPWA('camera');
+    this.m_checkPWA('accelerometer');
+    this.m_checkPWA('ambient-light-sensor');
+    this.m_checkPWA('background-sync');
+    this.m_checkPWA('persistent-storage');
+    this.m_checkPWA('clipboard-read');
+    this.m_checkPWA('clipboard-write');
+    this.m_checkPWA('accessibility-events');
+    this.m_checkPWA('payment-handler');
+    this.m_checkPWAExist('serviceWorker');
+    this.m_checkPWAExist('bluetooth');
+    this.m_checkPWAExist('PushManager');
+    this.m_checkPWA('mediaDevices');
+    this.m_checkPWA('getUserMedia');
+    this.m_checkPWA('webkitGetUserMedia');
+    this.m_checkPWA('mozGetUserMedia');
+    this.m_checkPWA('DeviceOrientationEvent');
+    this.m_checkPWA('DeviceMotionEvent');
+    this.m_checkPWAInFunction('Gyroscope');
   },
 
   mounted(){
-    this.scrollTo('#app');// トップ
+    this.m_scrollTo('#app');// トップ
   },
 
   methods:{

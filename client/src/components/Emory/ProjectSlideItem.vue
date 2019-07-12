@@ -83,7 +83,7 @@
 
             moveMapTo(){
                 if(this.proj.id && this.mapstore.emory.projects){
-                    this.setIdAndMoveCenter(this.proj.id);
+                    this.m_setIdAndMoveCenter(this.proj.id);
                     this.a_mapstore(['emory','alpha',{key:'slider',val:true}]);
                     if(this.timeout) clearTimeout(this.timeout);
                     this.timeout = setTimeout(()=> this.a_mapstore(['emory','alpha',{key:'slider',val:false}]),2000);
@@ -95,7 +95,7 @@
                 if(this.timeout) clearTimeout(this.timeout);
 
                 if(this.proj.id){
-                    this.setIdAndMoveCenter(this.proj.id);
+                    this.m_setIdAndMoveCenter(this.proj.id);
                     setTimeout(()=>{
                         this.a_mapstore(['set', 'tracking', true]);
                         this.a_mapstore(['set','mode','map']);

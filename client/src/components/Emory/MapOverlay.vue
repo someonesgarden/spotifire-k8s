@@ -1,14 +1,14 @@
 <template>
         <div>
             <!-- MAP WITH IMAGE BG-->
-            <l-map v-if="activeProj && mapstore.map.projectBoundary"
+            <l-map v-if="m_activeProj && mapstore.map.projectBoundary"
                    ref="map"
-                   :zoom="activeProj.zoom"
+                   :zoom="m_activeProj.zoom"
                    :center="mapstore.map.center"
-                   :max-zoom="activeProj.zoom+1"
-                   :min-zoom="activeProj.zoom"
-                   :bounds="[activeProj.LBBound, activeProj.RTBound]"
-                   :max-bounds="[activeProj.LBBound, activeProj.RTBound]"
+                   :max-zoom="m_activeProj.zoom+1"
+                   :min-zoom="m_activeProj.zoom"
+                   :bounds="[m_activeProj.LBBound, m_activeProj.RTBound]"
+                   :max-bounds="[m_activeProj.LBBound, m_activeProj.RTBound]"
                    :zoomAnimation="false"
                    :fadeAnimation="false"
                    :markerZoomAnimation="false"
@@ -17,8 +17,8 @@
                    @click="mapClick">
                 <l-tile-layer :url="mapstore.map.url" :attribution="mapstore.map.attribution"></l-tile-layer>
 
-                <l-image-overlay v-if="activeProj.imgurl && activeProj.LBBound"
-                        :url="activeProj.imgurl" :bounds="[activeProj.LBBound, activeProj.RTBound]"
+                <l-image-overlay v-if="m_activeProj.imgurl && m_activeProj.LBBound"
+                        :url="m_activeProj.imgurl" :bounds="[m_activeProj.LBBound, m_activeProj.RTBound]"
                         :opacity="0.9"
                         :zoomAnimation="false"
                         :fadeAnimation="false"
@@ -26,7 +26,7 @@
                         :inertia="false"
                         :bounceAtZoomLimits="false"></l-image-overlay>
 
-                <my-marker v-if="mapstore.markers && mapstore.mainuser" v-for="(marker,id) in sortedMarkers"
+                <my-marker v-if="mapstore.markers && mapstore.mainuser" v-for="(marker,id) in m_sortedMarkers"
                            :marker="marker"
                            :key="'marker'+id"
                            :id="id"
@@ -51,7 +51,7 @@
                    :min-zoom="0"
                    @click="mapClick">
                 <l-tile-layer :url="mapstore.map.url" :attribution="mapstore.map.attribution"></l-tile-layer>
-                <my-marker v-if="mapstore.markers && mapstore.mainuser" v-for="(marker,id) in sortedMarkers"
+                <my-marker v-if="mapstore.markers && mapstore.mainuser" v-for="(marker,id) in m_sortedMarkers"
                            :marker="marker"
                            :key="'marker'+id"
                            :id="id"
@@ -79,7 +79,7 @@
     import mapMixin from '../../mixins/map';
     //LEAF
     import {LImageOverlay,  LMap, LTileLayer, LPolygon} from "vue2-leaflet";
-    import { latLng, icon } from "leaflet";
+    //import { latLng, icon } from "leaflet";
 
     import MyMarker from '../Map/MyMarker';
     import MyTooltip from '../Map/MyTooltip';
@@ -107,27 +107,21 @@
                 projectPoly: null
             };
         },
-        computed:{
-            ...mapGetters([
-                           'ws',
-                           'mp3',
-                           'mapstore',
-                           'spotify'])
-        },
+        computed:mapGetters(['ws','mp3', 'mapstore', 'spotify']),
 
         watch: {
             'mapstore.tracking': {
                 handler: function () {
                     if (this.mapstore.tracking){
                         console.log("watch:tracking:START");
-                        this.resetAllPods(); //全てのmp3プレイヤーを初期化
+                        this.m_resetAllPods(); //全てのmp3プレイヤーを初期化
                         this.keepTracking();
                     }else{
                         console.log("watch:tracking:STOP");
                         this.timeout = null;
                         this.center  = null;
-                        //this.resetAllPods();
-                        setTimeout(()=> this.resetAllPods,2000);//全てのmp3プレイヤーを初期化
+                        //this.m_resetAllPods();
+                        setTimeout(()=> this.m_resetAllPods,2000);//全てのmp3プレイヤーを初期化
                     }
                 }
             },
@@ -150,8 +144,8 @@
                 let proj = this.mapstore.emory.projects[key];
                 this.a_mapstore(['center', 'map', proj.center]);
                 //setTimeout(() => this.a_mapstore(['center', 'map', proj.center]), 5100);
-                this.distOfProjPoints();
-                this.drawPoly();
+                this.m_distOfProjPoints();
+                this.m_drawPoly();
             },
 
             mapClick(val){
@@ -165,7 +159,6 @@
                     this.a_mapstore(['set','mode','edit']);
                     return;
                 }
-
                 //通常モードの場合
                 this.a_mapstore(['set','mode','info']);
             },
@@ -178,7 +171,6 @@
                     this.a_mapstore(['set','mode','edit']);
                     return;
                 }
-
                 //通常モードの場合
                 this.a_mapstore(['center', 'map', val.center]);
                 this.onProjectSelected(id);
@@ -187,14 +179,12 @@
             mClick(val,id){
                 //EDITモードの場合
                 if(this.mapstore.emory.editing.status){
-                    console.log("mclick");
-                    this.callPlayerFromMap(val);
+                    this.m_callPlayerFromMap(val);
                     return;
                 }
-
                 //通常モードの場合
                 this.a_mapstore(['set', 'tracking', false]);
-                this.callPlayerFromMap(val);
+                this.m_callPlayerFromMap(val);
             },
 
             tClick(val,id){
@@ -205,7 +195,6 @@
                     this.a_mapstore(['set','mode','edit']);
                     return;
                 }
-
                 //通常モードの場合
                 this.mClick(val,id);
             },
@@ -228,38 +217,40 @@
                     }else{
                         this.track_max++;
                     }
-                }else{
-                    this.trackTimeout = false;
-                    this.timeout      = null;
-                    this.mp3.pods.forEach((p, i) => {
-                        // this.a_mp3(['pod', i, 'file', null]);
-                        // this.a_mp3(['pod', i, 'volume', 0]);
-                        // this.a_mp3(['pod', i, 'playing',false]);
-                        setTimeout(() =>  this.a_mp3(['pod', i, 'file', null]), 20);
-                        setTimeout(() => this.a_mp3(['pod', i, 'volume', 0]), 20);
-                        setTimeout(() => this.a_mp3(['pod', i, 'playing',false]), 20);
-                    });
+                    return;
                 }
+
+                this.trackTimeout = false;
+                this.timeout      = null;
+                this.mp3.pods.forEach((p, i) => {
+                    // this.a_mp3(['pod', i, 'file', null]);
+                    // this.a_mp3(['pod', i, 'volume', 0]);
+                    // this.a_mp3(['pod', i, 'playing',false]);
+                    setTimeout(() =>  this.a_mp3(['pod', i, 'file', null]), 20);
+                    setTimeout(() => this.a_mp3(['pod', i, 'volume', 0]), 20);
+                    setTimeout(() => this.a_mp3(['pod', i, 'playing',false]), 20);
+                });
+
             },
 
             //一回だけはこちら！
             geoCurrentPosition(){
                 console.log("track once called!");
-                if(!!navigator.geolocation) navigator.geolocation.getCurrentPosition(this.geoSuccess,this.geoError,this.mapstore.map.geocodingOptions);
+                if(!!navigator.geolocation) navigator.geolocation.getCurrentPosition(this.geoSuccess,this.m_geoError,this.mapstore.map.geocodingOptions);
             },
 
             geolocation() {
                 console.log("watchPosition called!");
-                if(!!navigator.geolocation) this.watchID = navigator.geolocation.watchPosition(this.geoSuccess,this.geoError,this.mapstore.map.geocodingOptions);
+                if(!!navigator.geolocation) this.watchID = navigator.geolocation.watchPosition(this.geoSuccess,this.m_geoError,this.mapstore.map.geocodingOptions);
             },
 
             geoSuccess(position){
                 console.log("getSuccess");
                 console.log(position);
                 this.resetPos(position);
-                this.drawPoly();
+                this.m_drawPoly();
                 if(this.mapstore.mainuser){
-                    this.distOfProjPoints();
+                    this.m_distOfProjPoints();
                     this.distMarkerActionUpdate();
                 }
                 navigator.geolocation.clearWatch(this.watchID);
@@ -267,111 +258,97 @@
 
             distMarkerActionUpdate() {
 
-                if (!!this.mapstore.markerDists) {
-                    let limit = parseInt(this.mapstore.emory.triggerDist);
+                if(!this.mapstore.markerDists) return;
 
+                let limit = parseInt(this.mapstore.emory.triggerDist);
 
-                    if (this.mapstore.markerDists.every(d => d.dist === 0 || d.dist > limit/1000)) {
-                        //全てが範囲外なら、プレイヤーをリセット
-                        console.log("reset all");
+                if (this.mapstore.markerDists.every(d => d.dist === 0 || d.dist > limit/1000)) {
+                    //全てが範囲外なら、プレイヤーをリセット
+                    this.mp3.pods.forEach((p, i) => {
+                        setTimeout(() =>  this.a_mp3(['pod', i, 'file', null]), 20);
+                        setTimeout(() => this.a_mp3(['pod', i, 'volume', 0]), 20);
+                        setTimeout(() => this.a_mp3(['pod', i, 'playing',false]), 20);
+                    });
+                    return;
+                }
+
+                this.mapstore.markerDists.forEach((d, i) => {
+                    let dm = d.dist * 1000;
+
+                    //----------------有効範囲外なら終了
+                    if(dm === 0 || dm>=limit) return;
+
+                    //----------------各マーカーがトリガー距離外なら終了
+                    let marker = this.mapstore.markers[d.id];
+                    if(marker.triggerDist <dm || typeof marker.triggerDist === "undefined") return;
+
+                    //----------------すでに再生されていてloopではない場合は再生しない
+                    if(!!this.mapstore.emory.play[marker.id] && this.mapstore.emory.play[marker.id]!=='loop') return;
+
+                    //let volume = Math.min(1,1/Math.sqrt((limit-dm)))*100;
+                    //let volume =  Math.floor(Math.max(0,100-18*Math.sqrt(dm)));
+                    let volume =  100*((limit - dm)/limit)^2;
+
+                    //mp3の場合、３つのmp3プレイヤーを起動する
+                    if (marker.markertype === 'mp3') {
+                        let already_has = null;
+                        let paused_pods = [];
+
                         this.mp3.pods.forEach((p, i) => {
-                            setTimeout(() =>  this.a_mp3(['pod', i, 'file', null]), 20);
-                            setTimeout(() => this.a_mp3(['pod', i, 'volume', 0]), 20);
-                            setTimeout(() => this.a_mp3(['pod', i, 'playing',false]), 20);
+                            if (p.file === marker.mp3) already_has = {num: i, ...p};
+
+                            if (!p.playing) {
+                                this.a_mp3(['pod', i, 'file', '']);
+                                this.a_mp3(['pod', i, 'volume', 0]);
+                                this.a_mp3(['pod', i, 'playing', false]);
+                                paused_pods.push(i);
+                            }
                         });
 
+                        if (already_has) {
+                            console.log("already_has");
+                            if (!already_has.playing) {
+                                setTimeout(() => this.a_mp3(['pod', already_has.num, 'file', marker.mp3]), 100);
+                                setTimeout(() => this.a_mp3(['pod', already_has.num, 'volume', volume + Math.floor(Math.random() * 2)]), 100);
 
-                    } else {
-                        this.mapstore.markerDists.forEach((d, i) => {
+                                //this.a_mp3(['pod', already_has.num, 'playing', false]);
+                                setTimeout(() => this.a_mp3(['pod', already_has.num, 'playing', true + Math.floor(Math.random() * 3)]), 200);
+                            } else {
+                                //すでに再生中は、ボリューが変わる程度
 
-                            let dm = d.dist * 1000;
-                            if (dm > 0 && dm < limit) {
-                                let marker = this.mapstore.markers[d.id];
-                                //let volume = Math.min(1, (limit - dm) / limit)*100;
-                                //let volume = Math.min(1,Math.sqrt((limit - dm)/limit))*100;
-                                //let volume = Math.min(1,1/Math.sqrt((limit-dm)))*100;
-                                //let volume =  Math.floor(Math.max(0,100-18*Math.sqrt(dm)));
-                                let volume =  100*((limit - dm)/limit)^2;
-
-
-                                //各マーカーが持っているトリガー距離を確認
-                                if(marker.triggerDist>=dm){
-
-                                    //最初の一回か、「Loop」に設定されている場合は再生する
-                                    if(!this.mapstore.emory.play[marker.id] || this.mapstore.emory.play[marker.id]==='loop'){
-
-                                        //mp3の場合、３つのmp3プレイヤーを起動する
-                                        if (marker.markertype === 'mp3') {
-                                            let already_has = null;
-                                            let paused_pods = [];
-
-                                            this.mp3.pods.forEach((p, i) => {
-                                                if (p.file === marker.mp3) {
-                                                    already_has = {num: i, ...p};
-                                                }
-
-                                                if (!p.playing) {
-                                                    this.a_mp3(['pod', i, 'file', '']);
-                                                    this.a_mp3(['pod', i, 'volume', 0]);
-                                                    this.a_mp3(['pod', i, 'playing', false]);
-                                                    paused_pods.push(i);
-                                                }
-                                            });
-
-                                            if (already_has) {
-                                                console.log("already_has");
-                                                if (!already_has.playing) {
-                                                    setTimeout(() => this.a_mp3(['pod', already_has.num, 'file', marker.mp3]), 100);
-                                                    setTimeout(() => this.a_mp3(['pod', already_has.num, 'volume', volume + Math.floor(Math.random() * 2)]), 100);
-
-                                                    //this.a_mp3(['pod', already_has.num, 'playing', false]);
-                                                    setTimeout(() => this.a_mp3(['pod', already_has.num, 'playing', true + Math.floor(Math.random() * 3)]), 200);
-                                                } else {
-                                                    //すでに再生中は、ボリューが変わる程度
-
-                                                    //setTimeout(() => this.a_mp3(['pod', already_has.num, 'playing', true]), 10);
-                                                    console.log("changevolume:", volume);
-                                                    console.log('pod', already_has.num, 'volume', volume);
-                                                    //this.a_mp3(['pod', already_has.num, 'volume', volume + Math.floor(Math.random() * 2)]);
-                                                    setTimeout(() => this.a_mp3(['pod', already_has.num, 'volume', volume + Math.floor(Math.random() * 2)]), 100);
-                                                }
-
-                                            } else if (paused_pods.length > 0) {
-
-                                                setTimeout(() => this.a_mp3(['pod', paused_pods[0], 'file', marker.mp3]), 100);
-                                                setTimeout(() => this.a_mp3(['pod', paused_pods[0], 'volume', volume]), 100);
-                                                setTimeout(() => this.a_mp3(['pod', paused_pods[0], 'playing', true + Math.floor(Math.random() * 3)]), 200);
-
-                                            } else {
-                                                console.log("all pods are used...");
-                                            }
-
-                                        }else if(marker.markertype === 'pod'){
-
-                                            //Podcastの場合、StoryModalを開く。
-                                            //すでに開いているときは、、みたいな処理を書く必要あり！
-                                            this.a_index(['storyModal','set',{
-                                                open:true,
-                                                thumb: marker.thumb,
-                                                title: marker.title,
-                                                content: marker.desc,
-                                                spotifyid:marker.spotifyid,
-                                                spotifytype:marker.spotifytype
-                                            }]);
-
-                                        }
-
-                                        //再生したマーカーの履歴を残す
-                                        this.a_mapstore(['emory','setPlay',{key:marker.id,val:marker.loop ? 'loop':'once'}]);
-                                    }
-
-                                }
-
-
+                                //setTimeout(() => this.a_mp3(['pod', already_has.num, 'playing', true]), 10);
+                                console.log("changevolume:", volume);
+                                console.log('pod', already_has.num, 'volume', volume);
+                                //this.a_mp3(['pod', already_has.num, 'volume', volume + Math.floor(Math.random() * 2)]);
+                                setTimeout(() => this.a_mp3(['pod', already_has.num, 'volume', volume + Math.floor(Math.random() * 2)]), 100);
                             }
-                        })
+
+                        } else if (paused_pods.length > 0) {
+                            setTimeout(() => this.a_mp3(['pod', paused_pods[0], 'file', marker.mp3]), 100);
+                            setTimeout(() => this.a_mp3(['pod', paused_pods[0], 'volume', volume]), 100);
+                            setTimeout(() => this.a_mp3(['pod', paused_pods[0], 'playing', true + Math.floor(Math.random() * 3)]), 200);
+
+                        } else {
+                            console.log("all pods are used...");
+                        }
+
+                    }else if(marker.markertype === 'pod'){
+                        //Podcastの場合、StoryModalを開く。
+                        //すでに開いているときは、、みたいな処理を書く必要あり！
+                        this.a_index(['storyModal','set',{
+                            open:true,
+                            thumb: marker.thumb,
+                            title: marker.title,
+                            content: marker.desc,
+                            spotifyid:marker.spotifyid,
+                            spotifytype:marker.spotifytype
+                        }]);
                     }
-                }
+
+                    //再生したマーカーの履歴を残す
+                    this.a_mapstore(['emory','setPlay',{key:marker.id,val:marker.loop ? 'loop':'once'}]);
+                });
+
             },
 
             resetPos(position) {
@@ -379,7 +356,7 @@
                     let center = {lat:position.coords.latitude, lng:position.coords.longitude};
                     if(!this.center) this.center = center;
 
-                    let dist_delta = this.distKmOfTwo(this.center.lat,this.center.lng,center.lat,center.lng);
+                    let dist_delta = this.m_distKmOfTwo(this.center.lat,this.center.lng,center.lat,center.lng);
 
                     if (dist_delta > 0.02) { //20メートル以上はほとんど原点
                         center = {
@@ -395,6 +372,7 @@
 
                     //地図のセンターリセット
                     this.a_mapstore(['center', 'map', center]);
+
                     //メインユーザー位置をリセット(Firebaseのエントリーを更新）
                     if (this.mapstore.mainuser && this.mapstore.mainuser.id) new M({...this.mapstore.mainuser, center: center}).update(this.markersRef);
 

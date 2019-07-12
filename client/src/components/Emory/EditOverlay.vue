@@ -23,7 +23,7 @@
                             <mu-form-item prop="markertype" :rules="blankRules">
                                 <mu-select prop="markertype" color="primary"
                                            v-model="mapstore.emory.marker.markertype"
-                                           @change="(val)=>markerParam('markertype',val)">
+                                           @change="(val)=>m_emoryParam('markertype',val,'marker')">
                                     <mu-option  label="podcast" value="pod"></mu-option>
                                     <mu-option  label="mp3"     value="mp3"></mu-option>
                                     <mu-option  label="track" value="track"></mu-option>
@@ -36,7 +36,7 @@
                             <mu-form-item prop="triggerDist" :rules="blankRules">
                                 <mu-select prop="triggerDist" color="primary"
                                            v-model="mapstore.emory.marker.triggerDist"
-                                           @change="(val)=>markerParam('triggerDist',val)">
+                                           @change="(val)=>m_emoryParam('triggerDist',val,'marker')">
                                     <mu-option  label="5m"      value="5"></mu-option>
                                     <mu-option  label="10m"     value="10"></mu-option>
                                     <mu-option  label="15m"     value="15"></mu-option>
@@ -55,7 +55,7 @@
                             <mu-form-item prop="type" :rules="blankRules">
                                 <mu-select prop="type" color="primary"
                                            v-model="mapstore.emory.marker.type"
-                                           @change="(val)=>markerParam('type',val)">
+                                           @change="(val)=>m_emoryParam('type',val,'marker')">
                                     <mu-option  label="スポット"  value="spot"></mu-option>
                                     <mu-option  label="人"       value="person"></mu-option>
                                     <mu-option  label="その他"    value="other"></mu-option>
@@ -71,7 +71,7 @@
                             <mu-form-item prop="loop">
                                 <mu-checkbox label="loop"
                                              v-model="mapstore.emory.marker.loop"
-                                             @change="(val)=>markerParam('loop',val)"></mu-checkbox>
+                                             @change="(val)=>m_emoryParam('loop',val,'marker')"></mu-checkbox>
                             </mu-form-item>
                         </div>
 
@@ -80,7 +80,7 @@
                             <mu-form-item prop="title" :rules="blankRules">
                                 <mu-text-field prop="title" placeholder="マーカーのタイトル"
                                                v-model="mapstore.emory.marker.title"
-                                               @change="(val)=>markerParam('title',val)"></mu-text-field>
+                                               @change="(val)=>m_emoryParam('title',val,'marker')"></mu-text-field>
                             </mu-form-item>
                         </div>
                     </div>
@@ -88,7 +88,7 @@
                     <mu-form-item prop="desc" :rules="blankRules">
                         <mu-text-field prop="desc" placeholder="メモ（20文字以内）"
                                        v-model="mapstore.emory.marker.desc"
-                                       @change="(val)=>markerParam('desc',val)"></mu-text-field>
+                                       @change="(val)=>m_emoryParam('desc',val,'marker')"></mu-text-field>
                     </mu-form-item>
 
                     <div class="ui grid" style="margin-left:0;margin-right:0;margin-bottom:10px;">
@@ -97,7 +97,7 @@
                             <mu-form-item prop="public">
                                 <mu-checkbox :label="mapstore.emory.marker.public ? '公開' : '非公開'"
                                              v-model="mapstore.emory.marker.public"
-                                             @change="(val)=>markerParam('public',val)"></mu-checkbox>
+                                             @change="(val)=>m_emoryParam('public',val,'marker')"></mu-checkbox>
                             </mu-form-item>
                         </div>
 
@@ -106,12 +106,12 @@
                             <mu-form-item prop="spotifyid" :rules="blankRules">
                                 <mu-select prop="spotifyid" color="primary" v-if="spotify.episodes"
                                            v-model="mapstore.emory.marker.spotifyid"
-                                           @change="(val)=>markerParam('spotifyid',val)">
+                                           @change="(val)=>m_emoryParam('spotifyid',val,'marker')">
                                     <mu-option  :label="epi.name" :value="epi.id" v-for="(epi,inx) in spotify.episodes.items" :key="'epi'+inx"></mu-option>
                                 </mu-select>
                                 <mu-text-field prop="spotifyid" placeholder="Episode ID"
                                                v-model="mapstore.emory.marker.spotifyid"
-                                               @change="(val)=>markerParam('spotifyid',val)"></mu-text-field>
+                                               @change="(val)=>m_emoryParam('spotifyid',val,'marker')"></mu-text-field>
                             </mu-form-item>
                         </div>
 
@@ -120,7 +120,7 @@
                             <mu-form-item prop="mp3" :rules="blankRules">
                                 <mu-text-field prop="mp3" placeholder="mp3 URL(https)"
                                                v-model="mapstore.emory.marker.mp3"
-                                               @change="(val)=>markerParam('mp3',val)"></mu-text-field>
+                                               @change="(val)=>m_emoryParam('mp3',val,'marker')"></mu-text-field>
                             </mu-form-item>
                         </div>
 
@@ -129,10 +129,10 @@
                             <mu-form-item prop="spotifyid" :rules="blankRules">
                                 <mu-text-field prop="spotifyid" placeholder="Spotify ID"
                                                v-model="mapstore.emory.marker.spotifyid"
-                                               @change="(val)=>markerParam('spotifyid',val)"></mu-text-field>
+                                               @change="(val)=>m_emoryParam('spotifyid',val,'marker')"></mu-text-field>
                                 <mu-select prop="spotifyid" color="primary" v-if="spotify.tracks"
                                            v-model="mapstore.emory.marker.spotifyid"
-                                           @change="(val)=>markerParam('spotifyid',val)">
+                                           @change="(val)=>m_emoryParam('spotifyid',val,'marker')">
                                     <mu-option  :label="track.name" :value="track.id" v-for="(track,inx) in spotify.tracks.items" :key="'track'+inx"></mu-option>
                                 </mu-select>
                             </mu-form-item>
@@ -151,24 +151,26 @@
                     <img :src="mapstore.emory.project.thumb" v-if="mapstore.emory.project.thumb">
                     <mu-text-field prop="thumb" placeholder="プロジェクトの画像"  v-if="mapstore.emory.project.thumb"
                                    v-model="mapstore.emory.project.thumb"
-                                   @change="(val)=>projParam('thumb',val)"></mu-text-field>
+                                   @change="(val)=>m_emoryParam('thumb',val,'project')"></mu-text-field>
 
                     <mu-form-item prop="title" :rules="blankRules">
                         <mu-text-field prop="title" placeholder="プロジェクトのタイトル"
                                        v-model="mapstore.emory.project.title"
-                                       @change="(val)=>projParam('title',val)"></mu-text-field>
+                                       @change="(val)=>m_emoryParam('title',val,'project')"></mu-text-field>
                     </mu-form-item>
                     <mu-form-item prop="desc" :rules="blankRules">
                         <mu-text-field prop="desc" placeholder="プロジェクトの概要(100文字程度）" multi-line :rows="2"
                                        v-model="mapstore.emory.project.desc"
-                                       @change="(val)=>projParam('desc',val)"></mu-text-field>
+                                       @change="(val)=>m_emoryParam('desc',val,'project')"></mu-text-field>
                     </mu-form-item>
                     <mu-form-item prop="spotifyid" :rules="blankRules">
-                        <mu-text-field prop="spotifyid" placeholder="Spotify ID" v-model="mapstore.emory.project.spotifyid"/>
+                        <mu-text-field prop="spotifyid" placeholder="Spotify ID"
+                                       v-model="mapstore.emory.project.spotifyid"
+                                       @change="(val)=>m_emoryParam('spotifyid',val,'project')"></mu-text-field>
                         <mu-select prop="spotifyid" color="primary"
                                    v-if="spotify.playlists"
                                    v-model="mapstore.emory.project.spotifyid"
-                                   @change="projParam('spotifyid',val)">
+                                   @change="(val)=>m_emoryParam('spotifyid',val,'project')">
                             <mu-option  :label="pro.name" :value="pro.id" v-for="(pro,inx) in spotify.playlists.items" :key="'pro'+inx"></mu-option>
                         </mu-select>
 
@@ -183,9 +185,9 @@
 
 
                 <mu-flex justify-content="center" align-items="center" direction="row">
-                    <mu-button color="indigo400" class="smallbtn" @click="editProject">プロジェクト編集</mu-button>
-                    <mu-button color="indigo600" class="smallbtn" @click="editMarker">マーカー編集</mu-button>
-                    <mu-button color="indigo800" class="smallbtn" @click="editEnd">終了</mu-button>
+                    <mu-button color="indigo400" class="smallbtn" @click="m_editMap('project')">プロジェクト編集</mu-button>
+                    <mu-button color="indigo600" class="smallbtn" @click="m_editMap('marker')">マーカー編集</mu-button>
+                    <mu-button color="indigo800" class="smallbtn" @click="m_endEditing">終了</mu-button>
                 </mu-flex>
 
 
@@ -255,43 +257,9 @@
                 'a_spotify',
                 'a_mapstore']),
 
-            markerParam(key,val){
-                this.a_mapstore(['emory','markerparam',{key:key,val:val}]);
-            },
-
-            projParam(key,val){
-                this.a_mapstore(['emory','projectparam',{key:key,val:val}]);
-            },
-
-            editProject(){
-                this.a_mapstore(['set','editing',{key:'type',val:'project'}]);
-                this.cancelEditMode();
-            },
-
-            editMarker(){
-                this.a_mapstore(['set','editing',{key:'type',val:'marker'}]);
-                this.cancelEditMode();
-            },
-            cancelEditMode() {
-                this.a_mapstore(['emory','setmarker',nullmarker]);
-                this.a_mapstore(['emory','setproject',nullproject]);
-
-                this.a_mapstore(['set','mode','map']);
-            },
-
-            editEnd() {
-                this.a_mapstore(['set','editing',{key:'status',val:false}]);
-                this.a_mapstore(['set','mode','info']);
-
-                this.a_mapstore(['emory','setmarker',nullmarker]);
-
-                //this.$refs.selectedPoint.style.top = -300+'px';
-
-                this.a_mapstore(['emory','selectedPoint',[-300,-300]]);
-            },
             delFirebase(ref,id){
                 ref.child(id).remove();
-                this.cancelEditMode();
+                this.m_cancelEditMode();
                 this.delMarkerAlert = false;
                 this.delProjAlert = false;
             },
@@ -306,7 +274,7 @@
 
                                 // フォームの初期化
                                 this.a_mapstore(['emory','setmarker',nullmarker]);
-                                this.cancelEditMode();
+                                this.m_cancelEditMode();
                             }
                         }
                     }
@@ -319,13 +287,13 @@
                             if (this.mapstore.emory.project.center.lat !== 34.722677123) { //初期値「大阪のある場所」じゃなければ
 
                                 //this.newProject.zoom = 20;
-                                this.projParam('zoom',20);
+                                this.m_emoryParam('zoom',20,'project');
 
                                 new P(this.mapstore.emory.project).updateOrNew(this.projsRef);
 
                                // フォームの初期化
                                 this.a_mapstore(['emory','setproject',nullproject]);
-                                this.cancelEditMode();
+                                this.m_cancelEditMode();
                             }
                         }
 
