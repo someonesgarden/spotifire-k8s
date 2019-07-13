@@ -41,10 +41,10 @@
                                     <md-button class="md-icon-button md-indigo md-sm" @click="a_mapstore(['emory', 'alpha', {key: 'slider', val: 'toggle'}])"><md-icon>location_on</md-icon></md-button>
                                     <md-button class="md-icon-button md-indigo md-sm" @click="$emit('trackOnce')"><md-icon>settings_input_antenna</md-icon></md-button>
 
-                                    <md-button class="md-icon-button md-indigo md-sm" @click="a_mapstore(['set','projBoundary','toggle'])" v-if="mapstore.emory.project.id">
-                                        <span v-if="mapstore.map.projectBoundary"><md-icon>image</md-icon></span>
-                                        <span v-else><md-icon>map</md-icon></span>
-                                    </md-button>
+<!--                                    <md-button class="md-icon-button md-indigo md-sm" @click="a_mapstore(['set','projBoundary','toggle'])" v-if="mapstore.emory.project.id">-->
+<!--                                        <span v-if="mapstore.map.projectBoundary"><md-icon>image</md-icon></span>-->
+<!--                                        <span v-else><md-icon>map</md-icon></span>-->
+<!--                                    </md-button>-->
                                 </div>
                             </div>
                         </div>

@@ -1,11 +1,11 @@
 <template>
     <div class="player">
-        <div class="square" :style="{height:Math.floor(volume)+'px', visibility:playing ? 'visible' : 'hidden'}"></div>
+        <div class="square" :style="{height:Math.floor(pod.volume)+'px', visibility:pod.playing ? 'visible' : 'hidden'}"></div>
         <div class="player-controls">
             <div>
                 <a v-on:click.prevent="togglePlay" title="Play/Pause" href="#">
                     <svg width="16px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                        <path v-if="!playing" fill="currentColor" d="M15,10.001c0,0.299-0.305,0.514-0.305,0.514l-8.561,5.303C5.51,16.227,5,15.924,5,15.149V4.852c0-0.777,0.51-1.078,1.135-0.67l8.561,5.305C14.695,9.487,15,9.702,15,10.001z"/>
+                        <path v-if="!pod.playing" fill="currentColor" d="M15,10.001c0,0.299-0.305,0.514-0.305,0.514l-8.561,5.303C5.51,16.227,5,15.924,5,15.149V4.852c0-0.777,0.51-1.078,1.135-0.67l8.561,5.305C14.695,9.487,15,9.702,15,10.001z"/>
                         <path v-else fill="currentColor" d="M15,3h-2c-0.553,0-1,0.048-1,0.6v12.8c0,0.552,0.447,0.6,1,0.6h2c0.553,0,1-0.048,1-0.6V3.6C16,3.048,15.553,3,15,3z M7,3H5C4.447,3,4,3.048,4,3.6v12.8C4,16.952,4.447,17,5,17h2c0.553,0,1-0.048,1-0.6V3.6C8,3.048,7.553,3,7,3z"/>
                     </svg>
                 </a>
@@ -20,18 +20,22 @@
                 </div>
             </div>
         </div>
-        <audio :loop="innerLoop" ref="audiofile" :src="file" preload="auto" style="display: none;"></audio>
+        <audio :loop="innerLoop" ref="audiofile" :src="pod.file" preload="auto" style="display: none;"></audio>
     </div>
 </template>
 
 <script>
+
+    import {mapActions} from 'vuex';
+
     const convertTimeHHMMSS = (val) => {
         let hhmmss = new Date(val * 1000).toISOString().substr(11, 8);
         return hhmmss.indexOf("00:") === 0 ? hhmmss.substr(3) : hhmmss;
     };
 
     export default {
-        name: "AudioPlayer",
+        name: "AudioPlayerStore",
+        props:['pod','num'],
 
         data: () => ({
             audio: undefined,
@@ -40,12 +44,7 @@
             innerLoop: false,
             loaded: false,
             previousVolume: 35,
-            showVolume: false,
-            file:'',
-            loop:false,
-            volume:0,
-            playing:false,
-            autoPlay:false
+            showVolume: false
         }),
         computed: {
             currentTime() {
@@ -58,24 +57,53 @@
                 return parseInt(this.currentSeconds / this.durationSeconds * 100);
             }
         },
+        watch: {
 
+            'pod':{
+              handler(newPod){
+                  console.log("pod changed");
+                  console.log(newPod);
+              }
+            },
+
+            'pod.playing':{
+                handler(newPlaying){
+                    console.log("[AudioPlayer] pod.playing"+this.num, newPlaying);
+                    if (newPlaying) { return this.audio.play(); }
+                    this.audio.pause();
+                    this.a_mp3(['pod', this.num,'playing', false]);
+
+                }
+            },
+
+            'pod.volume':{
+                handler(newVol){
+                        console.log("[AP("+this.num+")] Volume change!");
+                        this.showVolume   = true;
+                        this.audio.volume = Math.min(newVol / 100,1);
+                    console.log( Math.min(newVol / 100,1));
+                }
+            }
+
+        },
         methods: {
+            ...mapActions(['a_mp3']),
             togglePlay(){
-                this.playing = !this.playing;
-                this.setPlaying(this.playing);
+              this.a_mp3(['pod', this.num,'playing', !this.pod.playing]);
             },
 
             load() {
                 if (this.audio.readyState >= 2) {
                     this.loaded = true;
                     this.durationSeconds = parseInt(this.audio.duration);
-                    return this.autoPlay;
+                    //this.a_mp3(['pod', this.num,'playing', this.pod.autoPlay]);
+                    return this.pod.autoPlay;
                 }
 
                 throw new Error('Failed to load sound file.');
             },
             seek(e) {
-                if (!this.playing || e.target.tagName === 'SPAN') {
+                if (!this.pod.playing || e.target.tagName === 'SPAN') {
                     return;
                 }
                 const el = e.target.getBoundingClientRect();
@@ -83,48 +111,22 @@
                 this.audio.currentTime = parseInt(this.audio.duration * seekPos);
             },
             stop() {
-                this.playing = false;
-                this.setPlaying(this.playing);
+                this.a_mp3(['pod', this.num,'playing', false]);
                 this.audio.currentTime = 0;
             },
             update(e) {
                 this.currentSeconds = parseInt(this.audio.currentTime);
-            },
-
-            /*set funcs */
-            setVolume(val){
-                this.volume = val;
-                console.log( Math.min(this.volume / 100,1));
-                this.showVolume   = true;
-                this.audio.volume = Math.min(this.volume / 100,1);
-            },
-            setPlaying(val) {
-                this.playing = val;
-                if (val) { return this.audio.play(); }
-                this.audio.pause();
-                this.audio.currentTime = 0;
-            },
-
-            setParams(file,volume,playing){
-                console.log("[AudioPlayer] @setParams",file,volume,playing);
-                this.file     = file;
-                this.volume   = volume;
-                this.setVolume(this.volume);
-                this.playing  = playing;
-                setTimeout(() => this.setPlaying(this.playing), 200);
             }
         },
-
         created() {
-           // this.innerLoop = this.loop;
+            this.innerLoop = this.pod.loop;
         },
-
         mounted() {
             this.audio = this.$el.querySelectorAll('audio')[0];
             this.audio.addEventListener('timeupdate', this.update);
             this.audio.addEventListener('loadeddata', this.load);
-            this.audio.addEventListener('pause', () => this.playing = false);
-            this.audio.addEventListener('play',  () => this.playing = true);
+            this.audio.addEventListener('pause', () => this.a_mp3(['pod',this.num,'playing',false]));
+            this.audio.addEventListener('play',  () => this.a_mp3(['pod',this.num,'playing',true]));
         }
     }
 </script>

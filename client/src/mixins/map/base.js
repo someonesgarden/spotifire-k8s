@@ -76,46 +76,9 @@ export default{
 
         },
 
-        m_resetAllPods(){
-            console.log("m_resetAllPods!");
-            this.mp3.pods.forEach((p, i) => {
-                setTimeout(() =>  this.a_mp3(['pod', i, 'file', null]), 20);
-                setTimeout(() => this.a_mp3(['pod', i, 'volume', 0]), 20);
-                setTimeout(() => this.a_mp3(['pod', i, 'playing',false]), 20);
-            });
-        },
 
-        m_callPlayerFromMap(val){
-            if (val.markertype === 'mp3') {
-                //mp3プレイヤーを開く
-                this.a_mp3(['pod', 0, 'playing',false]);
-                setTimeout(()=> this.a_mp3(['pod',0,'file',val.mp3]),100);
-                setTimeout(()=> this.a_mp3(['pod',0,'volume',75]),100);
-                setTimeout(()=> this.a_mp3(['pod',0,'playing', true+Math.floor(Math.random() * 3)]),100);
 
-            } else if (val.markertype === 'pod') {
 
-                //StoryModalを開く。
-                this.a_index(['storyModal','set',{
-                    open:true,
-                    thumb: val.thumb,
-                    title: val.title,
-                    content: val.desc,
-                    spotifyid:val.spotifyid,
-                    spotifytype:val.spotifytype
-                }]);
-
-            } else if (val.markertype === 'track') {
-                //Spotifyプレイヤーを開く（これもすべてWidgetにする！）
-                this.c_getTrack(val.spotifyid,(res)=>{
-                    if(!!res.data){
-                        this.a_spotify(['player','track',res.data]);
-                        this.a_spotify(['player','play',{id:val.spotifyid,type:'track'}]);
-                    }
-                });
-                this.a_index(['bottom','open']);
-            }
-        },
 
         m_bottomAvatarClick(mkr){
             this.a_mapstore(['set','tracking',false]);

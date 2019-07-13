@@ -42,17 +42,15 @@
     import {mapGetters,mapActions} from 'vuex';
     import BottomSlider from './BottomSlider';
     import MyAvatar from '../Map/MyAvatar';
-    import AudioPlayer from '../Mp3/AudioPlayer';
     export default {
         name: "BottomView",
         mixins: [spotifyMixin, mapMixin],
         components: {
             BottomSlider,
             MyAvatar,
-            AudioPlayer
         },
-        computed: mapGetters(['spotify','mapstore','mp3']),
-        methods:mapActions(['a_spotify','a_mp3'])
+        computed: mapGetters(['spotify','mapstore']),
+        methods:mapActions(['a_spotify'])
     }
 </script>
 

@@ -5,10 +5,6 @@
           <info-overlay ref="info_overlay" class="info_overlay overlay" @trackOnce="trackOnce"/>
           <play-overlay ref="play_overlay" class="play_overlay overlay" :class="{hide:!mapstore.mainuser}"/>
           <edit-overlay ref="edit_overlay" class="edit_overlay overlay" :class="{hide:!mapstore.mainuser}" :firebaseDB="firebaseDB"/>
-
-          <div class="mp3_players">
-            <audio-player :key="'pod'+index" :num="index" :pod="pod" v-for="(pod,index) in mp3.pods"></audio-player>
-          </div>
       </parallax>
 
     <div class="main main-raised">
@@ -118,7 +114,6 @@
   import M from '../class/map/EMarker';
   import P from '../class/map/EProject';
 
-  import AudioPlayer from '../components/Mp3/AudioPlayer';
   import {BlogCard}  from "../components/MD";
   import MapsOverlay from '../components/Emory/MapOverlay';
   import InfoOverlay from '../components/Emory/InfoOverlay';
@@ -138,7 +133,7 @@
       wsMixin
     ],
     components: {
-      AudioPlayer,
+      //AudioPlayer,
       BlogCard,
       MapsOverlay,
       InfoOverlay,
@@ -171,8 +166,7 @@
         'spotify',
         'mapstore',
         'loggedIn',
-        'ws',
-        'mp3']),
+        'ws']),
       avatar_thumb(){
         return this.spotify.bookmarks ? this.spotify.bookmarks[0].album.images[0].url : '/static/img/markers/m_mainuser_1.png'
       }
@@ -182,17 +176,16 @@
       this.firebaseDB.project   = firebase.database().ref('projects');
     },
     mounted() {
-      this.m_scrollTo('#app');// トップ
+      //TOPにスクロール
+      this.m_scrollTo('#app');
 
+      //INFOモードに
       this.a_mapstore(['set','mode','info']);
 
-        this.$nextTick(()=>{
-          this.trackOnce();
-          this.a_mapstore(['emory','initPlay', true]);
-        });
-        setTimeout(() => this.trackOnce(), 2000);
+      //少しあとで位置をセンターに合わせる
+      setTimeout(() => this.trackOnce(), 2000);
 
-      //とりあえずゲストで入らせる。最初からログインさせるときは　はずす！
+      //とりあえずゲストで入らせる。最初からログインさせるときははずす！
       this.a_spotify(['set','me',{id:'GUEST'}]);
 
       //IDがある場合
@@ -228,7 +221,6 @@
     methods: {
       ...mapActions([
         'a_index',
-        'a_mp3',
         'a_spotify',
         'a_mapstore',
         'a_ws']),
@@ -381,17 +373,6 @@
     left:0;
     width:100vw;
     height:100vh;
-  }
-
-  .mp3_players{
-    position: absolute;
-    top: 50%;
-    left: -100px;
-    margin: 0;
-    padding: 4px 0 2px;
-    z-index: 4;
-    text-align: left;
-    transform: rotate(90deg);
   }
 
   .ctrl-btn{
