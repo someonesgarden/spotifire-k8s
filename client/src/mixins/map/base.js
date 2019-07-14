@@ -77,9 +77,6 @@ export default{
         },
 
 
-
-
-
         m_bottomAvatarClick(mkr){
             this.a_mapstore(['set','tracking',false]);
             let marker = this.mapstore.markers[mkr.id];
@@ -113,9 +110,7 @@ export default{
         },
 
         m_distOfProjPoints(){
-
             if(this.mapstore.mainuser){
-
                 //自分と現在のプロジェクトのpointの距離を測る
                 let mainuser = this.mapstore.mainuser.id==="GUEST" ? this.mapstore.mainuser : this.mapstore.markers[this.mapstore.mainuser.id];
 

@@ -1,37 +1,27 @@
 <template>
         <pricing-card class="projectitem md-card-background" :class="{noimg:!proj.thumb,selected:mapstore.emory.alpha.slider}" :card-image="proj.thumb ? proj.thumb : ''" style="">
             <template slot="cardContent">
-                <h6 class="card-category text-success" :class="{active:proj.dist<0.2}"><md-icon>room</md-icon>{{proj.dist | distance}}</h6>
-                <h3 class="card-title">
-                    {{proj.title}}
-                </h3>
-                <p class="card-description" style="color:white;">
-                    {{proj.desc}}
-                </p>
-                <div class="md-layout">
-                    <div class="md-layout-item md-size-100 mx-auto md-xsmall-size-100 text-center">
-                        <div class="vertical-center">
-                            <md-button class="md-icon-button md-indigo md-sm" @click="backToLeft" v-if="mapstore.emory.slider.no>0">
-                                <md-icon>arrow_back</md-icon>
-                            </md-button>
-                            <md-button class="md-icon-button md-orange md-sm" @click="a_index(['side','left',{key:'emory',val:true}])">
-                                <md-icon>train</md-icon>
-                            </md-button>
-                            <md-button class="md-icon-button md-teal md-sm"
-                                       v-if="mapstore.emory.project.id===proj.id && mapstore.emory.alpha.slider"
-                                       @click="a_mapstore(['emory','alpha',{key:'slider',val:false}])">
-                                <md-icon>location_on</md-icon>
-                            </md-button>
-                            <md-button class="md-icon-button md-green md-sm"
-                                       v-else
-                                       @click="moveMapTo"><md-icon>location_on</md-icon></md-button>
+                <div @click="locationOnClick(proj.id)">
+                    <h3 class="card-title">
+                        {{proj.title}}
+                    </h3>
+                    <p class="card-description" style="color:white;">
+                        {{proj.desc}}
+                    </p>
+                    <div class="md-layout">
+                        <div class="md-layout-item md-size-100 mx-auto md-xsmall-size-100 text-center">
+                            <div class="vertical-center">
+                                <h6 class="card-category text-success" :class="{active:proj.dist<0.2}">
+                                    <md-icon>room</md-icon>{{proj.dist | distance}}</h6>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="md-layout-item md-size-100 mx-auto md-xsmall-size-100 text-center">
-                        <div class="vertical-center">
-                            <md-button class="md-orange" @click="playStart" v-if="proj.dist < 0.2"><md-icon>play_arrow</md-icon>&nbsp;PLAY</md-button>
-                            <span v-else>近づいてください</span>
+                        <div class="md-layout-item md-size-100 mx-auto md-xsmall-size-100 text-center">
+                            <div class="vertical-center">
+                                <md-button class="md-icon-button md-indigo md-sm" @click="backToLeft" v-if="mapstore.emory.slider.no>0"><md-icon>arrow_back</md-icon></md-button>
+                                <md-button class="md-orange" @click="playStart" v-if="proj.dist < 0.2"><md-icon>nature_people</md-icon>&nbsp;スタート</md-button>
+                                <md-button class="md-teal" @click="a_index(['side','left',{key:'emory',val:true}])" v-else><md-icon>train</md-icon>&nbsp;行き方</md-button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -75,6 +65,14 @@
                 'a_index'
             ]),
 
+            locationOnClick(id){
+                if(this.mapstore.emory.project.id===id && this.mapstore.emory.alpha.slider){
+                    this.a_mapstore(['emory','alpha',{key:'slider',val:false}]);
+                }else{
+                    this.moveMapTo();
+                }
+            },
+
             backToLeft() {
                 this.a_mapstore(['emory', 'alpha', {key: 'slider', val: false}]);
                 if(this.timeout) clearTimeout(this.timeout);
@@ -108,12 +106,11 @@
 </script>
 <style lang="scss" scoped>
 
-.card-category{
-    &.active{
-        color:#ffa500 !important;
-        font-size:1.0rem !important;
-    }
-}
-
-
+/*.card-category{*/
+/*    &.active{*/
+/*        color:#ffa500 !important;*/
+/*        font-size:1.0rem !important;*/
+/*    }*/
+/*}*/
+/*    */
 </style>

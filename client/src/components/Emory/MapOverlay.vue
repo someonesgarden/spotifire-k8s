@@ -140,10 +140,8 @@
                 for(let i=0;i<this.pods;i++) if(this.$refs['pod'+i]) this.$refs['pod'+i][0].setParams("",0,false);
             },
 
-            callPlayerFromMap(val){
+            clickMarkerCallPlayer(val){
                 if (val.markertype === 'mp3') {
-                    //mp3プレイヤーを開く
-                    console.log("play mp3player by click");
                     this.$refs['pod0'][0].setParams(val.mp3,75,true);
 
                 } else if (val.markertype === 'pod') {
@@ -171,7 +169,6 @@
             },
 
             /*---*/
-
 
             trackAction(){
                 if (this.mapstore.tracking){
@@ -231,12 +228,12 @@
             mClick(val,id){
                 //EDITモードの場合
                 if(this.mapstore.emory.editing.status){
-                    this.callPlayerFromMap(val);
+                    this.clickMarkerCallPlayer(val);
                     return;
                 }
                 //通常モードの場合
                 this.a_mapstore(['set', 'tracking', false]);
-                this.callPlayerFromMap(val);
+                this.clickMarkerCallPlayer(val);
             },
 
             tClick(val,id){
@@ -257,8 +254,8 @@
 
             keepTracking(){
                 console.log("keepTracking..");
-                //this.geolocation();
-                this.geoCurrentPosition();
+                this.geolocation();
+                //this.geoCurrentPosition();
                 if(this.mapstore.tracking){
                     this.trackTimeout = true;
                     this.timeout = setTimeout(this.keepTracking, this.mapstore.trackDuration);

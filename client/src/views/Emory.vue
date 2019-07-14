@@ -133,7 +133,6 @@
       wsMixin
     ],
     components: {
-      //AudioPlayer,
       BlogCard,
       MapsOverlay,
       InfoOverlay,
@@ -148,10 +147,6 @@
         socket:     null,
         userisready:false,
         mainuser:   null,
-
-        // //FIREBASE
-        // markersRef: null,
-        // projsRef:   null,
 
         firebaseDB:{
           marker:   null,
@@ -182,9 +177,6 @@
       //INFOモードに
       this.a_mapstore(['set','mode','info']);
 
-      //少しあとで位置をセンターに合わせる
-      setTimeout(() => this.trackOnce(), 2000);
-
       //とりあえずゲストで入らせる。最初からログインさせるときははずす！
       this.a_spotify(['set','me',{id:'GUEST'}]);
 
@@ -209,7 +201,7 @@
       this.a_mapstore(['emory','loader',true]);
       //全マーカーとエリアの設定
       this.firebaseDB.marker.on('value', (snapshot)=> this.a_mapstore(['set','markers',snapshot.val()]));
-      this.firebaseDB.project.on('value',   (snapshot)=> this.a_mapstore(['emory','setprojects',snapshot.val()]));
+      this.firebaseDB.project.on('value',(snapshot)=> this.a_mapstore(['emory','setprojects',snapshot.val()]));
     },
 
     beforeDestroy() {
@@ -346,14 +338,16 @@
       },
 
       'mapstore.emory.mode':{
-        handler(newMode){
-          this.switchLayer();
-        }
+        handler:'switchLayer'
       },
 
       'mapstore.emory.projects':{
         handler(newProjects){
-          if(newProjects) this.a_mapstore(['emory','loader',false]);
+          if(newProjects){
+              //プロジェクトが全て読み込まれたら位置計算させる
+              this.trackOnce();
+              setTimeout(()=>this.a_mapstore(['emory','loader',false]),500);
+          }
         }
       }
     }
