@@ -101,11 +101,11 @@
         },
         data() {
             return {
+                timout_volume:  null,
+                timeout:        null,
                 watchID:        null,
                 center:         null,
                 track_max:      0,
-                trackTimeout:   false,
-                timeout:        null,
                 projectPoly:    null,
                 pods: 3
             };
@@ -114,12 +114,12 @@
         computed:mapGetters(['ws', 'mapstore', 'spotify']),
 
         mounted(){
-            this.trackAction();
+            this.watchedTrackAction();
         },
 
         watch: {
             'mapstore.tracking': {
-                handler: 'trackAction',
+                handler: 'watchedTrackAction',
                 immediate: true
             },
 
@@ -138,6 +138,25 @@
             resetAllPods(){
                 console.log("[MapOverlay] @resetAllPods");
                 for(let i=0;i<this.pods;i++) if(this.$refs['pod'+i]) this.$refs['pod'+i][0].setParams("",0,false);
+            },
+
+            fadeOffAllPods(){
+                console.log("[MapOverlay] @fadeOffAllPods");
+
+                for(let j=1;j<15;j++){
+                    this.timout_volume = setTimeout(()=>{
+                        for(let i=0;i<this.pods;i++){
+                            if(this.$refs['pod'+i]){
+                                this.$refs['pod'+i][0].setVolume(this.$refs['pod'+i][0].volume*(0.98-0.01*j));
+                            }
+                        }
+                    },j*100);
+                }
+                setTimeout(()=>{
+                    for(let i=0;i<this.pods;i++){
+                        if(this.$refs['pod'+i])  this.$refs['pod'+i][0].setParams("",0,false);
+                    }
+                },1500);
             },
 
             clickMarkerCallPlayer(val){
@@ -170,17 +189,22 @@
 
             /*---*/
 
-            trackAction(){
+            watchedTrackAction(){
                 if (this.mapstore.tracking){
                     console.log("watch:tracking:START");
                     this.resetAllPods(); //全てのmp3プレイヤーを初期化
                     this.keepTracking();
                 }else{
                     console.log("watch:tracking:STOP");
+                    clearTimeout(this.timeout);
                     this.timeout = null;
                     this.center  = null;
-                    this.resetAllPods();
-                    //setTimeout(()=> this.m_resetAllPods,2000);//全てのmp3プレイヤーを初期化
+                    if(!!navigator.geolocation && this.watchID){
+                        console.log("clearWatch");
+                        navigator.geolocation.clearWatch(this.watchID);
+                    }
+                    this.fadeOffAllPods();
+                    //setTimeout(()=> this.resetAllPods,2000);//念の為さらに2秒後に停止
                 }
             },
 
@@ -239,13 +263,12 @@
 
             keepTracking(){
                 console.log("keepTracking..");
-                this.geolocation();
-                //this.geoCurrentPosition();
                 if(this.mapstore.tracking){
-                    this.trackTimeout = true;
+                    //this.geoCurrentPosition();
+                    this.geolocation();
                     this.timeout = setTimeout(this.keepTracking, this.mapstore.trackDuration);
 
-                    if(this.track_max>450){
+                    if(this.track_max>300){
                         this.a_mapstore(['set', 'tracking', false]);
                         this.track_max=0;
                         this.a_index(['alert','set',"15分経過したためトラッキングを停止します。再度「PLAY」から再生してください"]);
@@ -253,15 +276,7 @@
                     }else{
                         this.track_max++;
                     }
-                    return;
                 }
-
-                //リセット
-                console.log("reset tracking..");
-                this.trackTimeout = false;
-                this.timeout      = null;
-                this.resetAllPods();
-
             },
 
             //一回だけはこちら！
@@ -269,6 +284,7 @@
                 if(!!navigator.geolocation) navigator.geolocation.getCurrentPosition(this.geoSuccess,this.m_geoError,this.mapstore.map.geocodingOptions);
             },
 
+            //継続的に呼び出し続ける場合はこちら！
             geolocation() {
                 if(!!navigator.geolocation) this.watchID = navigator.geolocation.watchPosition(this.geoSuccess,this.m_geoError,this.mapstore.map.geocodingOptions);
             },
@@ -293,7 +309,7 @@
                 if (this.mapstore.markerDists.every(d => d.dist === 0 || d.dist > limit/1000)) {
                     //全てが範囲外なら、プレイヤーをリセット
                     console.log("all points are out of range");
-                    this.resetAllPods();
+                    this.fadeOffAllPods();
                     return;
                 }
 

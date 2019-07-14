@@ -93,10 +93,10 @@
 
             /*set funcs */
             setVolume(val){
-                this.volume = val;
-                console.log( Math.min(this.volume / 100,1));
+                console.log("[AudioPlayer] @setVolume",val);
+                this.volume = val*0.5; //少しボリュームを落とす
                 this.showVolume   = true;
-                this.audio.volume = Math.min(this.volume / 100,1);
+                this.audio.volume = Math.min(this.volume / 100, 0.5); //少しボリュームを落とす
             },
             setPlaying(val) {
                 this.playing = val;
@@ -108,10 +108,8 @@
             setParams(file,volume,playing){
                 console.log("[AudioPlayer] @setParams",file,volume,playing);
                 this.file     = file;
-                this.volume   = volume;
-                this.setVolume(this.volume);
-                this.playing  = playing;
-                setTimeout(() => this.setPlaying(this.playing), 200);
+                this.setVolume(volume);
+                setTimeout(() => this.setPlaying(playing), 200);
             }
         },
 
