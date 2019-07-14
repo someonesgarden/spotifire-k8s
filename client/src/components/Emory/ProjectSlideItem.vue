@@ -61,7 +61,6 @@
                 }else{
                     this.moveMapTo();
                 }
-
                 e.stopPropagation(); //下のレイヤーのクリックイベントが発火しないようにする
             },
 
@@ -93,11 +92,8 @@
                         this.a_index(['storyModal','toggle',true]);
                     },1000);
                 }
-
                 e.stopPropagation(); //下のレイヤーのクリックイベントが発火しないようにする
             }
         }
     }
 </script>
-<style lang="scss">
-</style>

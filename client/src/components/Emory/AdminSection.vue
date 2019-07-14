@@ -37,12 +37,9 @@
                         <mu-button color="orange700" class="smallbtn md-sm" full-width @click="goEdit">
                             <mu-icon value="build"></mu-icon>
                         </mu-button>
-
-
                         <div>
                             <span style="color:white;">有効範囲の選択</span>
-                            <mu-select prop="triggerDist"
-                                       class="white" style="margin-bottom:0;padding-bottom:0;"
+                            <mu-select prop="triggerDist" class="white" style="margin-bottom:0;padding-bottom:0;"
                                        :value="mapstore.emory.triggerDist"
                                        @change="(val)=>a_mapstore(['emory','setTriggerDist',val])">
                                 <mu-option label="8m" :value="8"></mu-option>

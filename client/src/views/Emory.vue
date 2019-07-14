@@ -123,99 +123,107 @@
   import AdminSection from '../components/Emory/AdminSection';
 
   export default {
-    name:"emory_main",
-    bodyClass: "emory-page",
-    mixins: [
-      Mixins.HeaderImage,
-      spotifyMixin,
-      utilMixin,
-      mapMixin,
-      wsMixin
-    ],
-    components: {
-      BlogCard,
-      MapsOverlay,
-      InfoOverlay,
-      PlayOverlay,
-      EditOverlay,
-      AdminSection
-    },
-    data() {
-      return {
-        image: '/static/img/emory/bg/bg1.png',
-        mode:       'info',
-        socket:     null,
-        userisready:false,
-        mainuser:   null,
+      name: "emory_main",
+      bodyClass: "emory-page",
+      mixins: [
+          Mixins.HeaderImage,
+          spotifyMixin,
+          utilMixin,
+          mapMixin,
+          wsMixin
+      ],
+      components: {
+          BlogCard,
+          MapsOverlay,
+          InfoOverlay,
+          PlayOverlay,
+          EditOverlay,
+          AdminSection
+      },
+      data() {
+          return {
+              image: '/static/img/emory/bg/bg1.png',
+              mode: 'info',
+              socket: null,
+              userisready: false,
+              mainuser: null,
+              overlay: {
+                  info: null,
+                  play: null,
+                  edit: null
+              },
+              firebaseDB: {
+                  marker: null,
+                  project: null
+              },
+              blankRules: [ruleEmpty]
+          };
+      },
+      computed: {
+          ...mapGetters([
+              'spotify',
+              'mapstore',
+              'loggedIn',
+              'ws']),
+          avatar_thumb() {
+              return this.spotify.bookmarks ? this.spotify.bookmarks[0].album.images[0].url : '/static/img/markers/m_mainuser_1.png'
+          }
+      },
+      created() {
+          this.firebaseDB.marker = firebase.database().ref('markers');
+          this.firebaseDB.project = firebase.database().ref('projects');
+      },
+      mounted() {
+          //
+          this.overlay.info = this.$refs.info_overlay.$el;
+          this.overlay.play = this.$refs.play_overlay.$el;
+          this.overlay.edit = this.$refs.edit_overlay.$el;
 
-        firebaseDB:{
-          marker:   null,
-          project:  null,
-        },
-        blankRules: [ruleEmpty]
-      };
-    },
-    computed: {
-      ...mapGetters([
-        'pwa',
-        'spotify',
-        'mapstore',
-        'loggedIn',
-        'ws']),
-      avatar_thumb(){
-        return this.spotify.bookmarks ? this.spotify.bookmarks[0].album.images[0].url : '/static/img/markers/m_mainuser_1.png'
-      }
-    },
-    created() {
-      this.firebaseDB.marker    = firebase.database().ref('markers');
-      this.firebaseDB.project   = firebase.database().ref('projects');
-    },
-    mounted() {
-      //TOPにスクロール
-      this.m_scrollTo('#app');
+          //TOPにスクロール
+          this.m_scrollTo('#app');
 
-      //INFOモードに
-      this.a_mapstore(['set','mode','info']);
+          //INFOモードに
+          this.a_mapstore(['set', 'mode', 'info']);
 
-      //とりあえずゲストで入らせる。最初からログインさせるときははずす！
-      this.a_spotify(['set','me',{id:'GUEST'}]);
+          //とりあえずゲストで入らせる。最初からログインさせるときははずす！
+          this.a_spotify(['set', 'me', {id: 'GUEST'}]);
 
-      //IDがある場合
-      if(this.spotify.me.id){
-        //ログイン済みでブックマークデータがない場合
-        if(this.spotify.me.id!=='GUEST' && !this.spotify.me.bookmark_num) {
-          this.a_index(['alert', 'set', "Spotifyユーザーデータを調べています"]);
-          this.a_index(['alert', 'open']);
-          this.a_index(['alert','action',null]);
-        }
-        //マーカー作成
-        this.createOrFindMainuser(this.spotify.me.id);
+          //IDがある場合
+          if (this.spotify.me.id) {
+              //ログイン済みでブックマークデータがない場合
+              if (this.spotify.me.id !== 'GUEST' && !this.spotify.me.bookmark_num) {
+                  this.a_index(['alert', 'set', "Spotifyユーザーデータを調べています"]);
+                  this.a_index(['alert', 'open']);
+                  this.a_index(['alert', 'action', null]);
+              }
+              //マーカー作成
+              this.createOrFindMainuser(this.spotify.me.id);
 
-      }else{
-        //IDがない場合
-        this.a_index(['alert','set',"Spotifyにログインが必要です。"]);
-        this.a_index(['alert','open']);
-        this.a_index(['alert','action','login']);
-      }
+          } else {
+              //IDがない場合
+              this.a_index(['alert', 'set', "Spotifyにログインが必要です。"]);
+              this.a_index(['alert', 'open']);
+              this.a_index(['alert', 'action', 'login']);
+          }
 
-      this.a_mapstore(['emory','loader',true]);
-      //全マーカーとエリアの設定
-      this.firebaseDB.marker.on('value', (snapshot)=> this.a_mapstore(['set','markers',snapshot.val()]));
-      this.firebaseDB.project.on('value',(snapshot)=> this.a_mapstore(['emory','setprojects',snapshot.val()]));
-    },
+          this.a_mapstore(['emory', 'loader', true]);
+          //全マーカーとエリアの設定
+          this.firebaseDB.marker.on('value', (snapshot) => this.a_mapstore(['set', 'markers', snapshot.val()]));
+          this.firebaseDB.project.on('value', (snapshot) => this.a_mapstore(['emory', 'setprojects', snapshot.val()]));
+      },
 
-    beforeDestroy() {
-      this.socketDisconnect();
-      this.a_mapstore(['set', 'tracking', false]);
-      this.firebaseDB.marker = null;
-    },
+      beforeDestroy() {
+          this.socketDisconnect();
+          this.a_mapstore(['set', 'tracking', false]);
+          this.firebaseDB.marker = null;
+      },
 
-    methods: {
-      ...mapActions([
-        'a_index',
-        'a_spotify',
-        'a_mapstore',
-        'a_ws']),
+      methods: {
+          ...mapActions([
+              'a_index',
+              'a_spotify',
+              'a_mapstore',
+              'a_ws']),
 
       trackOnce(){
         this.$refs.maps_overlay.geoCurrentPosition();
@@ -264,48 +272,46 @@
       },
 
       switchLayer() {
-        let info_overlay = this.$refs.info_overlay.$el;
-        let play_overlay = this.$refs.play_overlay.$el;
-        let edit_overlay = this.$refs.edit_overlay.$el;
+        if(!this.overlay.info) return;
 
         let mode = this.mapstore.emory.mode ? this.mapstore.emory.mode : 'info';
 
         switch (mode) {
           case 'info':
             this.a_mapstore(['set', 'tracking', false]);
-            info_overlay.style.visibility = 'visible';
-            info_overlay.style.zIndex = 401;
-            play_overlay.style.zIndex = -1;
-            edit_overlay.style.zIndex = -1;
+            this.overlay.info.style.visibility = 'visible';
+            this.overlay.info.style.zIndex = 401;
+            this.overlay.play.style.zIndex = -1;
+            this.overlay.edit.style.zIndex = -1;
             break;
 
           case 'edit':
             this.a_mapstore(['set','editing',{key:'status',val:true}]);
-            info_overlay.style.visibility = 'hidden';
-            info_overlay.style.zIndex = -1;
-            play_overlay.style.zIndex = -1;
-            edit_overlay.style.zIndex = 401;
+            this.overlay.info.style.visibility = 'hidden';
+            this.overlay.info.style.zIndex = -1;
+            this.overlay.play.style.zIndex = -1;
+            this.overlay.edit.style.zIndex = 401;
             break;
 
           case 'play_map':
             this.a_mapstore(['set', 'projBoundary', false]);
-            info_overlay.style.visibility = 'hidden';
-            play_overlay.style.zIndex = 401;
-            edit_overlay.style.zIndex = -1;
+            this.overlay.info.style.visibility = 'hidden';
+            this.overlay.play.style.zIndex = 401;
+            this.overlay.edit.style.zIndex = -1;
             break;
 
           case 'play_imagemap':
             this.a_mapstore(['set', 'projBoundary', true]);
-            info_overlay.style.visibility = 'hidden';
-            play_overlay.style.zIndex = 401;
-            edit_overlay.style.zIndex = -1;
+            this.overlay.info.style.visibility = 'hidden';
+            this.overlay.play.style.zIndex = 401;
+            this.overlay.edit.style.zIndex = -1;
             break;
 
           case 'map':
-            info_overlay.style.visibility = 'hidden';
-            info_overlay.style.zIndex = -1;
-            play_overlay.style.zIndex = -1;
-            edit_overlay.style.zIndex = -1;
+            this.overlay.info.style.visibility = 'hidden';
+            this.overlay.info.style.zIndex = -1;
+            this.overlay.play.style.zIndex = -1;
+            this.overlay.edit.style.zIndex = -1;
             break;
         }
       },
@@ -314,26 +320,25 @@
 
     watch:{
       'spotify.me':{
-        handler(newMe){
-          if(!!newMe.id){
-            if(!this.spotify.me.bookmark_num && newMe.id!=='GUEST') {
-              this.a_index(['alert', 'set', "ユーザー"+newMe.id+"を調べています"]);
+          handler(newMe) {
+              if (!newMe.id) return;
+              if (!!this.spotify.me.bookmark_num || newMe.id === 'GUEST') return;
+
+              this.a_index(['alert', 'set', "ユーザー" + newMe.id + "を調べています"]);
               this.a_index(['alert', 'open']);
-              this.a_index(['alert','action',null]);
-            }
-            //ユーザーのbookmarkデータがなくてもとりあえず初期化
-            this.createOrFindMainuser(this.spotify.me.id);
-          }
-        },deep:true
+              this.a_index(['alert', 'action', null]);
+
+              this.createOrFindMainuser(this.spotify.me.id);
+          }, deep: true
       },
 
       'mapstore.mainuser':{
         handler(newUser){
-          if(!!newUser && !this.userisready){
+            if(!newUser || this.userisready) return;
+
             this.socketInit();
             this.connectToSocket();
             this.userisready = true;
-          }
         }
       },
 
@@ -343,11 +348,11 @@
 
       'mapstore.emory.projects':{
         handler(newProjects){
-          if(newProjects){
+            if(!newProjects) return;
+
               //プロジェクトが全て読み込まれたら位置計算させる
               this.trackOnce();
               setTimeout(()=>this.a_mapstore(['emory','loader',false]),500);
-          }
         }
       }
     }
@@ -355,11 +360,6 @@
 </script>
 
 <style lang="scss" scoped>
-  .md-card-actions.text-center {
-    display: flex;
-    justify-content: center !important;
-  }
-
   .layers{
     z-index:2;
     position:absolute;
@@ -368,9 +368,4 @@
     width:100vw;
     height:100vh;
   }
-
-  .ctrl-btn{
-    min-width:48px;
-  }
-
 </style>
