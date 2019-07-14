@@ -245,7 +245,7 @@
 
         &.active{
           &::after{
-            background-color: rgba(9, 191, 120, 0.26);
+            background-color: rgba(12,12,10, 0.06);
           }
         }
       }
@@ -272,7 +272,7 @@
             font-size:1.0rem !important;
             //border-bottom:2px solid #ffa500;
 
-            background-color: rgba(0, 0, 0, 0.5);
+            background-color: rgba(0, 0, 0, 0.6);
             border-radius: 4px;
 
             //&::before{

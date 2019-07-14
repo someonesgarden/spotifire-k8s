@@ -4,7 +4,7 @@
                       :card-image="proj.thumb ? proj.thumb : ''">
 
             <template slot="cardContent">
-                <div @click="locationOnClick(proj.id)">
+                <div @click="locationOnClick(proj.id,$event)">
                     <a class="inrange" :class="{active:proj.dist < mapstore.emory.triggerDist/1000}">範囲内
                     </a>
 
@@ -20,8 +20,8 @@
                         </div>
                         <div class="md-layout-item md-size-100 mx-auto md-xsmall-size-100 text-center">
                             <div class="vertical-center">
-                                <md-button class="md-icon-button md-indigo md-sm" @click="backToLeft" v-if="mapstore.emory.slider.no>0"><md-icon>arrow_back</md-icon></md-button>
-                                <md-button class="md-orange" @click="playStart" v-if="proj.dist < mapstore.emory.triggerDist/1000"><md-icon>nature_people</md-icon>&nbsp;スタート</md-button>
+                                <md-button class="md-icon-button md-indigo md-sm" @click="backToLeft($event)" v-if="mapstore.emory.slider.no>0"><md-icon>arrow_back</md-icon></md-button>
+                                <md-button class="md-orange" @click="playStart($event)" v-if="proj.dist < mapstore.emory.triggerDist/1000"><md-icon>nature_people</md-icon>&nbsp;スタート</md-button>
                                 <md-button class="md-teal" @click="a_index(['side','left',{key:'emory',val:true}])" v-else><md-icon>train</md-icon>&nbsp;行き方</md-button>
                             </div>
                         </div>
@@ -55,18 +55,21 @@
         methods: {
             ...mapActions(['a_mapstore', 'a_index']),
 
-            locationOnClick(id){
+            locationOnClick(id,e){
                 if(this.mapstore.emory.project.id===id && this.mapstore.emory.alpha.slider){
                     this.a_mapstore(['emory','alpha',{key:'slider',val:false}]);
                 }else{
                     this.moveMapTo();
                 }
+
+                e.stopPropagation(); //下のレイヤーのクリックイベントが発火しないようにする
             },
 
-            backToLeft() {
-                this.a_mapstore(['emory', 'alpha', {key: 'slider', val: false}]);
-                if(this.timeout) clearTimeout(this.timeout);
+            backToLeft(e) {
+                // this.a_mapstore(['emory', 'alpha', {key: 'slider', val: false}]);
+                // if(this.timeout) clearTimeout(this.timeout);
                 this.$emit('backToLeft');
+                e.stopPropagation(); //下のレイヤーのクリックイベントが発火しないようにする
             },
 
             moveMapTo(){
@@ -78,7 +81,7 @@
                 }
             },
 
-            playStart(){
+            playStart(e){
                 this.a_mapstore(['emory','alpha',{key:'slider',val:false}]);
                 if(this.timeout) clearTimeout(this.timeout);
 
@@ -90,6 +93,8 @@
                         this.a_index(['storyModal','toggle',true]);
                     },1000);
                 }
+
+                e.stopPropagation(); //下のレイヤーのクリックイベントが発火しないようにする
             }
         }
     }
