@@ -51,6 +51,8 @@
                                 <mu-option label="30m" :value="30"></mu-option>
                                 <mu-option label="50m" :value="50"></mu-option>
                                 <mu-option label="80m" :value="80"></mu-option>
+                                <mu-option label="100m" :value="100"></mu-option>
+                                <mu-option label="200m" :value="200"></mu-option>
                             </mu-select>
                         </div>
                     </div>

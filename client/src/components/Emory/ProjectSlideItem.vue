@@ -1,25 +1,27 @@
 <template>
-        <pricing-card class="projectitem md-card-background" :class="{noimg:!proj.thumb,selected:mapstore.emory.alpha.slider}" :card-image="proj.thumb ? proj.thumb : ''" style="">
+        <pricing-card class="projectitem md-card-background"
+                      :class="{noimg:!proj.thumb,selected:mapstore.emory.alpha.slider,active:proj.dist < mapstore.emory.triggerDist/1000}"
+                      :card-image="proj.thumb ? proj.thumb : ''">
+
             <template slot="cardContent">
                 <div @click="locationOnClick(proj.id)">
-                    <h3 class="card-title">
-                        {{proj.title}}
-                    </h3>
-                    <p class="card-description" style="color:white;">
-                        {{proj.desc}}
-                    </p>
+                    <a class="inrange" :class="{active:proj.dist < mapstore.emory.triggerDist/1000}">範囲内
+                    </a>
+
+                    <h3 class="card-title" v-text="proj.title"></h3>
+                    <p class="card-description" style="color:white;" v-text="proj.desc"></p>
                     <div class="md-layout">
                         <div class="md-layout-item md-size-100 mx-auto md-xsmall-size-100 text-center">
                             <div class="vertical-center">
-                                <h6 class="card-category text-success" :class="{active:proj.dist<0.2}">
-                                    <md-icon>room</md-icon>{{proj.dist | distance}}</h6>
+                                <h6 class="card-category text-success" :class="{active:proj.dist < mapstore.emory.triggerDist/1000}">
+                                    <md-icon>room</md-icon>{{proj.dist | distance}}
+                                </h6>
                             </div>
                         </div>
-
                         <div class="md-layout-item md-size-100 mx-auto md-xsmall-size-100 text-center">
                             <div class="vertical-center">
                                 <md-button class="md-icon-button md-indigo md-sm" @click="backToLeft" v-if="mapstore.emory.slider.no>0"><md-icon>arrow_back</md-icon></md-button>
-                                <md-button class="md-orange" @click="playStart" v-if="proj.dist < 0.2"><md-icon>nature_people</md-icon>&nbsp;スタート</md-button>
+                                <md-button class="md-orange" @click="playStart" v-if="proj.dist < mapstore.emory.triggerDist/1000"><md-icon>nature_people</md-icon>&nbsp;スタート</md-button>
                                 <md-button class="md-teal" @click="a_index(['side','left',{key:'emory',val:true}])" v-else><md-icon>train</md-icon>&nbsp;行き方</md-button>
                             </div>
                         </div>
@@ -30,7 +32,6 @@
 </template>
 
 <script>
-    //import utilMixin from '../../mixins/util';
     import mapMixin from '../../mixins/map';
     import {mapGetters, mapActions} from 'vuex';
     import {PricingCard} from '../../components/MD/index';
@@ -50,20 +51,9 @@
                 timeout:null
             }
         },
-        computed: {
-            ...mapGetters(['mapstore']),
-
-            sortedMarkersNum(){
-                let results = [];
-                if(this.mapstore.markers) results = Object.keys(this.mapstore.markers).filter(key=>(this.mapstore.markers[key].project==='mainuser' || this.mapstore.markers[key].project===this.proj.id));
-                return results.length;
-            }
-        },
+        computed: mapGetters(['mapstore']),
         methods: {
-            ...mapActions([
-                'a_mapstore',
-                'a_index'
-            ]),
+            ...mapActions(['a_mapstore', 'a_index']),
 
             locationOnClick(id){
                 if(this.mapstore.emory.project.id===id && this.mapstore.emory.alpha.slider){
@@ -104,13 +94,5 @@
         }
     }
 </script>
-<style lang="scss" scoped>
-
-/*.card-category{*/
-/*    &.active{*/
-/*        color:#ffa500 !important;*/
-/*        font-size:1.0rem !important;*/
-/*    }*/
-/*}*/
-/*    */
+<style lang="scss">
 </style>

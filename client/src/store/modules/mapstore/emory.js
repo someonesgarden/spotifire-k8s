@@ -24,7 +24,7 @@ const state = {
                 zoom:19
             }
         },
-        triggerDist:30,
+        triggerDist:100,
 
         //all:'-LgQfo9-XfQHou8ixUre',
         all:'all',
