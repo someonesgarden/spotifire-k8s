@@ -38,6 +38,22 @@ export default{
     },
 
     methods: {
+        /* MAP Overlay */
+        m_mapClick(val){
+            //EDITモードの場合
+            if(this.mapstore.emory.editing.status){
+                if(val.containerPoint && val.containerPoint.x > 0){
+                    this.a_mapstore(['emory','markerparam',{key:'center',val:val.latlng}]);
+                    this.a_mapstore(['emory','projectparam',{key:'center',val:val.latlng}]);
+                    this.a_mapstore(['emory','selectedPoint',[val.containerPoint.x-10,val.containerPoint.y-10]]);
+                }
+                this.a_mapstore(['set','mode','edit']);
+                return;
+            }
+            //通常モードの場合
+            this.a_mapstore(['set','mode','info']);
+        },
+
         /* EDITOverlay */
         m_emoryParam(key,val,type='marker'){
             this.a_mapstore(['emory',type+'param',{key:key,val:val}]);
@@ -73,9 +89,7 @@ export default{
                 this.m_drawPoly();
                 //プロジェクト位置へマップを移動
             }
-
         },
-
 
         m_bottomAvatarClick(mkr){
             this.a_mapstore(['set','tracking',false]);

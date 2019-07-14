@@ -14,7 +14,7 @@
                    :markerZoomAnimation="false"
                    :inertia="false"
                    :bounceAtZoomLimits="false"
-                   @click="mapClick">
+                   @click="m_mapClick">
                 <l-tile-layer :url="mapstore.map.url" :attribution="mapstore.map.attribution"></l-tile-layer>
 
                 <l-image-overlay v-if="m_activeProj.imgurl && m_activeProj.LBBound"
@@ -49,7 +49,7 @@
                    :max-zoom="18"
                    :max-native-zoom="18"
                    :min-zoom="0"
-                   @click="mapClick">
+                   @click="m_mapClick">
                 <l-tile-layer :url="mapstore.map.url" :attribution="mapstore.map.attribution"></l-tile-layer>
                 <my-marker v-if="mapstore.markers && mapstore.mainuser" v-for="(marker,id) in m_sortedMarkers"
                            :marker="marker"
@@ -195,21 +195,6 @@
 
                 this.m_distOfProjPoints();
                 this.m_drawPoly();
-            },
-
-            mapClick(val){
-                //EDITモードの場合
-                if(this.mapstore.emory.editing.status){
-                    if(val.containerPoint && val.containerPoint.x > 0){
-                        this.a_mapstore(['emory','markerparam',{key:'center',val:val.latlng}]);
-                        this.a_mapstore(['emory','projectparam',{key:'center',val:val.latlng}]);
-                        this.a_mapstore(['emory','selectedPoint',[val.containerPoint.x-10,val.containerPoint.y-10]]);
-                    }
-                    this.a_mapstore(['set','mode','edit']);
-                    return;
-                }
-                //通常モードの場合
-                this.a_mapstore(['set','mode','info']);
             },
 
             pClick(val, id) {
@@ -383,33 +368,33 @@
             },
 
             resetPos(position) {
-                if (!!position) {
-                    let center = {lat:position.coords.latitude, lng:position.coords.longitude};
-                    if(!this.center) this.center = center;
+                if(!position) return;
 
-                    let dist_delta = this.m_distKmOfTwo(this.center.lat,this.center.lng,center.lat,center.lng);
+                let center = {lat:position.coords.latitude, lng:position.coords.longitude};
+                if(!this.center) this.center = center;
 
-                    if (dist_delta > 0.02) { //20メートル以上はほとんど原点
-                        center = {
-                            lat: (3 * this.center.lat + center.lat) / 4,
-                            lng: (3 * this.center.lng + center.lng) / 4
-                        };
-                    } else if (dist_delta > 0.01) { //10メートル以上は中間地点(バッファ側に重みを置く）
-                        center = {
-                            lat: (2 * this.center.lat + center.lat) / 3,
-                            lng: (2 * this.center.lng + center.lng) / 3
-                        };
-                    }
+                let dist_delta = this.m_distKmOfTwo(this.center.lat,this.center.lng,center.lat,center.lng);
 
-                    //地図のセンターリセット
-                    this.a_mapstore(['center', 'map', center]);
-
-                    //メインユーザー位置をリセット(Firebaseのエントリーを更新）
-                    if (this.mapstore.mainuser && this.mapstore.mainuser.id) new M({...this.mapstore.mainuser, center: center}).update(this.markersRef);
-
-                    //バッファ値を更新
-                    this.center = center;
+                if (dist_delta > 0.02) { //20メートル以上はほとんど原点
+                    center = {
+                        lat: (3 * this.center.lat + center.lat) / 4,
+                        lng: (3 * this.center.lng + center.lng) / 4
+                    };
+                } else if (dist_delta > 0.01) { //10メートル以上は中間地点(バッファ側に重みを置く）
+                    center = {
+                        lat: (2 * this.center.lat + center.lat) / 3,
+                        lng: (2 * this.center.lng + center.lng) / 3
+                    };
                 }
+
+                //地図のセンターリセット
+                this.a_mapstore(['center', 'map', center]);
+
+                //メインユーザー位置をリセット(Firebaseのエントリーを更新）
+                if (this.mapstore.mainuser && this.mapstore.mainuser.id) new M({...this.mapstore.mainuser, center: center}).update(this.markersRef);
+
+                //バッファ値を更新
+                this.center = center;
             }
         }
     };

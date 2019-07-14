@@ -22,7 +22,7 @@ const state = {
 
     geo:null,
 
-    tracking:       true,
+    tracking:       false,
     trackDuration:  2000,
 
     markers:        {},
@@ -72,12 +72,11 @@ const mutations = {
     },
 
     setTracking(state,val){
-        state.tracking = val;
-    },
-
-    toggleTracking(state){
-        console.log("toggleTracking!");
-        state.tracking = !state.tracking;
+        if(val==='toggle'){
+            state.tracking = !state.tracking;
+        }else{
+            state.tracking = val;
+        }
     }
 }
 

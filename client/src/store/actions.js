@@ -149,9 +149,6 @@ export const a_mapstore = ({commit},[type, action, data]) => {
             mainuser:(data)   => commit('mapstore/setMainuserCenter',data),
             map:(data)        => commit('mapstore/setMapCenter',data)
         },
-        toggle: {
-            tracking: (data) => commit('mapstore/toggleTracking',data)
-        },
         emory:{
             loader:(data)         => commit('mapstore/setLoader', data),
             marker:(data)         => commit('mapstore/setEmoryMarker',data),

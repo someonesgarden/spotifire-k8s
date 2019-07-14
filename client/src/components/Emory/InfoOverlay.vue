@@ -31,15 +31,6 @@
                                     </mu-select>
                                 </mu-form-item>
                             </mu-form>
-
-                            <div class="md-layout">
-                                <div class="md-layout-item md-size-100 mx-auto md-xsmall-size-100 text-center">
-                                    <div class="vertical-center">
-                                        <md-button class="md-icon-button md-indigo md-sm" @click="a_mapstore(['emory', 'alpha', {key: 'slider', val: 'toggle'}])"><md-icon>location_on</md-icon></md-button>
-                                        <md-button class="md-icon-button md-indigo md-sm" @click="$emit('trackOnce')"><md-icon>settings_input_antenna</md-icon></md-button>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </template>
                 </pricing-card>

@@ -47,13 +47,14 @@
                 </mu-list>
             </mu-menu>
 
-<!--            side.emory.left.open = true-->
             <mu-button flat slot="left" @click="a_index(['side','left',{key:'emory',val:true}])">
                 <mu-icon value="train"></mu-icon>
             </mu-button>
-            <mu-button flat slot="right" color="grey500" @click="a_index(['bottom','open'])">
-                <mu-icon value="border_bottom"></mu-icon>
+
+            <mu-button flat slot="right" :color="mapstore.tracking ? 'green' : 'grey500'" @click="emoryMyPosition">
+                <span v-if="mapstore.tracking">トラック中</span> <mu-icon value="directions_walk"></mu-icon>
             </mu-button>
+
             <mu-button flat slot="right" @click="a_index(['howModal','toggle',true])">
                 <mu-icon value="info"></mu-icon>
             </mu-button>
@@ -95,7 +96,10 @@
 
         <mu-drawer :open.sync="side.spotify.right.open" :docked="side.spotify.right.docked" :right="true" :width="300" @change="()=> a_index(['side','right',{key:'spotify',val:'toggle'}])">
             <mu-list>
-                <playlist-view @leftopen="a_index(['side','left',{key:'spotify',val:true}])" @close="a_index(['side','right',{key:'spotify',val:false}])" @open="a_index(['side','right',{key:'spotify',val:true}])"/>
+                <playlist-view
+                        @leftopen="a_index(['side','left',{key:'spotify',val:true}])"
+                        @close="a_index(['side','right',{key:'spotify',val:false}])"
+                        @open="a_index(['side','right',{key:'spotify',val:true}])"/>
             </mu-list>
         </mu-drawer>
         <!--/Spotify Drawers -->
@@ -103,7 +107,8 @@
         <!-- Emory Drawers -->
         <mu-drawer :open.sync="side.emory.left.open" :docked="side.emory.left.docked" :width="350" style="background-color:#0d7970;" @change="()=> a_index(['side','left',{key:'emory',val:'toggle'}])">
             <mu-list style="width:inherit;">
-                <emory-left-view @close="a_index(['side','left',{key:'emory',val:false}])"></emory-left-view>
+                <emory-left-view
+                        @close="a_index(['side','left',{key:'emory',val:false}])"></emory-left-view>
             </mu-list>
         </mu-drawer>
         <!--/Emory Drawers -->
@@ -117,7 +122,9 @@
 
         <mu-drawer :open.sync="side.news.right.open" :docked="side.news.right.docked" :right="true" :width="300" @change="()=> a_index(['side','right',{key:'news',val:'toggle'}])">
             <mu-list style="width:inherit;padding:0;">
-                <subscribe-right-view  @close="a_index(['side','right',{key:'news',val:false}])" @open="a_index(['side','right',{key:'news',val:true}])"/>
+                <subscribe-right-view
+                        @close="a_index(['side','right',{key:'news',val:false}])"
+                        @open="a_index(['side','right',{key:'news',val:true}])"/>
             </mu-list>
         </mu-drawer>
         <!--/News Drawers -->
@@ -159,14 +166,21 @@
             'bottom',
             'rootAction',
             'header',
-            'side'
+            'side',
+            'mapstore'
         ]),
 
         methods:{
-            ...mapActions(['a_index']),
+            ...mapActions(['a_index','a_mapstore']),
 
             toggleMenu(type){
                 this.menu[type] = !this.menu[type];
+            },
+
+            emoryMyPosition(){
+                this.a_mapstore(['set','tracking','toggle']);
+                this.a_mapstore(['emory', 'alpha', {key: 'slider', val: 'toggle'}]);
+                setTimeout(()=> this.a_mapstore(['emory','alpha',{key:'slider',val:false}]), 4000);
             }
         },
 

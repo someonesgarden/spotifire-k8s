@@ -1,10 +1,10 @@
 <template>
   <div class="wrapper">
       <parallax class="section page-header header-filter" parallax-active="true" :style="headerStyle">
-          <maps-overlay ref="maps_overlay" class="maps_overlay layers overlay" :markersRef="firebaseDB.marker"/>
-          <info-overlay ref="info_overlay" class="info_overlay overlay" @trackOnce="trackOnce"/>
-          <play-overlay ref="play_overlay" class="play_overlay overlay" :class="{hide:!mapstore.mainuser}"/>
-          <edit-overlay ref="edit_overlay" class="edit_overlay overlay" :class="{hide:!mapstore.mainuser}" :firebaseDB="firebaseDB"/>
+          <maps-overlay ref="maps_overlay" class="layers overlay maps_overlay" :markersRef="firebaseDB.marker"/>
+          <info-overlay ref="info_overlay" class="overlay info_overlay" @trackOnce="trackOnce"/>
+          <play-overlay ref="play_overlay" class="overlay play_overlay" :class="{hide:!mapstore.mainuser}"/>
+          <edit-overlay ref="edit_overlay" class="overlay edit_overlay" :class="{hide:!mapstore.mainuser}" :firebaseDB="firebaseDB"/>
       </parallax>
 
     <div class="main main-raised">
@@ -170,11 +170,10 @@
           }
       },
       created() {
-          this.firebaseDB.marker = firebase.database().ref('markers');
+          this.firebaseDB.marker  = firebase.database().ref('markers');
           this.firebaseDB.project = firebase.database().ref('projects');
       },
       mounted() {
-          //
           this.overlay.info = this.$refs.info_overlay.$el;
           this.overlay.play = this.$refs.play_overlay.$el;
           this.overlay.edit = this.$refs.edit_overlay.$el;
