@@ -16,7 +16,7 @@ const marker0 = {
         markertype:'pod', //pod or mp3
         w: 35,
         h: 35,
-        icon: '/static/img/markers/m_dummy.png'
+        icon: '/static/img/markers/edit/m_dummy.png'
     };
 
 export default class EMarker{
@@ -44,7 +44,7 @@ export default class EMarker{
 
                 this.marker.center = store.state.mapstore.map.center;
                 this.marker.title ="GUEST";
-                this.marker.thumb = "/static/img/markers/m_dummy.png";
+                this.marker.thumb = "/static/img/markers/edit/m_dummy.png";
                 store.commit('mapstore/setMainuser',this.marker);
 
             }else{
@@ -60,12 +60,14 @@ export default class EMarker{
     guestUpdate(){
             this.marker.center = store.state.mapstore.map.center;
             this.marker.title ="GUEST";
-            this.marker.thumb = "/static/img/markers/m_dummy.png";
+            this.marker.thumb = "/static/img/markers/edit/m_dummy.png";
             return this.marker;
     }
 
     mp3(update,firebaseRef){
         console.log("EMarker:mp3");
+
+
 
         this.marker.thumb = '/static/img/emory/marker_thumb_dummy.jpg';
 

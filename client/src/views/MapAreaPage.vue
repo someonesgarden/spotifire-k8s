@@ -15,7 +15,7 @@
 
 <!--                    <span><img src="/static/img/markers/m_RTmarker.png" style="width:12px;height:12px;display:inline;margin-right:5px;"/>-->
 <!--                        {{RTBound[0] | dicimal4}},{{RTBound[1] | dicimal4}}</span>-->
-<!--                    <span><img src="/static/img/markers/m_LBmarker.png" style="width:12px;height:12px;display:inline;margin-right:5px;"/>-->
+<!--                    <span><img src="/static/img/markers/edit/m_LBmarker.png" style="width:12px;height:12px;display:inline;margin-right:5px;"/>-->
 <!--                        {{LBBound[0] | dicimal4}},{{LBBound[1] | dicimal4}}</span>-->
                 </div>
                 <div class="sixteen wide mobile three wide tablet three wide computer column" style="padding:0;margin:0;">
@@ -48,7 +48,7 @@
                 <l-icon
                         :icon-size="[30,30]"
                         :icon-anchor="[15,15]"
-                        :icon-url="'/static/img/markers/m_LBmarker.png'"
+                        :icon-url="'/static/img/markers/edit/m_LBmarker.png'"
                         :shadow-size="[30,30]"
                         :shadow-anchow="[15,15]"
                         shadow-url='/static/img/emory/marker-shadow.png'
@@ -60,7 +60,7 @@
                 <l-icon
                         :icon-size="[30,30]"
                         :icon-anchor="[15,15]"
-                        :icon-url="'/static/img/markers/m_RTmarker.png'"
+                        :icon-url="'/static/img/markers/edit/m_RTmarker.png'"
                         :shadow-size="[30,30]"
                         :shadow-anchow="[15,15]"
                         shadow-url='/static/img/emory/marker-shadow.png'

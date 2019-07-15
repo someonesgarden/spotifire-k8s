@@ -18,7 +18,7 @@ const state = {
                 zoom:   19
             }
         },
-        triggerDist:20,
+        triggerDist: 0,
         searchDist: 100,
 
         all:'all',

@@ -138,8 +138,8 @@ export const a_mapstore = ({commit},[type, action, data]) => {
             markerdists:(data)=> commit('mapstore/setMarkerDists',data),
             poly:(data)       => commit('mapstore/setMapPoly',data),
             projBoundary:(data)=>commit('mapstore/setMapProjBoundary',data),
-
             tracking:(data)   => commit('mapstore/setTracking',  data),
+            zoom:(data)       => commit('mapstore/setMapZoom',  data),
         },
 
         geo:{

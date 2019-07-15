@@ -183,13 +183,11 @@
                 </mu-form>
                 <!--//Edit Project-->
 
-
                 <mu-flex justify-content="center" align-items="center" direction="row">
                     <mu-button color="indigo400" class="smallbtn" @click="m_editMap('project')">プロジェクト編集</mu-button>
                     <mu-button color="indigo600" class="smallbtn" @click="m_editMap('marker')">マーカー編集</mu-button>
                     <mu-button color="indigo800" class="smallbtn" @click="m_endEditing">終了</mu-button>
                 </mu-flex>
-
 
                 <mu-dialog title="マーカーを削除する" width="600" max-width="80%" :esc-press-close="false" :overlay-close="false" :open="delAlert.marker">
                     <p>決定をクリックすると削除されます。この処理は取り消せません。<br/>削除しない場合は「キャンセル」を押してください。</p>
@@ -266,7 +264,7 @@
                     if(this.mapstore.emory[type].center.lat === 34.722677123) return; //初期座標のままだと終了
 
                     if (type === 'marker') {
-                        this.a_mapstore(['emory', 'project', this.mapstore.emory.project.id]);
+                        this.a_mapstore(['emory', 'setprojectid', this.mapstore.emory.project.id]);
 
                         new M(this.mapstore.emory[type]).updateOrNew(this.firebaseDB[type]);
                         this.a_mapstore(['emory', type, nulls[type]]);  // フォームの初期化

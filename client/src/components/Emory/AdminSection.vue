@@ -41,6 +41,7 @@
                         <mu-select prop="triggerDist" class="white" style="margin-bottom:0;padding-bottom:0;"
                                    :value="mapstore.emory.triggerDist"
                                    @change="(val)=>a_mapstore(['emory','setTriggerDist',val])">
+                            <mu-option label="なし" :value="0"></mu-option>
                             <mu-option label="8m" :value="8"></mu-option>
                             <mu-option label="10m" :value="10"></mu-option>
                             <mu-option label="20m" :value="20"></mu-option>
@@ -88,7 +89,7 @@
                 'mapstore',
                 'loggedIn']),
             avatar_thumb(){
-                return this.spotify.bookmarks ? this.spotify.bookmarks[0].album.images[0].url : '/static/img/markers/m_mainuser_1.png'
+                return this.spotify.bookmarks ? this.spotify.bookmarks[0].album.images[0].url : '/static/img/markers/edit/m_mainuser_1.png'
             }
         },
         methods: {

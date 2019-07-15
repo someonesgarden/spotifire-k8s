@@ -76,7 +76,7 @@
                     this.m_setIdAndMoveCenter(this.proj.id);
                     this.a_mapstore(['emory','alpha',{key:'slider',val:true}]);
                     if(this.timeout) clearTimeout(this.timeout);
-                    this.timeout = setTimeout(()=> this.a_mapstore(['emory','alpha',{key:'slider',val:false}]),2000);
+                    this.timeout = setTimeout(()=> this.a_mapstore(['emory','alpha',{key:'slider',val:false}]),4000);
                 }
             },
 
@@ -90,7 +90,7 @@
                         this.a_mapstore(['set', 'tracking', true]);
                         this.a_mapstore(['set','mode','map']);
                         this.a_index(['storyModal','toggle',true]);
-                    },1000);
+                    },500);
                 }
                 e.stopPropagation(); //下のレイヤーのクリックイベントが発火しないようにする
             }

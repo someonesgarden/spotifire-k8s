@@ -3,10 +3,10 @@
             <!-- MAP WITH IMAGE BG-->
             <l-map v-if="m_activeProj && mapstore.map.projectBoundary"
                    ref="map"
-                   :zoom="m_activeProj.zoom"
+                   :zoom="mapstore.map.zoom"
                    :center="mapstore.map.center"
-                   :max-zoom="m_activeProj.zoom+1"
-                   :min-zoom="m_activeProj.zoom"
+                   :max-zoom="18"
+                   :min-zoom="12"
                    :bounds="[m_activeProj.LBBound, m_activeProj.RTBound]"
                    :max-bounds="[m_activeProj.LBBound, m_activeProj.RTBound]"
                    :zoomAnimation="false"
@@ -14,7 +14,7 @@
                    :markerZoomAnimation="false"
                    :inertia="false"
                    :bounceAtZoomLimits="false"
-                   @click="m_mapClick">
+                   @click="m_mapClick" @zoomend="zoomChange">
                 <l-tile-layer :url="mapstore.map.url" :attribution="mapstore.map.attribution"></l-tile-layer>
 
                 <l-image-overlay v-if="m_activeProj.imgurl && m_activeProj.LBBound"
@@ -47,9 +47,9 @@
                    :zoom="mapstore.map.zoom"
                    :center="mapstore.map.center"
                    :max-zoom="18"
-                   :max-native-zoom="18"
-                   :min-zoom="0"
-                   @click="m_mapClick">
+                   :max-native-zoom="mapstore.map.zoom"
+                   :min-zoom="12"
+                   @click="m_mapClick" @zoomend="zoomChange">
                 <l-tile-layer :url="mapstore.map.url" :attribution="mapstore.map.attribution"></l-tile-layer>
                 <my-marker v-if="mapstore.markers && mapstore.mainuser" v-for="(marker,id) in m_sortedMarkers"
                            :marker="marker"
@@ -105,6 +105,7 @@
                 timeout:        null,
                 watchID:        null,
                 center:         null,
+                centers:        [],
                 track_max:      0,
                 projectPoly:    null,
                 pods: 3
@@ -134,6 +135,10 @@
             ...mapActions(['a_mapstore','a_ws','a_index']),
 
             /*----*/
+
+            zoomChange(evt){
+                this.a_mapstore(['set','zoom',evt.target._zoom]);
+            },
 
             resetAllPods(){
                 for(let i=0;i<this.pods;i++) if(this.$refs['pod'+i]) this.$refs['pod'+i][0].setParams("",0,false);
@@ -323,11 +328,11 @@
 
             distMarkerActionUpdate() {
                 if(!this.mapstore.emory.searchDist) return; //検索範囲外の場合、即終了。
-                if(this.mapstore.emory.mode.indexOf('map')===-1) return; //map関連のモードでなければ終了。
+                if(this.mapstore.emory.mode.indexOf('play')===-1) return; //map関連のモードでなければ終了。
 
                 // ------------------------------------------------- //
 
-                let limit = parseInt(this.mapstore.emory.triggerDist);
+                let limit = this.mapstore.emory.triggerDist===0 ? this.mapstore.emory.searchDist : parseInt(this.mapstore.emory.triggerDist);
 
                 if (this.mapstore.markerDists.every(d => d.dist === 0 || d.dist > limit/1000)) {
                     //全てが範囲外なら、プレイヤーをリセット
@@ -340,9 +345,18 @@
 
                 this.mapstore.markerDists.forEach((d, i) => {
                     let dm = d.dist * 1000;
-                    if(dm === 0 || dm>=limit) return;         //---------------- 有効範囲外なら終了
-                    let marker = this.mapstore.markers[d.id]; //---------------- 各マーカーがトリガー距離外なら終了
-                    if(marker.triggerDist <dm || typeof marker.triggerDist === "undefined") return; //--すでに再生されていてloopではない場合は終了
+
+                    // console.log(
+                    //     this.mapstore.markers[d.id].markertype,
+                    //     "lim:"+limit+">"+dm+"m ",
+                    //     "trig:"+this.mapstore.markers[d.id].triggerDist+">"+dm+"m ",
+                    //     d.id+"("+ this.mapstore.markers[d.id].type+")");
+
+
+                    if(dm === 0 || dm>=limit) return;          //---------------- 有効範囲外なら終了
+                    let marker = this.mapstore.markers[d.id];  //---------------- 各マーカーがトリガー距離外なら終了
+                    if(dm > marker.triggerDist || typeof marker.triggerDist === "undefined") return; //--すでに再生されていてloopではない場合は終了
+
 
                     if(!!this.mapstore.emory.play[marker.id] && this.mapstore.emory.play[marker.id]!=='loop') return;
 
@@ -419,21 +433,25 @@
                 if(!position) return;
 
                 let center = {lat:position.coords.latitude, lng:position.coords.longitude};
+
                 if(!this.center) this.center = center;
-
                 let dist_delta = this.m_distKmOfTwo(this.center.lat,this.center.lng,center.lat,center.lng);
+                if (dist_delta > 0.05) return; //50メートル以上の変化は異常値の可能性があるので終了
 
-                if (dist_delta > 0.02) { //20メートル以上はほとんど原点
-                    center = {
-                        lat: (3 * this.center.lat + center.lat) / 4,
-                        lng: (3 * this.center.lng + center.lng) / 4
-                    };
-                } else if (dist_delta > 0.01) { //10メートル以上は中間地点(バッファ側に重みを置く）
-                    center = {
-                        lat: (2 * this.center.lat + center.lat) / 3,
-                        lng: (2 * this.center.lng + center.lng) / 3
-                    };
-                }
+
+                if(this.centers.length>3) this.centers.shift();
+                this.centers = [...this.centers,center];
+
+                let ave = this.centers.reduce((prev,cur)=>{return {lat:prev.lat+cur.lat,lng:prev.lng+cur.lng}});
+                ave = {lat:ave.lat/this.centers.length, lng:ave.lng/this.centers.length};
+
+                //let dist_delta_ave = this.m_distKmOfTwo(ave.lat,ave.lng,center.lat,center.lng);
+
+                center = {
+                    lat: (ave.lat + 2*center.lat) / 3,
+                    lng: (ave.lng + 2*center.lng) / 3
+                };
+
 
                 //地図のセンターリセット
                 this.a_mapstore(['center', 'map', center]);

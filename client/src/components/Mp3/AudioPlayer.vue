@@ -134,10 +134,10 @@
 
                 if(Math.abs(this.volume - volume)>0.1){
                     this.fadeVolume(volume);
-                    this.setPlaying(playing);
+                    setTimeout(() => this.setPlaying(playing), 200);
                 }else{
                     this.setVolume(volume);
-                    setTimeout(() => this.setPlaying(playing), 100);
+                    setTimeout(() => this.setPlaying(playing), 200);
                 }
             }
         },

@@ -166,7 +166,7 @@
               'loggedIn',
               'ws']),
           avatar_thumb() {
-              return this.spotify.bookmarks ? this.spotify.bookmarks[0].album.images[0].url : '/static/img/markers/m_mainuser_1.png'
+              return this.spotify.bookmarks ? this.spotify.bookmarks[0].album.images[0].url : '/static/img/markers/edit/m_mainuser_1.png'
           }
       },
       created() {
@@ -307,6 +307,13 @@
             break;
 
           case 'map':
+            this.overlay.info.style.visibility = 'hidden';
+            this.overlay.info.style.zIndex = -1;
+            this.overlay.play.style.zIndex = -1;
+            this.overlay.edit.style.zIndex = -1;
+            break;
+
+          case 'play':
             this.overlay.info.style.visibility = 'hidden';
             this.overlay.info.style.zIndex = -1;
             this.overlay.play.style.zIndex = -1;

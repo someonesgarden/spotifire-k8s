@@ -3,7 +3,7 @@
         <l-icon
                 :icon-size="[80,80]"
                 :icon-anchor="[40,40]"
-                :icon-url="'/static/img/markers/m_area1.png'"
+                :icon-url="'/static/img/markers/edit/m_area1.png'"
                 :shadow-size="[0,0]"
                 :shadow-anchow="[0,0]"
                 shadow-url='/static/img/emory/marker-shadow.png'

@@ -1,12 +1,26 @@
 <template>
     <div class="slide_inner" v-if="modal.modals.story">
-        <div style="float:none;clear:both;width:100%;margin-bottom:10px;">
-            <mu-flex justify-content="center" direction="row" align-items="center" style="width:100%;">
-                <img :src="modal.modals.story.thumb" class="circle">
-                <h2>{{modal.modals.story.title}}</h2>
-            </mu-flex>
-            <p v-html="modal.modals.story.content"></p>
+
+        <div class="baloon">
+            <div style="margin-left:10px;">
+                <mu-flex justify-content="center" direction="row" align-items="center" style="width:100%;">
+<!--                    <img :src="modal.modals.story.thumb" class="circle">-->
+                    <h3>{{modal.modals.story.title}}</h3>
+                </mu-flex>
+                <p v-html="modal.modals.story.content"></p>
+            </div>
+
+            <p class="md-teal" style="padding:12px;min-width:10%;margin:0 0 0 10px;" @click="closeBtn">
+                <md-icon class="md-size-3x">directions_walk</md-icon>
+            </p>
+
+<!--            <md-button class="md-icon-button md-teal md-sm" style="border-radius:50%" @click="closeBtn">-->
+<!--                <md-icon>directions_walk</md-icon>-->
+<!--            </md-button>-->
+
         </div>
+
+
         <div class="widget_player" :style="{height:height+'px'}">
             <iframe
                     :src="url" :width="width" :height="height"
@@ -14,9 +28,7 @@
                     frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
         </div>
 
-        <mu-button full-width color="greenA400" @click="closeBtn">
-            <mu-icon value="keyboard_arrow_down"></mu-icon>
-        </mu-button>
+
     </div>
 </template>
 
@@ -42,7 +54,7 @@
             }
 
             if(this.modal.modals.story.spotifytype==='episode'){
-                this.height = 240;
+                this.height = 232;
             }else if(this.modal.modals.story.spotifytype==='track'){
                 this.height = 80;
             }
@@ -57,6 +69,7 @@
 
             closeBtn(){
                 console.log("story close");
+                this.a_mapstore(['set','mode','play']);
                 this.a_index(['storyModal','toggle',false]);
                 //TOPにスクロール
                 this.m_scrollTo('#app');

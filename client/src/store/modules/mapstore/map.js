@@ -45,6 +45,11 @@ const mutations = {
         state.map.update = new Date();
     },
 
+    setMapZoom(state,data){
+        state.map.zoom = data;
+        state.map.update = new Date();
+    },
+
     setMapPoly(state,data){
         state.map.poly = data;
     },

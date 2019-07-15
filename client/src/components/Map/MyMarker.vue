@@ -35,38 +35,36 @@
     export default {
         name: "MyMarker",
         props:['marker'],
-        components:{
-            LMarker,
-            LPopup,
-            LIcon
-        },
+        components:{LMarker, LPopup, LIcon},
         computed:{
             ...mapGetters(['mapstore']),
 
             iconImg(){
+                let mode     = this.mapstore.emory.editing.status ? 'edit' : 'normal';
                 let icontype = (this.marker.id === this.mapstore.mainuser.id) ? 'you' : this.marker.type;
                 icontype     = this.marker.id === 'GUEST' ? 'you' : icontype;
+                let icon     = this.mapstore.icons[icontype][this.marker.title.charCodeAt(0) % this.mapstore.icons[icontype].length];
 
-                    let icon  = this.mapstore.icons[icontype][this.marker.title.charCodeAt(0) % this.mapstore.icons[icontype].length];
-                    let w = 22;
-                    let h = 22;
+                if(icontype==='you' || icontype==='mainuser') return {url:icon, w:22, h:22};
 
-                    if(icontype==='you'){
-                        icon  = this.mapstore.icons['you'][0];
-                        w = 24;
-                        h = 24;
-                    }else if(!!this.marker.markertype && !!this.marker.triggerDist){
-                        icon  ="/static/img/markers/m_"+this.marker.markertype+"_"+this.marker.triggerDist+(this.marker.loop ? 'loop' : '')+".png";
-                    }
-                    return {url:icon, w:w, h:h};
+                if(!!this.marker.markertype && !!this.marker.triggerDist){
+                    icon  ="/static/img/markers/"+mode+"/m_"+this.marker.markertype+"_"+this.marker.triggerDist+(this.marker.loop ? 'loop' : '')+".png";
+                }
+
+                let size = this.marker.triggerDist ? this.marker.triggerDist : 22;
+                size = size * (2^(this.mapstore.map.zoom)/1024);
+
+                if(mode==='edit'){
+                    return {url:icon, w:22, h:22}
+                }else{
+                    return {url:icon, w:size, h:size}
+                }
             }
         }
     }
 </script>
+
 <style lang="scss">
-    .leaflet-fake-icon-image-2x {
-        /*background-image: none !important;*/
-    }
     .leaflet-fake-icon-shadow {
         background-image: url('/static/img/emory/marker-shadow.png') !important;
     }

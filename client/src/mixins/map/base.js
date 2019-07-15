@@ -83,6 +83,11 @@ export default{
             this.a_mapstore(['set','poly',null]);  //リセット(polyの消去）
             this.a_mapstore(['set', 'tracking', false]); //トラッキングの停止
             if(this.mapstore.emory.projects[key]){
+
+                let zoom = this.mapstore.emory.projects[key].zoom ? this.mapstore.emory.projects[key].zoom : 18;
+                zoom = zoom > 18 ? 18 : zoom;
+                this.a_mapstore(['set','zoom',zoom]);
+
                 this.a_mapstore(['center', 'map', this.mapstore.emory.projects[key].center]);
 
                 this.m_distOfProjPoints();
