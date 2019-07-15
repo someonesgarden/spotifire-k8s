@@ -160,6 +160,7 @@ export const a_mapstore = ({commit},[type, action, data]) => {
             setprojects:(data)    => commit('mapstore/setEmoryProjects',data),
             setprojectid:(data)   => commit('mapstore/setEmoryProjectID',data),
             setTriggerDist:(data) => commit('mapstore/setTriggerDist',data),
+            setSearchDist:(data)  => commit('mapstore/setSearchDist',data),
             markerparam:(data)    => commit('mapstore/setMarkerParam', data),
             projectparam:(data)   => commit('mapstore/setProjectParam', data),
             alpha:(data)          => commit('mapstore/setAlpha', data),

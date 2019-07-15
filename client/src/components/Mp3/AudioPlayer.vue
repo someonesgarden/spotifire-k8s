@@ -33,7 +33,10 @@
     export default {
         name: "AudioPlayer",
 
+        props:['id'],
+
         data: () => ({
+            timout_volume:null,
             audio: undefined,
             currentSeconds: 0,
             durationSeconds: 0,
@@ -91,25 +94,51 @@
                 this.currentSeconds = parseInt(this.audio.currentTime);
             },
 
+            fadeVolume(volume){
+                for(let j=1;j<5;j++){
+
+                    this.timout_volume = setTimeout(()=>{
+                        if(volume > this.volume){
+                            this.setVolume(this.volume + (volume - this.volume)*0.05);
+                        }else if(volume < this.volume){
+                            this.setVolume(this.volume + (this.volume - volume)*0.05);
+                        }
+                    },j*100);
+                }
+                setTimeout(()=>this.setVolume(volume) ,500);
+                clearTimeout(this.timout_volume);
+                this.timout_volume = null;
+            },
+
             /*set funcs */
             setVolume(val){
-                console.log("[AudioPlayer] @setVolume",val);
-                this.volume = val*0.5; //少しボリュームを落とす
+                console.log("[AudioPlayer #"+this.id+"] @setVolume",val);
+                this.volume = val;
                 this.showVolume   = true;
-                this.audio.volume = Math.min(this.volume / 100, 0.5); //少しボリュームを落とす
+                this.audio.volume = Math.min(this.volume / 100, 1);
             },
             setPlaying(val) {
                 this.playing = val;
-                if (val) { return this.audio.play(); }
-                this.audio.pause();
-                this.audio.currentTime = 0;
+                if (val) {
+                    this.audio.play();
+                }else{
+                    this.audio.pause();
+                    this.audio.currentTime = 0;
+                }
+
             },
 
             setParams(file,volume,playing){
-                console.log("[AudioPlayer] @setParams",file,volume,playing);
+                console.log("[AudioPlayer #"+this.id+"] @setParams",file,volume,playing);
                 this.file     = file;
-                this.setVolume(volume);
-                setTimeout(() => this.setPlaying(playing), 200);
+
+                if(Math.abs(this.volume - volume)>0.1){
+                    this.fadeVolume(volume);
+                    this.setPlaying(playing);
+                }else{
+                    this.setVolume(volume);
+                    setTimeout(() => this.setPlaying(playing), 100);
+                }
             }
         },
 

@@ -33,25 +33,38 @@
 
             <div class="md-layout tight">
                 <div class="md-layout-item md-size-100 mx-auto md-xsmall-size-100 text-center">
-                    <div class="vertical-center">
-                        <mu-button color="orange700" class="smallbtn md-sm" full-width @click="goEdit">
-                            <mu-icon value="build"></mu-icon>
-                        </mu-button>
-                        <div>
-                            <span style="color:white;">有効範囲の選択</span>
-                            <mu-select prop="triggerDist" class="white" style="margin-bottom:0;padding-bottom:0;"
-                                       :value="mapstore.emory.triggerDist"
-                                       @change="(val)=>a_mapstore(['emory','setTriggerDist',val])">
-                                <mu-option label="8m" :value="8"></mu-option>
-                                <mu-option label="10m" :value="10"></mu-option>
-                                <mu-option label="20m" :value="20"></mu-option>
-                                <mu-option label="30m" :value="30"></mu-option>
-                                <mu-option label="50m" :value="50"></mu-option>
-                                <mu-option label="80m" :value="80"></mu-option>
-                                <mu-option label="100m" :value="100"></mu-option>
-                                <mu-option label="200m" :value="200"></mu-option>
-                            </mu-select>
-                        </div>
+                    <mu-button color="orange700" class="smallbtn md-sm" full-width @click="goEdit">
+                        <mu-icon value="build"></mu-icon>
+                    </mu-button>
+                    <div>
+                        <span style="color:white;">ユーザー有効範囲</span>
+                        <mu-select prop="triggerDist" class="white" style="margin-bottom:0;padding-bottom:0;"
+                                   :value="mapstore.emory.triggerDist"
+                                   @change="(val)=>a_mapstore(['emory','setTriggerDist',val])">
+                            <mu-option label="8m" :value="8"></mu-option>
+                            <mu-option label="10m" :value="10"></mu-option>
+                            <mu-option label="20m" :value="20"></mu-option>
+                            <mu-option label="30m" :value="30"></mu-option>
+                            <mu-option label="50m" :value="50"></mu-option>
+                            <mu-option label="80m" :value="80"></mu-option>
+                            <mu-option label="100m" :value="100"></mu-option>
+                        </mu-select>
+                    </div>
+
+                    <div>
+                        <span style="color:white;">サーチ範囲</span>
+                        <mu-select prop="searchDist" class="white" style="margin-bottom:0;padding-bottom:0;"
+                                   :value="mapstore.emory.searchDist"
+                                   @change="(val)=>a_mapstore(['emory','setSearchDist',val])">
+
+                            <mu-option label="50m" :value="50"></mu-option>
+                            <mu-option label="100m" :value="100"></mu-option>
+                            <mu-option label="200m" :value="200"></mu-option>
+                            <mu-option label="300m" :value="300"></mu-option>
+                            <mu-option label="500m" :value="500"></mu-option>
+                            <mu-option label="1km" :value="1000"></mu-option>
+                            <mu-option label="10km" :value="10000"></mu-option>
+                        </mu-select>
                     </div>
                 </div>
             </div>

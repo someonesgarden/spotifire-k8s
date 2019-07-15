@@ -1,11 +1,11 @@
 <template>
         <pricing-card class="projectitem md-card-background"
-                      :class="{noimg:!proj.thumb,selected:mapstore.emory.alpha.slider,active:proj.dist < mapstore.emory.triggerDist/1000}"
+                      :class="{noimg:!proj.thumb,selected:mapstore.emory.alpha.slider,active:proj.dist < mapstore.emory.searchDist/1000}"
                       :card-image="proj.thumb ? proj.thumb : ''">
 
             <template slot="cardContent">
                 <div @click="locationOnClick(proj.id,$event)">
-                    <a class="inrange" :class="{active:proj.dist < mapstore.emory.triggerDist/1000}">範囲内
+                    <a class="inrange" :class="{active:proj.dist < mapstore.emory.searchDist/1000}">範囲内
                     </a>
 
                     <h3 class="card-title" v-text="proj.title"></h3>
@@ -13,7 +13,7 @@
                     <div class="md-layout">
                         <div class="md-layout-item md-size-100 mx-auto md-xsmall-size-100 text-center">
                             <div class="vertical-center">
-                                <h6 class="card-category text-success" :class="{active:proj.dist < mapstore.emory.triggerDist/1000}">
+                                <h6 class="card-category text-success" :class="{active:proj.dist < mapstore.emory.searchDist/1000}">
                                     <md-icon>room</md-icon>{{proj.dist | distance}}
                                 </h6>
                             </div>
@@ -21,7 +21,7 @@
                         <div class="md-layout-item md-size-100 mx-auto md-xsmall-size-100 text-center">
                             <div class="vertical-center">
                                 <md-button class="md-icon-button md-indigo md-sm" @click="backToLeft($event)" v-if="mapstore.emory.slider.no>0"><md-icon>arrow_back</md-icon></md-button>
-                                <md-button class="md-orange" @click="playStart($event)" v-if="proj.dist < mapstore.emory.triggerDist/1000"><md-icon>nature_people</md-icon>&nbsp;スタート</md-button>
+                                <md-button class="md-orange" @click="playStart($event)" v-if="proj.dist < mapstore.emory.searchDist/1000"><md-icon>nature_people</md-icon>&nbsp;スタート</md-button>
                                 <md-button class="md-teal" @click="a_index(['side','left',{key:'emory',val:true}])" v-else><md-icon>train</md-icon>&nbsp;行き方</md-button>
                             </div>
                         </div>

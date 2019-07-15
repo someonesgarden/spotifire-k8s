@@ -14,7 +14,7 @@
                     frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
         </div>
 
-        <mu-button full-width color="greenA400" @click="a_index(['storyModal','toggle',false])">
+        <mu-button full-width color="greenA400" @click="closeBtn">
             <mu-icon value="keyboard_arrow_down"></mu-icon>
         </mu-button>
     </div>
@@ -22,8 +22,10 @@
 
 <script>
     import {mapActions,mapGetters} from 'vuex';
+    import utilMixin from '../../mixins/util';
     export default {
         name: "StorySlide",
+        mixins:[utilMixin],
         data(){
             return{
                 url:"https://open.spotify.com/embed/album/1DFixLWuPkv3KT3TnV35m3",
@@ -50,7 +52,16 @@
             this.a_mapstore(['set', 'tracking', true]);
         },
 
-        methods:mapActions(['a_index','a_mapstore'])
+        methods:{
+            ...mapActions(['a_index','a_mapstore']),
+
+            closeBtn(){
+                console.log("story close");
+                this.a_index(['storyModal','toggle',false]);
+                //TOPにスクロール
+                this.m_scrollTo('#app');
+            }
+        }
     }
 </script>
 

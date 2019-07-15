@@ -1,32 +1,26 @@
 const state = {
     emory: {
-        alpha:{
-            slider:false
-        },
-
-        slider:{
-          no:0
-        },
-
-        mode:'info',
-        loader:false,
+        alpha:  {slider:false},
+        slider: {no:0},
+        mode:   'info',
+        loader: false,
         editing: {
-            status:     false,
-            type:       'marker'
+            status: false,
+            type:   'marker'
         },
         play:{
-          init:false
+            init:    false
         },
         projects: {
             all: {
-                title: '読み込み中です...',
+                title:  '読み込み中です...',
                 center: {lat:35.67104,lng:139.734547},
-                zoom:19
+                zoom:   19
             }
         },
-        triggerDist:100,
+        triggerDist:20,
+        searchDist: 100,
 
-        //all:'-LgQfo9-XfQHou8ixUre',
         all:'all',
         selectedPoint:{
           top:-300,
@@ -106,6 +100,10 @@ const mutations = {
         state.emory.triggerDist = val;
     },
 
+    setSearchDist(state,val){
+        state.emory.searchDist = val;
+    },
+
     setEmoryProjects(state,val){
         state.emory.projects = val;
     },
@@ -119,6 +117,7 @@ const mutations = {
         state.emory.marker.project = val;
     },
 
+    // MARKERS
     setEmoryMarker(state,data){
         state.emory.marker = data;
     },

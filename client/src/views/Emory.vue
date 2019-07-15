@@ -270,8 +270,8 @@
         }
       },
 
-      switchLayer() {
-        if(!this.overlay.info) return;
+      switchMode() {
+        if(!this.overlay.info) return; //レイヤーの準備ができててなければ即終了。
 
         let mode = this.mapstore.emory.mode ? this.mapstore.emory.mode : 'info';
 
@@ -342,7 +342,7 @@
       },
 
       'mapstore.emory.mode':{
-        handler:'switchLayer'
+        handler:'switchMode'
       },
 
       'mapstore.emory.projects':{

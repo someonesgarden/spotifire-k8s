@@ -73,7 +73,7 @@
             </div>
             <!-- MP3 PLAYERS -->
             <div class="mp3_players">
-                <audio-player :key="'pod'+(index-1)" :ref="'pod'+(index-1)" v-for="index in pods"></audio-player>
+                <audio-player :key="'pod'+(index-1)" :ref="'pod'+(index-1)" :id="index-1" v-for="index in pods"></audio-player>
             </div>
         </div>
 </template>
@@ -136,28 +136,49 @@
             /*----*/
 
             resetAllPods(){
-                console.log("[MapOverlay] @resetAllPods");
                 for(let i=0;i<this.pods;i++) if(this.$refs['pod'+i]) this.$refs['pod'+i][0].setParams("",0,false);
             },
 
             fadeOffAllPods(){
-                console.log("[MapOverlay] @fadeOffAllPods");
+                let vol_sum = 0;
+                for(let i=0;i<this.pods;i++){
+                    if(this.$refs['pod'+i]) vol_sum += this.$refs['pod'+i][0].volume;
+                }
 
-                for(let j=1;j<15;j++){
+                //もし十分に音が小さければフェードアウトはしない
+                if(vol_sum<10){
+                   this.resetAllPods(); return;
+                }
+
+                for(let j=1;j<20;j++){
                     this.timout_volume = setTimeout(()=>{
                         for(let i=0;i<this.pods;i++){
                             if(this.$refs['pod'+i]){
-                                this.$refs['pod'+i][0].setVolume(this.$refs['pod'+i][0].volume*(0.98-0.01*j));
+                                this.$refs['pod'+i][0].setVolume(this.$refs['pod'+i][0].volume*(0.98-0.02*j));
                             }
                         }
                     },j*100);
                 }
-                setTimeout(()=>{
-                    for(let i=0;i<this.pods;i++){
-                        if(this.$refs['pod'+i])  this.$refs['pod'+i][0].setParams("",0,false);
-                    }
-                },1500);
+
+                setTimeout(()=>this.resetAllPods ,2000);
             },
+
+
+            fadeInPod(num,volume){
+                for(let j=1;j<10;j++){
+                    this.timout_volume = setTimeout(()=>{
+                        if(volume > this.$refs['pod'+num][0].volume){
+                            this.$refs['pod'+num][0].setVolume(this.$refs['pod'+num][0].volume + (volume - this.$refs['pod'+num][0].volume)*0.08);
+                        }else if(volume < this.$refs['pod'+num][0].volume){
+                            this.$refs['pod'+num][0].setVolume(this.$refs['pod'+num][0].volume - (this.$refs['pod'+num][0].volume - volume)*0.08);
+                        }
+                    },j*100);
+                }
+                setTimeout(()=>this.$refs['pod'+num][0].setVolume(volume) ,1000);
+                clearTimeout(this.timout_volume);
+                this.timout_volume = null;
+            },
+
 
             clickMarkerCallPlayer(val){
                 if (val.markertype === 'mp3') {
@@ -301,32 +322,33 @@
             },
 
             distMarkerActionUpdate() {
+                if(!this.mapstore.emory.searchDist) return; //検索範囲外の場合、即終了。
+                if(this.mapstore.emory.mode.indexOf('map')===-1) return; //map関連のモードでなければ終了。
 
-                if(!this.mapstore.markerDists) return;
+                // ------------------------------------------------- //
 
                 let limit = parseInt(this.mapstore.emory.triggerDist);
 
                 if (this.mapstore.markerDists.every(d => d.dist === 0 || d.dist > limit/1000)) {
                     //全てが範囲外なら、プレイヤーをリセット
-                    console.log("all points are out of range");
+                    console.log("All Points are Out of Range");
                     this.fadeOffAllPods();
                     return;
                 }
 
+                // ------------------------------------------------- //
+
                 this.mapstore.markerDists.forEach((d, i) => {
                     let dm = d.dist * 1000;
-                    //----------------有効範囲外なら終了
-                    if(dm === 0 || dm>=limit) return;
-                    //----------------各マーカーがトリガー距離外なら終了
-                    let marker = this.mapstore.markers[d.id];
-                    if(marker.triggerDist <dm || typeof marker.triggerDist === "undefined") return;
-                    //----------------すでに再生されていてloopではない場合は再生しない
+                    if(dm === 0 || dm>=limit) return;         //---------------- 有効範囲外なら終了
+                    let marker = this.mapstore.markers[d.id]; //---------------- 各マーカーがトリガー距離外なら終了
+                    if(marker.triggerDist <dm || typeof marker.triggerDist === "undefined") return; //--すでに再生されていてloopではない場合は終了
 
                     if(!!this.mapstore.emory.play[marker.id] && this.mapstore.emory.play[marker.id]!=='loop') return;
 
-                    //let volume = Math.min(1,1/Math.sqrt((limit-dm)))*100;
-                    //let volume =  Math.floor(Math.max(0,100-18*Math.sqrt(dm)));
-                    let volume =  100*((limit - dm)/limit)^2;
+                    let triggerDist = marker.triggerDist ? marker.triggerDist : 10;
+
+                    let volume =  60*((triggerDist - dm)/triggerDist)^2; //mp3は控えめにするので60％程度
 
                     //mp3の場合、３つのmp3プレイヤーを起動する
                     if (marker.markertype === 'mp3') {
@@ -335,13 +357,12 @@
 
                         for(let i=0;i<this.pods;i++){
                             //すでにそのプレイヤーに登録されているなら
-                            if (this.$refs['pod'+i][0].file === marker.mp3){
-                                already_has = {num: i, playing:this.$refs['pod'+i][0].playing};
-                            }
+                            if (this.$refs['pod'+i][0].file === marker.mp3) already_has = {num: i, playing:this.$refs['pod'+i][0].playing};
 
                             //そのプレイヤーが停止していたら
                             if (!this.$refs['pod'+i][0].playing) {
                                 this.$refs['pod'+i][0].setParams("",0,false);
+
                                 paused_pods.push(i);
                             }
                         }
@@ -350,10 +371,21 @@
                         if (already_has) {
                             console.log("already_has is..",already_has);
                             if (!already_has.playing) {
+                                console.log("restart pod!");
                                 this.$refs['pod'+already_has.num][0].setParams(marker.mp3,volume,true);
                             } else {
+                                console.log("change vol to",volume,limit,dm);
                                 //すでに再生中は、ボリューが変わる程度
-                                this.$refs['pod'+already_has.num][0].setVolume(volume);
+
+                                //十分に差があるならフェードイン
+                                if(Math.abs(volume-this.$refs['pod'+already_has.num][0].volume)>20){
+                                    this.fadeInPod(already_has.num,volume);
+                                }else{
+                                    //ダイレクトに変更
+                                    this.$refs['pod'+already_has.num][0].setVolume(volume);
+                                }
+
+
                             }
 
                         } else if (paused_pods.length > 0) {
