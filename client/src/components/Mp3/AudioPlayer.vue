@@ -75,6 +75,8 @@
                     return this.autoPlay;
                 }
 
+                console.log("load,file",this.file);
+
                 throw new Error('Failed to load sound file.');
             },
             seek(e) {
@@ -112,7 +114,7 @@
 
             /*set funcs */
             setVolume(val){
-                console.log("[AudioPlayer #"+this.id+"] @setVolume",val);
+                //console.log("[AudioPlayer #"+this.id+"] @setVolume",val);
                 this.volume = val;
                 this.showVolume   = true;
                 this.audio.volume = Math.min(this.volume / 100, 1);
@@ -120,7 +122,7 @@
             setPlaying(val) {
                 this.playing = val;
                 if (val) {
-                    this.audio.play();
+                    if(this.audio && this.file !=='' && this.file) setTimeout(()=> this.audio.play(),200);
                 }else{
                     this.audio.pause();
                     this.audio.currentTime = 0;
@@ -129,7 +131,7 @@
             },
 
             setParams(file,volume,playing){
-                console.log("[AudioPlayer #"+this.id+"] @setParams",file,volume,playing);
+                //console.log("[AudioPlayer #"+this.id+"] @setParams",file,volume,playing);
                 this.file     = file;
 
                 if(Math.abs(this.volume - volume)>0.1){

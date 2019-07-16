@@ -1,44 +1,11 @@
 <template>
-        <mu-flex justify-content="center" align-items="center" direction="row">
+        <mu-flex justify-content="center" align-items="center" direction="column">
 
-            <pricing-card class="md-card-background" :card-image="mapstore.emory.projects[mapstore.emory.project.id].thumb" style="max-width:320px;width:80%;" v-if="mapstore.emory.project.id">
-                <template slot="cardContent" v-if="mapstore.emory.projects[mapstore.emory.project.id]">
-                    <h6 class="card-category text-success">PLAY</h6>
-                    <h3 class="card-title">
-                        {{mapstore.emory.projects[mapstore.emory.project.id].title}}
-                    </h3>
-
-                    <p class="card-description">
-                       {{mapstore.emory.projects[mapstore.emory.project.id].desc}}
-                    </p>
-
-                    <ul>
-                        <li>
-                            <md-icon class="text-success">check</md-icon>有効範囲の選択
-                        </li>
-                        <li>
-                            <mu-select class="white" prop="triggerDist" :value="mapstore.emory.triggerDist" @change="(val)=>a_mapstore(['emory','setTriggerDist',val])" style="margin-bottom:0;padding-bottom:0;">
-                                <mu-option  label="8m" :value="8"></mu-option>
-                                <mu-option  label="10m" :value="10"></mu-option>
-                                <mu-option  label="20m" :value="20"></mu-option>
-                                <mu-option  label="30m" :value="30"></mu-option>
-                                <mu-option  label="50m" :value="50"></mu-option>
-                                <mu-option  label="80m" :value="80"></mu-option>
-                            </mu-select>
-                        </li>
-
-                        <li v-if="mapstore.mainuser">
-                            <my-avatar :marker="marker" :id="marker.id" v-for="(marker,id) in m_sortedMarkers" :key="'mv'+id"></my-avatar>
-                        </li>
-                    </ul>
-
-                    <md-button class="md-primary md-round"  @click="playStart" v-if="mapstore.emory.projects[mapstore.emory.project.id]">プレイ開始</md-button>
-                    <md-button class="md-primary md-round"  @click="a_mapstore(['set','mode','info'])">メニューへ</md-button>
-
-                </template>
-            </pricing-card>
-
-
+            <div class="animearea" v-if="shapes">
+                <anime-control :shapes="shapes.shapes">
+                </anime-control>
+            </div>
+            <md-button class="md-orange md-round" @click="a_mapstore(['set','mode','info'])">終了</md-button>
 
         </mu-flex>
 </template>
@@ -51,6 +18,12 @@
 
     import {PricingCard} from '../../components/MD/index';
     import MyAvatar from '../../components/Map/MyAvatar';
+    import AnimeControl from '../../components/Svg/AnimeControl';
+
+
+    import axios from 'axios';
+
+
     export default {
         name: "PlayOverlay",
         mixins:[
@@ -60,13 +33,22 @@
         ],
         components:{
             MyAvatar,
-            PricingCard
+            PricingCard,
+            AnimeControl
+        },
+        data(){
+            return{
+                shapes:null
+            }
         },
         computed: {
             ...mapGetters([
                 'spotify',
                 'mapstore',
                 'loggedIn'])
+        },
+        mounted(){
+            axios.get("/static/data/emory_svg_shape.json").then(res => this.shapes = res.data)
         },
         methods: {
             ...mapActions([
@@ -84,5 +66,16 @@
 </script>
 
 <style scoped>
+    .animearea{
+        margin-top: 60px;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+        /* min-height: 300px; */
+        /* margin: 10px auto; */
+        display: flex;
+        justify-content: center;
+        mix-blend-mode: hard-light;
+    }
 
 </style>

@@ -4,15 +4,27 @@ export default class OrganicShape{
     constructor(el) {
         this.DOM = {};
         this.DOM.el = el;
+
         this.DOM.svg = this.DOM.el.querySelector('.item__svg');
         this.DOM.path = this.DOM.svg.querySelector('path');
-        this.paths = {};
-        this.paths.start = this.DOM.path.getAttribute('d');
-        this.paths.end = this.DOM.el.dataset.morphPath;
-        this.DOM.deco = this.DOM.svg.querySelector('.item__deco');
+        //this.DOM.pathary = this.DOM.svg.querySelectorAll('path');
+
+        this.DOM.ds = [];
+        Array.from(this.DOM.svg.querySelectorAll('path'),  p => {this.DOM.ds.push(p.getAttribute('d'))});
+
+        // this.ds = this.DOM.pathary.map((p)=>p.getAttribute('d'));
+        console.log(this.DOM.ds);
+
+        // this.paths = {};
+        // this.paths.start = this.DOM.path.getAttribute('d');
+        // this.paths.end = this.DOM.el.dataset.morphPath;
+
+        // this.paths.start = this.DOM.ds[0];
+        // this.paths.end   = this.DOM.ds[1];
+
         this.DOM.image = this.DOM.svg.querySelector('image');
-        this.DOM.title = this.DOM.el.querySelector('.item__meta > .item__title');
-        this.DOM.subtitle = this.DOM.el.querySelector('.item__meta > .item__subtitle');
+
+
         this.CONFIG = {
             // Defaults:
             animation: {
@@ -37,90 +49,87 @@ export default class OrganicShape{
                     translateX: this.DOM.el.dataset.imageTranslatex || 0,
                     translateY: this.DOM.el.dataset.imageTranslatey || 0,
                     rotate: this.DOM.el.dataset.imageRotate || 0
-                },
-                deco: {
-                    duration: this.DOM.el.dataset.animationDecoDuration || 2500,
-                    delay: this.DOM.el.dataset.animationDecoDelay || 0,
-                    easing: this.DOM.el.dataset.animationDecoEasing || 'easeOutQuad',
-                    elasticity: this.DOM.el.dataset.decoElasticity || 400,
-                    scaleX: this.DOM.el.dataset.decoScalex || 0.9,
-                    scaleY: this.DOM.el.dataset.decoScaley || 0.9,
-                    translateX: this.DOM.el.dataset.decoTranslatex || 0,
-                    translateY: this.DOM.el.dataset.decoTranslatey || 0,
-                    rotate: this.DOM.el.dataset.decoRotate || 0
                 }
             }
         };
         this.initEvents();
     }
     initEvents() {
-        this.mouseenterFn = () => {
-            this.mouseTimeout = setTimeout(() => {
-                this.isActive = true;
-                this.animate();
-            }, 75);
-        }
-        this.mouseleaveFn = () => {
-            clearTimeout(this.mouseTimeout);
-            if( this.isActive ) {
-                this.isActive = false;
-                this.animate();
-            }
-        }
-        this.DOM.el.addEventListener('mouseenter', this.mouseenterFn);
-        this.DOM.el.addEventListener('mouseleave', this.mouseleaveFn);
-        this.DOM.el.addEventListener('touchstart', this.mouseenterFn);
-        this.DOM.el.addEventListener('touchend', this.mouseleaveFn);
+
+        this.num = 0;
+        this.isActive = true;
+        this.rotate = 0;
+        this.scale = 1;
+
+        this.loop_interval = setInterval(()=> {
+
+            this.timeout0 = setTimeout(()=>{
+                this.num = Math.floor(Math.random()*5);
+                this.num = this.num>4 ? 0 : this.num;
+                this.rotate = Math.floor(Math.random()*180);
+                this.scale = Math.random()*0.02+0.98;
+                this.loop();
+            },Math.floor(Math.random()*2))
+
+            // this.num = Math.floor(Math.random()*5);
+            // this.num = this.num>4 ? 0 : this.num;
+            //this.loop();
+            //this.isActive = !this.isActive;
+
+        },3000)
+
+        // this.mouseenterFn = () => {
+        //     this.mouseTimeout = setTimeout(() => {
+        //         this.isActive = true;
+        //         this.animate();
+        //     }, 75);
+        // }
+        // this.mouseleaveFn = () => {
+        //     clearTimeout(this.mouseTimeout);
+        //     if( this.isActive ) {
+        //         this.isActive = false;
+        //         this.animate();
+        //     }
+        // }
+        // this.DOM.el.addEventListener('mouseenter', this.mouseenterFn);
+        // this.DOM.el.addEventListener('mouseleave', this.mouseleaveFn);
+        // this.DOM.el.addEventListener('touchstart', this.mouseenterFn);
+        // this.DOM.el.addEventListener('touchend', this.mouseleaveFn);
     }
+
+
     getAnimeObj(targetStr) {
         const target = this.DOM[targetStr];
         let animeOpts = {
             targets: target,
             duration: this.CONFIG.animation[targetStr].duration,
-            delay: this.CONFIG.animation[targetStr].delay,
+            //delay: this.CONFIG.animation[targetStr].delay,
             easing: this.CONFIG.animation[targetStr].easing,
             elasticity: this.CONFIG.animation[targetStr].elasticity,
-            scaleX: this.isActive ? this.CONFIG.animation[targetStr].scaleX : 1,
-            scaleY: this.isActive ? this.CONFIG.animation[targetStr].scaleY : 1,
-            translateX: this.isActive ? this.CONFIG.animation[targetStr].translateX : 0,
-            translateY: this.isActive ? this.CONFIG.animation[targetStr].translateY : 0,
-            rotate: this.isActive ? this.CONFIG.animation[targetStr].rotate : 0
+            scaleX: this.scale,
+            scaleY: this.scale,
+            translateX : Math.max(1 - this.scale,0),
+            translateY : Math.max(1 - this.scale,0),
+            // translateX: this.isActive ? this.CONFIG.animation[targetStr].translateX : 0,
+            // translateY: this.isActive ? this.CONFIG.animation[targetStr].translateY : 0,
+            //rotate: this.rotate
         };
         if( targetStr === 'path' ) {
-            animeOpts.d = this.isActive ? this.paths.end : this.paths.start;
+
+            animeOpts.d = this.DOM.ds[this.num];
         }
         anime.remove(target);
         return animeOpts;
     }
-    animate() {
-        // Animate the path, the image and deco.
+
+    loop(){
         anime(this.getAnimeObj('path'));
         anime(this.getAnimeObj('image'));
-        anime(this.getAnimeObj('deco'));
-        // Title and Subtitle animation
-        anime.remove(this.DOM.title);
-        anime({
-            targets: this.DOM.title,
-            easing: 'easeOutQuad',
-            translateY: this.isActive ? [
-                {value: '-50%', duration: 200},
-                {value: ['50%', '0%'], duration: 200}
-            ] : [
-                {value: '50%', duration: 200},
-                {value: ['-50%', '0%'], duration: 200}
-            ],
-            opacity: [
-                {value: 0, duration: 200},
-                {value: 1, duration: 200}
-            ]
-        });
-        anime.remove(this.DOM.subtitle);
-        anime({
-            targets: this.DOM.subtitle,
-            easing: 'easeOutQuad',
-            translateY: this.isActive ? {value: ['50%', '0%'], duration: 200, delay: 250} : {value: '0%', duration: 1},
-            opacity: this.isActive ? {value: [0,1], duration: 200, delay: 250} : {value: 0, duration: 1}
-        });
+
+    }
+    animate() {
+        anime(this.getAnimeObj('path'));
+        anime(this.getAnimeObj('image'));
     }
 }
 

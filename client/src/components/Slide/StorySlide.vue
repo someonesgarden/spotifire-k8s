@@ -1,6 +1,8 @@
 <template>
     <div class="slide_inner" v-if="modal.modals.story">
 
+
+        <p class="subtitle"><md-icon>looks_one</md-icon></p>
         <div class="baloon" @click="closeBtn">
             <div style="margin-left:10px;">
                 <mu-flex justify-content="center" direction="row" align-items="center">
@@ -11,7 +13,7 @@
             </div>
 
             <p class="md-teal" style="padding:5px;animation: r7 2s linear infinite;">
-                <md-icon class="md-size-3x">directions_walk</md-icon>
+                <md-icon class="md-size-2x">hearing</md-icon>
             </p>
 
         </div>

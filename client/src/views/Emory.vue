@@ -282,6 +282,7 @@
             this.overlay.info.style.zIndex = 401;
             this.overlay.play.style.zIndex = -1;
             this.overlay.edit.style.zIndex = -1;
+            document.body.classList.remove('playing');
             break;
 
           case 'edit':
@@ -290,6 +291,7 @@
             this.overlay.info.style.zIndex = -1;
             this.overlay.play.style.zIndex = -1;
             this.overlay.edit.style.zIndex = 401;
+            document.body.classList.remove('playing');
             break;
 
           case 'play_map':
@@ -297,6 +299,7 @@
             this.overlay.info.style.visibility = 'hidden';
             this.overlay.play.style.zIndex = 401;
             this.overlay.edit.style.zIndex = -1;
+            document.body.classList.add('playing');
             break;
 
           case 'play_imagemap':
@@ -304,6 +307,7 @@
             this.overlay.info.style.visibility = 'hidden';
             this.overlay.play.style.zIndex = 401;
             this.overlay.edit.style.zIndex = -1;
+            document.body.classList.add('playing');
             break;
 
           case 'map':
@@ -311,13 +315,15 @@
             this.overlay.info.style.zIndex = -1;
             this.overlay.play.style.zIndex = -1;
             this.overlay.edit.style.zIndex = -1;
+            document.body.classList.remove('playing');
             break;
 
           case 'play':
             this.overlay.info.style.visibility = 'hidden';
             this.overlay.info.style.zIndex = -1;
-            this.overlay.play.style.zIndex = -1;
+            this.overlay.play.style.zIndex = 401;
             this.overlay.edit.style.zIndex = -1;
+            document.body.classList.add('playing');
             break;
         }
       },

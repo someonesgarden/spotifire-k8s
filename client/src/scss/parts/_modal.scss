@@ -70,7 +70,7 @@
     }
 
     p{
-      line-height:2rem;
+      line-height:1.2rem;
     }
 
     .spinner{
@@ -107,6 +107,19 @@
         position:relative;
         top:-10px;
 
+
+        p.subtitle{
+          display: inline-block;
+          background-color: #0eaa84;
+          color: $white;
+          padding: 12px;
+          border-radius: 50%;
+          /* border: 3px solid white; */
+          //font-weight: bold;
+          margin-bottom: 6px;
+          @include shadow-6dp();
+        }
+
         .baloon{
 
           cursor: pointer;
@@ -116,9 +129,13 @@
           //color:$teal-900;
           //opacity:0.9;
           background-color: #ffffff;
+          background-image:url('/static/img/emory/baloon_bg.jpg');
+          background-size:cover;
+          background-position:left top;
+          background-repeat: no-repeat;
           color: #0eaa84;
           width: 80%;
-          margin: 0 auto 45px auto;
+          margin: 0 auto 25px auto;
           border-radius: 18px;
           display: flex;
           justify-content: center;
