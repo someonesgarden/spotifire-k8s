@@ -26,11 +26,15 @@
 
     //LEAF
     import {LIcon, LMarker, LPopup} from "vue2-leaflet";
-    import icon from 'leaflet/dist/images/marker-icon.png';
-    import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 
-    let DefaultIcon = L.icon({iconUrl: icon, shadowUrl: iconShadow});
-    L.Marker.prototype.options.icon = DefaultIcon;
+    //マーカー関連のエラー防止
+    //参考：https://stackoverflow.com/questions/55928916/marker-in-leaflet-js-does-not-load-properly-due-to-err-invalid-url-error
+    delete L.Icon.Default.prototype._getIconUrl;
+    L.Icon.Default.mergeOptions({
+        iconRetinaUrl: '/static/img/emory/marker-icon-2x.png',
+        iconUrl: '/static/img/emory/marker-icon-2x.png',
+        shadowUrl: '/static/img/emory/marker-shadow.png'
+    });
 
     export default {
         name: "MyMarker",
@@ -63,9 +67,3 @@
         }
     }
 </script>
-
-<style lang="scss">
-    .leaflet-fake-icon-shadow {
-        background-image: url('/static/img/emory/marker-shadow.png') !important;
-    }
-</style>

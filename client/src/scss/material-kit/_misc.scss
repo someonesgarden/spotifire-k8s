@@ -14,9 +14,19 @@ body {
 }
 
 .main-raised{
+  transition: 1s;
+  -webkit-transition: 1s;
     margin: -60px 30px 0px;
     border-radius: $border-radius-base * 2;
     @include shadow-16dp();
+
+  &.map{
+    margin: -20px 30px 0;
+  }
+
+  &.play{
+    margin: 0 30px 0;
+  }
 }
 
 .wrapper{

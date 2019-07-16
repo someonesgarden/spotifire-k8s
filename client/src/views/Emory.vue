@@ -7,7 +7,7 @@
           <edit-overlay ref="edit_overlay" class="overlay edit_overlay" :class="{hide:!mapstore.mainuser}" :firebaseDB="firebaseDB"/>
       </parallax>
 
-    <div class="main main-raised">
+    <div class="main main-raised" :class="[mapstore.emory.mode]">
       <div class="section">
         <div class="container">
           <div class="md-layout">

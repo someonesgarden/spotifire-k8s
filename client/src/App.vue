@@ -47,8 +47,8 @@
 
     <!-- STORY MODAL-->
     <mu-dialog transition="slide-bottom" fullscreen :open.sync="modal.modals.story.open"  class="storyModal">
-      <mu-appbar style="background-color:inherit;">
-        <mu-button slot="left" icon @click="a_index(['storyModal','toggle',false])">
+      <mu-appbar style="background-color:inherit;box-shadow:none;">
+        <mu-button slot="left" icon @click="a_index(['storyModal','toggle',false])" style="background-color: black;color:white;">
           <mu-icon value="chevron_left"></mu-icon>
         </mu-button>
       </mu-appbar>

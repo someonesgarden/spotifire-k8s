@@ -1,22 +1,18 @@
 <template>
     <div class="slide_inner" v-if="modal.modals.story">
 
-        <div class="baloon">
+        <div class="baloon" @click="closeBtn">
             <div style="margin-left:10px;">
-                <mu-flex justify-content="center" direction="row" align-items="center" style="width:100%;">
+                <mu-flex justify-content="center" direction="row" align-items="center">
 <!--                    <img :src="modal.modals.story.thumb" class="circle">-->
                     <h3>{{modal.modals.story.title}}</h3>
                 </mu-flex>
                 <p v-html="modal.modals.story.content"></p>
             </div>
 
-            <p class="md-teal" style="padding:12px;min-width:10%;margin:0 0 0 10px;" @click="closeBtn">
+            <p class="md-teal" style="padding:5px;animation: r7 2s linear infinite;">
                 <md-icon class="md-size-3x">directions_walk</md-icon>
             </p>
-
-<!--            <md-button class="md-icon-button md-teal md-sm" style="border-radius:50%" @click="closeBtn">-->
-<!--                <md-icon>directions_walk</md-icon>-->
-<!--            </md-button>-->
 
         </div>
 
@@ -27,7 +23,6 @@
                     :style="{height:height+'px'}"
                     frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
         </div>
-
 
     </div>
 </template>

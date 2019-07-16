@@ -89,8 +89,10 @@
 
 .storyModal {
   .mu-dialog{
+    //background-color: #00bb76a8;
+    background-image: url(/static/img/emory/bg/bg2.gif);
     background-color:inherit;
-    background-image:url('/static/img/emory/story_circle_bg.png');
+    //background-image:url('/static/img/emory/story_circle_bg.png');
     background-size:cover;
     background-position:center center;
 
@@ -102,18 +104,27 @@
 
       }
       .slide_inner{
+        position:relative;
+        top:-10px;
 
         .baloon{
-          background-color:white;
+
+          cursor: pointer;
           position:relative;
-          color:$teal-900;
+
+          //background-color:white;
+          //color:$teal-900;
+          //opacity:0.9;
+          background-color: #ffffff;
+          color: #0eaa84;
           width: 80%;
-          margin: 0 auto 20px auto;
-          border-radius: 20px;
+          margin: 0 auto 45px auto;
+          border-radius: 18px;
           display: flex;
           justify-content: center;
           align-items: center;
 
+          @include shadow-8dp();
 
           &::after{
             content: '';
@@ -127,6 +138,12 @@
             background-position:center top;
             background-repeat: no-repeat;
           }
+        }
+
+        .widget_player{
+          border-radius:30px;
+          overflow: hidden;
+          @include shadow-8dp();
         }
 
         h1{
