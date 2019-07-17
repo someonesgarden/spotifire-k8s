@@ -307,12 +307,18 @@
 
             //一回だけはこちら！
             geoCurrentPosition(){
-                if(!!navigator.geolocation) navigator.geolocation.getCurrentPosition(this.geoSuccess,this.m_geoError,this.mapstore.map.geocodingOptions);
+                if(!!navigator.geolocation) navigator.geolocation.getCurrentPosition(this.geoSuccessOnce,this.m_geoError,this.mapstore.map.geocodingOptions);
             },
 
             //継続的に呼び出し続ける場合はこちら！
             geolocation() {
                 if(!!navigator.geolocation) this.watchID = navigator.geolocation.watchPosition(this.geoSuccess,this.m_geoError,this.mapstore.map.geocodingOptions);
+            },
+
+            geoSuccessOnce(position){
+                console.log("geoSuccessOnce");
+                this.a_mapstore(['emory','loader',false]);
+                this.geoSuccess(position);
             },
 
             geoSuccess(position){

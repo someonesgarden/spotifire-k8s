@@ -27,13 +27,12 @@
                 <image class="item__img" xlink:href="/static/img/animesvg/11.png" x="0" y="0" width="500px" height="500px" />
             </g>
         </svg>
-        <now-playing></now-playing>
+        <now-playing v-if="this.mapstore.emory.mode==='play'"></now-playing>
     </div>
 </template>
 
-<script>
+<script>import {mapGetters} from 'vuex';
     import OrganicShape from '../../class/anime/OrganicShape';
-
     import NowPlaying from '../../components/Typing/NowPlaying';
 
     export default {
@@ -48,6 +47,7 @@
               height:500
           }
         },
+        computed:mapGetters(['mapstore']),
         mounted(){
             let os = new OrganicShape(this.$refs.item);
             window.addEventListener('resize', () => this.resetSize);

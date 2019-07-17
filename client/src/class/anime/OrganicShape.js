@@ -64,10 +64,12 @@ export default class OrganicShape{
         this.loop_interval = setInterval(()=> {
 
             this.timeout0 = setTimeout(()=>{
-                this.num = Math.floor(Math.random()*5);
-                this.num = this.num>4 ? 0 : this.num;
-                this.rotate = Math.floor(Math.random()*180);
-                this.scale = Math.random()*0.02+0.98;
+                this.num = Math.floor(Math.random()*6);
+                this.num = this.num>6 ? 0 : this.num;
+                this.rotate = Math.random()*4;
+                this.scale = Math.random()*0.01+1;
+                this.translateX = Math.random()*4*(-1)^(Math.floor(Math.random()*2));
+                this.translateY = Math.random()*4*(-1)^(Math.floor(Math.random()*2));
                 this.loop();
             },Math.floor(Math.random()*2))
 
@@ -108,11 +110,11 @@ export default class OrganicShape{
             elasticity: this.CONFIG.animation[targetStr].elasticity,
             scaleX: this.scale,
             scaleY: this.scale,
-            translateX : Math.max(1 - this.scale,0),
-            translateY : Math.max(1 - this.scale,0),
+            translateX : targetStr==='image'? this.translateX : Math.max(1 - this.scale,0),
+            translateY : targetStr==='image'? this.translateY : Math.max(1 - this.scale,0),
             // translateX: this.isActive ? this.CONFIG.animation[targetStr].translateX : 0,
             // translateY: this.isActive ? this.CONFIG.animation[targetStr].translateY : 0,
-            //rotate: this.rotate
+            rotate: targetStr==='image'? this.rotate : 0
         };
         if( targetStr === 'path' ) {
 

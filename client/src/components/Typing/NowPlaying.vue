@@ -15,10 +15,9 @@
 			return {
 				staticText: "",
                 introTypingTexts: [
-                    "PLAYING",
-					"NOW",
-					"WALING",
-					"EMORY"
+					"U ARE WALKIN",
+					"IN A STORY.",
+					"[EMORY]"
                 ],
 				currentText: 0
 			}
@@ -53,7 +52,7 @@
 		top:0;
 		left:0;
 		width: 100%;
-		height: 90%;
+		height: 75%;
 		display: flex;
 		justify-content: center;
 		align-items: center;

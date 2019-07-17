@@ -364,7 +364,7 @@
 
               //プロジェクトが全て読み込まれたら位置計算させる
               this.trackOnce();
-              setTimeout(()=>this.a_mapstore(['emory','loader',false]),500);
+
         }
       }
     }

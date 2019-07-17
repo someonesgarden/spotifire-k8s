@@ -19,7 +19,7 @@ const state = {
             }
         },
         triggerDist: 0,
-        searchDist: 100,
+        searchDist: 300,
 
         all:'all',
         selectedPoint:{
