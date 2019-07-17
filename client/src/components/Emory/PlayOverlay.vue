@@ -2,8 +2,7 @@
         <mu-flex justify-content="center" align-items="center" direction="column">
 
             <div class="animearea" v-if="shapes">
-                <anime-control :shapes="shapes.shapes">
-                </anime-control>
+                <anime-control :shapes="shapes.shapes"></anime-control>
             </div>
             <md-button class="md-orange md-round" @click="a_mapstore(['set','mode','info'])">終了</md-button>
 
@@ -75,7 +74,7 @@
         /* margin: 10px auto; */
         display: flex;
         justify-content: center;
-        mix-blend-mode: hard-light;
+        /*mix-blend-mode: hard-light;*/
     }
 
 </style>

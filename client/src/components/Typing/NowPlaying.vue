@@ -15,10 +15,10 @@
 			return {
 				staticText: "",
                 introTypingTexts: [
-                    "NOW",
-					"NOW",
                     "PLAYING",
-                    "",
+					"NOW",
+					"WALING",
+					"EMORY"
                 ],
 				currentText: 0
 			}
@@ -49,7 +49,17 @@
 	.IntroTyping{
 		font-family: 'Allerta Stencil', sans-serif !important;
 
+		position:absolute;
+		top:0;
+		left:0;
+		width: 100%;
+		height: 90%;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+
 		&__body{
+			height:30px;
 			white-space: nowrap;
 			-webkit-transition: all 0.5s ease-in-out;
 			-moz-transition: all 0.5s ease-in-out;
@@ -89,7 +99,7 @@
 
 	@keyframes typing{
 		from{
-			width: 0px;
+			width: 0;
 		}
 		35%{
 			width: 100%;

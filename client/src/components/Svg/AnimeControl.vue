@@ -17,17 +17,17 @@
          data-image-translateY="-45"
          data-image-rotate="-5"
          :data-morph-path="shapes[1]">
-        <svg class="item__svg" width="90%" height="80%" :viewBox="'0 0 '+width+' '+height">
+        <svg class="item__svg" width="500" height="500" :viewBox="'0 0 500 500'">
             <clipPath id="clipShape1"><path class="item__clippath" :d="shapes[0]" /></clipPath>
             <clipPath id="clipShape2"><path class="item__clippath" :d="shapes[1]" /></clipPath>
             <clipPath id="clipShape3"><path class="item__clippath" :d="shapes[2]" /></clipPath>
             <clipPath id="clipShape4"><path class="item__clippath" :d="shapes[3]" /></clipPath>
             <clipPath id="clipShape5"><path class="item__clippath" :d="shapes[4]" /></clipPath>
             <g clip-path="url(#clipShape1)">
-                <image class="item__img" xlink:href="/static/img/animesvg/11.png" x="0" y="0" :style="{width:width+'px',height:height+'px'}" />
+                <image class="item__img" xlink:href="/static/img/animesvg/11.png" x="0" y="0" width="500px" height="500px" />
             </g>
         </svg>
-        <now-playing style="position:absolute;top:100px;left:80px;"></now-playing>
+        <now-playing></now-playing>
     </div>
 </template>
 
