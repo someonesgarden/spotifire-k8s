@@ -109,6 +109,9 @@
 
 
         p.subtitle{
+          position: relative;
+          top: 15px;
+          z-index: 11;
           display: inline-block;
           background-color: #0eaa84;
           color: $white;
@@ -124,6 +127,7 @@
 
           cursor: pointer;
           position:relative;
+          z-index:10;
 
           //background-color:white;
           //color:$teal-900;
@@ -158,6 +162,8 @@
         }
 
         .widget_player{
+          position:relative;
+          top:-18px;
           border-radius:30px;
           overflow: hidden;
           @include shadow-8dp();

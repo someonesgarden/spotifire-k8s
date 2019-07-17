@@ -4,7 +4,7 @@
             <div class="animearea" v-if="shapes">
                 <anime-control :shapes="shapes.shapes"></anime-control>
             </div>
-            <md-button class="md-orange md-round" @click="a_mapstore(['set','mode','info'])">終了</md-button>
+            <md-button class="md-orange md-round" style="margin-bottom:18px;padding-bottom:8px;" @click="a_mapstore(['set','mode','info'])">終了</md-button>
 
         </mu-flex>
 </template>
@@ -66,6 +66,7 @@
 
 <style scoped>
     .animearea{
+        overflow:hidden;
         margin-top: 60px;
         align-items: center;
         width: 100%;

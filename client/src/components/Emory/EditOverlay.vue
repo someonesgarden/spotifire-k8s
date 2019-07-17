@@ -184,9 +184,9 @@
                 <!--//Edit Project-->
 
                 <mu-flex justify-content="center" align-items="center" direction="row">
-                    <mu-button color="indigo400" class="smallbtn" @click="m_editMap('project')">プロジェクト編集</mu-button>
-                    <mu-button color="indigo600" class="smallbtn" @click="m_editMap('marker')">マーカー編集</mu-button>
-                    <mu-button color="indigo800" class="smallbtn" @click="m_endEditing">終了</mu-button>
+                    <mu-button color="indigo400" class="smallbtn" @click="m_editMap('project')">Project</mu-button>
+                    <mu-button color="indigo600" class="smallbtn" @click="m_editMap('marker')">Point</mu-button>
+                    <mu-button color="indigo800" class="smallbtn" @click="m_endEditing">Finish</mu-button>
                 </mu-flex>
 
                 <mu-dialog title="マーカーを削除する" width="600" max-width="80%" :esc-press-close="false" :overlay-close="false" :open="delAlert.marker">

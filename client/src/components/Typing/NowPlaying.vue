@@ -15,6 +15,7 @@
 			return {
 				staticText: "",
                 introTypingTexts: [
+					"",
 					"U ARE WALKIN",
 					"IN A STORY.",
 					"[EMORY]"
@@ -39,7 +40,7 @@
 				} else {
 					this.currentText ++;
 				}
-			}, 4000)
+			}, 2000)
 		}
 	}
 </script>
