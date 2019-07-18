@@ -121,13 +121,15 @@
             },
             setPlaying(val) {
                 this.playing = val;
-                if (val) {
-                    if(this.audio && this.file !=='' && this.file) setTimeout(()=> this.audio.play(),200);
-                }else{
-                    this.audio.pause();
-                    this.audio.currentTime = 0;
-                }
 
+                if (this.audio && typeof this.audio !== 'undefined') {
+                    if (val) {
+                        if (this.file !== '' && this.file) setTimeout(() => this.audio.play(), 200);
+                    } else {
+                        this.audio.pause();
+                        this.audio.currentTime = 0;
+                    }
+                }
             },
 
             setParams(file,volume,playing){
@@ -154,6 +156,18 @@
             this.audio.addEventListener('loadeddata', this.load);
             this.audio.addEventListener('pause', () => this.playing = false);
             this.audio.addEventListener('play',  () => this.playing = true);
+        },
+
+        beforeDestroy(){
+            this.audio.removeEventListener('timeupdate', this.update);
+            this.audio.removeEventListener('loadeddata', this.load);
+            this.audio.removeEventListener('pause', () => this.playing = false);
+            this.audio.removeEventListener('play',  () => this.playing = true);
+
+            this.audio = undefined;
+
+            if(!this.timout_volume) clearTimeout(this.timout_volume);
+            this.timout_volume = null;
         }
     }
 </script>

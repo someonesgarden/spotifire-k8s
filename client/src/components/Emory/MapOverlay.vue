@@ -72,7 +72,7 @@
                  :style="{top:mapstore.emory.selectedPoint.top+'px',left:mapstore.emory.selectedPoint.left+'px'}">
             </div>
             <!-- MP3 PLAYERS -->
-            <div class="mp3_players">
+            <div class="mp3_players" v-if="mapstore.tracking">
                 <audio-player :key="'pod'+(index-1)" :ref="'pod'+(index-1)" :id="index-1" v-for="index in pods"></audio-player>
             </div>
         </div>
@@ -141,7 +141,9 @@
             },
 
             resetAllPods(){
-                for(let i=0;i<this.pods;i++) if(this.$refs['pod'+i]) this.$refs['pod'+i][0].setParams("",0,false);
+                for(let i=0;i<this.pods;i++) if(this.$refs['pod'+i]){
+                    if(this.$refs['pod'+i][0])  this.$refs['pod'+i][0].setParams("",0,false);
+                }
             },
 
             fadeOffAllPods(){
@@ -159,27 +161,27 @@
                     this.timout_volume = setTimeout(()=>{
                         for(let i=0;i<this.pods;i++){
                             if(this.$refs['pod'+i]){
-                                this.$refs['pod'+i][0].setVolume(this.$refs['pod'+i][0].volume*(0.98-0.02*j));
+                                if(this.$refs['pod'+i][0]) this.$refs['pod'+i][0].setVolume(this.$refs['pod'+i][0].volume*(0.98-0.02*j));
                             }
                         }
                     },j*100);
                 }
 
-                setTimeout(()=>this.resetAllPods ,2000);
+                if(this.$refs['pod0']) setTimeout(()=>this.resetAllPods ,2000);
             },
-
 
             fadeInPod(num,volume){
                 for(let j=1;j<10;j++){
                     this.timout_volume = setTimeout(()=>{
                         if(volume > this.$refs['pod'+num][0].volume){
-                            this.$refs['pod'+num][0].setVolume(this.$refs['pod'+num][0].volume + (volume - this.$refs['pod'+num][0].volume)*0.08);
+                            if(this.$refs['pod'+num]) this.$refs['pod'+num][0].setVolume(this.$refs['pod'+num][0].volume + (volume - this.$refs['pod'+num][0].volume)*0.08);
                         }else if(volume < this.$refs['pod'+num][0].volume){
-                            this.$refs['pod'+num][0].setVolume(this.$refs['pod'+num][0].volume - (this.$refs['pod'+num][0].volume - volume)*0.08);
+                            if(this.$refs['pod'+num]) this.$refs['pod'+num][0].setVolume(this.$refs['pod'+num][0].volume - (this.$refs['pod'+num][0].volume - volume)*0.08);
                         }
                     },j*100);
                 }
-                setTimeout(()=>this.$refs['pod'+num][0].setVolume(volume) ,1000);
+
+                if(this.$refs['pod'+num][0]) setTimeout(()=>this.$refs['pod'+num][0].setVolume(volume) ,1000);
                 clearTimeout(this.timout_volume);
                 this.timout_volume = null;
             },

@@ -4,7 +4,7 @@
             <div class="animearea" v-if="shapes">
                 <anime-control :shapes="shapes.shapes"></anime-control>
             </div>
-            <md-button class="md-orange md-round" style="margin-bottom:18px;padding-bottom:8px;" @click="a_mapstore(['set','mode','info'])">終了</md-button>
+            <md-button class="md-orange md-round" style="margin-bottom:18px;padding-bottom:8px;" @click="playStop">終了</md-button>
 
         </mu-flex>
 </template>
@@ -60,6 +60,12 @@
                 this.a_mapstore(['set','mode','map']);
                 this.a_index(['storyModal','toggle',true]);
             },
+
+            playStop(){
+                this.a_mapstore(['set', 'tracking', false]);
+                this.a_mapstore(['set','mode','info']);
+                this.a_index(['storyModal','toggle',false]);
+            }
         }
     }
 </script>
