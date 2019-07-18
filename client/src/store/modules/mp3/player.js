@@ -33,6 +33,7 @@ const state =
 
 const mutations = {
     setPodParam(state, data) {
+        console.log("setPodParam",data);
         state.pods[data.num][data.key] = data.val;
         state.pods[data.num].update = new Date();
     }

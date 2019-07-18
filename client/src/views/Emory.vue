@@ -211,6 +211,10 @@
           this.firebaseDB.project.on('value', (snapshot) => this.a_mapstore(['emory', 'setprojects', snapshot.val()]));
       },
 
+      // errorCaptured(){
+      //   this.a_mapstore(['set', 'tracking', false]);
+      // },
+
       beforeDestroy() {
           this.socketDisconnect();
           this.a_mapstore(['set', 'tracking', false]);

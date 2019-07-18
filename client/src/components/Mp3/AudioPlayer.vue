@@ -107,6 +107,7 @@
                         }
                     },j*100);
                 }
+
                 setTimeout(()=>this.setVolume(volume) ,500);
                 clearTimeout(this.timout_volume);
                 this.timout_volume = null;
@@ -136,7 +137,8 @@
                 //console.log("[AudioPlayer #"+this.id+"] @setParams",file,volume,playing);
                 this.file     = file;
 
-                if(Math.abs(this.volume - volume)>0.1){
+                console.log(this.volume,  volume,Math.abs(this.volume - volume))
+                if(Math.abs(this.volume - volume)>10){
                     this.fadeVolume(volume);
                     setTimeout(() => this.setPlaying(playing), 200);
                 }else{
@@ -263,7 +265,7 @@
         position:absolute;
         width:12px;
         height:20px;
-        bottom:18px;
+        bottom:20px;
         left:0;
         background-color: rgba(0, 11, 15, 0.94);
         border-top: thin solid #4a4a4a;

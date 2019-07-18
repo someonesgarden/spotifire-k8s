@@ -1,4 +1,6 @@
+import store from '../../store/index';
 import anime from 'animejs';
+
 
 export default class OrganicShape{
     constructor(el) {
@@ -78,7 +80,14 @@ export default class OrganicShape{
             //this.loop();
             //this.isActive = !this.isActive;
 
-        },3000)
+        },3000);
+
+        this.mouseclickFn = () => {
+            console.log("mouseClickFn");
+            store.commit('mp3/setPodParam', {num:0, key:'volume',   val:100});
+            store.commit('mp3/setPodParam', {num:1, key:'volume',   val:100});
+
+        }
 
         // this.mouseenterFn = () => {
         //     this.mouseTimeout = setTimeout(() => {
@@ -97,6 +106,11 @@ export default class OrganicShape{
         // this.DOM.el.addEventListener('mouseleave', this.mouseleaveFn);
         // this.DOM.el.addEventListener('touchstart', this.mouseenterFn);
         // this.DOM.el.addEventListener('touchend', this.mouseleaveFn);
+
+        // this.DOM.el.addEventListener('touchstart', this.mouseenterFn);
+        // this.DOM.el.addEventListener('touchend', this.mouseleaveFn);
+
+        this.DOM.el.addEventListener('click', this.mouseclickFn);
     }
 
 

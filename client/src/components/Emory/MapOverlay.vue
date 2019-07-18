@@ -118,6 +118,11 @@
             this.watchedTrackAction();
         },
 
+        beforeDestroy(){
+            //とりあえず止める
+            this.a_mapstore(['set', 'tracking', false]);
+        },
+
         watch: {
             'mapstore.tracking': {
                 handler: 'watchedTrackAction',
@@ -296,10 +301,10 @@
                     this.geolocation();
                     this.timeout = setTimeout(this.keepTracking, this.mapstore.trackDuration);
 
-                    if(this.track_max>300){
+                    if(this.track_max>200){
                         this.a_mapstore(['set', 'tracking', false]);
                         this.track_max=0;
-                        this.a_index(['alert','set',"15分経過したためトラッキングを停止します。再度「PLAY」から再生してください"]);
+                        this.a_index(['alert','set',"10分経過したためトラッキングを停止します。再度「PLAY」から再生してください"]);
                         this.a_index(['alert','open']);
                     }else{
                         this.track_max++;
@@ -353,13 +358,6 @@
 
                 this.mapstore.markerDists.forEach((d, i) => {
                     let dm = d.dist * 1000;
-
-                    // console.log(
-                    //     this.mapstore.markers[d.id].markertype,
-                    //     "lim:"+limit+">"+dm+"m ",
-                    //     "trig:"+this.mapstore.markers[d.id].triggerDist+">"+dm+"m ",
-                    //     d.id+"("+ this.mapstore.markers[d.id].type+")");
-
 
                     if(dm === 0 || dm>=limit) return;          //---------------- 有効範囲外なら終了
                     let marker = this.mapstore.markers[d.id];  //---------------- 各マーカーがトリガー距離外なら終了

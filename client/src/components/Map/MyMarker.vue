@@ -6,7 +6,7 @@
                 :icon-url="iconImg.url"
                 :shadow-size="[iconImg.w,iconImg.h]"
                 :shadow-anchow="[iconImg.w/2,iconImg.h/2]"
-                shadow-url='/static/img/emory/marker-shadow.png'
+                shadow-url='/static/img/markers/normal/m_shadow0.png'
                 class-name="marker_base">
         </l-icon>
         <l-popup>
@@ -33,7 +33,7 @@
     L.Icon.Default.mergeOptions({
         iconRetinaUrl: '/static/img/emory/marker-icon-2x.png',
         iconUrl: '/static/img/emory/marker-icon-2x.png',
-        shadowUrl: '/static/img/emory/marker-shadow.png'
+        shadowUrl: '/static/img/markers/normal/m_shadow0.png'
     });
 
     export default {
