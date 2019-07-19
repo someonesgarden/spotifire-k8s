@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+let request = require('request');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const keys = require('./keys');
@@ -25,7 +26,6 @@ const redisClient = redis.createClient({
     retry_strategy: () => 1000});
 const redisPublisher = redisClient.duplicate();
 //*-------------------------------  REDIS
-
 
 
 //*-------------------------------  SOCKET.IO
@@ -86,7 +86,6 @@ io.on('connection',function(socket){
 });
 //*-------------------------------  SOCKET.IO
 
-
 app.use(cors());
 app.use(bodyParser.json());
 app.set('views', path.join(__dirname, 'views'));
@@ -106,6 +105,13 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/' , function(req, res){
     res.send('API IS REASDY');
+});
+
+app.get('/proxy', function(req, res) {
+    let url = req.query.url;
+    let x = request(url);
+    req.pipe(x);
+    x.pipe(res);
 });
 
 app.use('/spotify',     spotifyRouter);

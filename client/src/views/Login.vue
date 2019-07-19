@@ -41,15 +41,34 @@
               <md-button slot="footer" class="md-simple md-success md-lg" @click="loginAction">
                 LOGIN
               </md-button>
+
             </login-card>
           </div>
 
         <div class="pwa">
           <p v-for="(status,key) in pwa" :key="'pwa_'+key" v-if="status!=='error'"><span class="circle" :class="status"></span>{{key}}</p>
         </div>
+
+<!--        <web-audio-player :id="0" :ref="'pod0'"></web-audio-player>-->
+
+<!--        <div style="display:flex;flex-direction: row;justify-content: space-around">-->
+<!--          <p @click="vol(30)">vol30</p>-->
+<!--          <p @click="vol(80)">vol80</p>-->
+<!--          <p @click="vol(10)">vol10</p>-->
+<!--          <p @click="vol(0)">vol0</p>-->
+<!--          <p @click="vol(100)">vol100</p>-->
+<!--        </div>-->
+
+<!--        <div style="display:flex;flex-direction: row;justify-content: space-around">-->
+<!--          <p @click="setall('https://someonesgarden.org/emory/river.mp3',30,true)">R vol30 ON</p>-->
+<!--          <p @click="setall('https://someonesgarden.org/emory/river.mp3',80,false)">R vol80 OFF</p>-->
+<!--          <p @click="setall('https://someonesgarden.org/emory/drum1.mp3',20,true)">D vol10 ON</p>-->
+<!--          <p @click="setall('https://someonesgarden.org/emory/drum1.mp3',40,false)">D vol40 OFF</p>-->
+<!--          <p @click="setall('https://someonesgarden.org/emory/drum1.mp3',0,true)">D vol0 </p>-->
+<!--        </div>-->
+
       </div>
     </parallax>
-
   </div>
 </template>
 
@@ -60,7 +79,7 @@
 
   import utilMixin from '../mixins/util';
   //import spotifyMixin from '../mixins/spotify';
-
+  //import WebAudioPlayer from '../components/Mp3/WebAudioPlayer';
 
 export default {
   mixins: [
@@ -69,7 +88,8 @@ export default {
     //spotifyMixin
   ],
   components: {
-    LoginCard
+    LoginCard,
+    //WebAudioPlayer
   },
   bodyClass: "login-page",
   data() {
@@ -113,6 +133,7 @@ export default {
     this.m_checkPWA('DeviceOrientationEvent');
     this.m_checkPWA('DeviceMotionEvent');
     this.m_checkPWAInFunction('Gyroscope');
+    this.m_checkPWAInWindow('AudioContext');
   },
 
   mounted(){
@@ -124,11 +145,16 @@ export default {
     loginAction(){
       this.a_login(this.admin);
       if(this.loggedIn) this.$router.push('/');
+    },
 
-    }
-  },
-
+    // vol(val){
+    //   console.log(this.$refs.pod0);
+    //   this.$refs.pod0.setVolume(val,1);
+    // },
+    //
+    // setall(file,vol,play){
+    //   this.$refs.pod0.setParams(file,vol,play)
+    // }
+  }
 };
 </script>
-
-<style lang="scss"></style>

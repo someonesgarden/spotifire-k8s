@@ -85,7 +85,7 @@
     import {LImageOverlay,  LMap, LTileLayer, LPolygon} from "vue2-leaflet";
     //import { latLng, icon } from "leaflet";
 
-    import AudioPlayer from '../../components/Mp3/AudioPlayer';
+    import AudioPlayer from '../../components/Mp3/WebAudioPlayer';
     import MyMarker from '../Map/MyMarker';
     import MyTooltip from '../Map/MyTooltip';
     import M from '../../class/map/EMarker';
@@ -116,6 +116,20 @@
 
         mounted(){
             this.watchedTrackAction();
+
+            window.onpagehide = ()=>{
+                console.log("onpagehide");
+                this.resetWhenBackground();
+            };
+
+            document.addEventListener('visibilitychange', () => {
+                console.log(document.visibilityState);
+                if (document.visibilityState !== "visible"){
+                    console.log("visibility hidden");
+                    this.resetWhenBackground();
+                }
+
+            }, false);
         },
 
         beforeDestroy(){
@@ -141,6 +155,12 @@
 
             /*----*/
 
+            resetWhenBackground(){
+                this.a_mapstore(['set', 'tracking', false]);
+                this.a_mapstore(['set','mode','info']);
+                this.a_index(['storyModal','toggle',false]);
+            },
+
             zoomChange(evt){
                 this.a_mapstore(['set','zoom',evt.target._zoom]);
             },
@@ -152,45 +172,18 @@
             },
 
             fadeOffAllPods(){
-                let vol_sum = 0;
                 for(let i=0;i<this.pods;i++){
-                    if(this.$refs['pod'+i]) vol_sum += this.$refs['pod'+i][0].volume;
-                }
-
-                //もし十分に音が小さければフェードアウトはしない
-                if(vol_sum<10){
-                   this.resetAllPods(); return;
-                }
-
-                for(let j=1;j<20;j++){
-                    this.timout_volume = setTimeout(()=>{
-                        for(let i=0;i<this.pods;i++){
-                            if(this.$refs['pod'+i]){
-                                if(this.$refs['pod'+i][0]) this.$refs['pod'+i][0].setVolume(this.$refs['pod'+i][0].volume*(0.98-0.02*j));
-                            }
-                        }
-                    },j*100);
+                    if(this.$refs['pod'+i]){
+                        if(this.$refs['pod'+i][0])  this.$refs['pod'+i][0].setVolume(0,1);
+                    }
                 }
 
                 if(this.$refs['pod0']) setTimeout(()=>this.resetAllPods ,2000);
             },
 
             fadeInPod(num,volume){
-                for(let j=1;j<10;j++){
-                    this.timout_volume = setTimeout(()=>{
-                        if(volume > this.$refs['pod'+num][0].volume){
-                            if(this.$refs['pod'+num]) this.$refs['pod'+num][0].setVolume(this.$refs['pod'+num][0].volume + (volume - this.$refs['pod'+num][0].volume)*0.08);
-                        }else if(volume < this.$refs['pod'+num][0].volume){
-                            if(this.$refs['pod'+num]) this.$refs['pod'+num][0].setVolume(this.$refs['pod'+num][0].volume - (this.$refs['pod'+num][0].volume - volume)*0.08);
-                        }
-                    },j*100);
-                }
-
-                if(this.$refs['pod'+num][0]) setTimeout(()=>this.$refs['pod'+num][0].setVolume(volume) ,1000);
-                clearTimeout(this.timout_volume);
-                this.timout_volume = null;
+                if(this.$refs['pod'+num][0]) this.$refs['pod'+num][0].setVolume(volume,1);
             },
-
 
             clickMarkerCallPlayer(val){
                 if (val.markertype === 'mp3') {
