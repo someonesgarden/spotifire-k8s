@@ -23,15 +23,19 @@
             <clipPath id="clipShape3"><path class="item__clippath" :d="shapes[2]" /></clipPath>
             <clipPath id="clipShape4"><path class="item__clippath" :d="shapes[3]" /></clipPath>
             <clipPath id="clipShape5"><path class="item__clippath" :d="shapes[4]" /></clipPath>
+            <clipPath id="clipShape6"><path class="item__clippath" :d="shapes[5]" /></clipPath>
+            <clipPath id="clipShape7"><path class="item__clippath" :d="shapes[6]" /></clipPath>
+            <clipPath id="clipShape8"><path class="item__clippath" :d="shapes[7]" /></clipPath> <!--スリープモード-->
             <g clip-path="url(#clipShape1)">
-                <image class="item__img" xlink:href="/static/img/animesvg/11.png" x="0" y="0" width="500px" height="500px" />
+                <image class="item__img" :xlink:href="'/static/img/animesvg/'+mapstore.emory.typing.mode+'.png'" x="0" y="0" width="500px" height="500px" ></image>
             </g>
         </svg>
         <now-playing v-if="this.mapstore.emory.mode==='play'"></now-playing>
     </div>
 </template>
 
-<script>import {mapGetters} from 'vuex';
+<script>
+    import {mapGetters,mapActions} from 'vuex';
     import OrganicShape from '../../class/anime/OrganicShape';
     import NowPlaying from '../../components/Typing/NowPlaying';
 

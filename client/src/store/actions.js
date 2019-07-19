@@ -130,6 +130,7 @@ export const a_spotify  =  ({commit}, [type, action, data]) => {
 export const a_mapstore = ({commit},[type, action, data]) => {
     const actions = {
         set: {
+            typing:(data)     => commit('mapstore/setTyping',    data),
             mode:(data)       => commit('mapstore/setMode',      data),
             editing:(data)    => commit('mapstore/setEditing',   data),
             mainuser:(data)   => commit('mapstore/setMainuser',  data),

@@ -294,7 +294,7 @@
                     this.geolocation();
                     this.timeout = setTimeout(this.keepTracking, this.mapstore.trackDuration);
 
-                    if(this.track_max>200){
+                    if(this.track_max>50){
                         this.a_mapstore(['set', 'tracking', false]);
                         this.track_max=0;
                         this.a_index(['alert','set',"10分経過したためトラッキングを停止します。再度「PLAY」から再生してください"]);

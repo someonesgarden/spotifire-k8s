@@ -36,19 +36,24 @@
         props:['id'],
 
         data: () => ({
-            timout_volume:null,
             audio: undefined,
-            currentSeconds: 0,
+
+            timout_volume:   null,
+            currentSeconds:  0,
             durationSeconds: 0,
-            innerLoop: false,
-            loaded: false,
-            previousVolume: 35,
-            showVolume: false,
-            file:'',
-            loop:false,
-            volume:0,
-            playing:false,
-            autoPlay:false
+            innerLoop:       false,
+
+            previousVolume:  35,
+            showVolume:      true,
+            file:            '',
+
+            loop:           false,
+            playing:        false,
+            loaded:         false,
+            volume:         0.0,
+
+            fadeSpeed:      1000
+
         }),
         computed: {
             currentTime() {
@@ -62,94 +67,8 @@
             }
         },
 
-        methods: {
-            togglePlay(){
-                this.playing = !this.playing;
-                this.setPlaying(this.playing);
-            },
-
-            load() {
-                if (this.audio.readyState >= 2) {
-                    this.loaded = true;
-                    this.durationSeconds = parseInt(this.audio.duration);
-                    return this.autoPlay;
-                }
-
-                console.log("load,file",this.file);
-
-                throw new Error('Failed to load sound file.');
-            },
-            seek(e) {
-                if (!this.playing || e.target.tagName === 'SPAN') {
-                    return;
-                }
-                const el = e.target.getBoundingClientRect();
-                const seekPos = (e.clientX - el.left) / el.width;
-                this.audio.currentTime = parseInt(this.audio.duration * seekPos);
-            },
-            stop() {
-                this.playing = false;
-                this.setPlaying(this.playing);
-                this.audio.currentTime = 0;
-            },
-            update(e) {
-                this.currentSeconds = parseInt(this.audio.currentTime);
-            },
-
-            fadeVolume(volume){
-                for(let j=1;j<5;j++){
-
-                    this.timout_volume = setTimeout(()=>{
-                        if(volume > this.volume){
-                            this.setVolume(this.volume + (volume - this.volume)*0.05);
-                        }else if(volume < this.volume){
-                            this.setVolume(this.volume + (this.volume - volume)*0.05);
-                        }
-                    },j*100);
-                }
-
-                setTimeout(()=>this.setVolume(volume) ,500);
-                clearTimeout(this.timout_volume);
-                this.timout_volume = null;
-            },
-
-            /*set funcs */
-            setVolume(val){
-                //console.log("[AudioPlayer #"+this.id+"] @setVolume",val);
-                this.volume = val;
-                this.showVolume   = true;
-                this.audio.volume = Math.min(this.volume / 100, 1);
-            },
-            setPlaying(val) {
-                this.playing = val;
-
-                if (this.audio && typeof this.audio !== 'undefined') {
-                    if (val) {
-                        if (this.file !== '' && this.file) setTimeout(() => this.audio.play(), 200);
-                    } else {
-                        this.audio.pause();
-                        this.audio.currentTime = 0;
-                    }
-                }
-            },
-
-            setParams(file,volume,playing){
-                //console.log("[AudioPlayer #"+this.id+"] @setParams",file,volume,playing);
-                this.file     = file;
-
-                console.log(this.volume,  volume,Math.abs(this.volume - volume))
-                if(Math.abs(this.volume - volume)>10){
-                    this.fadeVolume(volume);
-                    setTimeout(() => this.setPlaying(playing), 200);
-                }else{
-                    this.setVolume(volume);
-                    setTimeout(() => this.setPlaying(playing), 200);
-                }
-            }
-        },
-
         created() {
-           // this.innerLoop = this.loop;
+            // this.innerLoop = this.loop;
         },
 
         mounted() {
@@ -170,6 +89,113 @@
 
             if(!this.timout_volume) clearTimeout(this.timout_volume);
             this.timout_volume = null;
+        },
+
+
+        methods: {
+            togglePlay(){
+                this.playing = !this.playing;
+                this.setPlaying(this.playing);
+            },
+
+            load() {
+                if (this.audio.readyState >= 2) {
+                    this.loaded = true;
+                    this.durationSeconds = parseInt(this.audio.duration);
+                    return;
+                }
+                console.log("load,file",this.file);
+                throw new Error('Failed to load sound file.');
+            },
+
+            seek(e) {
+                if (!this.playing || e.target.tagName === 'SPAN') return;
+
+                const el = e.target.getBoundingClientRect();
+                const seekPos = (e.clientX - el.left) / el.width;
+                this.audio.currentTime = parseInt(this.audio.duration * seekPos);
+            },
+
+            stop() {
+                this.playing = false;
+                this.setPlaying(this.playing);
+                this.audio.currentTime = 0;
+            },
+
+            update(e) {
+                this.currentSeconds = parseInt(this.audio.currentTime);
+            },
+
+            fadeVolume(volume){
+                for(let j=1;j<5;j++){
+                    this.timout_volume = setTimeout(()=>{
+                        if(volume > this.volume){
+                            this.setVolume(this.volume + (volume - this.volume)*0.05);
+                        }else if(volume < this.volume){
+                            this.setVolume(this.volume + (this.volume - volume)*0.05);
+                        }
+                    },j*200);
+                }
+                setTimeout(()=>this.setVolume(volume) ,1000);
+                clearTimeout(this.timout_volume);
+            },
+
+            /*set funcs */
+            setVolume(val){
+                this.volume = val;
+                if(this.audio) this.audio.volume = Math.max(0, Math.min(this.volume / 100, 1));
+            },
+
+            // fadeIn(baseVol){
+            //     this.volume = 0;
+            //     this.audio.play();
+            //     let start_func = setInterval(()=>{
+            //         this.volume = this.volume + (baseVol / 100);
+            //         this.setVolume(this.volume);
+            //         if(this.volume >= baseVol - (baseVol / 100)) {
+            //             this.volume = baseVol;
+            //             this.setVolume(this.volume);
+            //             clearInterval(start_func);
+            //         }
+            //     }, this.fadeSpeed * baseVol / 100);
+            // },
+            //
+            // fadeOut(baseVol){
+            //     let end_func = setInterval(()=> {
+            //         this.volume = this.volume - (baseVol / 100);
+            //         this.setVolume(this.volume);
+            //         if(this.volume <= (baseVol / 100)) {
+            //             this.volume = baseVol;
+            //             this.setVolume(this.volume);
+            //             this.audio.pause();
+            //             clearInterval(end_func);
+            //         }
+            //     }, this.fadeSpeed * baseVol / 100);
+            // },
+
+            setPlaying(val) {
+                this.playing = val;
+
+                if (this.audio && typeof this.audio !== 'undefined'){
+                    if (val) {
+                        if (this.file !== '' && this.file) setTimeout(() => this.audio.play(), 200);
+                    } else {
+                        this.audio.pause();
+                        this.audio.currentTime = 0;
+                    }
+                }
+            },
+
+            setParams(file,volume,playing){
+                this.file     = file;
+                if(Math.abs(this.volume - volume)>10){
+                    this.fadeVolume(volume);
+                    setTimeout(() => this.setPlaying(playing), 200);
+                }else{
+                    this.setVolume(volume);
+                    setTimeout(() => this.setPlaying(playing), 200);
+                }
+            }
         }
     }
 </script>

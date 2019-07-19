@@ -1,6 +1,6 @@
 <template>
 
-	<div class="IntroTyping">
+	<div class="IntroTyping" @click="clickAction">
 		<div class="IntroTyping__body">
 			<span class="IntroTyping__animated-text"  v-for="text in typingTexts" v-if="text.show" v-text="text.content"></span>
 		</div>
@@ -9,15 +9,23 @@
 </template>
 
 <script>
+	import {mapGetters,mapActions} from 'vuex';
+
 	export default{
 		name: 'nowPlaying',
 		data(){
 			return {
 				staticText: "",
-                introTypingTexts: [
+				introTypingTexts0: [
 					"",
 					"U ARE WALKIN",
-					"IN A STORY.",
+					"IN A STORY",
+					"[EMORY]"
+				],
+                introTypingTexts: [
+					"",
+					"タッチすると",
+					"変化します",
 					"[EMORY]"
                 ],
 				currentText: 0
@@ -25,6 +33,7 @@
 		},
 
 		computed: {
+			...mapGetters(['mapstore']),
 			typingTexts() {
 				return this.introTypingTexts.map((text, index) => ({content: text, show: (index === this.currentText)}));
 			},
@@ -33,9 +42,34 @@
 			}
 		},
 
+		methods:{
+			...mapActions(['a_mapstore']),
+			clickAction(){
+				if(this.mapstore.emory.typing.show){
+
+					let reducers = {
+						track: ()=> {
+							this.a_mapstore(['set','typing', {show:false,mode:'working'}]);
+							this.a_mapstore(['set', 'tracking', true]);
+						}
+					};
+
+					if (!reducers[this.mapstore.emory.typing.action]) return false;
+					return reducers[this.mapstore.emory.typing.action]()
+
+				}
+			}
+		},
+
 		mounted() {
 			setInterval(() => {
-				if( this.currentText === this.numberOfTexts ) {
+				if(this.mapstore.emory.typing.show){
+					this.introTypingTexts = this.mapstore.emory.typing.texts;
+				}else{
+					this.introTypingTexts = this.introTypingTexts0;
+				}
+
+				if( this.currentText >= this.numberOfTexts ) {
 					this.currentText = 0;
 				} else {
 					this.currentText ++;

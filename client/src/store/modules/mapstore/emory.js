@@ -1,5 +1,13 @@
 const state = {
     emory: {
+
+        typing: {
+            show: false,
+            texts: [],
+            mode:'working',
+            action: 'track'
+        },
+
         alpha:  {slider:false},
         slider: {no:0},
         mode:   'info',
@@ -57,6 +65,10 @@ const state = {
 }
 
 const mutations = {
+
+    setTyping(state,data){
+        state.emory.typing = data;
+    },
 
     setLoader(state,data){
         if(data==='toggle'){

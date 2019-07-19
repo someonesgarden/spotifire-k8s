@@ -14,18 +14,7 @@ export default class OrganicShape{
         this.DOM.ds = [];
         Array.from(this.DOM.svg.querySelectorAll('path'),  p => {this.DOM.ds.push(p.getAttribute('d'))});
 
-        // this.ds = this.DOM.pathary.map((p)=>p.getAttribute('d'));
-        console.log(this.DOM.ds);
-
-        // this.paths = {};
-        // this.paths.start = this.DOM.path.getAttribute('d');
-        // this.paths.end = this.DOM.el.dataset.morphPath;
-
-        // this.paths.start = this.DOM.ds[0];
-        // this.paths.end   = this.DOM.ds[1];
-
         this.DOM.image = this.DOM.svg.querySelector('image');
-
 
         this.CONFIG = {
             // Defaults:
@@ -84,9 +73,7 @@ export default class OrganicShape{
 
         this.mouseclickFn = () => {
             console.log("mouseClickFn");
-            store.commit('mp3/setPodParam', {num:0, key:'volume',   val:100});
-            store.commit('mp3/setPodParam', {num:1, key:'volume',   val:100});
-
+            //store.commit('mapstore/setTyping', {show:true, texts:['','休憩中..','タッチして再開'],action:'track'});
         }
 
         // this.mouseenterFn = () => {
@@ -126,13 +113,10 @@ export default class OrganicShape{
             scaleY: this.scale,
             translateX : targetStr==='image'? this.translateX : Math.max(1 - this.scale,0),
             translateY : targetStr==='image'? this.translateY : Math.max(1 - this.scale,0),
-            // translateX: this.isActive ? this.CONFIG.animation[targetStr].translateX : 0,
-            // translateY: this.isActive ? this.CONFIG.animation[targetStr].translateY : 0,
             rotate: targetStr==='image'? this.rotate : 0
         };
         if( targetStr === 'path' ) {
-
-            animeOpts.d = this.DOM.ds[this.num];
+           animeOpts.d = (store.state.mapstore.emory.typing.mode==='sleeping') ? this.DOM.ds[7] : this.DOM.ds[this.num];
         }
         anime.remove(target);
         return animeOpts;

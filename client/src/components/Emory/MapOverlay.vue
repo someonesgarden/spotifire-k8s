@@ -39,9 +39,9 @@
                             :center="p.center"
                             :key="'proj'+id"
                             @pClick="pClick(p,id)"></my-tooltip>
-
                 <l-polygon :lat-lngs="mapstore.map.poly" color="#1DEA6E"  v-if="mapstore.map.poly"/>
             </l-map>
+
             <!-- MAP WITH NORMAL BG-->
             <l-map v-else ref="map"
                    :zoom="mapstore.map.zoom"
@@ -63,9 +63,9 @@
                             :center="p.center"
                             :key="'proj'+id"
                             @pClick="pClick(p,id)"></my-tooltip>
-
                 <l-polygon :lat-lngs="mapstore.map.poly" color="#1DEA6E"  v-if="mapstore.map.poly"/>
             </l-map>
+
             <!-- SELECTED POINT-->
             <div ref="selectedPoint" class="selectedPoint"
                  :class="{'project':mapstore.emory.editing.type==='project'}"
@@ -78,10 +78,9 @@
         </div>
 </template>
 <script>
-
     import {mapGetters, mapActions} from 'vuex';
     import mapMixin from '../../mixins/map';
-    //LEAF
+
     import {LImageOverlay,  LMap, LTileLayer, LPolygon} from "vue2-leaflet";
     //import { latLng, icon } from "leaflet";
 
@@ -117,23 +116,12 @@
         mounted(){
             this.watchedTrackAction();
 
-            window.onpagehide = ()=>{
-                console.log("onpagehide");
-                this.resetWhenBackground();
-            };
+            window.onpagehide = ()=> this.resetWhenBackground();
 
-            document.addEventListener('visibilitychange', () => {
-                console.log(document.visibilityState);
-                if (document.visibilityState !== "visible"){
-                    console.log("visibility hidden");
-                    this.resetWhenBackground();
-                }
-
-            }, false);
+            document.addEventListener('visibilitychange', () => { if (document.visibilityState !== "visible") this.resetWhenBackground() }, false)
         },
 
         beforeDestroy(){
-            //とりあえず止める
             this.a_mapstore(['set', 'tracking', false]);
         },
 
@@ -153,12 +141,10 @@
         methods: {
             ...mapActions(['a_mapstore','a_ws','a_index']),
 
-            /*----*/
-
             resetWhenBackground(){
-                this.a_mapstore(['set', 'tracking', false]);
-                this.a_mapstore(['set','mode','info']);
                 this.a_index(['storyModal','toggle',false]);
+                this.a_mapstore(['set','mode','info']);
+                this.a_mapstore(['set', 'tracking', false]);
             },
 
             zoomChange(evt){
@@ -321,11 +307,14 @@
                     this.geolocation();
                     this.timeout = setTimeout(this.keepTracking, this.mapstore.trackDuration);
 
-                    if(this.track_max>200){
+                    if(this.track_max>15){
                         this.a_mapstore(['set', 'tracking', false]);
                         this.track_max=0;
-                        this.a_index(['alert','set',"10分経過したためトラッキングを停止します。再度「PLAY」から再生してください"]);
-                        this.a_index(['alert','open']);
+
+                        this.a_mapstore(['set','typing',{show:true, mode:'sleeping', texts:['','休憩中..','タッチして再開'], action:'track'}]); //
+
+                        // this.a_index(['alert','set',"3分経過したためトラッキングを停止します。再度「PLAY」から再生してください"]);
+                        // this.a_index(['alert','open']);
                     }else{
                         this.track_max++;
                     }
@@ -339,17 +328,16 @@
 
             //継続的に呼び出し続ける場合はこちら！
             geolocation() {
+                console.log("navigator.geolocation is",navigator.geolocation);
                 if(!!navigator.geolocation) this.watchID = navigator.geolocation.watchPosition(this.geoSuccess,this.m_geoError,this.mapstore.map.geocodingOptions);
             },
 
             geoSuccessOnce(position){
-                console.log("geoSuccessOnce");
                 this.a_mapstore(['emory','loader',false]);
                 this.geoSuccess(position);
             },
 
             geoSuccess(position){
-                console.log("geoSuccess");
                 this.resetPos(position);
                 this.m_drawPoly();
                 if(this.mapstore.mainuser){
@@ -388,7 +376,7 @@
 
                     let triggerDist = marker.triggerDist ? marker.triggerDist : 10;
 
-                    let volume =  60*((triggerDist - dm)/triggerDist)^2; //mp3は控えめにするので60％程度
+                    let volume =  60*(Math.abs(triggerDist - dm)/triggerDist)^2; //mp3は控えめにするので60％程度
 
                     //mp3の場合、３つのmp3プレイヤーを起動する
                     if (marker.markertype === 'mp3') {
@@ -414,7 +402,7 @@
                                 console.log("restart pod!");
                                 this.$refs['pod'+already_has.num][0].setParams(marker.mp3,volume,true);
                             } else {
-                                console.log("change vol to",volume,limit,dm);
+                                console.log("change vol to:triggerDist,volume,limit,dm",triggerDist,volume,limit,dm);
                                 //すでに再生中は、ボリューが変わる程度
 
                                 //十分に差があるならフェードイン

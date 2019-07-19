@@ -32,7 +32,7 @@
                 <use xlink:href="#deco1" />
             </g>
             <g clip-path="url(#clipShape1)">
-                <image class="item__img" xlink:href="/static/img/animesvg/1.png" x="0" y="0" height="500px" width="500px" />
+                <image class="item__img" xlink:href="/static/img/animesvg/working.png" x="0" y="0" height="500px" width="500px" />
             </g>
         </svg>
         <div class="item__meta">

@@ -50,18 +50,7 @@ const state = {
             id:0,
             type:'friend'
         }
-    ],
-
-    // locations:[
-    //     {
-    //         htmltxt: '千代田区',
-    //         lat: 35.670812,
-    //         lng: 139.754182,
-    //         w:25,
-    //         h:25,
-    //         img: '/static/img/markers/edit/m_friend_boy_1.png'
-    //     }
-    // ],
+    ]
 }
 
 export default {
