@@ -1,7 +1,7 @@
 export default class WebAudio{
     constructor(){
         window.AudioContext = window.AudioContext || window.webkitAudioContext;
-        this.context  = new AudioContext();
+        this.context  = new (window.AudioContext || window.webkitAudioContext);
         this.context.createGain = this.context.createGain || this.context.createGainNode;
         if(!this.gainNode) this.gainNode = this.context.createGain(); //ボリューム用ゲイン
         this.playing = false;
