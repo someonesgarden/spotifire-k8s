@@ -3,14 +3,26 @@ import axios from 'axios';
 export default{
 
     methods: {
+
+        c_mysql_getall(table,cb=null){
+            axios.get(window.dbDomain+'/api/mysql/'+table+'/all').then(res => {
+                console.log(res);
+                if(cb) cb(res);
+            }).catch(error => {
+                console.log(error);
+                if(cb) cb(null);
+            });
+        },
+
         c_mysql_find(table,key,val,cb){
-          axios.get('https://spotifire.work/api/mysql/'+table+'/get',{params:{key:key,val:val}}).then(res => {
+          axios.get(window.dbDomain+'/api/mysql/'+table+'/get',{params:{key:key,val:val}}).then(res => {
               cb(res);
           }).catch(error => {
               console.log(error);
               cb(null);
           });
         },
+
 
         c_trackLyricsByMusixMatch(isrc,track_name){
             this.c_mm_lyrics_isrc(isrc,track_name,res=>{

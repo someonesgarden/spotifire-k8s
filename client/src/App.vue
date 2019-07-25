@@ -48,7 +48,7 @@
     <!-- STORY MODAL-->
     <mu-dialog transition="slide-bottom" fullscreen :open.sync="modal.modals.story.open"  class="storyModal">
       <mu-appbar style="background-color:inherit;box-shadow:none;">
-        <mu-button slot="left" icon @click="a_index(['storyModal','toggle',false])" style="background-color: black;color:white;">
+        <mu-button slot="left" icon @click="m_resetWhenBackground" style="background-color: black;color:white;">
           <mu-icon value="chevron_left"></mu-icon>
         </mu-button>
       </mu-appbar>
@@ -69,6 +69,7 @@
   import {mapGetters, mapActions} from 'vuex';
   import feedMixin from './mixins/feed/index';
   import spotifyMixin from './mixins/spotify/index';
+  import mapMixin from './mixins/map/index';
 
   import Player from './components/Spotify/Player/Player.vue';
   import BottomView from './components/Common/BottomView';
@@ -79,7 +80,7 @@
 
   export default {
       name: 'app',
-      mixins: [feedMixin, spotifyMixin],
+      mixins: [feedMixin, spotifyMixin,mapMixin],
       components: {
           Player,
           BottomView,

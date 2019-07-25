@@ -3,7 +3,7 @@
 
 
         <p class="subtitle"><md-icon>looks_one</md-icon></p>
-        <div class="baloon" @click="closeBtn">
+        <div class="baloon" @click="closeAndRestartPlayBtn">
             <div style="margin-left:10px;">
                 <mu-flex justify-content="center" direction="row" align-items="center">
 <!--                    <img :src="modal.modals.story.thumb" class="circle">-->
@@ -58,18 +58,21 @@
         },
 
         beforeDestroy(){
-            this.a_mapstore(['set', 'tracking', true]);
+            //this.a_mapstore(['set', 'tracking', true]);
         },
 
         methods:{
             ...mapActions(['a_index','a_mapstore']),
 
-            closeBtn(){
+            closeAndRestartPlayBtn(){
                 console.log("story close");
                 this.a_mapstore(['set','mode','play']);
                 this.a_index(['storyModal','toggle',false]);
+
                 //TOPにスクロール
                 this.m_scrollTo('#app');
+                //tracking開始
+                this.a_mapstore(['set', 'tracking', true]);
             }
         }
     }

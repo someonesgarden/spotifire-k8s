@@ -11,7 +11,3 @@ router.use('/lyrics',   lyricsRouter);
 router.use('/initials', initialsRouter);
 
 module.exports = router;
-
-
-//test
-//http://127.0.0.1:8080/api/mysql/lyrics/test

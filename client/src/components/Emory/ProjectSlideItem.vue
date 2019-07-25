@@ -4,11 +4,14 @@
                       :card-image="proj.thumb ? proj.thumb : ''">
 
             <template slot="cardContent">
-                <div @click="locationOnClick(proj.id,$event)">
-                    <a class="inrange" :class="{active:proj.dist < mapstore.emory.searchDist/1000}">範囲内
-                    </a>
 
+                <div v-if="tenki" class="weather_bg" :class="[localTimeMode]" :style="'background-image:url(/static/img/agif/'+weatherIcon+'.gif)'"></div>
+
+                <div @click="locationOnClick(proj.id,$event)" style="position:relative;">
+
+<!--                    <p class="inrange" :class="{active:proj.dist < mapstore.emory.searchDist/1000}">範囲内</p>-->
                     <h3 class="card-title" v-text="proj.title"></h3>
+                    {{localTimeMode}}
                     <p class="card-description" style="color:white;" v-text="proj.desc"></p>
                     <div class="md-layout">
                         <div class="md-layout-item md-size-100 mx-auto md-xsmall-size-100 text-center">
@@ -27,12 +30,14 @@
                         </div>
                     </div>
                 </div>
+
             </template>
         </pricing-card>
 </template>
 
 <script>
     import mapMixin from '../../mixins/map';
+    import weatherMixin from '../../mixins/weather';
     import {mapGetters, mapActions} from 'vuex';
     import {PricingCard} from '../../components/MD/index';
     import MyAvatar from '../../components/Map/MyAvatar';
@@ -40,7 +45,8 @@
         name: "ProjectSlideItem",
         props:['proj'],
         mixins:[
-            mapMixin
+            mapMixin,
+            weatherMixin
         ],
         components:{
             MyAvatar,
@@ -48,14 +54,96 @@
         },
         data(){
             return{
-                timeout:null
+                timeout:null,
+                tenki:null
             }
         },
-        computed: mapGetters(['mapstore']),
+        computed: {
+            ...mapGetters(['mapstore']),
+
+            localTimeMode(){
+                if(this.tenki){
+                    let now = new Date();
+                    now = now.getHours()+now.getMinutes()/60.0;
+                    now = now + this.tenki.jisa;
+                    now = now < 0 ? now +24 : now;
+
+                    let sunrise = this.tenki.sunrise;
+                    sunrise = new Date(sunrise * 1000);
+                    sunrise = sunrise.toLocaleTimeString();
+                    sunrise = sunrise.split(":");
+                    sunrise = parseInt(sunrise[0])+parseInt(sunrise[1])/60;
+                    sunrise = sunrise + this.tenki.jisa;
+                    sunrise = sunrise <0 ? sunrise +24 : sunrise;
+
+                    let sunset  = this.tenki.sunset;
+                    sunset = new Date(sunset * 1000);
+                    sunset = sunset.toLocaleTimeString();
+                    sunset = sunset.split(":");
+                    sunset = parseInt(sunset[0])+parseInt(sunset[1])/60;
+                    sunset = sunset + this.tenki.jisa;
+                    sunset = sunset <0 ? sunset +24 : sunset;
+
+                    let status = "day";
+                    if(Math.abs(now-sunrise)<1){
+                        status = "dawn";
+                    }else if(Math.abs(now-sunset)<1){
+                        status = "sunset";
+                    }else if(Math.abs(now-12)<2){
+                        status = "midday";
+                    }else if(sunrise > now || sunset < now){
+                        status = "night";
+                    }
+                    return status;
+                }
+            },
+
+            weatherIcon(){
+                let tenki = null;
+                if(this.tenki){
+                    switch (this.tenki.main) {
+                        case 'Thunderstorm':
+                        case 'Drizzle':
+                        case 'Rain':
+                        case 'Snow':
+                        case 'Mist':
+                        case 'Smoke':
+                        case 'Haze':
+                            tenki = 'Rain';
+                            break;
+                        case 'Fog':
+                        case 'Sand':
+                        case 'Dust':
+                        case 'Ash':
+                        case 'Squall':
+                        case 'Tornado':
+                        case 'Clouds':
+                            tenki = 'Clouds';
+                            break;
+                        default:
+                            tenki = 'Clear';
+                            break;
+                    }
+
+                    if(this.tenki.rain>20){
+                        tenki +="_rain";
+                    }else{
+                        tenki +="_sunny";
+                    }
+                }
+                return tenki;
+            }
+        },
         methods: {
             ...mapActions(['a_mapstore', 'a_index']),
 
             locationOnClick(id,e){
+                let lat = this.mapstore.emory.projects[id] ? this.mapstore.emory.projects[id].center.lat : '35.663613';
+                let lng = this.mapstore.emory.projects[id] ? this.mapstore.emory.projects[id].center.lng : '139.732293';
+
+                //天気をチェック
+                this.m_weather(lat, lng, res => this.tenki = res)
+
                 if(this.mapstore.emory.project.id===id && this.mapstore.emory.alpha.slider){
                     this.a_mapstore(['emory','alpha',{key:'slider',val:false}]);
                 }else{
@@ -65,8 +153,6 @@
             },
 
             backToLeft(e) {
-                // this.a_mapstore(['emory', 'alpha', {key: 'slider', val: false}]);
-                // if(this.timeout) clearTimeout(this.timeout);
                 this.$emit('backToLeft');
                 e.stopPropagation(); //下のレイヤーのクリックイベントが発火しないようにする
             },
@@ -97,3 +183,41 @@
         }
     }
 </script>
+
+<style lang="scss">
+    .weather_bg{
+        opacity: 0.9;
+        z-index: 0;
+        position: absolute;
+        top:    0;
+        right:  0;
+        width:  45px;
+        height: 45px;
+        background-position: center center;
+        background-size:     contain;
+        background-repeat:   no-repeat;
+        border-radius:50%;
+
+        &.night{
+            background-color: rgba(8, 3, 12, 0.97);
+        }
+
+        &.dawn{
+            background-color: rgba(91, 1, 10, 0.91);
+        }
+
+        &.day{
+            background-color: rgba(12, 141, 217, 0.9);
+        }
+
+        &.midday{
+            background-color: rgba(136, 192, 249, 0.95);
+        }
+
+        &.sunset{
+            background-color: rgba(203, 6, 108, 0.9);
+        }
+
+
+    }
+</style>

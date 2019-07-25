@@ -104,9 +104,10 @@
   import {mapGetters, mapActions} from 'vuex';
   import spotifyMixin from '../mixins/spotify';
   import utilMixin    from '../mixins/util';
-  import mapMixin     from '../mixins/map';
+  import mapMixin     from '../mixins/map/index';
   import wsMixin      from '../mixins/ws';
   import Mixins       from "../mixins/basicMixins";
+  import mysqlMixin   from "../mixins/mysql";
 
   import {ruleEmpty}  from '../store/rules';
   import firebase     from 'firebase';
@@ -123,25 +124,26 @@
   import AdminSection from '../components/Emory/AdminSection';
 
   export default {
-      name: "emory_main",
-      bodyClass: "emory-page",
-      mixins: [
-          Mixins.HeaderImage,
-          spotifyMixin,
-          utilMixin,
-          mapMixin,
-          wsMixin
-      ],
-      components: {
-          BlogCard,
-          MapsOverlay,
-          InfoOverlay,
-          PlayOverlay,
-          EditOverlay,
-          AdminSection
-      },
-      data() {
-          return {
+    name: "emory_main",
+    bodyClass: "emory-page",
+    mixins: [
+      Mixins.HeaderImage,
+      spotifyMixin,
+      utilMixin,
+      mapMixin,
+      wsMixin,
+      mysqlMixin
+    ],
+    components: {
+      BlogCard,
+      MapsOverlay,
+      InfoOverlay,
+      PlayOverlay,
+      EditOverlay,
+      AdminSection
+    },
+    data() {
+      return {
               image: '/static/img/emory/bg/bg1.png',
               mode: 'info',
               socket: null,
@@ -173,47 +175,81 @@
           this.firebaseDB.marker  = firebase.database().ref('markers');
           this.firebaseDB.project = firebase.database().ref('projects');
       },
-      mounted() {
-          this.overlay.info = this.$refs.info_overlay.$el;
-          this.overlay.play = this.$refs.play_overlay.$el;
-          this.overlay.edit = this.$refs.edit_overlay.$el;
+    mounted() {
 
-          //TOPにスクロール
-          this.m_scrollTo('#app');
+      let match;
+      const regexp_h4 = /<h4>(.*?)<\/h4>/g;
+      const regexp_h = /<h(.)>.*?<\/h\1>/g;
+      const regexp_p = /<p>(.*?)<\/p>/g;
 
-          //INFOモードに
-          this.a_mapstore(['set', 'mode', 'info']);
+      this.c_mysql_getall('posts',res=>{
 
-          //とりあえずゲストで入らせる。最初からログインさせるときははずす！
-          this.a_spotify(['set', 'me', {id: 'GUEST'}]);
+        let posts =  res.data.map(post=> {
+          let content = post.post_content ? this.m_html_comment(decodeURIComponent(post.post_content)) : '';
+          let contents = content.split(/\n/); contents = contents.filter(v => v);
 
-          //IDがある場合
-          if (this.spotify.me.id) {
-              //ログイン済みでブックマークデータがない場合
-              if (this.spotify.me.id !== 'GUEST' && !this.spotify.me.bookmark_num) {
-                  this.a_index(['alert', 'set', "Spotifyユーザーデータを調べています"]);
-                  this.a_index(['alert', 'open']);
-                  this.a_index(['alert', 'action', null]);
-              }
-              //マーカー作成
-              this.createOrFindMainuser(this.spotify.me.id);
+          let trip = contents.map(cont => {
+            let res = {hs: [], ps: []};
+            while ((match = regexp_h.exec(cont)) !== null) res.hs.push(match[1]);
+            while ((match = regexp_p.exec(cont)) !== null) res.ps.push(match[1]);
+            return res;
+          });
 
-          } else {
-              //IDがない場合
-              this.a_index(['alert', 'set', "Spotifyにログインが必要です。"]);
-              this.a_index(['alert', 'open']);
-              this.a_index(['alert', 'action', 'login']);
+          return {
+            id: post.ID,
+            title: post.post_title ? decodeURIComponent(post.post_title) : '',
+            excerpt: post.post_excerpt ? post.post_excerpt : '',
+            trip: trip,
+            spotifyid: post.spotifyid ? post.spotifyid : null
           }
+        });
 
-          this.a_mapstore(['emory', 'loader', true]);
-          //全マーカーとエリアの設定
-          this.firebaseDB.marker.on('value', (snapshot) => this.a_mapstore(['set', 'markers', snapshot.val()]));
-          this.firebaseDB.project.on('value', (snapshot) => this.a_mapstore(['emory', 'setprojects', snapshot.val()]));
-      },
+        this.a_wp(['set','posts',posts]);
+        // console.log(posts);
 
-      // errorCaptured(){
-      //   this.a_mapstore(['set', 'tracking', false]);
-      // },
+      });
+
+      window.onpagehide = () => this.m_resetWhenBackground();
+      document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState !== "visible") this.m_resetWhenBackground()
+      }, false);
+
+      this.overlay.info = this.$refs.info_overlay.$el;
+      this.overlay.play = this.$refs.play_overlay.$el;
+      this.overlay.edit = this.$refs.edit_overlay.$el;
+
+      this.m_scrollTo('#app');       //TOPにスクロール
+
+      this.a_mapstore(['set', 'mode', 'info']);     //INFOモードに
+
+      //とりあえずゲストで入らせる(最初からログインさせるときは外す）
+      this.a_spotify(['set', 'me', {id: 'GUEST'}]);
+
+      //IDがある場合
+      if (this.spotify.me.id) {
+        //ログイン済みでブックマークデータがない場合
+        if (this.spotify.me.id !== 'GUEST' && !this.spotify.me.bookmark_num) {
+          this.a_index(['alert', 'set', "Spotifyユーザーデータを調べています"]);
+          this.a_index(['alert', 'open']);
+          this.a_index(['alert', 'action', null]);
+        }
+        this.createOrFindMainuser(this.spotify.me.id);     //マーカー作成
+
+      } else {   //IDがない場合
+        this.a_index(['alert', 'set', "Spotifyにログインが必要です。"]);
+        this.a_index(['alert', 'open']);
+        this.a_index(['alert', 'action', 'login']);
+      }
+
+      this.a_mapstore(['emory', 'loader', true]);
+      //全マーカーとエリアの設定
+      this.firebaseDB.marker.on('value', (snapshot) => this.a_mapstore(['set', 'markers', snapshot.val()]));
+      this.firebaseDB.project.on('value', (snapshot) => this.a_mapstore(['emory', 'setprojects', snapshot.val()]));
+    },
+
+    // errorCaptured(){
+    //   this.a_mapstore(['set', 'tracking', false]);
+    // },
 
       beforeDestroy() {
           this.socketDisconnect();
@@ -226,7 +262,8 @@
               'a_index',
               'a_spotify',
               'a_mapstore',
-              'a_ws']),
+              'a_ws',
+              'a_wp']),
 
       trackOnce(){
         this.$refs.maps_overlay.geoCurrentPosition();

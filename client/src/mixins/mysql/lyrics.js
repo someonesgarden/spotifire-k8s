@@ -1,7 +1,6 @@
 import axios from 'axios';
 
 export default{
-
     methods: {
         c_mysql_lyrics_new(data,cb=null){
 
@@ -31,7 +30,7 @@ export default{
             //     mode:        data.mode
             // };
 
-            axios.post('https://spotifire.work/api/mysql/lyrics/create', conditions)
+            axios.post(window.dbDomain+'/api/mysql/lyrics/create', conditions)
                 .then(res => {if (cb) cb(res)})
                 .catch(error => { if (cb) cb(null)});
         },

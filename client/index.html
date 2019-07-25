@@ -50,8 +50,9 @@
       This is your fallback content in case JavaScript fails to load.
     </noscript>
     <script>
-      //プレイヤーは共通して利用する
-      window.player = null;
+      window.isLocal  = false;  //テスト用の場合true
+      window.dbDomain = window.isLocal ? 'http://127.0.0.1:8000' : 'https://spotifire.work';
+      window.player   = null;   //プレイヤーは共通して利用する
     </script>
     <script src="https://sdk.scdn.co/spotify-player.js"></script>
     <script>

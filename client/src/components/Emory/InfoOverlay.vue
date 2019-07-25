@@ -26,7 +26,7 @@
 
                             <mu-form :model="mapstore.emory" class="range" v-if="!mapstore.emory.loader">
                                 <mu-form-item prop="project" class="range" style="background-color:white;border-radius:4px;">
-                                    <mu-select :value="mapstore.emory.project.id ? mapstore.emory.projects[mapstore.emory.project.id].title : 'ストーリーを選択'" @change="selectStory">
+                                    <mu-select :value="mapstore.emory.projects[mapstore.emory.project.id] ? mapstore.emory.projects[mapstore.emory.project.id].title : 'ストーリーを選択'" @change="selectStory">
                                         <mu-option v-for="(p,inx) in m_sortProjsByDist" :key="'proj'+inx" :label="p.title" :value="p.id+'|'+inx"></mu-option>
                                     </mu-select>
                                 </mu-form-item>

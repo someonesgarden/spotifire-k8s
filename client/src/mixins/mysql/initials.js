@@ -1,7 +1,6 @@
 import axios from 'axios';
 
 export default{
-
     methods: {
         c_mysql_initials_new(data,cb=null){
             const conditions = {
@@ -9,9 +8,8 @@ export default{
                 initial: data.initial,
                 genres:data.genres
             };
-            console.log(conditions);
-            //axios.post('/api/mysql/initials/new', conditions)
-            axios.post('https://spotifire.work/api/mysql/initials/create', conditions)
+
+            axios.post(window.dbDomain+'/api/mysql/initials/create', conditions)
                 .then(res => {
                     console.log(res);
                     if (cb) cb(res);
@@ -29,7 +27,7 @@ export default{
             };
             console.log(conditions);
             //axios.post('/api/mysql/initials/update', conditions)
-            axios.post('https://spotifire.work/api/mysql/initials/update', conditions)
+            axios.post(window.dbDomain+'/api/mysql/initials/update', conditions)
                 .then(res => {
                     console.log(res);
                     if (cb) cb(res);

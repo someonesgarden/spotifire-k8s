@@ -17,7 +17,7 @@
          data-image-translateY="-45"
          data-image-rotate="-5"
          :data-morph-path="shapes[1]">
-        <svg class="item__svg" width="500" height="500" :viewBox="'0 0 500 500'">
+        <svg class="svgitem" width="500" height="500" :viewBox="'0 0 500 500'">
             <clipPath id="clipShape1"><path class="item__clippath" :d="shapes[0]" /></clipPath>
             <clipPath id="clipShape2"><path class="item__clippath" :d="shapes[1]" /></clipPath>
             <clipPath id="clipShape3"><path class="item__clippath" :d="shapes[2]" /></clipPath>
@@ -70,15 +70,14 @@
 </script>
 
 <style scoped lang="scss">
-    .item--style-1{
+    .animebody{
+        transition : 1.0s, cubic-bezier(.04,.65,.72,.97);
+
         text-align:center;
         position:relative;
 
-        .item__svg{
+        .svgitem{
             margin:0 auto;
-
         }
     }
-
-
 </style>

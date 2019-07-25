@@ -7,6 +7,7 @@ const Op = Sequelize.Op;
 router.get('/all', (req,res)=>{
     Initials.findAll().then(
         function(data) {
+            console.log(data);
             res.send(data);
         },
         function(err) {

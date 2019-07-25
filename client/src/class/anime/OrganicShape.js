@@ -7,7 +7,7 @@ export default class OrganicShape{
         this.DOM = {};
         this.DOM.el = el;
 
-        this.DOM.svg = this.DOM.el.querySelector('.item__svg');
+        this.DOM.svg = this.DOM.el.querySelector('.svgitem');
         this.DOM.path = this.DOM.svg.querySelector('path');
         //this.DOM.pathary = this.DOM.svg.querySelectorAll('path');
 

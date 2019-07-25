@@ -16,6 +16,8 @@ const modal     = modules => modules.modal
 const side      = modules => modules.side
 const pwa       = modules => modules.pwa
 const subscribe = modules => modules.subscribe
+const wp        = modules => modules.wp
+const weather   = modules => modules.weather
 // const g_three   = modules => modules.three
 
 export {
@@ -36,5 +38,7 @@ export {
     header,
     home,
     subscribe,
+    wp,
+    weather
     //g_three,
 }

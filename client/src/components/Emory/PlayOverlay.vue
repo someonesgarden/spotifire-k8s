@@ -77,11 +77,10 @@
         align-items: center;
         width: 100%;
         height: 100%;
-        /* min-height: 300px; */
-        /* margin: 10px auto; */
         display: flex;
         justify-content: center;
-        /*mix-blend-mode: hard-light;*/
+
+
     }
 
 </style>

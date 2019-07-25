@@ -15,6 +15,8 @@ import side  from './modules/side/index';
 import pwa from './modules/pwa/index';
 import svg from './modules/svg/index';
 import subscribe from './modules/subscribe/index';
+import wp from './modules/wp/index';
+import weather from './modules/weather/index';
 
 Vue.use(Vuex);
 
@@ -35,7 +37,9 @@ export default new Vuex.Store({
         side,
         pwa,
         svg,
-        subscribe
+        subscribe,
+        wp,
+        weather
     }
 });
 

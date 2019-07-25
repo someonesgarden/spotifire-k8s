@@ -48,7 +48,7 @@
                    :center="mapstore.map.center"
                    :max-zoom="18"
                    :max-native-zoom="mapstore.map.zoom"
-                   :min-zoom="12"
+                   :min-zoom="5"
                    @click="m_mapClick" @zoomend="zoomChange">
                 <l-tile-layer :url="mapstore.map.url" :attribution="mapstore.map.attribution"></l-tile-layer>
                 <my-marker v-if="mapstore.markers && mapstore.mainuser" v-for="(marker,id) in m_sortedMarkers"
@@ -72,7 +72,7 @@
                  :style="{top:mapstore.emory.selectedPoint.top+'px',left:mapstore.emory.selectedPoint.left+'px'}">
             </div>
             <!-- MP3 PLAYERS -->
-            <div class="mp3_players" v-if="mapstore.tracking">
+            <div class="mp3_players" v-if="mapstore.tracking || mapstore.emory.mode==='map'">
                 <audio-player :key="'pod'+(index-1)" :ref="'pod'+(index-1)" :id="index-1" v-for="index in pods"></audio-player>
             </div>
         </div>
@@ -107,7 +107,7 @@
                 centers:        [],
                 track_max:      0,
                 projectPoly:    null,
-                pods: 3
+                pods: 4
             };
         },
 
@@ -115,10 +115,6 @@
 
         mounted(){
             this.watchedTrackAction();
-
-            window.onpagehide = ()=> this.resetWhenBackground();
-
-            document.addEventListener('visibilitychange', () => { if (document.visibilityState !== "visible") this.resetWhenBackground() }, false)
         },
 
         beforeDestroy(){
@@ -140,12 +136,6 @@
 
         methods: {
             ...mapActions(['a_mapstore','a_ws','a_index']),
-
-            resetWhenBackground(){
-                this.a_index(['storyModal','toggle',false]);
-                this.a_mapstore(['set','mode','info']);
-                this.a_mapstore(['set', 'tracking', false]);
-            },
 
             zoomChange(evt){
                 this.a_mapstore(['set','zoom',evt.target._zoom]);
@@ -338,6 +328,8 @@
             },
 
             geoSuccess(position){
+                let center = {lat:position.coords.latitude, lng:position.coords.longitude};
+                this.a_mapstore(['geo','set',{center:center}]); //リアルなジオコードの位置は別に保存しておく
                 this.resetPos(position);
                 this.m_drawPoly();
                 if(this.mapstore.mainuser){

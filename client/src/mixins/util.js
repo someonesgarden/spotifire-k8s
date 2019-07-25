@@ -1,9 +1,15 @@
 export default {
     methods: {
+        m_html_comment(txt){
+            let filtered = txt.replace( /<!--[\s\S]*?-->/g , '' ); //htmlタグは削除
+            filtered = filtered.replace(/\r?\n/g, ''); //改行コードは削除
+            filtered = filtered.replace(/<hr[\s\S]*?\/>/g, '\n' ); //hrは改行記号に置き換え
+            return filtered.replace( /<p><\/p>/g , '' ); //からのp段落は削除
+        },
+
         m_scrollTo (target,top=0){
             if(!!target) top = jQuery(target).offset().top;
             jQuery('html, body').stop().animate({'scrollTop': top}, 500, 'swing');
-
         },
 
         m_goMap(login,to='/map'){

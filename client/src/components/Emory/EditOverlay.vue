@@ -32,7 +32,6 @@
                         </div>
 
                         <div class="four wide mobile four wide tablet four wide computer column" style="padding:10px 0 0 0;">
-
                             <mu-form-item prop="triggerDist" :rules="blankRules">
                                 <mu-select prop="triggerDist" color="primary"
                                            v-model="mapstore.emory.marker.triggerDist"
@@ -252,6 +251,14 @@
             ...mapActions(['a_index', 'a_spotify', 'a_mapstore']),
 
             delFirebase(ref,id){
+                if(ref.key==="projects"){
+                    //プロジェクトを消す場合は、登録されているマーカーも消さなくてはいけない
+                    Object.keys(this.mapstore.markers).map(markerid=> {
+                        if(this.mapstore.markers[markerid].project===id) this.delFirebase(this.firebaseDB.marker,markerid);
+                    })
+                }
+
+                console.log("delete",ref.key,id);
                 ref.child(id).remove();
                 this.m_cancelEditMode();
                 this.delAlert.marker = false;

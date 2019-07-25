@@ -182,6 +182,28 @@ export const a_feed = ({commit}, [type, action, data]) => {
     actions[type][action](data)
 }
 
+// --------------- Weather --------------
+export const a_weather = ({commit}, [type, action, data]) => {
+    const actions = {
+        set:{
+            sun:(data) => commit('weather/setSun', data),
+            weather:(data) => commit('weather/setWeather',data)
+        }
+    }
+    actions[type][action](data)
+}
+
+// --------------- WordPress --------------
+export const a_wp = ({commit}, [type, action, data]) => {
+    const actions = {
+        set:{
+            posts:(data) => commit('wp/setPosts', data)
+        }
+    }
+    actions[type][action](data)
+}
+
+
 // --------------- WEB SOCKET -------------
 export const a_ws = ({commit}, [type, action, data]) => {
     const actions = {

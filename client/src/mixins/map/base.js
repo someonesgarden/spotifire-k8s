@@ -38,6 +38,13 @@ export default{
     },
 
     methods: {
+        m_resetWhenBackground(){
+            console.log("m_resetWhenBackground!");
+            this.a_index(['storyModal','toggle',false]);
+            //this.a_mapstore(['set','mode','info']);
+            //this.a_mapstore(['set', 'tracking', false]);
+        },
+
         /* MAP Overlay */
         m_mapClick(val){
             //EDITモードの場合
@@ -116,7 +123,11 @@ export default{
             let polys = [];
             //実際のユーザー以外のポイントでポリゴンを作る
             if(this.mapstore.markerDists){
-                this.mapstore.markerDists.forEach(mkr=>{ if(this.mapstore.markers[mkr.id].type!=='mainuser') polys.push(this.mapstore.markers[mkr.id].center) });
+                this.mapstore.markerDists.forEach(mkr=>{
+                    if(this.mapstore.markers[mkr.id]){
+                        if(this.mapstore.markers[mkr.id].type!=='mainuser') polys.push(this.mapstore.markers[mkr.id].center)
+                    }
+                });
                 polys.sort((a, b)=> a.lat > b.lat ? 1 : -1);
                 polys.sort((a, b)=> a.lng > b.lng ? 1 : -1);
                 this.a_mapstore(['set','poly',polys]);

@@ -24,6 +24,9 @@ export default class EProject{
 
     updateOrNew(firebaseRef){
 
+        console.log(this.project);
+        console.log(firebaseRef);
+
         let updates = {};
         this.init();
 

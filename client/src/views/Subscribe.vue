@@ -226,7 +226,7 @@
             deleteLyricComplete(){
                 //データベースから削除
                 if(this.delId){
-                    axios.get('https://spotifire.work/api/mysql/lyrics/delete',{params:{'id':this.delId}}).then(res => {
+                    axios.get(window.dbDomain+'/api/mysql/lyrics/delete',{params:{'id':this.delId}}).then(res => {
                         if(res){
                             //Storeから削除
                             this.a_subscribe(['delete','lyric', this.delIndex]);
@@ -244,7 +244,7 @@
             deleteMorphComplete(){
                 let key = this.delObj.key;
                 let entries = this.delObj.mo;
-                let queries = entries.length>0 ? entries.map(obj=> axios.post('https://spotifire.work/api/mysql/lyrics/updatemorph', {morph:key,id:obj.id})) : null;
+                let queries = entries.length>0 ? entries.map(obj=> axios.post(window.dbDomain+'/api/mysql/lyrics/updatemorph', {morph:key,id:obj.id})) : null;
 
                 Promise.all(queries).then(res=>{
                     //Lyricsデータを更新
@@ -263,14 +263,14 @@
 
             loadInitials(){
                 console.log("loadInitials from spotife.work(laravel)..");
-                axios.get('https://spotifire.work/api/mysql/initials/all')
+                axios.get(window.dbDomain+'/api/mysql/initials/all')
                     .then(res => { if(res) this.a_subscribe(['set','initials',res.data])})
                     .catch(error => { console.log(error)});
             },
 
             loadLyrics(){
                 console.log("loadLyrics from spotife.work(laravel)..");
-                axios.get('https://spotifire.work/api/mysql/lyrics/all')
+                axios.get(window.dbDomain+'/api/mysql/lyrics/all')
                     .then(res => { if(res) this.a_subscribe(['set','lyrics',res.data])})
                     .catch(error => { console.log(error)});
             }

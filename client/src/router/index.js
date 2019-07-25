@@ -16,6 +16,8 @@ import MapArea   from '../views/MapAreaPage.vue';
 import Login     from '../views/Login.vue';
 import Analysis  from '../views/Analysis.vue';
 
+import TestView  from '../views/TestView.vue';
+
 
 let routes = [
   {
@@ -33,7 +35,7 @@ let routes = [
     path: '/emory',
     name: 'Emory',
     components: {default:Emory,header:HeadTop,footer:MainFooter},
-    meta: {requiresAuth: true},
+    // meta: {requiresAuth: true},
   },
   {
     path: '/maparea',
@@ -52,6 +54,12 @@ let routes = [
     name: 'Analysis',
     components: {default:Analysis,header:HeadTop},
     meta: {requiresAuth: true}
+  },
+
+  {
+    path: '/testview',
+    name: 'TestView',
+    components: {default:TestView}
   },
 
   // {
