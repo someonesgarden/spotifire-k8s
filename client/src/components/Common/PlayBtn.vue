@@ -1,8 +1,11 @@
 <template>
 
     <mu-list-item-action @click="play">
-        <mu-icon value="pause_circle_outline" v-if="spotify.player.playing && spotify.player.nowid === id"></mu-icon>
-        <mu-icon value="play_circle_outline" v-else></mu-icon>
+
+        <md-icon v-if="spotify.player.playing && spotify.player.nowid === id">pause_circle_outline</md-icon>
+        <md-icon v-else>play_circle_outline</md-icon>
+<!--        <mu-icon value="pause_circle_outline" v-if="spotify.player.playing && spotify.player.nowid === id"></mu-icon>-->
+<!--        <mu-icon value="play_circle_outline" v-else></mu-icon>-->
     </mu-list-item-action>
 </template>
 

@@ -94,7 +94,7 @@
                         </h4>
                         <div class="stats">
                           <md-button @click="verifyPageAccess('subscribe')" class="md-white md-round">
-                            <md-icon class="md-icon-button">link</md-icon> LInk
+                            <md-icon class="md-icon-button">link</md-icon> Link
                           </md-button>
                         </div>
 
@@ -123,8 +123,11 @@
         </div>
       </div>
 
-      <mu-button slot="actions" flat color="primary" @click="goPageAccess"><mu-icon value="input"></mu-icon>&nbsp;go</mu-button>
-      <mu-button slot="actions" flat color="primary" @click="openLoginModal=false"><mu-icon value="cancel"></mu-icon>&nbsp;cancel</mu-button>
+      <mu-button slot="actions" flat color="primary" @click="goPageAccess">
+        <md-icon>input</md-icon>
+        &nbsp;go</mu-button>
+      <mu-button slot="actions" flat color="primary" @click="openLoginModal=false">
+        <md-icon>cancel</md-icon>&nbsp;cancel</mu-button>
     </mu-dialog>
 
   </div>

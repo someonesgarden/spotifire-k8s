@@ -1,6 +1,5 @@
 const state = {
     emory: {
-
         typing: {
             show: false,
             texts: [],
@@ -61,7 +60,6 @@ const state = {
             spotifyid:  ""
         }
     }
-
 }
 
 const mutations = {

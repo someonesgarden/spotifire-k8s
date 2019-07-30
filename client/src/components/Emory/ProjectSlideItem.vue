@@ -4,14 +4,10 @@
                       :card-image="proj.thumb ? proj.thumb : ''">
 
             <template slot="cardContent">
-
                 <div v-if="tenki" class="weather_bg" :class="[localTimeMode]" :style="'background-image:url(/static/img/agif/'+weatherIcon+'.gif)'"></div>
-
                 <div @click="locationOnClick(proj.id,$event)" style="position:relative;">
-
-<!--                    <p class="inrange" :class="{active:proj.dist < mapstore.emory.searchDist/1000}">範囲内</p>-->
+                <!-- <p class="inrange" :class="{active:proj.dist < mapstore.emory.searchDist/1000}">範囲内</p>-->
                     <h3 class="card-title" v-text="proj.title"></h3>
-                    {{localTimeMode}}
                     <p class="card-description" style="color:white;" v-text="proj.desc"></p>
                     <div class="md-layout">
                         <div class="md-layout-item md-size-100 mx-auto md-xsmall-size-100 text-center">
@@ -30,7 +26,6 @@
                         </div>
                     </div>
                 </div>
-
             </template>
         </pricing-card>
 </template>
@@ -101,22 +96,27 @@
             weatherIcon(){
                 let tenki = null;
                 if(this.tenki){
+                    console.log(this.tenki);
                     switch (this.tenki.main) {
-                        case 'Thunderstorm':
                         case 'Drizzle':
-                        case 'Rain':
-                        case 'Snow':
                         case 'Mist':
-                        case 'Smoke':
-                        case 'Haze':
+                        case 'Tornado':
+                        case 'Rain':
                             tenki = 'Rain';
                             break;
+                        case 'Snow':
+                            tenki = 'Snow';
+                            break;
+                        case 'Thunderstorm':
+                            tenki = 'Thunder';
+                            break;
+                        case 'Smoke':
+                        case 'Haze':
                         case 'Fog':
                         case 'Sand':
                         case 'Dust':
                         case 'Ash':
                         case 'Squall':
-                        case 'Tornado':
                         case 'Clouds':
                             tenki = 'Clouds';
                             break;
@@ -125,8 +125,8 @@
                             break;
                     }
 
-                    if(this.tenki.rain>20){
-                        tenki +="_rain";
+                    if(this.tenki.clouds.all>60){
+                        tenki +="_cloudy";
                     }else{
                         tenki +="_sunny";
                     }
@@ -217,7 +217,5 @@
         &.sunset{
             background-color: rgba(203, 6, 108, 0.9);
         }
-
-
     }
 </style>

@@ -1,4 +1,3 @@
-
 import {mapGetters,mapActions} from 'vuex';
 import axios from 'axios';
 
@@ -20,7 +19,7 @@ export default{
         },
 
         m_jisa_from_lng_diff(lng) {
-            return this.mapstore.geo ? parseInt((parseFloat(lng) - this.mapstore.geo.center.lng) / 15) : 0;
+            return this.mapstore.geocoding.center ? parseInt((parseFloat(lng) - this.mapstore.geocoding.center.lng) / 15) : 0;
         },
 
         m_weather(lat,lng,cb=null){
@@ -39,24 +38,20 @@ export default{
                 //let yahoo       = results[1].data;
                // let hinode      = results[2].data;
                 let date        = new Date();
-
                 // let features = yahoo.Feature ? yahoo.Feature : [];
                 // if(features.length>0) features = features[0].Property.WeatherList.Weather;
 
                 let features = {
-                    jisa: this.m_jisa_from_lng_diff(lng),
-                    update:date.getTime(),
-                    //rain:features[0].Rainfall,
-                    //forecasts:features,
-                    //...openweather.main,
-                    temp:this.m_temp2Celsius(openweather.main.temp),
-                    main:openweather.weather[0].main,
-                    desc:openweather.weather[0].description,
-                    wind:openweather.wind.deg,
-                    clouds:openweather.clouds,
-                    area:openweather.name,
+                    jisa:   this.m_jisa_from_lng_diff(lng),
+                    update: date.getTime(),
+                    temp:   this.m_temp2Celsius(openweather.main.temp),
+                    main:   openweather.weather[0].main,
+                    desc:   openweather.weather[0].description,
+                    wind:   openweather.wind.deg,
+                    clouds: openweather.clouds,
+                    area:   openweather.name,
                     sunrise:openweather.sys.sunrise,
-                    sunset:openweather.sys.sunset,
+                    sunset: openweather.sys.sunset,
                 };
 
                 if(cb) cb(features);

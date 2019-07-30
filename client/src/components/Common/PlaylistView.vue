@@ -154,14 +154,14 @@
                         </mu-list-item-sub-title>
                     </mu-list-item-content>
                     <mu-list-item-action @click="setRecoFeature(track.features)">
-                        <mu-icon value="colorize"></mu-icon>
+                        <md-icon>colorize</md-icon>
                     </mu-list-item-action>
                 </mu-list-item>
 
                 <mu-divider></mu-divider>
                     <mu-list-item button :ripple="false" class="range" @click="getAlbum(track.album.id)">
                         <mu-list-item-action>
-                            <mu-icon value="album"></mu-icon>
+                            <md-icon>album</md-icon>
                         </mu-list-item-action>
                         <mu-list-item-title>&nbsp;{{track.album.name}}</mu-list-item-title>
                     </mu-list-item>
@@ -170,7 +170,7 @@
                 <div v-if="track.artists">
                     <mu-list-item button :ripple="false" color="cyan100" class="range" v-for="(artist,inx) in track.artists" :key="'artist'+inx" @click="getArtist(artist.id)">
                         <mu-list-item-action>
-                            <mu-icon value="mic"></mu-icon>
+                            <md-icon>mic</md-icon>
                         </mu-list-item-action>
                         <mu-list-item-title>&nbsp;{{artist.name}}</mu-list-item-title>
                     </mu-list-item>
@@ -260,7 +260,7 @@
                     <mu-row gutter v-if="filter.use">
                         <mu-col span="12" style="margin-bottom:12px;">
                             <mu-button full-width color="indigo400" @click="filterAction">
-                                <mu-icon value="filter_list"></mu-icon>&nbsp;FILTER
+                                <md-icon>filter_list</md-icon>&nbsp;FILTER
                             </mu-button>
                         </mu-col>
                     </mu-row>
@@ -310,7 +310,7 @@
                 <mu-row gutter v-if="filter.use">
                     <mu-col span="12" style="margin-bottom:12px;">
                         <mu-button full-width color="teal400" @click="c_downloadCSV(filter)">
-                            <mu-icon value="cloud_download"></mu-icon>&nbsp;CSV
+                            <md-icon>cloud_download</md-icon>&nbsp;CSV
                         </mu-button>
                     </mu-col>
                 </mu-row>

@@ -1,7 +1,6 @@
 import M from '../../class/map/EMarker';
-//import P from '../../class/map/EProject';
-
 const nullmarker = new M({}).marker;
+//import P from '../../class/map/EProject';
 //const nullproject = new P({}).project;
 
 export default{
@@ -61,6 +60,10 @@ export default{
             this.a_mapstore(['set','mode','info']);
         },
 
+        m_zoomChange(evt){
+            this.a_mapstore(['set','zoom',evt.target._zoom]);
+        },
+
         /* EDITOverlay */
         m_emoryParam(key,val,type='marker'){
             this.a_mapstore(['emory',type+'param',{key:key,val:val}]);
@@ -82,7 +85,6 @@ export default{
             this.a_mapstore(['set','editing',{key:'status',val:false}]);
             this.a_mapstore(['set','mode','info']);
         },
-
 
         /* Map Basic */
         m_setIdAndMoveCenter(key){

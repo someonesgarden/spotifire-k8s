@@ -11,21 +11,29 @@
                 </mu-button>
                 <mu-list slot="content" @mouseup="toggleMenu('normal')">
                     <mu-list-item button to="/emory">
-                        <mu-list-item-title><mu-icon value="extension" :size="15"></mu-icon>&nbsp;Emory</mu-list-item-title>
+                        <mu-list-item-title>
+                            <md-icon>extension</md-icon>
+                            &nbsp;Emory</mu-list-item-title>
                     </mu-list-item>
+
+<!--                    <mu-list-item button to="/routetrack">-->
+<!--                        <mu-list-item-title>-->
+<!--                            <md-icon>extension</md-icon>-->
+<!--                            &nbsp;RouteTrack</mu-list-item-title>-->
+<!--                    </mu-list-item>-->
                     <mu-divider></mu-divider>
 
                 </mu-list>
             </mu-menu>
 
             <mu-button flat slot="left" @click="a_index(['side','left',{key:'spotify',val:true}])">
-                <mu-icon value="border_left"></mu-icon>
+                <md-icon>border_left</md-icon>
             </mu-button>
             <mu-button flat slot="right" color="grey500" @click="a_index(['bottom','open'])">
-                <mu-icon value="border_bottom"></mu-icon>
+                <md-icon>border_bottom</md-icon>
             </mu-button>
             <mu-button flat slot="right" @click="a_index(['side','right',{key:'spotify',val:true}])">
-                <mu-icon value="border_right"></mu-icon>
+                <md-icon>border_right</md-icon>
             </mu-button>
         </mu-appbar>
 
@@ -35,28 +43,32 @@
             <mu-menu  open-on-hover cover placement="left-start" :open.sync="menu.map">
 
                 <mu-button flat>
-                    <img class="menu-icon" src="/static/img/emory/logos/horizontal_w.png" style="width:110px; height:auto;"></mu-button>
+                    <img class="menu-icon" src="/static/img/emory/logos/horizontal_w.png" style="width:110px; height:auto;">
+                </mu-button>
                 <mu-list slot="content" @mouseup="toggleMenu('map')">
                     <mu-list-item button to="/">
-                        <mu-list-item-title><mu-icon value="home" :size="15"></mu-icon>&nbsp;トップ</mu-list-item-title>
+                        <mu-list-item-title>
+                            <md-icon>home</md-icon>&nbsp;トップ</mu-list-item-title>
                     </mu-list-item>
                     <mu-divider></mu-divider>
                     <mu-list-item button  @click="a_index(['howModal','toggle',true])">
-                        <mu-list-item-title><mu-icon value="info" :size="15"></mu-icon>&nbsp;使い方</mu-list-item-title>
+                        <mu-list-item-title>
+                            <md-icon>info</md-icon>&nbsp;使い方</mu-list-item-title>
                     </mu-list-item>
                 </mu-list>
             </mu-menu>
 
-            <mu-button flat slot="left" @click="a_index(['side','left',{key:'emory',val:true}])">
-                <mu-icon value="train"></mu-icon>
+            <mu-button flat slot="left" @click="a_mapstore(['set','mode','wide_map']);">
+                <md-icon>flight_takeoff</md-icon>
             </mu-button>
 
-            <mu-button flat slot="right" :color="mapstore.tracking ? 'green' : 'grey500'" @click="emoryMyPosition">
-                <span v-if="mapstore.tracking">トラック中</span> <mu-icon value="directions_walk"></mu-icon>
+            <mu-button flat slot="right" :color="mapstore.geocoding.on ? 'green' : 'grey500'" @click="emoryMyPosition">
+                <span v-if="mapstore.geocoding.on">トラック中</span>
+                <md-icon>directions_walk</md-icon>
             </mu-button>
 
             <mu-button flat slot="right" @click="a_index(['howModal','toggle',true])">
-                <mu-icon value="info"></mu-icon>
+                <md-icon>info</md-icon>
             </mu-button>
         </mu-appbar>
 
@@ -70,20 +82,21 @@
                 <mu-list slot="content" @mouseup="toggleMenu('news')">
 
                     <mu-list-item button to="/">
-                        <mu-list-item-title><mu-icon value="home" :size="15"></mu-icon>&nbsp;トップ</mu-list-item-title>
+                        <mu-list-item-title>
+                            <md-icon>home</md-icon>&nbsp;トップ</mu-list-item-title>
                     </mu-list-item>
 
                 </mu-list>
             </mu-menu>
 
             <mu-button flat slot="left" @click="side.news.left.open = true">
-                <mu-icon value="spellcheck"></mu-icon>
+                <md-icon>spellcheck</md-icon>
             </mu-button>
             <mu-button flat slot="right" color="grey500" @click="a_index(['bottom','open'])">
-                <mu-icon value="border_bottom"></mu-icon>
+                <md-icon>border_bottom</md-icon>
             </mu-button>
             <mu-button flat slot="right" @click="side.news.right.open=true">
-                <mu-icon value="dashboard"></mu-icon>
+                <md-icon>dashboard</md-icon>
             </mu-button>
         </mu-appbar>
 
@@ -105,7 +118,7 @@
         <!--/Spotify Drawers -->
 
         <!-- Emory Drawers -->
-        <mu-drawer :open.sync="side.emory.left.open" :docked="side.emory.left.docked" :width="350" style="background-color:#0d7970;" @change="()=> a_index(['side','left',{key:'emory',val:'toggle'}])">
+        <mu-drawer :open.sync="side.emory.left.open" :docked="side.emory.left.docked" :width="300" style="background-color:#0d7970;" @change="()=> a_index(['side','left',{key:'emory',val:'toggle'}])">
             <mu-list style="width:inherit;">
                 <emory-left-view
                         @close="a_index(['side','left',{key:'emory',val:false}])"></emory-left-view>

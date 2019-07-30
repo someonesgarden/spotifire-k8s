@@ -303,7 +303,7 @@
 
                     <mu-col span="2" sm="2" md="2" lg="2">
                         <mu-button full-width color="indigo400" @click="orderChange">
-                            <mu-icon value="low_priority"></mu-icon>
+                            <md-icon>low_priority</md-icon>
                         </mu-button>
                     </mu-col>
 

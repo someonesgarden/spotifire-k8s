@@ -72,7 +72,7 @@
                  :style="{top:mapstore.emory.selectedPoint.top+'px',left:mapstore.emory.selectedPoint.left+'px'}">
             </div>
             <!-- MP3 PLAYERS -->
-            <div class="mp3_players" v-if="mapstore.tracking">
+            <div class="mp3_players" v-if="mapstore.geocoding.on">
                 <audio-player :key="'pod'+(index-1)" :ref="'pod'+(index-1)" :id="index-1" v-for="index in pods"></audio-player>
             </div>
         </div>
@@ -115,6 +115,7 @@
         computed:mapGetters(['ws', 'mapstore', 'spotify']),
 
         mounted(){
+
             this.watchedTrackAction();
 
             window.onpagehide = ()=>{
@@ -138,7 +139,7 @@
         },
 
         watch: {
-            'mapstore.tracking': {
+            'mapstore.geocoding.on': {
                 handler: 'watchedTrackAction',
                 immediate: true
             },
@@ -216,7 +217,7 @@
             /*---*/
 
             watchedTrackAction(){
-                if (this.mapstore.tracking){
+                if (this.mapstore.geocoding.on){
                     console.log("watch:tracking:START");
                     this.resetAllPods(); //全てのmp3プレイヤーを初期化
                     this.keepTracking();
@@ -289,10 +290,10 @@
 
             keepTracking(){
                 console.log("keepTracking..");
-                if(this.mapstore.tracking){
+                if(this.mapstore.geocoding.on){
                     //this.geoCurrentPosition();
                     this.geolocation();
-                    this.timeout = setTimeout(this.keepTracking, this.mapstore.trackDuration);
+                    this.timeout = setTimeout(this.keepTracking, this.mapstore.geocoding.duration);
 
                     if(this.track_max>50){
                         this.a_mapstore(['set', 'tracking', false]);
@@ -307,12 +308,12 @@
 
             //一回だけはこちら！
             geoCurrentPosition(){
-                if(!!navigator.geolocation) navigator.geolocation.getCurrentPosition(this.geoSuccessOnce,this.m_geoError,this.mapstore.map.geocodingOptions);
+                if(!!navigator.geolocation) navigator.geolocation.getCurrentPosition(this.geoSuccessOnce,this.m_geoError,this.mapstore.geocoding.options);
             },
 
             //継続的に呼び出し続ける場合はこちら！
             geolocation() {
-                if(!!navigator.geolocation) this.watchID = navigator.geolocation.watchPosition(this.geoSuccess,this.m_geoError,this.mapstore.map.geocodingOptions);
+                if(!!navigator.geolocation) this.watchID = navigator.geolocation.watchPosition(this.geoSuccess,this.m_geoError,this.mapstore.geocoding.options);
             },
 
             geoSuccessOnce(position){

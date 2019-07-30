@@ -130,26 +130,28 @@ export const a_spotify  =  ({commit}, [type, action, data]) => {
 export const a_mapstore = ({commit},[type, action, data]) => {
     const actions = {
         set: {
-            typing:(data)     => commit('mapstore/setTyping',    data),
-            mode:(data)       => commit('mapstore/setMode',      data),
-            editing:(data)    => commit('mapstore/setEditing',   data),
-            mainuser:(data)   => commit('mapstore/setMainuser',  data),
-            markers:(data)    => commit('mapstore/setMarkers',   data),
+            typing:(data)       => commit('mapstore/setTyping',     data),
+            mode:(data)         => commit('mapstore/setMode',       data),
+            editing:(data)      => commit('mapstore/setEditing',    data),
+            mainuser:(data)     => commit('mapstore/setMainuser',   data),
+            markers:(data)      => commit('mapstore/setMarkers',    data),
 
-            markerdists:(data)=> commit('mapstore/setMarkerDists',data),
-            poly:(data)       => commit('mapstore/setMapPoly',data),
-            projBoundary:(data)=>commit('mapstore/setMapProjBoundary',data),
-            tracking:(data)   => commit('mapstore/setTracking',  data),
-            zoom:(data)       => commit('mapstore/setMapZoom',  data),
+            markerdists:(data)  => commit('mapstore/setMarkerDists',data),
+            poly:(data)         => commit('mapstore/setMapPoly',    data),
+            projBoundary:(data) => commit('mapstore/setMapProjBoundary',data),
+            tracking:(data)     => commit('mapstore/setTracking',   data),
+            zoom:(data)         => commit('mapstore/setMapZoom',    data),
         },
 
         geo:{
-            set:(data) => commit('mapstore/setGeo', data),
+            set:(data) => commit('mapstore/setGeoCenter', data),
         },
+
         center:{
             mainuser:(data)   => commit('mapstore/setMainuserCenter',data),
             map:(data)        => commit('mapstore/setMapCenter',data)
         },
+
         emory:{
             loader:(data)         => commit('mapstore/setLoader', data),
             marker:(data)         => commit('mapstore/setEmoryMarker',data),

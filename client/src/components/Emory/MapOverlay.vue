@@ -14,7 +14,7 @@
                    :markerZoomAnimation="false"
                    :inertia="false"
                    :bounceAtZoomLimits="false"
-                   @click="m_mapClick" @zoomend="zoomChange">
+                   @click="m_mapClick" @zoomend="m_zoomChange">
                 <l-tile-layer :url="mapstore.map.url" :attribution="mapstore.map.attribution"></l-tile-layer>
 
                 <l-image-overlay v-if="m_activeProj.imgurl && m_activeProj.LBBound"
@@ -49,7 +49,7 @@
                    :max-zoom="18"
                    :max-native-zoom="mapstore.map.zoom"
                    :min-zoom="5"
-                   @click="m_mapClick" @zoomend="zoomChange">
+                   @click="m_mapClick" @zoomend="m_zoomChange">
                 <l-tile-layer :url="mapstore.map.url" :attribution="mapstore.map.attribution"></l-tile-layer>
                 <my-marker v-if="mapstore.markers && mapstore.mainuser" v-for="(marker,id) in m_sortedMarkers"
                            :marker="marker"
@@ -67,12 +67,14 @@
             </l-map>
 
             <!-- SELECTED POINT-->
-            <div ref="selectedPoint" class="selectedPoint"
+            <div ref="selectedPoint"
+                 class="selectedPoint"
                  :class="{'project':mapstore.emory.editing.type==='project'}"
                  :style="{top:mapstore.emory.selectedPoint.top+'px',left:mapstore.emory.selectedPoint.left+'px'}">
             </div>
+
             <!-- MP3 PLAYERS -->
-            <div class="mp3_players" v-if="mapstore.tracking || mapstore.emory.mode==='map'">
+            <div class="mp3_players" v-if="mapstore.geocoding.on || mapstore.emory.mode==='map'">
                 <audio-player :key="'pod'+(index-1)" :ref="'pod'+(index-1)" :id="index-1" v-for="index in pods"></audio-player>
             </div>
         </div>
@@ -122,13 +124,13 @@
         },
 
         watch: {
-            'mapstore.tracking': {
+            'mapstore.geocoding.on': {
                 handler: 'watchedTrackAction',
                 immediate: true
             },
 
             'mapstore.map.center': {
-                handler: function (newCenter) {
+                handler: function(newCenter) {
                     if(newCenter) this.setView(newCenter, this.mapstore.map.zoom);
                 }
             }
@@ -136,10 +138,6 @@
 
         methods: {
             ...mapActions(['a_mapstore','a_ws','a_index']),
-
-            zoomChange(evt){
-                this.a_mapstore(['set','zoom',evt.target._zoom]);
-            },
 
             resetAllPods(){
                 for(let i=0;i<this.pods;i++) if(this.$refs['pod'+i]){
@@ -219,7 +217,7 @@
             /*---*/
 
             watchedTrackAction(){
-                if (this.mapstore.tracking){
+                if (this.mapstore.geocoding.on){
                     console.log("watch:tracking:START");
                     this.resetAllPods(); //全てのmp3プレイヤーを初期化
                     this.keepTracking();
@@ -292,10 +290,10 @@
 
             keepTracking(){
                 console.log("keepTracking..");
-                if(this.mapstore.tracking){
+                if(this.mapstore.geocoding.on){
                     //this.geoCurrentPosition();
                     this.geolocation();
-                    this.timeout = setTimeout(this.keepTracking, this.mapstore.trackDuration);
+                    this.timeout = setTimeout(this.keepTracking, this.mapstore.geocoding.duration);
 
                     if(this.track_max>15){
                         this.a_mapstore(['set', 'tracking', false]);
@@ -313,13 +311,13 @@
 
             //一回だけはこちら！
             geoCurrentPosition(){
-                if(!!navigator.geolocation) navigator.geolocation.getCurrentPosition(this.geoSuccessOnce,this.m_geoError,this.mapstore.map.geocodingOptions);
+                if(!!navigator.geolocation) navigator.geolocation.getCurrentPosition(this.geoSuccessOnce,this.m_geoError,this.mapstore.geocoding.options);
             },
 
             //継続的に呼び出し続ける場合はこちら！
             geolocation() {
                 console.log("navigator.geolocation is",navigator.geolocation);
-                if(!!navigator.geolocation) this.watchID = navigator.geolocation.watchPosition(this.geoSuccess,this.m_geoError,this.mapstore.map.geocodingOptions);
+                if(!!navigator.geolocation) this.watchID = navigator.geolocation.watchPosition(this.geoSuccess,this.m_geoError,this.mapstore.geocoding.options);
             },
 
             geoSuccessOnce(position){
@@ -329,7 +327,7 @@
 
             geoSuccess(position){
                 let center = {lat:position.coords.latitude, lng:position.coords.longitude};
-                this.a_mapstore(['geo','set',{center:center}]); //リアルなジオコードの位置は別に保存しておく
+                this.a_mapstore(['geo','set',center]); //リアルなジオコードの位置は別に保存しておく
                 this.resetPos(position);
                 this.m_drawPoly();
                 if(this.mapstore.mainuser){

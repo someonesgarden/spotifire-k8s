@@ -5,12 +5,12 @@
         <div class="md-layout tight light">
             <div class="md-layout-item md-medium-size-50 md-small-size-50 md-xsmall-size-100" v-if="!spotify.me.id">
                 <mu-button color="teal500" class="smallbtn" full-width @click="m_goMap(true)">
-                    <mu-icon value="check_circle"></mu-icon>&nbsp;Spotifyにログイン
+                   <md-icon>check_circle</md-icon>&nbsp;Spotifyにログイン
                 </mu-button>
             </div>
             <div class="md-layout-item md-medium-size-50 md-small-size-50 md-xsmall-size-100" v-if="!spotify.me.id">
                 <mu-button color="orange700" class="smallbtn" full-width @click="m_goMap(false)">
-                    <mu-icon value="exit_to_app"></mu-icon>&nbsp;ログインせず使用
+                    <md-icon>exit_to_app</md-icon>&nbsp;ログインせず使用
                 </mu-button>
             </div>
 
@@ -34,7 +34,7 @@
             <div class="md-layout tight">
                 <div class="md-layout-item md-size-100 mx-auto md-xsmall-size-100 text-center">
                     <mu-button color="orange700" class="smallbtn md-sm" full-width @click="goEdit">
-                        <mu-icon value="build"></mu-icon>
+                        <md-icon>build</md-icon>
                     </mu-button>
                     <div>
                         <span style="color:white;">ユーザー有効範囲</span>

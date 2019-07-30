@@ -1,10 +1,12 @@
 import {mapGetters,mapActions} from 'vuex';
 
-import baseMix from './base';
+import base from './base';
+import tracking from './tracking';
 
 export default{
     mixins:[
-        baseMix
+        base,
+        tracking
     ],
 
     computed: mapGetters(['mapstore']),

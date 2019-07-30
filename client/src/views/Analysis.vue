@@ -5,7 +5,7 @@
                 <mu-list toggle-nested>
                     <mu-list-item button :ripple="false" nested :open="open === 'meta'" @toggle-nested="open = arguments[0] ? 'meta' : ''" v-if="analysis.meta">
                         <mu-list-item-action>
-                            <mu-icon value="send"></mu-icon>
+                            <md-icon>send</md-icon>
                         </mu-list-item-action>
                         <mu-list-item-title>Meta</mu-list-item-title>
                         <mu-list-item-action>
@@ -19,7 +19,7 @@
 
                     <mu-list-item button :ripple="false" nested :open="open === 'track'" @toggle-nested="open = arguments[0] ? 'track' : ''" v-if="analysis.track">
                         <mu-list-item-action>
-                            <mu-icon value="send"></mu-icon>
+                            <md-icon>send</md-icon>
                         </mu-list-item-action>
                         <mu-list-item-title>Track</mu-list-item-title>
 

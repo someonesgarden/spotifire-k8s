@@ -178,18 +178,16 @@
     mounted() {
 
       let match;
-      const regexp_h4 = /<h4>(.*?)<\/h4>/g;
       const regexp_h = /<h(.)>.*?<\/h\1>/g;
       const regexp_p = /<p>(.*?)<\/p>/g;
 
       this.c_mysql_getall('posts',res=>{
 
-        let posts =  res.data.map(post=> {
-          let content = post.post_content ? this.m_html_comment(decodeURIComponent(post.post_content)) : '';
-          let contents = content.split(/\n/); contents = contents.filter(v => v);
-
-          let trip = contents.map(cont => {
-            let res = {hs: [], ps: []};
+        let posts       =  res.data.map(post=> {
+          let content   = post.post_content ? this.m_html_comment(decodeURIComponent(post.post_content)) : '';
+          let contents  = content.split(/\n/); contents = contents.filter(v => v);
+          let trip      = contents.map(cont => {
+            let res     = {hs: [], ps: []};
             while ((match = regexp_h.exec(cont)) !== null) res.hs.push(match[1]);
             while ((match = regexp_p.exec(cont)) !== null) res.ps.push(match[1]);
             return res;
@@ -203,10 +201,7 @@
             spotifyid: post.spotifyid ? post.spotifyid : null
           }
         });
-
         this.a_wp(['set','posts',posts]);
-        // console.log(posts);
-
       });
 
       window.onpagehide = () => this.m_resetWhenBackground();
@@ -317,6 +312,9 @@
         let mode = this.mapstore.emory.mode ? this.mapstore.emory.mode : 'info';
 
         switch (mode) {
+          case 'wide_map':
+            console.log("wide_map!");
+            break;
           case 'info':
             this.a_mapstore(['set', 'tracking', false]);
             this.overlay.info.style.visibility = 'visible';
@@ -372,6 +370,10 @@
     },
 
     watch:{
+      'mapstore.emory.mode':{
+        handler:'switchMode'
+      },
+
       'spotify.me':{
           handler(newMe) {
               if (!newMe.id) return;
@@ -395,17 +397,10 @@
         }
       },
 
-      'mapstore.emory.mode':{
-        handler:'switchMode'
-      },
-
       'mapstore.emory.projects':{
         handler(newProjects){
             if(!newProjects) return;
-
-              //プロジェクトが全て読み込まれたら位置計算させる
-              this.trackOnce();
-
+              this.trackOnce();//プロジェクトが全て読み込まれたら位置計算させる
         }
       }
     }

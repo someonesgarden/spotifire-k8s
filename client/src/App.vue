@@ -22,10 +22,10 @@
     <mu-dialog transition="slide-bottom" fullscreen :open.sync="modal.modals.how.open"  class="howModal">
       <mu-appbar color="blueGrey900" title="What's Emory?">
         <mu-button slot="left" icon @click="a_index(['howModal','toggle',false])">
-          <mu-icon value="chevron_left"></mu-icon>
+            <md-icon>chevron_left</md-icon>
         </mu-button>
         <mu-button slot="right" flat  @click="a_index(['howModal','toggle',false])">
-          <mu-icon value="done_all"></mu-icon>
+                <md-icon>done_all</md-icon>
         </mu-button>
       </mu-appbar>
         <mu-flex class="body flex-wrapper" justify-content="center" align-items="center" direction="column">
@@ -49,7 +49,7 @@
     <mu-dialog transition="slide-bottom" fullscreen :open.sync="modal.modals.story.open"  class="storyModal">
       <mu-appbar style="background-color:inherit;box-shadow:none;">
         <mu-button slot="left" icon @click="m_resetWhenBackground" style="background-color: black;color:white;">
-          <mu-icon value="chevron_left"></mu-icon>
+          <md-icon>chevron_left</md-icon>
         </mu-button>
       </mu-appbar>
       <mu-flex class="body flex-wrapper" justify-content="center" align-items="center" direction="column">

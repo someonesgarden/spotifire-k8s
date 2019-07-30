@@ -9,12 +9,13 @@ Vue.use(Router);
 import HeadTop from '../components/Common/Header.vue';
 import MainFooter from '../components/Common/MainFooter';
 
-import Emory     from '../views/Emory.vue';
-import Home      from '../views/Home.vue';
-import Subscribe from '../views/Subscribe.vue';
-import MapArea   from '../views/MapAreaPage.vue';
-import Login     from '../views/Login.vue';
-import Analysis  from '../views/Analysis.vue';
+import Emory      from '../views/Emory.vue';
+import Home       from '../views/Home.vue';
+import Subscribe  from '../views/Subscribe.vue';
+import MapArea    from '../views/MapAreaPage.vue';
+import Login      from '../views/Login.vue';
+import Analysis   from '../views/Analysis.vue';
+import RouteTrack from '../views/RouteTracking.vue';
 
 import TestView  from '../views/TestView.vue';
 
@@ -35,7 +36,7 @@ let routes = [
     path: '/emory',
     name: 'Emory',
     components: {default:Emory,header:HeadTop,footer:MainFooter},
-    // meta: {requiresAuth: true},
+    meta: {requiresAuth: true},
   },
   {
     path: '/maparea',
@@ -53,6 +54,12 @@ let routes = [
     path: '/analysis',
     name: 'Analysis',
     components: {default:Analysis,header:HeadTop},
+    meta: {requiresAuth: true}
+  },
+  {
+    path: '/routetrack',
+    name: 'RouteTrack',
+    components: {default:RouteTrack,header:HeadTop},
     meta: {requiresAuth: true}
   },
 

@@ -38,6 +38,16 @@ body {
   font-size: 1rem;
   line-height: 1.5em;
 
+
+  &.routetrack-page{
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    color: #fff;
+  }
+
+
+
   &.playing{
     overflow: hidden !important;
   }
@@ -54,6 +64,11 @@ body {
     //background-size: cover;
     //background-position: center center;
 
+
+    &.RouteTrack{
+      width:100%;
+      height:100%;
+    }
 
     &.News, &.Top, &.Subscribe {
       //margin-top: 60px;

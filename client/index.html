@@ -34,15 +34,12 @@
     <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <!-- STYLES-->
 
+    <link rel='stylesheet' href='//api.tiles.mapbox.com/mapbox.js/v1.6.4/mapbox.css'/>
     <link rel="stylesheet" href="https://unpkg.com/muse-ui/dist/muse-ui.css">
     <link rel="stylesheet" href="https://unpkg.com/vue-material/dist/vue-material.min.css">
 
-
     <!-- SOCKET.IO をAPIサーバーを経由して接続する-->
     <script src="/ws/socket.io/socket.io.js"></script>
-
-    <!-- JQUERY-->
-    <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
 
   </head>
   <body>
@@ -65,5 +62,8 @@
     <%= htmlWebpackPlugin.options.serviceWorkerLoader %>
     <!-- built files will be auto injected -->
 
+    <!-- JQUERY-->
+    <script src="//code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+    <script src="//d3js.org/d3.v3.min.js"></script>
   </body>
 </html>
