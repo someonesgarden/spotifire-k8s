@@ -3,32 +3,37 @@
 </template>
 
 <script>
-  let areaChartSvg  = null;
-  let markerLine    = null;
-  let marker        = null;
+  let areaChartSvg = null;
+  let markerLine = null;
+  let marker = null;
   let totalAreaPath = null;
   let emptyAreaPath = null;
 
-    export default {
-        name: "AreaChartBox",
-      props:['moment','running'],
-      data(){
-          return{
-            xScale: null,
-            yScale: null,
-            area:   null,
-            areaChartInterval : 0,
-            emptyAreaData     : [],
-            totalAreaData     : []
-          }
-      },
+  import {mapGetters, mapActions} from 'vuex';
 
-      mounted(){
-        this.areaChartInit();
-        this.calculateArea();
-      },
+  export default {
+    name: "AreaChartBox",
+    props: ['running'],
+    data() {
+      return {
+        xScale: null,
+        yScale: null,
+        area: null,
+        areaChartInterval: 0,
+        emptyAreaData: [],
+        totalAreaData: []
+      }
+    },
+    computed: mapGetters(['mapstore']),
 
-      methods:{
+    mounted() {
+      this.areaChartInit();
+      this.calculateArea();
+    },
+
+    methods: {
+      ...mapActions(['a_mapstore']),
+
           resetAll(){
             if(areaChartSvg) areaChartSvg.selectAll("*").remove();
             areaChartSvg  = null;
@@ -57,7 +62,7 @@
           tweenAreaChart(d,t){
             if(this.areaChartInterval === 10){
               this.areaChartInterval = 0;
-              let _decimalHour = parseInt(this.moment.format('H')) + parseFloat(this.moment.format('m')/60);
+              let _decimalHour = parseInt(this.mapstore.tracking.moment.format('H')) + parseFloat(this.mapstore.tracking.moment.format('m')/60);
 
               if(isNaN(d.properties.fare)) d.properties.fare = 0;
               let _incrementalFare = d.properties.fare*t;

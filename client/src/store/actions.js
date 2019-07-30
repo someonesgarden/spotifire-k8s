@@ -143,6 +143,13 @@ export const a_mapstore = ({commit},[type, action, data]) => {
             zoom:(data)         => commit('mapstore/setMapZoom',    data),
         },
 
+        tracking:{
+            moment:(data) => commit('mapstore/setTrackingMoment', data),
+            timefactor:(data) => commit('mapstore/setTrackingTimeFactor', data),
+            add_timefactor:() => commit('mapstore/addTrackingTimeFactor'),
+            minus_timefactor:() => commit('mapstore/minusTrackingTimeFactor'),
+        },
+
         geo:{
             set:(data) => commit('mapstore/setGeoCenter', data),
         },

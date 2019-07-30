@@ -18,9 +18,9 @@
             </md-card>
         </div>
 
-        <date-time-box ref="timebox" :moment="moment" @reloadClick="reloadClick" @toggle="togglePlay"/>
+        <date-time-box ref="timebox" @reloadClick="reloadClick" @toggle="togglePlay"/>
         <total-box ref="totalbox" :running="running"/>
-        <area-chart-box ref="areachartbox" :moment="moment" :running="running"/>
+        <area-chart-box ref="areachartbox" :running="running"/>
     </div>
 </template>
 
@@ -32,6 +32,7 @@
     let points  = null;
     let d3path  = null;
 
+    import {mapGetters,mapActions} from 'vuex';
     import moment   from 'moment';
     import axios    from 'axios/index';
     import {LMap, LTileLayer} from "vue2-leaflet";
@@ -64,7 +65,6 @@
                 map:    null,
                 tiles:  null,
                 pointsArray: [],
-                moment: null,
                 timer:  null,
                 tweenToggle: 0,
                 count:       0,
@@ -81,6 +81,8 @@
             }
         },
 
+        computed:mapGetters(['mapstore']),
+
         beforeDestroy() {
             this.active = false;
             clearTimeout(this.timer);
@@ -88,7 +90,8 @@
 
         created() {
             this.tiles = L.tileLayer(this.tilePattern['mono'], {attribution: '&copy;'});
-            this.moment = moment();
+
+            this.a_mapstore(['tracking','moment',moment()]);
         },
 
         mounted() {
@@ -100,6 +103,7 @@
         },
 
         methods: {
+            ...mapActions(['a_mapstore']),
             //Event Actions
             togglePlay(mode=null){
 
@@ -236,9 +240,11 @@
             },
 
             updateTimer() {
-                this.moment.add('minutes', 1);
-                let timefactor = this.$refs.timebox ? this.$refs.timebox.timeFactor : 3;
-                this.timer = setTimeout(() => this.updateTimer(), 1000 / timefactor);
+
+                this.mapstore.tracking.moment.add('minutes', 1);
+
+                //this.moment.add('minutes', 1);
+                this.timer = setTimeout(() => this.updateTimer(), 1000 / this.mapstore.tracking.timeFactor);
             },
 
             tweenDash(d){
@@ -268,15 +274,15 @@
 
             transition(_path) {
                 _path.transition().duration(d => {
-                    let timefactor = this.$refs.timebox ? this.$refs.timebox.timeFactor : 3;
                     let start = Date.parse(d.properties.pickuptime);
                     let finish = Date.parse(d.properties.dropofftime);
 
                     let duration = finish - start;
                     duration = duration / 60000; //convert to minutes
-                    duration = duration * (1 / timefactor) * 1000;
+                    duration = duration * (1 /  this.mapstore.tracking.timeFactor) * 1000;
 
-                    this.moment = moment(d.properties.pickuptime.toString());
+                    this.a_mapstore(['tracking','moment',moment(d.properties.pickuptime.toString())]);
+
                     return (duration);
                 })
                     .attrTween("stroke-dasharray", this.tweenDash)

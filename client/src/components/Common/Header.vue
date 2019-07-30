@@ -16,11 +16,11 @@
                             &nbsp;Emory</mu-list-item-title>
                     </mu-list-item>
 
-<!--                    <mu-list-item button to="/routetrack">-->
-<!--                        <mu-list-item-title>-->
-<!--                            <md-icon>extension</md-icon>-->
-<!--                            &nbsp;RouteTrack</mu-list-item-title>-->
-<!--                    </mu-list-item>-->
+                    <mu-list-item button to="/routetrack">
+                        <mu-list-item-title>
+                            <md-icon>extension</md-icon>
+                            &nbsp;RouteTrack</mu-list-item-title>
+                    </mu-list-item>
                     <mu-divider></mu-divider>
 
                 </mu-list>

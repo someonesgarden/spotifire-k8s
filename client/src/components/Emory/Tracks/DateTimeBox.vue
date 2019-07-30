@@ -16,40 +16,38 @@
         »
       </md-button>
     </div>
-    <p><span v-text="timeFactor"></span> minutes per second</p>
+    <p><span v-text="mapstore.tracking.timeFactor"></span> minutes per second</p>
 
   </md-card>
 </template>
 
 <script>
-    export default {
-        name: "DateTimeBox",
-        props:['moment'],
-      data(){
-          return{
-            timeFactor:5,
-          }
-        },
-        computed:{
-          timer_time(){
-            return this.moment.format('h:mm a');
-          },
+  import {mapGetters, mapActions} from 'vuex';
 
-          timer_date(){
-            return this.moment.format('dddd, MMMM Do YYYY');
-          }
-        },
-      methods:{
-        reloadClick() {
-          location.reload();
-        },
-        slowerClick(){
-          if(this.timeFactor > 1) this.timeFactor -= 1;
-        },
+  export default {
+    name: "DateTimeBox",
+    computed: {
+      ...mapGetters(['mapstore']),
+      timer_time() {
+        return this.mapstore.tracking.moment.format('h:mm a');
+      },
 
-        fasterClick(){
-          this.timeFactor += 1;
-        },
+      timer_date() {
+        return this.mapstore.tracking.moment.format('dddd, MMMM Do YYYY');
+      }
+    },
+    methods: {
+      ...mapActions(['a_mapstore']),
+      reloadClick() {
+        location.reload();
+      },
+      slowerClick() {
+        if (this.mapstore.tracking.timeFactor > 1) this.a_mapstore(['tracking', 'minus_timefactor']);
+      },
+
+      fasterClick() {
+        this.a_mapstore(['tracking', 'add_timefactor']);
+      },
       }
     }
 </script>

@@ -1,14 +1,19 @@
 const scopes = [
     'streaming',
+    'app-remote-control',
     'user-read-birthdate',
     'user-read-email',
     'user-read-private',
     'playlist-modify-public',
     'playlist-modify-private',
     'user-library-read',
-    'user-modify-playback-state',
+
     'user-read-playback-state',
-    'user-top-read'
+    'user-read-currently-playing',
+    'user-modify-playback-state',
+
+    'user-top-read',
+    'user-read-recently-played',
 ];
 const SpotifyWebApi = require('spotify-web-api-node');
 const spotifyApi = new SpotifyWebApi({
