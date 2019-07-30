@@ -51,7 +51,8 @@ spec:
                   name: spotify-secret
                   key: SPOTIFY-SECRET
             - name: SPOTIFY_CALLBACK
-              value: "https://spotifire.tokyo/api/spotify/callback"
+              value: "https://spotifire.tokyo/callback"
+              #value: "https://spotifire.tokyo/api/spotify/callback"
             - name: TWITTER_CONSUMER_KEY
               valueFrom:
                 secretKeyRef:

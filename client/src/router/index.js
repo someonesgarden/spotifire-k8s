@@ -18,9 +18,16 @@ import Analysis   from '../views/Analysis.vue';
 import RouteTrack from '../views/RouteTracking.vue';
 
 import TestView  from '../views/TestView.vue';
+import SpotifyCallback from '../views/SpotifyCallback';
 
 
 let routes = [
+  {
+    path: '/callback',
+    name: 'Callback',
+    components: {default:SpotifyCallback,header:HeadTop,footer:MainFooter},
+  },
+
   {
     path: '/login',
     name: 'Login',
@@ -50,6 +57,7 @@ let routes = [
     components: {default:Home,header:HeadTop,footer:MainFooter},
     meta: {requiresAuth: true}
   },
+
   {
     path: '/analysis',
     name: 'Analysis',

@@ -4,7 +4,9 @@
             <mu-flex justify-content="center" align-items="center">
                 <mu-button full-width small color="black" @click="$emit('close')">X</mu-button>
             </mu-flex>
-            <iframe src="https://open.spotify.com/embed/playlist/37i9dQZF1DXafb0IuPwJyF" style="height:380px !important;" width="300" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+            <iframe src="https://open.spotify.com/embed/playlist/37i9dQZF1DXbiEfzyzIRj9" style="height:380px !important;" width="100%" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+            <iframe src="https://open.spotify.com/embed/user/phnj10j4gt1yc3qfl5d1barzw/playlist/6hafy5tI22VMJkS98Q1ewj" style="height:380px !important;" width="100%" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+            <iframe src="https://open.spotify.com/embed/user/spotify/playlist/37i9dQZF1DXafb0IuPwJyF" style="height:380px !important;" width="300" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
             <mu-expansion-panel v-for="(feature,index) in features" :expand="panel === 'feature'+index" @change="panel = 'feature'+index === panel ? '' : 'feature'+index">
                 <div slot="header">
                     <mu-avatar slot="avatar" style="width:20px;height:20px; margin-right:6px;">

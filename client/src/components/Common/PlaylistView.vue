@@ -684,6 +684,7 @@
             },
             'spotify.credential.access_token':{
                 handler(newToken){
+                    this.m_appendScript('https://sdk.scdn.co/spotify-player.js');
                     this.c_initplayer();
                 }
             },

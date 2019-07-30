@@ -1,9 +1,22 @@
 import axios from 'axios';
+import {mapActions} from 'vuex';
+
 
 export default{
 
     methods: {
-        c_getCredential: function () {
+        c_set2LS(flag,data){
+            let time    = new Date();
+            let payload = {timestamp:time.getTime(), data:data};
+            localStorage.setItem(flag, JSON.stringify(payload));
+        },
+
+        c_getCredential: function (mode='nopop') {
+
+            //コールバック後に戻れるように
+            this.c_set2LS('callpoint',this.$route.path);
+
+
             let isvalid = false;
             if(!!this.spotify.credential.expire_date){
                 let now = new Date();
@@ -12,7 +25,14 @@ export default{
             if(!isvalid){
                 axios.post('/api/spotify/auth/get_credential', {})
                     .then(res => {
-                        window.open(res.data, null, 'width=350,height=580,toolbar=no,menubar=no,scrollbars=no');
+
+                        if(mode==='popup'){
+                            window.open(res.data, null, 'width=350,height=580,toolbar=no,menubar=no,scrollbars=no');
+                        }else{
+                            window.location = res.data;
+                        }
+
+
                     }).catch(error => {
                         console.log(error);
                         alert("エラーが発生しました");

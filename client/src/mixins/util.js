@@ -1,10 +1,15 @@
 export default {
     methods: {
-        m_html_comment(txt){
-            let filtered = txt.replace( /<!--[\s\S]*?-->/g , '' ); //htmlタグは削除
+        m_appendScript(URL) {
+            let el = document.createElement('script');
+            el.src = URL;
+            document.body.appendChild(el);
+        },
+        m_html_comment(txt) {
+            let filtered = txt.replace(/<!--[\s\S]*?-->/g, ''); //htmlタグは削除
             filtered = filtered.replace(/\r?\n/g, ''); //改行コードは削除
-            filtered = filtered.replace(/<hr[\s\S]*?\/>/g, '\n' ); //hrは改行記号に置き換え
-            return filtered.replace( /<p><\/p>/g , '' ); //からのp段落は削除
+            filtered = filtered.replace(/<hr[\s\S]*?\/>/g, '\n'); //hrは改行記号に置き換え
+            return filtered.replace(/<p><\/p>/g, ''); //からのp段落は削除
         },
 
         m_scrollTo (target,top=0){

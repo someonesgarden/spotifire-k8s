@@ -27,6 +27,34 @@ router.get('/grant', (req,res)=>{
 });
 
 
+router.get('/get_auth_from_code',(req,res)=>{
+
+   const code = req.query.code;
+
+    spotifyApi.authorizationCodeGrant(code).then(data => {
+
+            spotifyApi.setAccessToken(data.body['access_token']);
+
+            spotifyApi.getMe().then( res2 =>{
+                    data.me = res2.body;
+                    res.send(data);
+                },
+                err =>{
+                    console.log('Could not get me!', err);
+                    res.send("error;"+err.message);
+                }
+            );
+        },
+        err => {
+            console.log('Something went wrong!', err);
+            res.send("error;"+err.message);
+        }
+    );
+
+
+
+});
+
 router.post('/get_credential', (req,res)=>{
     const data = req.body.data;
     //console.log(req);

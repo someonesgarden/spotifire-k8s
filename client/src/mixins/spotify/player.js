@@ -80,6 +80,7 @@ export default{
 
                 //window.alert("onSpotifyWebPlaybackSDKReady!");
                 const token = this.spotify.credential.access_token;
+                console.log("token!",token);
 
                 window.player = new Spotify.Player({
                     name: 'Spotifire PC',
