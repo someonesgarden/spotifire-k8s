@@ -17,7 +17,6 @@
       </md-button>
     </div>
     <p><span v-text="mapstore.tracking.timeFactor"></span> minutes per second</p>
-
   </md-card>
 </template>
 
@@ -29,11 +28,11 @@
     computed: {
       ...mapGetters(['mapstore']),
       timer_time() {
-        return this.mapstore.tracking.moment.format('h:mm a');
+        return this.mapstore.tracking.moment ? this.mapstore.tracking.moment.format('h:mm a') : '';
       },
 
       timer_date() {
-        return this.mapstore.tracking.moment.format('dddd, MMMM Do YYYY');
+        return this.mapstore.tracking.moment ? this.mapstore.tracking.moment.format('dddd, MMMM Do YYYY') : '';
       }
     },
     methods: {

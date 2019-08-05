@@ -38,9 +38,7 @@ let connect_history = {};
 
 io.on('connection',function(socket){
 
-    //接続したユーザーにIDを識別情報として保存させる
-    console.log('socket_id: ' + socket.id + ' is connected');
-    socket.emit('new-socket-id',{socketid:socket.id});
+    console.log("Socket.io Connection START");
 
     // 新規ユーザーの回線オープン
     socket.on('open-socket', function(msg) {
@@ -57,6 +55,9 @@ io.on('connection',function(socket){
         clients = clients.filter(v => !!v)
         io.emit('new-user-added',{clients:clients});
     });
+
+
+    //　ユーザーの回線クローズ
 
     socket.on('close-socket', function(msg) {
         console.log("close-socket:success");

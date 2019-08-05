@@ -6,7 +6,7 @@
             <template slot="cardContent">
                 <div v-if="tenki" class="weather_bg" :class="[localTimeMode]" :style="'background-image:url(/static/img/agif/'+weatherIcon+'.gif)'"></div>
                 <div @click="locationOnClick(proj.id,$event)" style="position:relative;">
-                <!-- <p class="inrange" :class="{active:proj.dist < mapstore.emory.searchDist/1000}">範囲内</p>-->
+                 <p class="inrange" :class="{active:proj.dist < mapstore.emory.searchDist/1000}">範囲内</p>
                     <h3 class="card-title" v-text="proj.title"></h3>
                     <p class="card-description" style="color:white;" v-text="proj.desc"></p>
                     <div class="md-layout">
@@ -20,8 +20,11 @@
                         <div class="md-layout-item md-size-100 mx-auto md-xsmall-size-100 text-center">
                             <div class="vertical-center">
                                 <md-button class="md-icon-button md-indigo md-sm" @click="backToLeft($event)" v-if="mapstore.emory.slider.no>0"><md-icon>arrow_back</md-icon></md-button>
+
                                 <md-button class="md-orange" @click="playStart($event)" v-if="proj.dist < mapstore.emory.searchDist/1000"><md-icon>nature_people</md-icon>&nbsp;スタート</md-button>
-                                <md-button class="md-teal" @click="a_index(['side','left',{key:'emory',val:true}])" v-else><md-icon>train</md-icon>&nbsp;行き方</md-button>
+                                <md-button class="md-teal" @click="loadTrip(proj)" v-else-if="proj.tripid">
+                                    <md-icon>train</md-icon>&nbsp;行き方
+                                </md-button>
                             </div>
                         </div>
                     </div>
@@ -54,7 +57,7 @@
             }
         },
         computed: {
-            ...mapGetters(['mapstore']),
+            ...mapGetters(['mapstore','wp']),
 
             localTimeMode(){
                 if(this.tenki){
@@ -136,6 +139,16 @@
         },
         methods: {
             ...mapActions(['a_mapstore', 'a_index']),
+
+
+            loadTrip(proj){
+              if(this.wp.posts){
+                  console.log(this.wp.posts[proj.tripid]);
+                  this.a_mapstore(['emory','settrip',this.wp.posts[proj.tripid]]);
+                  this.a_index(['side','left',{key:'emory',val:true}]);
+
+              }
+            },
 
             locationOnClick(id,e){
                 let lat = this.mapstore.emory.projects[id] ? this.mapstore.emory.projects[id].center.lat : '35.663613';

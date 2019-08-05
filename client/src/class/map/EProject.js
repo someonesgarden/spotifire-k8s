@@ -8,7 +8,8 @@ const  project0 = {
         title:"",
         desc: "",
         id:"",
-        thumb: null
+        thumb: null,
+        trip:null
     };
 
 export default class EProject{

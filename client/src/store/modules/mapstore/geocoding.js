@@ -1,7 +1,10 @@
 const state = {
     geocoding:{
         on:       false,
-        center:   null,
+        center: {
+            lat: 34.722677123,
+            lng: 135.492364123
+        },
         duration: 4000,
         options:{
             enableHighAccuracy: true,   //精度の高い位置情報を取得するか
@@ -18,10 +21,8 @@ const mutations = {
 
     setTracking(state,val){
         if(val==='toggle'){
-            state.tracking = !state.tracking;
             state.geocoding.on = !state.geocoding.on;
         }else{
-            state.tracking = val;
             state.geocoding.on = val;
         }
     }

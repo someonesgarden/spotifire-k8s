@@ -8,7 +8,6 @@
                 </mu-step-label>
                 <mu-step-content>
                     <p v-html="step.desc"></p>
-                    <widget-player v-if="step.spotify" :type="step.spotify.type" :id="step.spotify.id"></widget-player>
                     <mu-button class="step-button" @click="vhandleNext" color="primary">次へ</mu-button>
                     <mu-button class="step-button" @click="vhandlePrev" color="amber500" v-if="index>0">戻る</mu-button>
                 </mu-step-content>
@@ -22,21 +21,23 @@
 </template>
 
 <script>
-    import WidgetPlayer from '../Spotify/Player/WidgetPlayer';
+    import {mapGetters} from 'vuex';
     export default {
         name: "SubscribeLeftView",
         props:['steps'],
-        components:{
-            WidgetPlayer
-        },
         data () {
             return {
                 vactiveStep: 0
             };
         },
+        mounted(){
+            this.vactiveStep = 0;
+        },
         computed: {
+            ...mapGetters(['side']),
+
             vfinished () {
-                return this.vactiveStep > 2;
+                return this.vactiveStep >= this.steps.length;
             }
         },
         methods: {
@@ -48,6 +49,14 @@
             },
             vreset () {
                 this.vactiveStep = 0;
+            }
+        },
+        watch:{
+            'side.emory.left.open':{
+                handler(newState){
+                    if(newState)  this.vactiveStep = 0;
+                    console.log(" this.vactiveStep is", this.vactiveStep);
+                }
             }
         }
     }

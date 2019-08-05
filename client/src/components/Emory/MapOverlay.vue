@@ -249,6 +249,8 @@
             },
 
             pClick(val, id) {
+                console.log("pClick");
+                console.log(val);
                 //EDITモードの場合
                 if(this.mapstore.emory.editing.status){
                     if(id) val.id = id;
@@ -262,6 +264,7 @@
             },
 
             mClick(val,id){
+                console.log("mClick");
                 //EDITモードの場合
                 if(this.mapstore.emory.editing.status){
                     this.clickMarkerCallPlayer(val);
@@ -273,6 +276,7 @@
             },
 
             tClick(val,id){
+                console.log("tClick");
                 //EDITモードの場合
                 if(this.mapstore.emory.editing.status){
                     if(id) val.id = id;

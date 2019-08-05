@@ -174,7 +174,9 @@ export const a_mapstore = ({commit},[type, action, data]) => {
             markerparam:(data)    => commit('mapstore/setMarkerParam', data),
             projectparam:(data)   => commit('mapstore/setProjectParam', data),
             alpha:(data)          => commit('mapstore/setAlpha', data),
-            sliderno:(data)       => commit('mapstore/setSliderNo',data)
+            sliderno:(data)       => commit('mapstore/setSliderNo',data),
+
+            settrip:(data)        => commit('side/setEmoryLeftTrip',data)
         }
     };
     actions[type][action](data)

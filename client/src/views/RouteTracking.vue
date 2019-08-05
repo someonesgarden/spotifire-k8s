@@ -216,7 +216,7 @@
                     _thisPath.exit().remove();
 
                     let _calculate = () => {
-                        let _bounds = d3path.bounds(_res.data);
+                        let _bounds = d3path ? d3path.bounds(_res.data)  : [0,0];
                         let _TL     = _bounds[0];
                         let _BR     = _bounds[1];
 

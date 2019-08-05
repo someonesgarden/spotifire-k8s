@@ -113,7 +113,7 @@
   import firebase     from 'firebase';
 
   import M from '../class/map/EMarker';
-  import P from '../class/map/EProject';
+  //import P from '../class/map/EProject';
 
   import {BlogCard}  from "../components/MD";
   import MapsOverlay from '../components/Emory/MapOverlay';
@@ -152,7 +152,8 @@
               overlay: {
                   info: null,
                   play: null,
-                  edit: null
+                  edit: null,
+                  map:  null
               },
               firebaseDB: {
                   marker: null,
@@ -178,26 +179,28 @@
     mounted() {
 
       let match;
-      const regexp_h = /<h(.)>.*?<\/h\1>/g;
+      const regexp_h = /<h(.)>(.*?)<\/h\1>/g;
       const regexp_p = /<p>(.*?)<\/p>/g;
 
       this.c_mysql_getall('posts',res=>{
-
-        let posts       =  res.data.map(post=> {
-          let content   = post.post_content ? this.m_html_comment(decodeURIComponent(post.post_content)) : '';
-          let contents  = content.split(/\n/); contents = contents.filter(v => v);
-          let trip      = contents.map(cont => {
-            let res     = {hs: [], ps: []};
-            while ((match = regexp_h.exec(cont)) !== null) res.hs.push(match[1]);
-            while ((match = regexp_p.exec(cont)) !== null) res.ps.push(match[1]);
-            return res;
+        let posts = res.data.map(post => {
+          let content = post.post_content ? this.m_html_comment(decodeURIComponent(post.post_content)) : '';
+          let contents = content.split(/\n/);
+          contents = contents.filter(v => v);
+          let steps = contents.map(cont => {
+            let hs = "";
+            let ps = "";
+            while ((match = regexp_h.exec(cont)) !== null) hs = match[2];
+            while ((match = regexp_p.exec(cont)) !== null) ps = match[1];
+            return {title: hs, desc: ps};
           });
 
           return {
             id: post.ID,
             title: post.post_title ? decodeURIComponent(post.post_title) : '',
+            thumb: post.thumbnail_url ? post.thumbnail_url : '',
             excerpt: post.post_excerpt ? post.post_excerpt : '',
-            trip: trip,
+            steps: steps,
             spotifyid: post.spotifyid ? post.spotifyid : null
           }
         });
@@ -213,9 +216,8 @@
       this.overlay.play = this.$refs.play_overlay.$el;
       this.overlay.edit = this.$refs.edit_overlay.$el;
 
-      this.m_scrollTo('#app');       //TOPにスクロール
-
-      this.a_mapstore(['set', 'mode', 'info']);     //INFOモードに
+      this.m_scrollTo('#app');                    //TOPにスクロール
+      this.a_mapstore(['set', 'mode', 'info']);   //INFOモードに
 
       //とりあえずゲストで入らせる(最初からログインさせるときは外す）
       this.a_spotify(['set', 'me', {id: 'GUEST'}]);
@@ -242,12 +244,8 @@
       this.firebaseDB.project.on('value', (snapshot) => this.a_mapstore(['emory', 'setprojects', snapshot.val()]));
     },
 
-    // errorCaptured(){
-    //   this.a_mapstore(['set', 'tracking', false]);
-    // },
-
       beforeDestroy() {
-          this.socketDisconnect();
+          this.m_socketDisconnect();
           this.a_mapstore(['set', 'tracking', false]);
           this.firebaseDB.marker = null;
       },
@@ -265,7 +263,6 @@
       },
 
       createOrFindMainuser(meid){
-
         if(meid==='GUEST'){
           //ゲストの場合はFirebaseに問いかけず、そのままマーカーを作成する！
           this.a_mapstore(['set', 'mainuser',
@@ -290,19 +287,6 @@
               if(!this.mapstore.mainuser) new M({type:'mainuser'}).updateOrNew(this.firebaseDB.marker);
             }
           })
-        }
-      },
-
-      connectToSocket() {
-        if (this.spotify.me && this.spotify.me.id) {
-          let your_pos_and_data = {
-            name: this.spotify.me.id,
-            lat: this.$refs.maps_overlay.lat,
-            lng: this.$refs.maps_overlay.lng,
-            pid: this.spotify.playlist ? this.spotify.playlist.id : null,
-            tid: this.spotify.track ? this.spotify.track.id : null
-          };
-          this.socketConnect(your_pos_and_data);
         }
       },
 
@@ -391,8 +375,8 @@
         handler(newUser){
             if(!newUser || this.userisready) return;
 
-            this.socketInit();
-            this.connectToSocket();
+            this.m_socketInit();
+            this.m_connectToSocket();
             this.userisready = true;
         }
       },

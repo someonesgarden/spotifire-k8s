@@ -3,6 +3,14 @@
 
         <pricing-card style="box-shadow:none !important;max-width:450px;width:76%;margin:8px auto;">
             <template slot="cardContent">
+
+                <mu-flex justify-content="center" align-items="center" direction="row">
+                    <mu-button color="indigo400" class="smallbtn" @click="m_editMap('project')">Project</mu-button>
+                    <mu-button color="indigo600" class="smallbtn" @click="m_editMap('marker')">Point</mu-button>
+                    <mu-button color="indigo800" class="smallbtn" @click="m_endEditing"><md-icon>keyboard_capslock</md-icon></mu-button>
+                </mu-flex>
+                <br>
+
                 <h4 class="card-category" style="font-weight:bold;">
                     <span v-if="mapstore.emory.editing.type==='marker'">マーカーの作成・編集</span>
                     <span v-else>プロジェクトの作成・編集</span>
@@ -172,8 +180,20 @@
                                    @change="(val)=>m_emoryParam('spotifyid',val,'project')">
                             <mu-option  :label="pro.name" :value="pro.id" v-for="(pro,inx) in spotify.playlists.items" :key="'pro'+inx"></mu-option>
                         </mu-select>
-
                     </mu-form-item>
+
+                    <mu-form-item  v-if="wp.posts">
+<!--                        <mu-text-field placeholder="Trip ID"-->
+<!--                                       v-model="mapstore.emory.project.tripid"-->
+<!--                                       @change="(val)=>m_emoryParam('tripid',val,'project')"-->
+<!--                        ></mu-text-field>-->
+                        <mu-select color="primary"
+                                   v-model="mapstore.emory.project.tripid"
+                                   @change="(val)=>m_emoryParam('tripid',val,'project')">
+                            <mu-option  :label="trip.title" :value="key" v-for="(trip,key,inx) in wp.posts" :key="'trip'+key+inx"></mu-option>
+                        </mu-select>
+                    </mu-form-item>
+
 
                     <mu-flex justify-content="center" align-items="center" direction="row">
                         <mu-button color="red" class="smallbtn" @click="delAlert.project=true" v-if="mapstore.emory.project.id"><mu-icon value="delete_forever" :size="20"></mu-icon>&nbsp;削除</mu-button>
@@ -182,11 +202,6 @@
                 </mu-form>
                 <!--//Edit Project-->
 
-                <mu-flex justify-content="center" align-items="center" direction="row">
-                    <mu-button color="indigo400" class="smallbtn" @click="m_editMap('project')">Project</mu-button>
-                    <mu-button color="indigo600" class="smallbtn" @click="m_editMap('marker')">Point</mu-button>
-                    <mu-button color="indigo800" class="smallbtn" @click="m_endEditing">Finish</mu-button>
-                </mu-flex>
 
                 <mu-dialog title="マーカーを削除する" width="600" max-width="80%" :esc-press-close="false" :overlay-close="false" :open="delAlert.marker">
                     <p>決定をクリックすると削除されます。この処理は取り消せません。<br/>削除しない場合は「キャンセル」を押してください。</p>
@@ -244,9 +259,10 @@
                     project:false
                 },
                 blankRules: [ruleEmpty],
+                trip_postid:null
             }
         },
-        computed:mapGetters(['spotify', 'mapstore', 'loggedIn']),
+        computed:mapGetters(['spotify', 'mapstore', 'loggedIn','wp']),
         methods: {
             ...mapActions(['a_index', 'a_spotify', 'a_mapstore']),
 

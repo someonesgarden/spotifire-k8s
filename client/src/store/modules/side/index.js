@@ -25,7 +25,8 @@ const state = {
     emory:{
         left:{
             open:false,
-            docked:false
+            docked:false,
+            trip:null
         }
     }
 
@@ -48,6 +49,10 @@ const mutations = {
             state[dat.key].right.open = dat.val;
         }
     },
+
+    setEmoryLeftTrip(state,dat){
+        state.emory.left.trip = dat;
+    }
 }
 
 export default {
