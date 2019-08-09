@@ -1,7 +1,7 @@
 <template>
     <mu-flex justify-content="center" align-items="center" direction="column">
         <canvas id="deckmap"></canvas>
-        <p v-if="test" style="font-size:3px;position:absolute;bottom:55px;color:#aaa;">{{test}}</p>
+        <p v-if="test" style="font-size:3px;position:absolute;bottom:75px;color:#aaa;">{{test}}</p>
     </mu-flex>
 </template>
 <script>

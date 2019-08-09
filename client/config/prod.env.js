@@ -1,5 +1,7 @@
 
 
 module.exports = {
-  NODE_ENV: '"production"'
+  NODE_ENV: '"production"',
+  MAPBOX_TOKEN:JSON.stringify(process.env.MAPBOX_TOKEN),
+  test2:'333'
 }

@@ -24,8 +24,7 @@ module.exports = merge(baseWebpackConfig, {
   plugins: [
     new webpack.DefinePlugin({
       'process.env': {
-        ...config.dev.env,
-        MAPBOX_TOKEN:JSON.stringify(process.env.MAPBOX_TOKEN)
+        ...config.dev.env
       }
     }),
     // https://github.com/glenjamin/webpack-hot-middleware#installation--usage
