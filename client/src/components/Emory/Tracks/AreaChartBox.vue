@@ -161,39 +161,4 @@
 </script>
 
 <style lang="scss">
-  .area {
-    fill: #ff1058;
-  }
-
-  .empty {
-    fill: rgba(50, 32, 219, 0.95);
-  }
-
-  .areaChartBox {
-    background-color: rgba(75, 7, 39, 0.09);
-    position: absolute;
-    bottom: 20px;
-    right: 15px;
-    left: 15px;
-    width: auto;
-    height: 140px;
-
-    .areaChart {
-      position: absolute;
-      bottom: 15px;
-
-      .axis {
-        path, line {
-          fill: none;
-          stroke: #FFF;
-          shape-rendering: crispEdges;
-          stroke-width: 1;
-        }
-        text {
-          stroke: white;
-        }
-      }
-    }
-  }
-
 </style>
