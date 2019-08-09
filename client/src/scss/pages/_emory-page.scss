@@ -70,6 +70,12 @@
     &.maps_overlay{
     }
 
+    &.deck_overlay{
+      z-index: -1;
+
+      background-color: rgba(22, 42, 138, 0.58);
+    }
+
     &.info_overlay {
       z-index: 100;
       //background-color: rgba(36, 210, 131, 0.68);

@@ -23,7 +23,11 @@ module.exports = merge(baseWebpackConfig, {
   devtool: '#cheap-module-eval-source-map',
   plugins: [
     new webpack.DefinePlugin({
-      'process.env': config.dev.env
+      'process.env': {
+        ...config.dev.env,
+        test:'12345',
+        test2:JSON.stringify(process.env.FIREBASE_AUTHDOMAIN)
+      }
     }),
     // https://github.com/glenjamin/webpack-hot-middleware#installation--usage
     new webpack.HotModuleReplacementPlugin(),

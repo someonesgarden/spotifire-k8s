@@ -59,11 +59,11 @@
                 </mu-list>
             </mu-menu>
 
-            <mu-button flat slot="left" @click="a_mapstore(['set','mode','wide_map']);">
+            <mu-button flat slot="left" @click="toggleDockMap">
                 <md-icon>flight_takeoff</md-icon>
             </mu-button>
 
-            <mu-button flat slot="right" :color="mapstore.geocoding.on ? 'green' : 'grey500'" @click="emoryMyPosition">
+            <mu-button flat slot="right" :color="mapstore.geocoding.on ? 'green' : 'grey500'" @click="trackMeOnce">
                 <span v-if="mapstore.geocoding.on">トラック中</span>
                 <md-icon>directions_walk</md-icon>
             </mu-button>
@@ -190,7 +190,13 @@
                 this.menu[type] = !this.menu[type];
             },
 
-            emoryMyPosition(){
+            toggleDockMap(){
+                console.log(this.mapstore.emory.mode);
+                let mode = this.mapstore.emory.mode === 'dock_map' ? 'info' : 'dock_map';
+                this.a_mapstore(['set', 'mode', mode]);
+            },
+
+            trackMeOnce(){
                 this.a_mapstore(['set','tracking','toggle']);
                 this.a_mapstore(['emory', 'alpha', 'toggle']);
                 setTimeout(()=> this.a_mapstore(['emory','alpha',false]), 4000);

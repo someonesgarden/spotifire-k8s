@@ -53,28 +53,3 @@
       }
     }
 </script>
-
-<style scoped lang="scss">
-  .totalsBox {
-    color:white;
-    padding:8px;
-    background-color:rgba(12,34,23,0.5);
-    position: absolute;
-    top: 65px;
-    right: 15px;
-    width: 200px;
-    p {
-      font-size: 16px;
-      margin-bottom: 0;
-    }
-  }
-
-  .running {
-    float: right;
-  }
-
-  .tolls {
-    border-bottom: 1px solid #fff;
-  }
-
-</style>

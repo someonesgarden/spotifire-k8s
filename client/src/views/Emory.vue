@@ -1,6 +1,7 @@
 <template>
   <div class="wrapper">
       <parallax class="section page-header header-filter" parallax-active="true" :style="headerStyle">
+          <deck-overlay ref="deck_overlay" class="layers overlay deck_overlay"/>
           <maps-overlay ref="maps_overlay" class="layers overlay maps_overlay" :markersRef="firebaseDB.marker"/>
           <info-overlay ref="info_overlay" class="overlay info_overlay" @trackOnce="trackOnce"/>
           <play-overlay ref="play_overlay" class="overlay play_overlay" :class="{hide:!mapstore.mainuser}"/>
@@ -65,16 +66,11 @@
             </div>
           </div>
           <div class="features text-center">
-            <div class="md-layout">
 
-              <div class="md-layout-item md-size-50 md-small-size-100 mx-auto text-center">
-
-                <div class="info" v-if="wp.posts">
-                  <top-post-item  v-for="(post,key,inx) in wp.posts" :key="'post'+key+inx" :post="post"></top-post-item>
-                </div>
-
+            <div class="md-layout" v-if="wp.posts">
+              <div class="md-layout-item md-size-50 md-small-size-100 mx-auto text-center" v-for="(post,key,inx) in wp.posts" :key="'post'+key+inx">
+                  <top-post-item :post="post"></top-post-item>
               </div>
-
             </div>
           </div>
 
@@ -105,6 +101,7 @@
   import InfoOverlay from '../components/Emory/InfoOverlay';
   import PlayOverlay from '../components/Emory/PlayOverlay';
   import EditOverlay from '../components/Emory/EditOverlay';
+  import DeckOverlay from '../components/Emory/DeckOverlay';
 
   import AdminSection from '../components/Emory/AdminSection';
 
@@ -122,6 +119,7 @@
       mysqlMixin
     ],
     components: {
+      DeckOverlay,
       MapsOverlay,
       InfoOverlay,
       PlayOverlay,
@@ -139,7 +137,8 @@
           info: null,
           play: null,
           edit: null,
-          map: null
+          map:  null,
+          deck: null
         },
         firebaseDB: {
           marker: null,
@@ -174,6 +173,8 @@
       this.overlay.info = this.$refs.info_overlay.$el;
       this.overlay.play = this.$refs.play_overlay.$el;
       this.overlay.edit = this.$refs.edit_overlay.$el;
+      this.overlay.deck = this.$refs.deck_overlay.$el;
+
       //Wordpressからデータ取得
       this.c_all_trips_from_wp();
       this.c_all_posts_from_wp();
@@ -224,8 +225,16 @@
           let mode = this.mapstore.emory.mode ? this.mapstore.emory.mode : 'info';
 
           switch (mode) {
-            case 'wide_map':
-              console.log("wide_map!");
+            case 'dock_map':
+              this.a_mapstore(['set', 'tracking', false]);
+              this.overlay.info.style.visibility = 'hidden';
+              this.overlay.info.style.zIndex = -1;
+              this.overlay.play.style.zIndex = -1;
+              this.overlay.edit.style.zIndex = -1;
+              document.body.classList.remove('playing');
+              this.overlay.deck.style.zIndex = 401;
+
+
               break;
             case 'info':
               this.a_mapstore(['set', 'tracking', false]);
@@ -234,6 +243,8 @@
               this.overlay.play.style.zIndex = -1;
               this.overlay.edit.style.zIndex = -1;
               document.body.classList.remove('playing');
+              this.overlay.deck.style.zIndex = -1;
+
               break;
 
             case 'edit':
@@ -243,6 +254,7 @@
               this.overlay.play.style.zIndex = -1;
               this.overlay.edit.style.zIndex = 401;
               document.body.classList.remove('playing');
+              this.overlay.deck.style.zIndex = -1;
               break;
 
             case 'play_map':
@@ -251,6 +263,7 @@
               this.overlay.play.style.zIndex = 401;
               this.overlay.edit.style.zIndex = -1;
               document.body.classList.add('playing');
+              this.overlay.deck.style.zIndex = -1;
               break;
 
             case 'play_imagemap':
@@ -259,6 +272,7 @@
               this.overlay.play.style.zIndex = 401;
               this.overlay.edit.style.zIndex = -1;
               document.body.classList.add('playing');
+              this.overlay.deck.style.zIndex = -1;
               break;
 
             case 'map':
@@ -267,6 +281,7 @@
               this.overlay.play.style.zIndex = -1;
               this.overlay.edit.style.zIndex = -1;
               document.body.classList.remove('playing');
+              this.overlay.deck.style.zIndex = -1;
               break;
 
             case 'play':
@@ -275,6 +290,7 @@
               this.overlay.play.style.zIndex = 401;
               this.overlay.edit.style.zIndex = -1;
               document.body.classList.add('playing');
+              this.overlay.deck.style.zIndex = -1;
               break;
           }
         },
