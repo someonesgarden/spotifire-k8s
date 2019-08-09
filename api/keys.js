@@ -24,6 +24,7 @@ const spotifyApi = new SpotifyWebApi({
 
 
 module.exports = {
+    MAPBOX_TOKEN: process.env.MAPBOX_TOKEN,
     musixmatchKey:process.env.MUSIXMATCH_KEY,
     geniusClientId: process.env.GENIUS_ID,
     geniusClientSecret: process.env.GENIUS_SECRET,

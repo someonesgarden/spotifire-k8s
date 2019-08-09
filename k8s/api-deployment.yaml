@@ -18,6 +18,11 @@ spec:
           ports:
             - containerPort: 5000
           env:
+            - name: MAPBOX_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: mapbox-token
+                  key: MAPBOX-TOKEN
             - name: MUSIXMATCH_KEY
               valueFrom:
                 secretKeyRef:
