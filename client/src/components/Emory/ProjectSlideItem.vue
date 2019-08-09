@@ -1,6 +1,6 @@
 <template>
         <pricing-card class="projectitem md-card-background"
-                      :class="{noimg:!proj.thumb,selected:mapstore.emory.alpha.slider,active:proj.dist < mapstore.emory.searchDist/1000}"
+                      :class="{noimg:!proj.thumb,selected:mapstore.emory.slider.alpha,active:proj.dist < mapstore.emory.searchDist/1000}"
                       :card-image="proj.thumb ? proj.thumb : ''">
 
             <template slot="cardContent">
@@ -142,9 +142,9 @@
 
 
             loadTrip(proj){
-              if(this.wp.posts){
-                  console.log(this.wp.posts[proj.tripid]);
-                  this.a_mapstore(['emory','settrip',this.wp.posts[proj.tripid]]);
+              if(this.wp.trips){
+                  console.log(this.wp.trips[proj.tripid]);
+                  this.a_mapstore(['emory','settrip',this.wp.trips[proj.tripid]]);
                   this.a_index(['side','left',{key:'emory',val:true}]);
 
               }
@@ -157,8 +157,8 @@
                 //天気をチェック
                 this.m_weather(lat, lng, res => this.tenki = res)
 
-                if(this.mapstore.emory.project.id===id && this.mapstore.emory.alpha.slider){
-                    this.a_mapstore(['emory','alpha',{key:'slider',val:false}]);
+                if(this.mapstore.emory.project.id===id && this.mapstore.emory.slider.alpha){
+                    this.a_mapstore(['emory','alpha',false]);
                 }else{
                     this.moveMapTo();
                 }
@@ -173,14 +173,14 @@
             moveMapTo(){
                 if(this.proj.id && this.mapstore.emory.projects){
                     this.m_setIdAndMoveCenter(this.proj.id);
-                    this.a_mapstore(['emory','alpha',{key:'slider',val:true}]);
+                    this.a_mapstore(['emory','alpha',true]);
                     if(this.timeout) clearTimeout(this.timeout);
-                    this.timeout = setTimeout(()=> this.a_mapstore(['emory','alpha',{key:'slider',val:false}]),4000);
+                    this.timeout = setTimeout(()=> this.a_mapstore(['emory','alpha',false]),4000);
                 }
             },
 
             playStart(e){
-                this.a_mapstore(['emory','alpha',{key:'slider',val:false}]);
+                this.a_mapstore(['emory','alpha',false]);
                 if(this.timeout) clearTimeout(this.timeout);
 
                 if(this.proj.id){

@@ -18,7 +18,6 @@ const pwa       = modules => modules.pwa
 const subscribe = modules => modules.subscribe
 const wp        = modules => modules.wp
 const weather   = modules => modules.weather
-// const g_three   = modules => modules.three
 
 export {
     rootAction,
@@ -40,5 +39,4 @@ export {
     subscribe,
     wp,
     weather
-    //g_three,
 }

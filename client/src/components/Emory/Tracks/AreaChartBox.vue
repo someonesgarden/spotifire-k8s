@@ -154,7 +154,7 @@
             .attr("y", 6)
             .attr("dy", ".71em")
             .style("text-anchor", "end")
-            .text("Fares ($)");
+            .text("Points");
         },
       }
     }
@@ -170,7 +170,7 @@
   }
 
   .areaChartBox {
-    background-color: rgba(122, 12, 64, 0.48);
+    background-color: rgba(75, 7, 39, 0.09);
     position: absolute;
     bottom: 20px;
     right: 15px;

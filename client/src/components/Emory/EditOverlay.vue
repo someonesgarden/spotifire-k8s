@@ -182,7 +182,7 @@
                         </mu-select>
                     </mu-form-item>
 
-                    <mu-form-item  v-if="wp.posts">
+                    <mu-form-item  v-if="wp.trips">
 <!--                        <mu-text-field placeholder="Trip ID"-->
 <!--                                       v-model="mapstore.emory.project.tripid"-->
 <!--                                       @change="(val)=>m_emoryParam('tripid',val,'project')"-->
@@ -190,7 +190,7 @@
                         <mu-select color="primary"
                                    v-model="mapstore.emory.project.tripid"
                                    @change="(val)=>m_emoryParam('tripid',val,'project')">
-                            <mu-option  :label="trip.title" :value="key" v-for="(trip,key,inx) in wp.posts" :key="'trip'+key+inx"></mu-option>
+                            <mu-option  :label="trip.title" :value="key" v-for="(trip,key,inx) in wp.trips" :key="'trip'+key+inx"></mu-option>
                         </mu-select>
                     </mu-form-item>
 

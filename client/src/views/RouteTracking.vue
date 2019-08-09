@@ -18,8 +18,7 @@
             </md-card>
         </div>
 
-        <date-time-box ref="timebox" @reloadClick="reloadClick" @toggle="togglePlay"/>
-        <total-box ref="totalbox" :running="running"/>
+        <total-box ref="totalbox" :running="running" @reloadClick="reloadClick" @toggle="togglePlay"/>
         <area-chart-box ref="areachartbox" :running="running"/>
     </div>
 </template>
@@ -40,7 +39,6 @@
     import mapMixin from '../mixins/map';
 
     import TotalBox     from '../components/Emory/Tracks/TotalBox';
-    import DateTimeBox  from '../components/Emory/Tracks/DateTimeBox';
     import AreaChartBox from '../components/Emory/Tracks/AreaChartBox';
 
     export default {
@@ -49,7 +47,6 @@
         mixins:[mapMixin],
         components: {
             TotalBox,
-            DateTimeBox,
             AreaChartBox,
             LMap,
             LTileLayer

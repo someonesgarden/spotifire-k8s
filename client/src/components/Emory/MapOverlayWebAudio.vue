@@ -32,7 +32,7 @@
                            :id="id"
                            @mClick="mClick(marker,id)" @tClick="tClick(marker,id)"></my-marker>
 
-                <my-marker v-if="mapstore.mainuser && mapstore.mainuser.id==='GUEST'" :marker="mapstore.mainuser"></my-marker>
+                <my-marker v-if="mapstore.mainuser && mapstore.mainuser.status==='GUEST'" :marker="mapstore.mainuser"></my-marker>
 
                 <my-tooltip v-if="mapstore.emory.projects" v-for="(p,id) in mapstore.emory.projects"
                             :title="p.title"
@@ -56,7 +56,7 @@
                            :key="'marker'+id"
                            :id="id"
                            @mClick="mClick(marker,id)" @tClick="tClick(marker,id)"></my-marker>
-                <my-marker v-if="mapstore.mainuser && mapstore.mainuser.id==='GUEST'" :marker="mapstore.mainuser"></my-marker>
+                <my-marker v-if="mapstore.mainuser && mapstore.mainuser.status==='GUEST'" :marker="mapstore.mainuser"></my-marker>
 
                 <my-tooltip v-if="mapstore.emory.projects" v-for="(p,id) in mapstore.emory.projects"
                             :title="p.title"

@@ -1,5 +1,7 @@
 const state = {
     emory: {
+        mode:   'info',
+        loader: false,
         typing: {
             show: false,
             texts: [],
@@ -7,10 +9,11 @@ const state = {
             action: 'track'
         },
 
-        alpha:  {slider:false},
-        slider: {no:0},
-        mode:   'info',
-        loader: false,
+        slider: {
+            no:0,
+            alpha:false
+        },
+
         editing: {
             status: false,
             type:   'marker'
@@ -28,7 +31,6 @@ const state = {
         triggerDist: 0,
         searchDist: 300,
 
-        all:'all',
         selectedPoint:{
           top:-300,
           left:-300
@@ -80,13 +82,12 @@ const mutations = {
         state.emory.slider.no = data;
     },
 
-    setAlpha(state,data){
-        if(data.val==='toggle'){
-            state.emory.alpha[data.key] = !state.emory.alpha[data.key];
+    setSliderAlpha(state,data){
+        if(data==='toggle'){
+            state.emory.slider.alpha = !state.emory.slider.alpha;
             return;
         }
-
-      state.emory.alpha[data.key] = data.val;
+        state.emory.slider.alpha = data;
     },
 
     setSelectedPoint(state,data){

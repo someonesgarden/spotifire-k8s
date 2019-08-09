@@ -4,6 +4,59 @@ export default{
 
     methods: {
 
+        c_all_posts_from_wp(){
+            console.log("c_all_posts_from_wp");
+
+            this.c_mysql_getall('posts',res=>{
+
+                let posts = res.data.map(post=>{
+                    return {
+                        id: post.ID,
+                        title: post.post_title ? decodeURIComponent(post.post_title) : '',
+                        thumb: post.thumbnail_url ? post.thumbnail_url : '',
+                        excerpt: post.post_excerpt ? post.post_excerpt : '',
+                        content: post.post_content ? post.post_content : '',
+                        categories: post.taxonomies ? post.taxonomies.category.map(c=>c.name) : '',
+                        trip: post.trip ? post.trip : null
+                    }
+                });
+                this.a_wp(['set','posts',posts]);
+            })
+
+        },
+
+        c_all_trips_from_wp(){
+            console.log("c_all_trips_from_wp");
+            this.c_mysql_getall('trips',res=>{
+                let match;
+                const regexp_h = /<h(.)>(.*?)<\/h\1>/g;
+                const regexp_p = /<p>(.*?)<\/p>/g;
+
+                let posts = res.data.map(post => {
+                    let content = post.post_content ? this.m_html_comment(decodeURIComponent(post.post_content)) : '';
+                    let contents = content.split(/\n/);
+                    contents = contents.filter(v => v);
+                    let steps = contents.map(cont => {
+                        let hs = "";
+                        let ps = "";
+                        while ((match = regexp_h.exec(cont)) !== null) hs = match[2];
+                        while ((match = regexp_p.exec(cont)) !== null) ps = match[1];
+                        return {title: hs, desc: ps};
+                    });
+
+                    return {
+                        id: post.ID,
+                        title: post.post_title ? decodeURIComponent(post.post_title) : '',
+                        thumb: post.thumbnail_url ? post.thumbnail_url : '',
+                        excerpt: post.post_excerpt ? post.post_excerpt : '',
+                        steps: steps,
+                        spotifyid: post.spotifyid ? post.spotifyid : null
+                    }
+                });
+                this.a_wp(['set','trips',posts]);
+            })
+        },
+
         c_mysql_getall(table,cb=null){
             axios.get(window.dbDomain+'/api/mysql/'+table+'/all').then(res => {
                 console.log(res);
@@ -13,6 +66,9 @@ export default{
                 if(cb) cb(null);
             });
         },
+
+
+
 
         c_mysql_find(table,key,val,cb){
           axios.get(window.dbDomain+'/api/mysql/'+table+'/get',{params:{key:key,val:val}}).then(res => {

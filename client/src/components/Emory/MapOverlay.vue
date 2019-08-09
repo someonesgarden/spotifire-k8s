@@ -26,13 +26,15 @@
                         :inertia="false"
                         :bounceAtZoomLimits="false"></l-image-overlay>
 
+                <my-marker v-if="mapstore.mainuser && mapstore.mainuser.status==='GUEST'" :marker="mapstore.mainuser"></my-marker>
+
                 <my-marker v-if="mapstore.markers && mapstore.mainuser" v-for="(marker,id) in m_sortedMarkers"
                            :marker="marker"
                            :key="'marker'+id"
                            :id="id"
                            @mClick="mClick(marker,id)" @tClick="tClick(marker,id)"></my-marker>
 
-                <my-marker v-if="mapstore.mainuser && mapstore.mainuser.id==='GUEST'" :marker="mapstore.mainuser"></my-marker>
+
 
                 <my-tooltip v-if="mapstore.emory.projects" v-for="(p,id) in mapstore.emory.projects"
                             :title="p.title"
@@ -51,12 +53,17 @@
                    :min-zoom="5"
                    @click="m_mapClick" @zoomend="m_zoomChange">
                 <l-tile-layer :url="mapstore.map.url" :attribution="mapstore.map.attribution"></l-tile-layer>
+
+
+                <my-marker v-if="mapstore.mainuser && mapstore.mainuser.status==='GUEST'" :marker="mapstore.mainuser"></my-marker>
+
                 <my-marker v-if="mapstore.markers && mapstore.mainuser" v-for="(marker,id) in m_sortedMarkers"
                            :marker="marker"
                            :key="'marker'+id"
                            :id="id"
                            @mClick="mClick(marker,id)" @tClick="tClick(marker,id)"></my-marker>
-                <my-marker v-if="mapstore.mainuser && mapstore.mainuser.id==='GUEST'" :marker="mapstore.mainuser"></my-marker>
+
+
 
                 <my-tooltip v-if="mapstore.emory.projects" v-for="(p,id) in mapstore.emory.projects"
                             :title="p.title"
@@ -82,6 +89,7 @@
 <script>
     import {mapGetters, mapActions} from 'vuex';
     import mapMixin from '../../mixins/map';
+    import wsMixin from '../../mixins/ws';
 
     import {LImageOverlay,  LMap, LTileLayer, LPolygon} from "vue2-leaflet";
     //import { latLng, icon } from "leaflet";
@@ -93,7 +101,7 @@
 
     export default {
         name: "MapOverlay",
-        mixins:[mapMixin],
+        mixins:[mapMixin,wsMixin],
         props: ['markersRef'],
         components:{
             LMap, LTileLayer, LPolygon, LImageOverlay,
@@ -102,6 +110,7 @@
         },
         data() {
             return {
+                GL:    null,
                 timout_volume:  null,
                 timeout:        null,
                 watchID:        null,
@@ -109,13 +118,28 @@
                 centers:        [],
                 track_max:      0,
                 projectPoly:    null,
-                pods: 4
+                pods: 4,
+
+                walking0: {
+                    starttime: null,
+                    endtime: null,
+                    points: [],
+                    num:0
+                },
+
+                walking: {
+                    starttime: null,
+                    endtime: null,
+                    points: [],
+                    num:0
+                }
             };
         },
 
         computed:mapGetters(['ws', 'mapstore', 'spotify']),
 
         mounted(){
+            this.GL = navigator.geolocation ? navigator.geolocation : null;
             this.watchedTrackAction();
         },
 
@@ -217,40 +241,35 @@
             /*---*/
 
             watchedTrackAction(){
+
                 if (this.mapstore.geocoding.on){
-                    console.log("watch:tracking:START");
+                    console.log("[w]track_START");
+                    this.walking.starttime = new Date();
+
                     this.resetAllPods(); //全てのmp3プレイヤーを初期化
                     this.keepTracking();
+
                 }else{
-                    console.log("watch:tracking:STOP");
+                    //もしsocketに未送信データがあるなら、送信後初期化
+                    if(this.walking.points.length >0){
+                        this.walking.endtime = new Date();
+                        this.m_socketGeoActions('routes', {routes:this.walking});
+                        this.walking = this.walking0; //初期化
+                    }
+
+                    console.log("[w]track_STOP");
                     clearTimeout(this.timeout);
                     this.timeout = null;
                     this.center  = null;
-                    if(!!navigator.geolocation && this.watchID){
+                    if(!!this.GL && this.watchID){
                         console.log("clearWatch");
-                        navigator.geolocation.clearWatch(this.watchID);
+                        this.GL.clearWatch(this.watchID);
                     }
                     this.fadeOffAllPods();
-                    //setTimeout(()=> this.resetAllPods,2000);//念の為さらに2秒後に停止
                 }
             },
 
-            onProjectSelected(key) {
-                this.a_mapstore(['emory','markerparam',{key:'project',val:key}]);
-                //リセット(polyの消去）
-                this.a_mapstore(['set','poly',null]);
-                this.a_mapstore(['emory', 'setprojectid', key]);
-                this.a_mapstore(['set', 'tracking', false]);
-                let proj = this.mapstore.emory.projects[key];
-                this.a_mapstore(['center', 'map', proj.center]);
-
-                this.m_distOfProjPoints();
-                this.m_drawPoly();
-            },
-
             pClick(val, id) {
-                console.log("pClick");
-                console.log(val);
                 //EDITモードの場合
                 if(this.mapstore.emory.editing.status){
                     if(id) val.id = id;
@@ -260,11 +279,10 @@
                 }
                 //通常モードの場合
                 this.a_mapstore(['center', 'map', val.center]);
-                this.onProjectSelected(id);
+                this.m_onProjectSelected(id);
             },
 
             mClick(val,id){
-                console.log("mClick");
                 //EDITモードの場合
                 if(this.mapstore.emory.editing.status){
                     this.clickMarkerCallPlayer(val);
@@ -276,7 +294,6 @@
             },
 
             tClick(val,id){
-                console.log("tClick");
                 //EDITモードの場合
                 if(this.mapstore.emory.editing.status){
                     if(id) val.id = id;
@@ -315,13 +332,13 @@
 
             //一回だけはこちら！
             geoCurrentPosition(){
-                if(!!navigator.geolocation) navigator.geolocation.getCurrentPosition(this.geoSuccessOnce,this.m_geoError,this.mapstore.geocoding.options);
+                if(!!this.GL) this.GL.getCurrentPosition(this.geoSuccessOnce,this.m_geoError,this.mapstore.geocoding.options);
             },
 
             //継続的に呼び出し続ける場合はこちら！
             geolocation() {
-                console.log("navigator.geolocation is",navigator.geolocation);
-                if(!!navigator.geolocation) this.watchID = navigator.geolocation.watchPosition(this.geoSuccess,this.m_geoError,this.mapstore.geocoding.options);
+                console.log("this.GL is",this.GL);
+                if(!!this.GL) this.watchID = this.GL.watchPosition(this.geoSuccess,this.m_geoError,this.mapstore.geocoding.options);
             },
 
             geoSuccessOnce(position){
@@ -330,15 +347,22 @@
             },
 
             geoSuccess(position){
-                let center = {lat:position.coords.latitude, lng:position.coords.longitude};
+                let lng = position.coords.longitude>180 ?  position.coords.longitude-360 : position.coords.longitude;
+                    lng = position.coords.longitude<-180 ? position.coords.longitude+360 : position.coords.longitude;
+
+                let center = {lat:position.coords.latitude, lng:lng};
                 this.a_mapstore(['geo','set',center]); //リアルなジオコードの位置は別に保存しておく
+
+                this.walking.points.push([center.lng,center.lat]);
+
                 this.resetPos(position);
                 this.m_drawPoly();
+
                 if(this.mapstore.mainuser){
                     this.m_distOfProjPoints();
                     this.distMarkerActionUpdate();
                 }
-                navigator.geolocation.clearWatch(this.watchID);
+                this.GL.clearWatch(this.watchID);
             },
 
             distMarkerActionUpdate() {
@@ -389,7 +413,6 @@
                             }
                         }
 
-
                         if (already_has) {
                             console.log("already_has is..",already_has);
                             if (!already_has.playing) {
@@ -406,8 +429,6 @@
                                     //ダイレクトに変更
                                     this.$refs['pod'+already_has.num][0].setVolume(volume);
                                 }
-
-
                             }
 
                         } else if (paused_pods.length > 0) {
@@ -446,20 +467,16 @@
                 let dist_delta = this.m_distKmOfTwo(this.center.lat,this.center.lng,center.lat,center.lng);
                 if (dist_delta > 0.05) return; //50メートル以上の変化は異常値の可能性があるので終了
 
-
                 if(this.centers.length>3) this.centers.shift();
                 this.centers = [...this.centers,center];
 
                 let ave = this.centers.reduce((prev,cur)=>{return {lat:prev.lat+cur.lat,lng:prev.lng+cur.lng}});
                 ave = {lat:ave.lat/this.centers.length, lng:ave.lng/this.centers.length};
 
-                //let dist_delta_ave = this.m_distKmOfTwo(ave.lat,ave.lng,center.lat,center.lng);
-
                 center = {
                     lat: (ave.lat + 2*center.lat) / 3,
                     lng: (ave.lng + 2*center.lng) / 3
                 };
-
 
                 //地図のセンターリセット
                 this.a_mapstore(['center', 'map', center]);

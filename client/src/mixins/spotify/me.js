@@ -1,11 +1,42 @@
 import axios from 'axios';
 
 export default{
+
     methods: {
-        c_getMe:function(){
+
+        c_checkLoginStatus:function(cb){
+            //ローカルストレージにSpotifyログイン情報が有効ならStoreに保存
+
+            if(localStorage.getItem('credentials')){
+                let cred = JSON.parse(localStorage.getItem('credentials'));
+
+                if(cred && cred.data){
+                    let date = new Date();
+                    if((date.getTime() - cred.timestamp) < cred.data.expires_in*1000){
+                        this.a_spotify(['set','credential',cred.data]);
+                        this.c_getMe(cb);
+                    }else{
+                        //this.c_set2LS("credentials",null);
+                        localStorage.removeItem('credential');
+                        cb(null);
+                    }
+                }else{
+                    cb(null);
+                }
+
+            }else{
+                cb(null);
+            }
+        },
+
+        c_getMe:function(cb=null){
             axios.get('/api/spotify/me/get_me/'+this.spotify.credential.access_token)
                 .then(res => {
-                    if(!!res.data) this.a_spotify(['set','me',res.data]);
+                    if(!!res.data){
+                        this.a_spotify(['set','me',res.data]);
+                        this.c_set2LS('username',res.data.id);//ローカルストレージに保存
+                        if(cb) cb(res);
+                    }
                 }).catch(error => {
                 console.log(error);
             });

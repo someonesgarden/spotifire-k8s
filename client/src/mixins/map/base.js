@@ -22,7 +22,7 @@ export default{
             let results = [];
             if(this.mapstore.mainuser){
                 let projects = this.mapstore.emory.projects;
-                let mainuser = this.mapstore.mainuser.id==="GUEST" ? this.mapstore.mainuser : this.mapstore.markers[this.mapstore.mainuser.id];
+                let mainuser = this.mapstore.mainuser.status==="GUEST" ? this.mapstore.mainuser : this.mapstore.markers[this.mapstore.mainuser.id];
                 if(mainuser){
                     results = Object.keys(projects).map(k=> {return {...projects[k],id:k,dist:this.m_distKmofCenters(mainuser.center, projects[k].center)}});
                     results.sort((a, b)=> a.dist > b.dist ? 1 : -1);
@@ -37,6 +37,57 @@ export default{
     },
 
     methods: {
+        m_onProjectSelected(id) {
+            this.a_mapstore(['emory','markerparam',{key:'project',val:id}]);
+            //リセット(polyの消去）
+            this.a_mapstore(['set','poly',null]);
+            this.a_mapstore(['emory', 'setprojectid', id]);
+            this.a_mapstore(['set', 'tracking', false]);
+            let proj = this.mapstore.emory.projects[id];
+            this.a_mapstore(['center', 'map', proj.center]);
+
+            this.m_distOfProjPoints();
+            this.m_drawPoly();
+        },
+
+        m_createOrFindMainuser(fdb) {
+            if (this.spotify.me.status === 'GUEST') {
+                console.log("for GUEST");
+                //ゲストの場合はFirebaseに問いかけず、そのままマーカーを作成する！
+                this.a_mapstore(['set', 'mainuser',
+                    {
+                        center: {lat: 34.722677, lng: 135.492364},
+                        type: 'mainuser',
+                        project: 'mainuser',
+                        title: 'GUEST',
+                        id: 'GUEST',
+                        status: 'GUEST'
+                    }]);
+
+            } else {
+                console.log("for LOGIND");
+                //メインユーザーを検索してなければ作成
+                fdb.marker.orderByChild('userid').startAt(this.spotify.me.id).endAt(this.spotify.me.id).once('value', ss => {
+                    if (ss.val()) {
+                        console.log("FOUND");
+                        let key = Object.keys(ss.val())[0];
+                        let val = Object.values(ss.val())[0];
+
+                        this.a_mapstore(['set', 'mainuser',
+                            {
+                                ...val,
+                                id: key,
+                                status: 'LOGIN'
+                            }
+                        ]);
+                    } else {
+                        //ローカルにユーザーデータがない場合だけ作成される
+                        if (!this.mapstore.mainuser) new M({type: 'mainuser'}).updateOrNew(fdb.marker);
+                    }
+                })
+            }
+        },
+
         m_resetWhenBackground(){
             console.log("m_resetWhenBackground!");
             this.a_index(['storyModal','toggle',false]);
@@ -144,7 +195,7 @@ export default{
         m_distOfProjPoints(){
             if(this.mapstore.mainuser){
                 //自分と現在のプロジェクトのpointの距離を測る
-                let mainuser = this.mapstore.mainuser.id==="GUEST" ? this.mapstore.mainuser : this.mapstore.markers[this.mapstore.mainuser.id];
+                let mainuser = this.mapstore.mainuser.status==="GUEST" ? this.mapstore.mainuser : this.mapstore.markers[this.mapstore.mainuser.id];
 
                 if(this.m_sortedMarkers && mainuser){
                     let dists = Object.keys(this.m_sortedMarkers).map(k=> {

@@ -7,7 +7,6 @@ import spotify from './modules/spotify/index';
 import feed from './modules/feed/index';
 import mapstore from './modules/mapstore/index';
 import ws from './modules/ws/index';
-import three from './modules/three/index';
 import mp3 from './modules/mp3/index';
 import genius from './modules/genius/index';
 import modal from './modules/modal/index';
@@ -17,6 +16,7 @@ import svg from './modules/svg/index';
 import subscribe from './modules/subscribe/index';
 import wp from './modules/wp/index';
 import weather from './modules/weather/index';
+//import three from './modules/three/index';
 
 Vue.use(Vuex);
 
@@ -30,7 +30,6 @@ export default new Vuex.Store({
         feed,
         mapstore,
         ws,
-        three,
         mp3,
         genius,
         modal,
@@ -39,7 +38,8 @@ export default new Vuex.Store({
         svg,
         subscribe,
         wp,
-        weather
+        weather,
+        // three,
     }
 });
 

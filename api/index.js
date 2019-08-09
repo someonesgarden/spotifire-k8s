@@ -42,7 +42,6 @@ io.on('connection',function(socket){
 
     // 新規ユーザーの回線オープン
     socket.on('open-socket', function(msg) {
-
         console.log(Object.keys(connect_history));
 
         // 指定ユーザーだけ
@@ -52,13 +51,17 @@ io.on('connection',function(socket){
 
         // 全ユーザーへ
         clients = Object.keys(io.eio.clients).map(key=> connect_history[key])
-        clients = clients.filter(v => !!v)
+
+        //clients = clients.filter(v => !!v);
+
+        let obj = {}
+        clients.map( v=>{ if(v) obj[msg.socketid] = v})
+
         io.emit('new-user-added',{clients:clients});
     });
 
 
     //　ユーザーの回線クローズ
-
     socket.on('close-socket', function(msg) {
         console.log("close-socket:success");
 
@@ -74,15 +77,27 @@ io.on('connection',function(socket){
         clients = id_ary_after.map(key=> connect_history[key])
         clients = clients.filter(v => !!v)
         io.emit('user-disconnected',{clients:clients});
-
+        console.log("before disconnect");
         socket.disconnect();
     });
 
     // クライアントが切断したときの処理
-    socket.on('disconnect', function(msg){
+    socket.on('disconnect', msg => {
         console.log(msg);
         console.log("disconnect called");
     });
+
+    // ユーザーのルート情報
+    socket.on('routes', msg => {
+        console.log("routes");
+        console.log(JSON.stringify(msg));
+    })
+
+    // ユーザーのルート情報
+    socket.on('geolocation', msg => {
+        console.log("geolocation");
+        console.log(JSON.stringify(msg));
+    })
 
 });
 //*-------------------------------  SOCKET.IO

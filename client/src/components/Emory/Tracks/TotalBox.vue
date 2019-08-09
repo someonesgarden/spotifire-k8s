@@ -1,15 +1,25 @@
 <template>
   <md-card class="totalsBox mybox" v-if="running">
     <p>
-      <strong><md-icon>dashboard</md-icon>&nbsp;Running Totals</strong>
+      <strong><md-icon>dashboard</md-icon>&nbsp;{{timer_time}}</strong>
     </p>
-    <p>Fares: <span class="runningFare running" v-text="running.fare.toFixed(2)"></span></p>
-    <p>Surcharge: <span class = "runningSurcharge running" v-text="running.surcharge.toFixed(2)"></span></p>
-    <p>MTA Tax: <span class = "runningTax running" v-text="running.mtatax.toFixed(2)"></span></p>
-    <p>Tips<sup>*</sup>: <span class = "runningTip running" v-text="running.tip.toFixed(2)"></span></p>
-    <p class = "tolls">Tolls: <span class = "runningTolls running" v-text="running.tolls.toFixed(2)"></span></p>
-    <p>Total: <span class = "runningTotal running" v-text="running.total.toFixed(2)"></span></p>
-    <p>Passengers: <span class = "runningPassengers running" v-text="running.passengers"></span></p>
+    <hr>
+    <div class="md-layout-item md-size-100 md-small-size-100 md-xsmall-size-100 md-medium-size-100 mx-auto text-center">
+      <md-button  :md-ripple="false" class="md-fab text-center" @click="slowerClick">
+        -
+      </md-button>
+      <md-button  :md-ripple="false" class="md-fab text-center" @click="fasterClick">
+        +
+      </md-button>
+      <md-button  :md-ripple="false" class="md-fab text-center" @click="$emit('toggle')">
+        x
+      </md-button>
+      <md-button :md-ripple="false" class="md-fab text-center md-teal" @click="$emit('reloadClick')">
+        {{mapstore.tracking.timeFactor}}
+      </md-button>
+    </div>
+    <p>Points: <span class = "runningTotal running" v-text="parseInt(running.total)"></span></p>
+    <p>Members: <span class = "runningPassengers running" v-text="running.passengers"></span></p>
     <div class = "passengerGlyphs">
       <md-icon v-for="p in running.passengers" :key="'passenger'+p">directions_run</md-icon>
     </div>
@@ -18,21 +28,41 @@
 
 <script>
 
+  import {mapGetters, mapActions} from 'vuex';
     export default {
         name: "TotalBox",
-        props:['running']
+        props:['running'],
+      computed: {
+        ...mapGetters(['mapstore']),
+        timer_time() {
+          return this.mapstore.tracking.moment ? this.mapstore.tracking.moment.format('h:mm a') : '';
+        }
+      },
+      methods: {
+        ...mapActions(['a_mapstore']),
+        reloadClick() {
+          location.reload();
+        },
+        slowerClick() {
+          if (this.mapstore.tracking.timeFactor > 1) this.a_mapstore(['tracking', 'minus_timefactor']);
+        },
+
+        fasterClick() {
+          this.a_mapstore(['tracking', 'add_timefactor']);
+        },
+      }
     }
 </script>
 
 <style scoped lang="scss">
   .totalsBox {
     color:white;
-    padding:5px;
+    padding:8px;
     background-color:rgba(12,34,23,0.5);
     position: absolute;
     top: 65px;
     right: 15px;
-    width: 300px;
+    width: 200px;
     p {
       font-size: 16px;
       margin-bottom: 0;

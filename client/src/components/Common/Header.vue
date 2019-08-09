@@ -45,6 +45,7 @@
                 <mu-button flat>
                     <img class="menu-icon" src="/static/img/emory/logos/horizontal_w.png" style="width:110px; height:auto;">
                 </mu-button>
+
                 <mu-list slot="content" @mouseup="toggleMenu('map')">
                     <mu-list-item button to="/">
                         <mu-list-item-title>
@@ -120,8 +121,7 @@
         <!-- Emory Drawers -->
         <mu-drawer :open.sync="side.emory.left.open" :docked="side.emory.left.docked" :width="300" style="background-color:#0d7970;" @change="()=> a_index(['side','left',{key:'emory',val:'toggle'}])">
             <mu-list style="width:inherit;">
-                <emory-left-view
-                        @close="a_index(['side','left',{key:'emory',val:false}])"></emory-left-view>
+                <emory-left-view @close="a_index(['side','left',{key:'emory',val:false}])"></emory-left-view>
             </mu-list>
         </mu-drawer>
         <!--/Emory Drawers -->
@@ -192,8 +192,8 @@
 
             emoryMyPosition(){
                 this.a_mapstore(['set','tracking','toggle']);
-                this.a_mapstore(['emory', 'alpha', {key: 'slider', val: 'toggle'}]);
-                setTimeout(()=> this.a_mapstore(['emory','alpha',{key:'slider',val:false}]), 4000);
+                this.a_mapstore(['emory', 'alpha', 'toggle']);
+                setTimeout(()=> this.a_mapstore(['emory','alpha',false]), 4000);
             }
         },
 

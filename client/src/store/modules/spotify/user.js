@@ -7,6 +7,7 @@ const state = {
         expires_in:null
     },
     me:{
+        status:'GUEST',
         id:null,
         center: {
             lat:34.722677,
@@ -40,8 +41,15 @@ const mutations = {
         state.code = val;
     },
 
-    setMe(state,val){
+    setMe(state, val) {
         state.me = val;
+        state.me.status = "GUEST";
+
+        if(state.credential.access_token){
+            let time = new Date();
+            if(time.getTime() < state.credential.expire_date) state.me.status="LOGIN";
+        }
+
         state.me.update = new Date();
     },
 

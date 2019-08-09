@@ -14,8 +14,10 @@
 <script>
     import axios from 'axios';
     import {mapActions,mapGetters} from 'vuex';
+    import spotifyMixin from '../mixins/spotify';
     export default {
         name: "SpotifyCallback",
+        mixins:[spotifyMixin],
         mounted(){
             let code = this.$route.query.code;
 
@@ -38,7 +40,9 @@
                     };
 
                     this.a_spotify(['set','credential',credentials]);
+                    this.c_set2LS('credentials',credentials);
                     this.a_spotify(['set','me',res.data.me]);
+                    this.c_set2LS('username',res.data.me.id);//ローカルストレージに保存
 
                     //認証前のページへそのまま戻る.
                     if(callpoint){

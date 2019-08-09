@@ -71,9 +71,7 @@
   import spotifyMixin from './mixins/spotify/index';
   import mapMixin from './mixins/map/index';
 
-  import Player from './components/Spotify/Player/Player.vue';
   import BottomView from './components/Common/BottomView';
-  import AudioPlayer from './components/Mp3/AudioPlayer';
   import HowSlide from './components/Slide/HowSlide.vue';
   import StorySlide from './components/Slide/StorySlide.vue';
   import SensorCheckSlide from './components/Slide/SensorCheckSlide.vue';
@@ -82,9 +80,7 @@
       name: 'app',
       mixins: [feedMixin, spotifyMixin,mapMixin],
       components: {
-          Player,
           BottomView,
-          AudioPlayer,
           HowSlide,
           StorySlide,
           SensorCheckSlide

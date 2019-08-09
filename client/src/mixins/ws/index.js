@@ -9,19 +9,28 @@ export default{
     methods: {
         ...mapActions(['a_ws']),
 
-        m_connectToSocket() {
+        m_startSocket() {
             if (this.spotify.me && this.spotify.me.id) {
                 let your_pos_and_data = {
                     name: this.spotify.me.id,
-                    center:this.mapstore.geocoding.center,
-                    pid: this.spotify.playlist ? this.spotify.playlist.id : null,
-                    tid: this.spotify.track ? this.spotify.track.id : null
+                    center:this.mapstore.geocoding.center
                 };
                 this.m_socketConnect(your_pos_and_data);
+                this.m_socketOnInit();
             }
         },
 
-        m_socketInit(){
+        m_socketOnInit(){
+            socket.on('open-socket-success',(msg)=>{
+                console.log("[WS] open-socket-success");
+                console.log(msg);
+
+                this.a_ws(['set','connect',socket.connected]);
+                this.a_ws(['set','socketid',msg.socketid]);
+                this.a_ws(['set','youname',msg.name]);
+            });
+
+
             // YOUR SOCKET
             socket.on('new-socket-id', (msg)=>{
                 console.log("[WS] new-socket-id");
@@ -29,13 +38,6 @@ export default{
                 this.a_ws(['set','socketid',msg.socketid]);
             });
 
-            socket.on('open-socket-success',(msg)=>{
-                console.log("[WS] open-socket-success");
-                console.log(msg);
-                this.a_ws(['set','connect',socket.connected]);
-                this.a_ws(['set','socketid',msg.socketid]);
-                this.a_ws(['set','youname',msg.name]);
-            });
 
             socket.on('close-socket-success',(msg)=>{
                 console.log("[WS] close-socket-success");
@@ -55,6 +57,17 @@ export default{
                 console.log(msg);
                 this.a_ws(['set','users',msg.clients]);
             });
+        },
+
+
+        m_socketGeoActions(type,data){
+            console.log("m_socketGeoActions:",type);
+            if(socket.connected) socket.emit(type,{...data,socketid:socket.id,id:this.spotify.me.id});
+        },
+
+        m_socketGeolocation(data){
+            console.log("m_socketGeolocation");
+            if(socket.connected) socket.emit('geolocation',{...data,socketid:socket.id,id:this.spotify.me.id,center:this.mapstore.geocoding.center});
         },
 
         m_socketConnect(userdata){

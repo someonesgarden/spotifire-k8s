@@ -26,6 +26,7 @@ const mutations = {
     },
 
     setMapCenter(state,data){
+
         state.map.center = data;
         state.map.update = new Date();
     },

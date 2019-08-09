@@ -173,7 +173,7 @@ export const a_mapstore = ({commit},[type, action, data]) => {
             setSearchDist:(data)  => commit('mapstore/setSearchDist',data),
             markerparam:(data)    => commit('mapstore/setMarkerParam', data),
             projectparam:(data)   => commit('mapstore/setProjectParam', data),
-            alpha:(data)          => commit('mapstore/setAlpha', data),
+            alpha:(data)          => commit('mapstore/setSliderAlpha', data),
             sliderno:(data)       => commit('mapstore/setSliderNo',data),
 
             settrip:(data)        => commit('side/setEmoryLeftTrip',data)
@@ -208,6 +208,7 @@ export const a_weather = ({commit}, [type, action, data]) => {
 export const a_wp = ({commit}, [type, action, data]) => {
     const actions = {
         set:{
+            trips:(data) => commit('wp/setTrips', data),
             posts:(data) => commit('wp/setPosts', data)
         }
     }
@@ -238,8 +239,6 @@ export const a_ws = ({commit}, [type, action, data]) => {
     actions[type][action](data)
 }
 
-// --------------- Three ------------------
-export const a_three = ({commit},param) => commit('three/setParam', param)
 
 // --------------- MP3 PLAYERS ------------
 export const a_mp3 =  ({commit}, [type, num, action, data]) => {

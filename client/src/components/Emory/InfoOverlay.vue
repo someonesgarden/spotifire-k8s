@@ -1,9 +1,9 @@
 <template>
-    <mu-flex justify-content="center" direction="row" align-items="center" :class="{selected:mapstore.emory.alpha.slider}">
+    <mu-flex justify-content="center" direction="row" align-items="center" :class="{selected:mapstore.emory.slider.alpha}">
 
         <carousel ref="projects"
                   class="carousel"
-                  :class="{selected:mapstore.emory.alpha.slider}"
+                  :class="{selected:mapstore.emory.slider.alpha}"
                   :per-page-custom="[[320, 1], [767, 3],[991, 4],[1199, 5]]"
                   :navigationEnabled="true"
                   navigationNextLabel="»"
@@ -20,7 +20,7 @@
                     <template slot="cardContent">
                         <div>
                             <img class="emory_logo"
-                                 :class="{selected:mapstore.emory.alpha.slider}"
+                                 :class="{selected:mapstore.emory.slider.alpha}"
                                  :src="info.img" alt="emory_logo" style="width:100%;height:auto;"/>
                             <h4 class="card-category" style="color:white;font-weight:bold;">{{info.subtitle}}</h4>
 
@@ -107,8 +107,8 @@
                 this.m_setIdAndMoveCenter(key);
                 this.m_scrollTo('#app');// スクロールトップ
 
-                this.a_mapstore(['emory','alpha',{key:'slider',val:true}]);
-                setTimeout(()=> this.a_mapstore(['emory','alpha',{key:'slider',val:false}]), 2000);
+                this.a_mapstore(['emory','alpha',true]);
+                setTimeout(()=> this.a_mapstore(['emory','alpha',false]), 2000);
             }
         }
     }

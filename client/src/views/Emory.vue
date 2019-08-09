@@ -68,29 +68,18 @@
             <div class="md-layout">
 
               <div class="md-layout-item md-size-50 md-small-size-100 mx-auto text-center">
-                <div class="info">
 
-                  <blog-card
-                          :shadow-normal="false"
-                          :no-colored-shadow="false"
-                          :card-image="'/static/img/emory/dummy/sengoku.jpg'">
-                    <template slot="cardContent">
-                      <h6 class="card-category text-warning"> HISTORY+FANTASY</h6>
-                      <h4 class="card-title">
-                        <a href="javacript:void(0)">戦国散歩第一話<br/>『JAPANTASY in 箱根』</a>
-                      </h4>
-                      <p class="card-description">
-                        大自然を舞台に繰り広げられる戦国散歩シリーズ第一弾『箱根xJAPANTASY』では、史実をモデルにワクワクハラハラの物語が体験できます。
-                        9月末公開！
-                      </p>
-                    </template>
-                  </blog-card>
+                <div class="info" v-if="wp.posts">
+                  <top-post-item  v-for="(post,key,inx) in wp.posts" :key="'post'+key+inx" :post="post"></top-post-item>
                 </div>
+
               </div>
+
             </div>
           </div>
-        </div>
-      </div>
+
+        </div><!-- / container -->
+      </div><!-- / section -->
 
       <div class="section text-center section-dark">
         <admin-section/>
@@ -102,26 +91,24 @@
 
 <script>
   import {mapGetters, mapActions} from 'vuex';
+  import firebase     from 'firebase';
+
   import spotifyMixin from '../mixins/spotify';
   import utilMixin    from '../mixins/util';
   import mapMixin     from '../mixins/map/index';
   import wsMixin      from '../mixins/ws';
   import Mixins       from "../mixins/basicMixins";
   import mysqlMixin   from "../mixins/mysql";
-
   import {ruleEmpty}  from '../store/rules';
-  import firebase     from 'firebase';
 
-  import M from '../class/map/EMarker';
-  //import P from '../class/map/EProject';
-
-  import {BlogCard}  from "../components/MD";
   import MapsOverlay from '../components/Emory/MapOverlay';
   import InfoOverlay from '../components/Emory/InfoOverlay';
   import PlayOverlay from '../components/Emory/PlayOverlay';
   import EditOverlay from '../components/Emory/EditOverlay';
 
   import AdminSection from '../components/Emory/AdminSection';
+
+  import TopPostItem from '../components/Emory/Items/TopPostItem';
 
   export default {
     name: "emory_main",
@@ -135,113 +122,82 @@
       mysqlMixin
     ],
     components: {
-      BlogCard,
       MapsOverlay,
       InfoOverlay,
       PlayOverlay,
       EditOverlay,
-      AdminSection
+      AdminSection,
+      TopPostItem
     },
     data() {
       return {
-              image: '/static/img/emory/bg/bg1.png',
-              mode: 'info',
-              socket: null,
-              userisready: false,
-              mainuser: null,
-              overlay: {
-                  info: null,
-                  play: null,
-                  edit: null,
-                  map:  null
-              },
-              firebaseDB: {
-                  marker: null,
-                  project: null
-              },
-              blankRules: [ruleEmpty]
-          };
-      },
-      computed: {
-          ...mapGetters([
-              'spotify',
-              'mapstore',
-              'loggedIn',
-              'ws']),
-          avatar_thumb() {
-              return this.spotify.bookmarks ? this.spotify.bookmarks[0].album.images[0].url : '/static/img/markers/edit/m_mainuser_1.png'
-          }
-      },
-      created() {
-          this.firebaseDB.marker  = firebase.database().ref('markers');
-          this.firebaseDB.project = firebase.database().ref('projects');
-      },
+        image: '/static/img/emory/bg/bg1.png',
+        mode: 'info',
+        socket: null,
+        mainuser: null,
+        overlay: {
+          info: null,
+          play: null,
+          edit: null,
+          map: null
+        },
+        firebaseDB: {
+          marker: null,
+          project: null
+        },
+        blankRules: [ruleEmpty]
+      };
+    },
+    computed: {
+      ...mapGetters([
+        'spotify',
+        'mapstore',
+        'loggedIn',
+        'ws',
+        'wp']),
+      avatar_thumb() {
+        return this.spotify.bookmarks ? this.spotify.bookmarks[0].album.images[0].url : '/static/img/markers/edit/m_mainuser_1.png'
+      }
+    },
+    created() {
+      this.firebaseDB.marker = firebase.database().ref('markers');
+      this.firebaseDB.project = firebase.database().ref('projects');
+    },
+
     mounted() {
-
-      let match;
-      const regexp_h = /<h(.)>(.*?)<\/h\1>/g;
-      const regexp_p = /<p>(.*?)<\/p>/g;
-
-      this.c_mysql_getall('posts',res=>{
-        let posts = res.data.map(post => {
-          let content = post.post_content ? this.m_html_comment(decodeURIComponent(post.post_content)) : '';
-          let contents = content.split(/\n/);
-          contents = contents.filter(v => v);
-          let steps = contents.map(cont => {
-            let hs = "";
-            let ps = "";
-            while ((match = regexp_h.exec(cont)) !== null) hs = match[2];
-            while ((match = regexp_p.exec(cont)) !== null) ps = match[1];
-            return {title: hs, desc: ps};
-          });
-
-          return {
-            id: post.ID,
-            title: post.post_title ? decodeURIComponent(post.post_title) : '',
-            thumb: post.thumbnail_url ? post.thumbnail_url : '',
-            excerpt: post.post_excerpt ? post.post_excerpt : '',
-            steps: steps,
-            spotifyid: post.spotifyid ? post.spotifyid : null
-          }
-        });
-        this.a_wp(['set','posts',posts]);
-      });
-
       window.onpagehide = () => this.m_resetWhenBackground();
       document.addEventListener('visibilitychange', () => {
         if (document.visibilityState !== "visible") this.m_resetWhenBackground()
       }, false);
 
+      //基本レイヤーパーツ
       this.overlay.info = this.$refs.info_overlay.$el;
       this.overlay.play = this.$refs.play_overlay.$el;
       this.overlay.edit = this.$refs.edit_overlay.$el;
+      //Wordpressからデータ取得
+      this.c_all_trips_from_wp();
+      this.c_all_posts_from_wp();
+      //TOPにスクロール
+      this.m_scrollTo('#app');
+      this.a_mapstore(['set', 'mode', 'info']);
 
-      this.m_scrollTo('#app');                    //TOPにスクロール
-      this.a_mapstore(['set', 'mode', 'info']);   //INFOモードに
+      this.c_checkLoginStatus(res => {
+        this.a_mapstore(['emory', 'loader', true]);
+        if(!res){
+          //名前をとりあえずGUESTで入らせる(最初からログインさせるときは外す）
+          this.a_spotify(['set', 'me', {id: 'GUEST'}]);
 
-      //とりあえずゲストで入らせる(最初からログインさせるときは外す）
-      this.a_spotify(['set', 'me', {id: 'GUEST'}]);
-
-      //IDがある場合
-      if (this.spotify.me.id) {
-        //ログイン済みでブックマークデータがない場合
-        if (this.spotify.me.id !== 'GUEST' && !this.spotify.me.bookmark_num) {
-          this.a_index(['alert', 'set', "Spotifyユーザーデータを調べています"]);
-          this.a_index(['alert', 'open']);
-          this.a_index(['alert', 'action', null]);
+          // this.a_index(['alert', 'set', "Spotifyにログインが必要です。"]);
+          // this.a_index(['alert', 'open']);
+          // this.a_index(['alert', 'action', 'login']);
         }
-        this.createOrFindMainuser(this.spotify.me.id);     //マーカー作成
 
-      } else {   //IDがない場合
-        this.a_index(['alert', 'set', "Spotifyにログインが必要です。"]);
-        this.a_index(['alert', 'open']);
-        this.a_index(['alert', 'action', 'login']);
-      }
-
-      this.a_mapstore(['emory', 'loader', true]);
-      //全マーカーとエリアの設定
-      this.firebaseDB.marker.on('value', (snapshot) => this.a_mapstore(['set', 'markers', snapshot.val()]));
-      this.firebaseDB.project.on('value', (snapshot) => this.a_mapstore(['emory', 'setprojects', snapshot.val()]));
+        //マーカー作成
+        this.m_createOrFindMainuser(this.firebaseDB);
+        //全マーカーとエリアの設定
+        this.firebaseDB.marker.on('value',  (snapshot) => this.a_mapstore(['set', 'markers', snapshot.val()]));
+        this.firebaseDB.project.on('value', (snapshot) => this.a_mapstore(['emory', 'setprojects', snapshot.val()]));
+      });
     },
 
       beforeDestroy() {
@@ -258,133 +214,93 @@
               'a_ws',
               'a_wp']),
 
-      trackOnce(){
-        this.$refs.maps_overlay.geoCurrentPosition();
+        trackOnce() {
+          this.$refs.maps_overlay.geoCurrentPosition();
+        },
+
+        switchMode() {
+          if (!this.overlay.info) return; //レイヤーの準備ができててなければ即終了。
+
+          let mode = this.mapstore.emory.mode ? this.mapstore.emory.mode : 'info';
+
+          switch (mode) {
+            case 'wide_map':
+              console.log("wide_map!");
+              break;
+            case 'info':
+              this.a_mapstore(['set', 'tracking', false]);
+              this.overlay.info.style.visibility = 'visible';
+              this.overlay.info.style.zIndex = 401;
+              this.overlay.play.style.zIndex = -1;
+              this.overlay.edit.style.zIndex = -1;
+              document.body.classList.remove('playing');
+              break;
+
+            case 'edit':
+              this.a_mapstore(['set', 'editing', {key: 'status', val: true}]);
+              this.overlay.info.style.visibility = 'hidden';
+              this.overlay.info.style.zIndex = -1;
+              this.overlay.play.style.zIndex = -1;
+              this.overlay.edit.style.zIndex = 401;
+              document.body.classList.remove('playing');
+              break;
+
+            case 'play_map':
+              this.a_mapstore(['set', 'projBoundary', false]);
+              this.overlay.info.style.visibility = 'hidden';
+              this.overlay.play.style.zIndex = 401;
+              this.overlay.edit.style.zIndex = -1;
+              document.body.classList.add('playing');
+              break;
+
+            case 'play_imagemap':
+              this.a_mapstore(['set', 'projBoundary', true]);
+              this.overlay.info.style.visibility = 'hidden';
+              this.overlay.play.style.zIndex = 401;
+              this.overlay.edit.style.zIndex = -1;
+              document.body.classList.add('playing');
+              break;
+
+            case 'map':
+              this.overlay.info.style.visibility = 'hidden';
+              this.overlay.info.style.zIndex = -1;
+              this.overlay.play.style.zIndex = -1;
+              this.overlay.edit.style.zIndex = -1;
+              document.body.classList.remove('playing');
+              break;
+
+            case 'play':
+              this.overlay.info.style.visibility = 'hidden';
+              this.overlay.info.style.zIndex = -1;
+              this.overlay.play.style.zIndex = 401;
+              this.overlay.edit.style.zIndex = -1;
+              document.body.classList.add('playing');
+              break;
+          }
+        },
       },
 
-      createOrFindMainuser(meid){
-        if(meid==='GUEST'){
-          //ゲストの場合はFirebaseに問いかけず、そのままマーカーを作成する！
-          this.a_mapstore(['set', 'mainuser',
-            {
-              center: {lat:34.722677, lng: 135.492364},
-              type:'mainuser',
-              project:'mainuser',
-              title:'GUEST',
-              id: 'GUEST'
-            }]);
+    watch: {
+      'mapstore.emory.mode': {
+        handler: 'switchMode'
+      },
 
-        }else{
-          //メインユーザーを検索してなければ作成
-          this.firebaseDB.marker.orderByChild('userid').startAt(meid).endAt(meid).once('value', ss=>{
-            if(ss.val()) {
-              console.log("FOUND");
-              let key = Object.keys(ss.val())[0];
-              let val = Object.values(ss.val())[0];
-              this.a_mapstore(['set', 'mainuser', {...val, id: key}]);
-            } else{
-              //ローカルにユーザーデータがない場合だけ作成される
-              if(!this.mapstore.mainuser) new M({type:'mainuser'}).updateOrNew(this.firebaseDB.marker);
-            }
-          })
+      'spotify.me': {
+        handler() {
+          console.log("handler");
+          if (!this.mapstore.mainuser) this.m_createOrFindMainuser(this.firebaseDB);
+        }, deep: true
+      },
+
+      'mapstore.mainuser': {
+        handler(newUser) {
+          if (newUser && !this.ws.you.connected) this.m_startSocket();
         }
       },
 
-      switchMode() {
-        if(!this.overlay.info) return; //レイヤーの準備ができててなければ即終了。
-
-        let mode = this.mapstore.emory.mode ? this.mapstore.emory.mode : 'info';
-
-        switch (mode) {
-          case 'wide_map':
-            console.log("wide_map!");
-            break;
-          case 'info':
-            this.a_mapstore(['set', 'tracking', false]);
-            this.overlay.info.style.visibility = 'visible';
-            this.overlay.info.style.zIndex = 401;
-            this.overlay.play.style.zIndex = -1;
-            this.overlay.edit.style.zIndex = -1;
-            document.body.classList.remove('playing');
-            break;
-
-          case 'edit':
-            this.a_mapstore(['set','editing',{key:'status',val:true}]);
-            this.overlay.info.style.visibility = 'hidden';
-            this.overlay.info.style.zIndex = -1;
-            this.overlay.play.style.zIndex = -1;
-            this.overlay.edit.style.zIndex = 401;
-            document.body.classList.remove('playing');
-            break;
-
-          case 'play_map':
-            this.a_mapstore(['set', 'projBoundary', false]);
-            this.overlay.info.style.visibility = 'hidden';
-            this.overlay.play.style.zIndex = 401;
-            this.overlay.edit.style.zIndex = -1;
-            document.body.classList.add('playing');
-            break;
-
-          case 'play_imagemap':
-            this.a_mapstore(['set', 'projBoundary', true]);
-            this.overlay.info.style.visibility = 'hidden';
-            this.overlay.play.style.zIndex = 401;
-            this.overlay.edit.style.zIndex = -1;
-            document.body.classList.add('playing');
-            break;
-
-          case 'map':
-            this.overlay.info.style.visibility = 'hidden';
-            this.overlay.info.style.zIndex = -1;
-            this.overlay.play.style.zIndex = -1;
-            this.overlay.edit.style.zIndex = -1;
-            document.body.classList.remove('playing');
-            break;
-
-          case 'play':
-            this.overlay.info.style.visibility = 'hidden';
-            this.overlay.info.style.zIndex = -1;
-            this.overlay.play.style.zIndex = 401;
-            this.overlay.edit.style.zIndex = -1;
-            document.body.classList.add('playing');
-            break;
-        }
-      },
-
-    },
-
-    watch:{
-      'mapstore.emory.mode':{
-        handler:'switchMode'
-      },
-
-      'spotify.me':{
-          handler(newMe) {
-              if (!newMe.id) return;
-              if (!!this.spotify.me.bookmark_num || newMe.id === 'GUEST') return;
-
-              this.a_index(['alert', 'set', "ユーザー" + newMe.id + "を調べています"]);
-              this.a_index(['alert', 'open']);
-              this.a_index(['alert', 'action', null]);
-
-              this.createOrFindMainuser(this.spotify.me.id);
-          }, deep: true
-      },
-
-      'mapstore.mainuser':{
-        handler(newUser){
-            if(!newUser || this.userisready) return;
-
-            this.m_socketInit();
-            this.m_connectToSocket();
-            this.userisready = true;
-        }
-      },
-
-      'mapstore.emory.projects':{
-        handler(newProjects){
-            if(!newProjects) return;
-              this.trackOnce();//プロジェクトが全て読み込まれたら位置計算させる
+      'mapstore.emory.projects': {
+        handler(newProjects) {
+          if (newProjects) this.trackOnce();//プロジェクトが全て読み込まれたら位置計算させる
         }
       }
     }

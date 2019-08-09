@@ -10,5 +10,5 @@ export default{
         initials
     ],
     computed: mapGetters(['spotify','subscribe']),
-    methods: mapActions(['a_spotify','a_subscribe'])
+    methods: mapActions(['a_spotify','a_subscribe','a_wp'])
 }

@@ -3,8 +3,6 @@ const state = {
         name:null,
         socketid:null,
         connected:false,
-        lat:null,
-        lng:null,
         pid:null,
         tid:null
     },
@@ -31,8 +29,6 @@ const mutations = {
             name: null,
             socketid: null,
             connected: false,
-            lat: null,
-            lng: null,
             pid: null,
             tid: null
         }
