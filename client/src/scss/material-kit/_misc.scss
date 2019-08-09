@@ -20,11 +20,12 @@ body {
     border-radius: $border-radius-base * 2;
     @include shadow-16dp();
 
+
   &.map{
     margin: -20px 30px 0;
   }
 
-  &.play{
+  &.play, &.dock_map{
     margin: 0 30px 0;
   }
 }
