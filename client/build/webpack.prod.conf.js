@@ -46,7 +46,7 @@ const webpackConfig = merge(baseWebpackConfig, {
     new webpack.DefinePlugin({
       'process.env': {
         ...env,
-        test:'2345'
+        MAPBOX_TOKEN:JSON.stringify(process.env.MAPBOX_TOKEN)
       }
     }),
     // new webpack.optimize.UglifyJsPlugin({

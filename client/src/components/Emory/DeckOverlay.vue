@@ -1,6 +1,7 @@
 <template>
     <mu-flex justify-content="center" align-items="center" direction="column">
         <canvas id="deckmap"></canvas>
+        <p v-if="test" style="font-size:3px;position:absolute;bottom:55px;color:#aaa;">{{test}}</p>
     </mu-flex>
 </template>
 <script>
@@ -26,6 +27,7 @@
         data () {
             return {
                 deck: '',
+                test:null
 
             }
         },
@@ -58,9 +60,7 @@
         },
         mounted () {
             this.deckInit()
-            console.log("process.env");
-            console.log(process.env);
-            alert(JSON.stringify(process.env));
+            this.test = JSON.stringify(process.env);
         },
         beforeDestroy () {
             this.deckDestory()

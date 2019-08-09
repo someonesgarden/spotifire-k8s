@@ -25,8 +25,7 @@ module.exports = merge(baseWebpackConfig, {
     new webpack.DefinePlugin({
       'process.env': {
         ...config.dev.env,
-        test:'12345',
-        test2:JSON.stringify(process.env.FIREBASE_AUTHDOMAIN)
+        MAPBOX_TOKEN:JSON.stringify(process.env.MAPBOX_TOKEN)
       }
     }),
     // https://github.com/glenjamin/webpack-hot-middleware#installation--usage
