@@ -1,39 +1,79 @@
 <template>
         <div>
-            <div class="mapcontainer">
-                <div id="map0" ref="map"></div>
-                <canvas id="deckmap0"></canvas>
-            </div>
+            <!-- MAP WITH IMAGE BG-->
+            <l-map v-if="m_activeProj && mapstore.map.projectBoundary"
+                   ref="map"
+                   :zoom="mapstore.map.zoom"
+                   :center="mapstore.map.center"
+                   :max-zoom="18"
+                   :min-zoom="12"
+                   :bounds="[m_activeProj.LBBound, m_activeProj.RTBound]"
+                   :max-bounds="[m_activeProj.LBBound, m_activeProj.RTBound]"
+                   :zoomAnimation="false"
+                   :fadeAnimation="false"
+                   :markerZoomAnimation="false"
+                   :inertia="false"
+                   :bounceAtZoomLimits="false"
+                   @click="m_mapClick" @zoomend="m_zoomChange">
+                <l-tile-layer
+                        :url="mapstore.mapbox.tile"
+                        :attribution="mapstore.mapbox.attribution"></l-tile-layer>
 
-<!--            <l-map ref="map"-->
-<!--                   :zoom="mapstore.map.zoom"-->
-<!--                   :center="mapstore.map.center"-->
-<!--                   :max-zoom="18"-->
-<!--                   :max-native-zoom="mapstore.map.zoom"-->
-<!--                   :min-zoom="5"-->
-<!--                   @click="m_mapClick" @zoomend="m_zoomChange">-->
-<!--                <l-tile-layer-->
-<!--                        :url="mapstore.mapbox.tile"-->
-<!--                        :attribution="mapstore.mapbox.attribution"></l-tile-layer>-->
+                <l-image-overlay v-if="m_activeProj.imgurl && m_activeProj.LBBound"
+                        :url="m_activeProj.imgurl" :bounds="[m_activeProj.LBBound, m_activeProj.RTBound]"
+                        :opacity="0.9"
+                        :zoomAnimation="false"
+                        :fadeAnimation="false"
+                        :markerZoomAnimation="false"
+                        :inertia="false"
+                        :bounceAtZoomLimits="false"></l-image-overlay>
 
-<!--                <my-marker v-if="mapstore.mainuser && mapstore.mainuser.status==='GUEST'" :marker="mapstore.mainuser"></my-marker>-->
+                <my-marker v-if="mapstore.mainuser && mapstore.mainuser.status==='GUEST'" :marker="mapstore.mainuser"></my-marker>
 
-<!--                <my-marker v-if="mapstore.markers && mapstore.mainuser" v-for="(marker,id) in m_sortedMarkers"-->
-<!--                           :marker="marker"-->
-<!--                           :key="'marker'+id"-->
-<!--                           :id="id"-->
-<!--                           @mClick="mClick(marker,id)" @tClick="tClick(marker,id)"></my-marker>-->
-
-<!--                <my-tooltip v-if="mapstore.emory.projects" v-for="(p,id) in mapstore.emory.projects"-->
-<!--                            :title="p.title"-->
-<!--                            :center="p.center"-->
-<!--                            :key="'proj'+id"-->
-<!--                            @pClick="pClick(p,id)"></my-tooltip>-->
-<!--                <l-polygon :lat-lngs="mapstore.map.poly" color="#1DEA6E"  v-if="mapstore.map.poly"/>-->
-<!--            </l-map>-->
+                <my-marker v-if="mapstore.markers && mapstore.mainuser" v-for="(marker,id) in m_sortedMarkers"
+                           :marker="marker"
+                           :key="'marker'+id"
+                           :id="id"
+                           @mClick="mClick(marker,id)" @tClick="tClick(marker,id)"></my-marker>
 
 
 
+                <my-tooltip v-if="mapstore.emory.projects" v-for="(p,id) in mapstore.emory.projects"
+                            :title="p.title"
+                            :center="p.center"
+                            :key="'proj'+id"
+                            @pClick="pClick(p,id)"></my-tooltip>
+                <l-polygon :lat-lngs="mapstore.map.poly" color="#1DEA6E"  v-if="mapstore.map.poly"/>
+            </l-map>
+
+            <!-- MAP WITH NORMAL BG-->
+            <l-map v-else ref="map"
+                   :zoom="mapstore.map.zoom"
+                   :center="mapstore.map.center"
+                   :max-zoom="18"
+                   :max-native-zoom="mapstore.map.zoom"
+                   :min-zoom="5"
+                   @click="m_mapClick" @zoomend="m_zoomChange">
+                <l-tile-layer
+                        :url="mapstore.mapbox.tile"
+                        :attribution="mapstore.mapbox.attribution"></l-tile-layer>
+
+
+                <my-marker v-if="mapstore.mainuser && mapstore.mainuser.status==='GUEST'" :marker="mapstore.mainuser"></my-marker>
+
+                <my-marker v-if="mapstore.markers && mapstore.mainuser" v-for="(marker,id) in m_sortedMarkers"
+                           :marker="marker"
+                           :key="'marker'+id"
+                           :id="id"
+                           @mClick="mClick(marker,id)" @tClick="tClick(marker,id)"></my-marker>
+
+                <my-tooltip v-if="mapstore.emory.projects" v-for="(p,id) in mapstore.emory.projects"
+                            :title="p.title"
+                            :center="p.center"
+                            :key="'proj'+id"
+                            @pClick="pClick(p,id)"></my-tooltip>
+                <l-polygon :lat-lngs="mapstore.map.poly" color="#1DEA6E"  v-if="mapstore.map.poly"/>
+            </l-map>
 
 
 
@@ -56,9 +96,6 @@
     import wsMixin from '../../mixins/ws';
 
     import mapboxgl from 'mapbox-gl';
-    import { Deck } from '@deck.gl/core';
-
-
     import {LImageOverlay,  LMap, LTileLayer, LPolygon} from "vue2-leaflet";
     //import { latLng, icon } from "leaflet";
 
@@ -68,7 +105,7 @@
     import M from '../../class/map/EMarker';
 
     export default {
-        name: "MapOverlay",
+        name: "MapOverlayLeafOnly",
         mixins:[mapMixin,wsMixin],
         props: ['markersRef'],
         components:{
@@ -78,9 +115,7 @@
         },
         data() {
             return {
-                deck:   null,
-                map:    null,
-                GL:     null,
+                GL:    null,
                 timout_volume:  null,
                 timeout:        null,
                 watchID:        null,
@@ -112,20 +147,14 @@
             this.GL = navigator.geolocation ? navigator.geolocation : null;
             this.watchedTrackAction();
 
-            this.deckInit();
+
         },
 
         beforeDestroy(){
             this.a_mapstore(['set', 'tracking', false]);
-            this.deckDestory();
         },
 
         watch: {
-            'mapstore.mapbox.token': {
-                handler: 'deckInit',
-                immediate: true
-            },
-
             'mapstore.geocoding.on': {
                 handler: 'watchedTrackAction',
                 immediate: true
@@ -140,87 +169,6 @@
 
         methods: {
             ...mapActions(['a_mapstore','a_ws','a_index']),
-
-            /*------- MapBox & Deck --------*/
-
-            deckInit() {
-                if(this.mapstore.mapbox.token){
-                    console.log(this.mapstore.mapbox.token);
-                    mapboxgl.accessToken = this.mapstore.mapbox.token;
-                    this.deck_geojson();
-                }
-
-            },
-            deckDestory () {
-                if(this.deck) this.deck.finalize();
-            },
-
-
-            deck_geojson(){
-
-                this.map = new mapboxgl.Map({
-                    container: 'map0',
-                    style:      this.mapstore.mapbox.style,
-                    interactive:this.mapstore.mapbox.interactive,
-                    center:     this.mapstore.map.center,
-                    zoom:       this.mapstore.map.zoom,
-                    bearing:    this.mapstore.mapbox.bearing,
-                    pitch:      this.mapstore.mapbox.pitch
-                });
-
-                // this.deck = new Deck({
-                //     canvas: 'deckmap',
-                //     width: '100%',
-                //     height: '100%',
-                //     interactive: false,
-                //     initialViewState: INITIAL_VIEW_STATE,
-                //     center: [INITIAL_VIEW_STATE.longitude, INITIAL_VIEW_STATE.latitude],
-                //     zoom: INITIAL_VIEW_STATE.zoom,
-                //     bearing: INITIAL_VIEW_STATE.bearing,
-                //     pitch: INITIAL_VIEW_STATE.pitch,
-                //     controller: true,
-                //     onViewStateChange: ({viewState}) => {
-                //         this.map.jumpTo({
-                //             center: [viewState.longitude, viewState.latitude],
-                //             zoom: viewState.zoom,
-                //             bearing: viewState.bearing,
-                //             pitch: viewState.pitch
-                //         });
-                //     },
-                //     layers: [
-                //         new GeoJsonLayer({
-                //             id: 'airports',
-                //             data: AIR_PORTS,
-                //             // Styles
-                //             filled: true,
-                //             pointRadiusMinPixels: 2,
-                //             opacity: 1,
-                //             pointRadiusScale: 2000,
-                //             getRadius: f => 11 - f.properties.scalerank,
-                //             getFillColor: [200, 0, 80, 180],
-                //             // Interactive props
-                //             pickable: true,
-                //             autoHighlight: true,
-                //             onClick: info =>
-                //                 // eslint-disable-next-line
-                //                 info.object && alert(`${info.object.properties.name} (${info.object.properties.abbrev})`)
-                //         }),
-                //         new ArcLayer({
-                //             id: 'arcs',
-                //             data: AIR_PORTS,
-                //             dataTransform: d => d.features.filter(f => f.properties.scalerank < 4),
-                //             // Styles
-                //             getSourcePosition: f => [-0.4531566, 51.4709959], // London
-                //             getTargetPosition: f => f.geometry.coordinates,
-                //             getSourceColor: [0, 128, 200],
-                //             getTargetColor: [200, 0, 80],
-                //             getWidth: 1
-                //         })
-                //     ]
-                // });
-            },
-
-            /*------- PODS -------*/
 
             resetAllPods(){
                 for(let i=0;i<this.pods;i++) if(this.$refs['pod'+i]){
@@ -297,6 +245,8 @@
                 }
             },
 
+            /*---*/
+
             watchedTrackAction(){
 
                 if (this.mapstore.geocoding.on){
@@ -363,11 +313,8 @@
             },
 
             setView(center,zoom){
-               // this.$refs.map.mapObject.setView(center,zoom);
+                this.$refs.map.mapObject.setView(center,zoom);
             },
-
-
-            /*---------- GeoLocation --------- */
 
             keepTracking(){
                 console.log("keepTracking..");
@@ -390,12 +337,12 @@
                 }
             },
 
-            //一回だけ
+            //一回だけはこちら！
             geoCurrentPosition(){
                 if(!!this.GL) this.GL.getCurrentPosition(this.geoSuccessOnce,this.m_geoError,this.mapstore.geocoding.options);
             },
 
-            //継続的に呼び出し続ける場合
+            //継続的に呼び出し続ける場合はこちら！
             geolocation() {
                 console.log("this.GL is",this.GL);
                 if(!!this.GL) this.watchID = this.GL.watchPosition(this.geoSuccess,this.m_geoError,this.mapstore.geocoding.options);

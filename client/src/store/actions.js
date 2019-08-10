@@ -143,6 +143,7 @@ export const a_mapstore = ({commit},[type, action, data]) => {
             zoom:(data)         => commit('mapstore/setMapZoom',    data),
         },
 
+
         tracking:{
             moment:(data) => commit('mapstore/setTrackingMoment', data),
             timefactor:(data) => commit('mapstore/setTrackingTimeFactor', data),
@@ -157,6 +158,10 @@ export const a_mapstore = ({commit},[type, action, data]) => {
         center:{
             mainuser:(data)   => commit('mapstore/setMainuserCenter',data),
             map:(data)        => commit('mapstore/setMapCenter',data)
+        },
+
+        mapbox:{
+            token:(data)          => commit('mapstore/setMapBoxParam', {key:'token',val:data}),
         },
 
         emory:{

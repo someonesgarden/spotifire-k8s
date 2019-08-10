@@ -55,6 +55,18 @@ router.get('/get_auth_from_code',(req,res)=>{
 
 });
 
+
+router.get('/get_credential', (req,res)=>{
+    let state = '';
+    let length = 40;
+    let possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    for (let i = 0; i < length; i++) {
+        state += possible.charAt(Math.floor(Math.random() * possible.length));
+    }
+    let authorizeURL = spotifyApi.createAuthorizeURL(keys.spotifyScopes, state);
+    res.send(authorizeURL);
+});
+
 router.post('/get_credential', (req,res)=>{
     const data = req.body.data;
     //console.log(req);

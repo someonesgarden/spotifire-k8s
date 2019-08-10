@@ -1,8 +1,7 @@
 <template>
     <mu-flex justify-content="center" align-items="center" direction="column">
 <!--        <canvas id="deckmap"></canvas>-->
-
-        <div id="container">
+        <div class="mapcontainer">
             <div id="map"></div>
             <canvas id="deckmap"></canvas>
         </div>
@@ -11,9 +10,9 @@
     </mu-flex>
 </template>
 <script>
+    import {mapGetters} from 'vuex';
     import { Deck } from '@deck.gl/core'
     import { GeoJsonLayer, ArcLayer} from '@deck.gl/layers'
-    import axios from 'axios';
     import mapboxgl from 'mapbox-gl'
 
     const GEOJSON = 'https://d2ad6b4ur7yvpq.cloudfront.net/naturalearth-3.3.0/ne_110m_admin_1_states_provinces_shp.geojson';
@@ -33,8 +32,6 @@
         pitch: 30
     };
 
-
-
     export default {
         name: "DeckOverlay",
         data () {
@@ -44,13 +41,35 @@
                 test:null
             }
         },
-        methods: {
-            deck_geojson() {
+        computed:mapGetters(['mapstore']),
 
+        watch:{
+            // 'mapstore.mapbox.token': (token)=>{
+            //     if(token) this.deckInit();
+            // },
+
+            'mapstore.mapbox.token': {
+                handler: 'deckInit',
+                immediate: true
+            },
+        },
+
+
+
+        mounted(){
+            this.deckInit()
+        },
+
+        beforeDestroy () {
+            this.deckDestory()
+        },
+
+        methods: {
+            deck_geojson(){
 
                 this.map = new mapboxgl.Map({
                     container: 'map',
-                    style: 'mapbox://styles/mapbox/light-v9',
+                    style: 'mapbox://styles/mapbox/light-v10',
                     // Note: deck.gl will be in charge of interaction and event handling
                     interactive: false,
                     center: [INITIAL_VIEW_STATE.longitude, INITIAL_VIEW_STATE.latitude],
@@ -129,41 +148,16 @@
                 });
             },
             deckInit() {
-                this.deck_geojson()
+                if(this.mapstore.mapbox.token){
+                    console.log(this.mapstore.mapbox.token);
+                    mapboxgl.accessToken = this.mapstore.mapbox.token;
+                    this.deck_geojson()
+                }
+
             },
             deckDestory () {
                 this.deck.finalize()
             }
-        },
-        mounted () {
-            axios.get('/api/props/tokens').then( res =>{
-
-                mapboxgl.accessToken = res.data.mapbox;
-
-                this.deckInit();
-
-            }).catch(error => console.log(error))
-        },
-        beforeDestroy () {
-            this.deckDestory()
         }
     }
 </script>
-<style lang="scss" scoped>
-    #container {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-
-        & > * {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-        }
-    }
-
-</style>

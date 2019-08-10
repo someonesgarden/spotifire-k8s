@@ -34,6 +34,9 @@ const webpackConfig = merge(baseWebpackConfig, {
   },
 
   optimization: {
+    // splitChunks: {
+    //            chunks: 'all'
+    //  },
     minimizer: [
       new UglifyJSPlugin({
         uglifyOptions: {compress: {drop_console: true}},

@@ -1,4 +1,21 @@
 const state = {
+
+    mapbox: {
+        style: 'mapbox://styles/mapbox/light-v10',
+        interactive: true,
+        center: [135.492364123,34.722677123],
+        zoom: 4,
+        bearing: 0,
+        pitch: 30,
+
+        token: null,
+        attribution: '&copy; mapbox',
+        tile:'//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+        //tile:"https://api.mapbox.com/v4/mapbox.satellite/{z}/{x}/{y}@2x.jpg90?access_token=pk.eyJ1IjoiZGFpc3VrZW5pc2hpbXVyYSIsImEiOiJjandiaXJnYjMwMnpkM3lvZ3UzbGZveHllIn0.Ajc8GA2rnzTt1QlYSr8mZA",
+        //tile: 'https://api.tiles.mapbox.com/v4/mapbox.light/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiZGFpc3VrZW5pc2hpbXVyYSIsImEiOiJjandiaXJnYjMwMnpkM3lvZ3UzbGZveHllIn0.Ajc8GA2rnzTt1QlYSr8mZA',
+        //tile:'http://a.tiles.mapbox.com/v4/mapbox.mapbox-streets-v7/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiZGFpc3VrZW5pc2hpbXVyYSIsImEiOiJjandiaXJnYjMwMnpkM3lvZ3UzbGZveHllIn0.Ajc8GA2rnzTt1QlYSr8mZA',
+    },
+
     map:{
         center: {
             lat: 34.722677123,
@@ -7,8 +24,6 @@ const state = {
         zoom:           18,
         maxZoom:        18,
         maxNativeZoom:  18,
-        url:'//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-        attribution:'&copy; sg',
 
         projectBoundary:false,
         poly:   null,
@@ -20,6 +35,11 @@ const state = {
 };
 
 const mutations = {
+
+    setMapBoxParam(state,data){
+      state.mapbox[data.key] = data.val;
+    },
+
     setMapOption(state,data){
         state.map[data.key] = data.val;
         state.map.update = new Date();

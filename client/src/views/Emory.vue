@@ -97,7 +97,7 @@
   import mysqlMixin   from "../mixins/mysql";
   import {ruleEmpty}  from '../store/rules';
 
-  import MapsOverlay from '../components/Emory/MapOverlay';
+  import MapsOverlay from '../components/Emory/MapOverlayLeafOnly';
   import InfoOverlay from '../components/Emory/InfoOverlay';
   import PlayOverlay from '../components/Emory/PlayOverlay';
   import EditOverlay from '../components/Emory/EditOverlay';
@@ -161,6 +161,8 @@
     created() {
       this.firebaseDB.marker = firebase.database().ref('markers');
       this.firebaseDB.project = firebase.database().ref('projects');
+
+      this.m_mapboxtoken();
     },
 
     mounted() {

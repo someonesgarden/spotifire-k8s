@@ -30,6 +30,12 @@ module.exports = {
       : config.dev.assetsPublicPath
   },
 
+  // optimization: {
+  //   splitChunks: {
+  //     chunks: 'all'
+  //   }
+  // },
+
 
   resolve: {
     extensions: ['.js', '.vue', '.json'],
