@@ -26,7 +26,7 @@
     "hard-source-webpack-plugin": "^0.13.1",
     "ismobilejs": "^0.5.2",
     "leaflet": "^1.5.1",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.19",
     "mapbox-gl": "^1.2.0",
     "muse-ui": "^3.0.2",
     "nouislider": "^14.0.2",
