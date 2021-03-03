@@ -28,6 +28,6 @@
   },
   "devDependencies": {
     "morgan": "^1.9.1",
-    "pug": "^2.0.3"
+    "pug": "^3.0.1"
   }
 }
